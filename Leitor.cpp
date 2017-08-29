@@ -41,16 +41,12 @@ int inicializarLeitor(LeitorArquivo* arquivo, const char* caminhoArquivo, int ta
  * \param arquivo LeitorArquivo* arquivo a ser destruido
  *
  */
-void destruirLeitor(LeitorArquivo* arquivo)
-{
-    if(arquivo->file)
-    {
-        fclose(arquivo->file);
-    }
+void destruirLeitor(LeitorArquivo* arquivo){
+    if(arquivo->file){ fclose(arquivo->file); }
     if(arquivo->buffer) {
-            free(arquivo->buffer[0]);
-            free(arquivo->buffer[1]);
-        }
+        free(arquivo->buffer[0]);
+        free(arquivo->buffer[1]);
+    }
     free(arquivo->buffer);
 
     arquivo->file = NULL;
@@ -67,8 +63,7 @@ void destruirLeitor(LeitorArquivo* arquivo)
  * \param arquivo LeitorArquivo* Leitor contendo o buffer
  *
  */
-void preencherBuffer(int indiceBuffer, LeitorArquivo* arquivo)
-{
+void preencherBuffer(int indiceBuffer, LeitorArquivo* arquivo){
     int elementosLidos, i;
     // Le o arquivo
     elementosLidos = fread(arquivo->buffer[indiceBuffer], 1, arquivo->tamanhoBuffer, arquivo->file);
@@ -93,7 +88,6 @@ char proximoCaractere(LeitorArquivo* arquivo) {
             preencherBuffer(0, arquivo);
             preencherBuffer(1, arquivo);
         }
-
         // Incrementa a posição do cursor
         arquivo->caractereAtual += 1;
         // Se tiver passado do tamanho do buffer, passa pro próximo
@@ -107,10 +101,7 @@ char proximoCaractere(LeitorArquivo* arquivo) {
             preencherBuffer((arquivo->bufferAtual+1) % 2, arquivo);
             arquivo->preencherProximo = 0;
         }
-
         return arquivo->buffer[arquivo->bufferAtual][arquivo->caractereAtual];
     }
-    else {
-        return (char)0; // Tem que tratar o erro aqui
-    }
+    else{ return (char)0; /*Tem que tratar o erro aqui*/ }
 }
