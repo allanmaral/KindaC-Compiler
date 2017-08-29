@@ -16,8 +16,9 @@ void iniciaAnalisadorLexico(char *caminho){
 
     leitor=malloc(sizeof(LeitorArquivo));
     if(!inicializarLeitor(leitor,caminho,32)){
-        system("PAUSE");
-        exit(1);
+
+
+       exit(1);
     }
 }
 
@@ -95,7 +96,7 @@ int a(){
                             incrementaLexema(caractere);
                             caractere = proximoCaractere(leitor);
                         break;
-                        case EOF:
+                        case '\0':
                             return EOF;
                         break;
                         case '|':
@@ -255,7 +256,7 @@ int a(){
                     printf("Erro: Caractere Vazio");                ///Acrescentar Linha e Coluna
                     return -1;                                      ///Arrumar o Retorno
                 }
-                else if(caractere == EOF){
+                else if(caractere == '\0'){
                     printf("Erro: Faltando Caractere ' de terminacao");    ///Acrescentar Linha e Coluna
                     return EOF;
                 }
@@ -271,7 +272,7 @@ int a(){
                 }
             break;
             case 10 :
-                if(caractere == EOF){
+                if(caractere == '\0'){
                     printf("Erro: Faltando Caractere ' de terminacao");     ///Acrescentar Linha e Coluna
                     return EOF;
                 }
@@ -300,7 +301,7 @@ int a(){
                     incrementaLexema(caractere);
                     caractere = proximoCaractere(leitor);
                 }
-                else if(caractere == EOF){
+                else if(caractere == '\0'){
                     printf("Erro: Faltando Caractere \" de terminação");    ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
@@ -316,7 +317,7 @@ int a(){
                 }
             break;
             case 13 :
-                if(caractere == EOF){
+                if(caractere == '\0'){
                     printf("Erro: Faltando Caractere \" de terminação");    ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
@@ -340,7 +341,7 @@ int a(){
                 else{ return DIVISAO; }
             break;
             case 15 :
-                if(caractere == EOF){
+                if(caractere == '\0'){
                     printf("Erro: Final de Arquivo Inexperado");    ///Acrescentar Linha e Coluna
                     return EOF;                                      ///Arrumar o Retorno
                 }
@@ -360,7 +361,7 @@ int a(){
                     ///Não Incrementar Lexema
                     caractere = proximoCaractere(leitor);
                 }
-                else if(caractere == EOF){
+                else if(caractere == '\0'){
                     printf("Erro: Bloco de Cometario Nao Terminado");       ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
@@ -374,7 +375,7 @@ int a(){
                     ///Não Incrementar Lexema
                     caractere = proximoCaractere(leitor);
                 }
-                else if(caractere == EOF){
+                else if(caractere == '\0'){
                     printf("Erro: Bloco de Cometario Nao Terminado");       ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
@@ -446,7 +447,9 @@ int a(){
                 else{ return NEGACAO; }
             break;
         }
+
     }
+        return 0;
 }
 
 /** \brief Destrutor do Analizador Lexico

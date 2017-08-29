@@ -35,7 +35,9 @@
 #define CHAVE_DIR       30
 #define PARENTESE_ESQ   31
 #define PARENTESE_DIR   32
-#define EOF             330
+#ifndef EOF
+#define EOF             -1
+#endif // EOF
 #define MAIOR           34
 #define MENOR           35
 #define MAIOR_IGUAL     36
