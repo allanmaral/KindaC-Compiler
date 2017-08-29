@@ -1,5 +1,5 @@
 #include "AnalisadorLexico.h"
-
+#include "GerenciadorErro.h"
 
 Automato* automato;
 LeitorArquivo* leitor;
@@ -15,7 +15,7 @@ void iniciaAnalisadorLexico(char *caminho){
     automato->tamLexema     =32;
 
     leitor=malloc(sizeof(LeitorArquivo));
-    if(!inicializarLeitor(leitor,caminho,32)){
+    if(!inicializarLeitor(leitor,caminho,4096)){
 
 
        exit(1);
@@ -149,7 +149,8 @@ int a(){
                         case '*': return ASTERISCO;     break;
 
                         default:
-                            printf("Erro: Caractere Inválido");         ///Acrescentar Linha e Coluna
+                            saidaErro(ErroCaractereInvalido, automato->linha, automato->coluna);
+                            //printf("Erro: Caractere Inválido");         ///Acrescentar Linha e Coluna
                             return -1;                                  ///Arrumar o Retorno
                         break;
                     }
@@ -226,7 +227,8 @@ int a(){
                     caractere = proximoCaractere(leitor);
                 }
                 else{
-                    printf("Erro: Numero Mal Formado");             ///Acrescentar Linha e Coluna
+                    saidaErro(ErroNumeroMalFormado, automato->linha, automato->coluna);
+                    //printf("Erro: Numero Mal Formado");             ///Acrescentar Linha e Coluna
                     return -1;                                      ///Arrumar o Retorno
                 }
             break;
@@ -247,17 +249,20 @@ int a(){
                     caractere = proximoCaractere(leitor);
                 }
                 else{
-                    printf("Erro: Numero Mal Formado");             ///Acrescentar Linha e Coluna
+                    saidaErro(ErroNumeroMalFormado, automato->linha, automato->coluna);
+                    //printf("Erro: Numero Mal Formado");             ///Acrescentar Linha e Coluna
                     return -1;                                      ///Arrumar o Retorno
                 }
             break;
             case 9 :
                 if(caractere == '\''){
-                    printf("Erro: Caractere Vazio");                ///Acrescentar Linha e Coluna
+                    saidaErro(ErroCaractereVazio, automato->linha, automato->coluna);
+                    //printf("Erro: Caractere Vazio");                ///Acrescentar Linha e Coluna
                     return -1;                                      ///Arrumar o Retorno
                 }
                 else if(caractere == '\0'){
-                    printf("Erro: Faltando Caractere ' de terminacao");    ///Acrescentar Linha e Coluna
+                    saidaErro(ErroFaltaAspaSimples, automato->linha, automato->coluna);
+                    //printf("Erro: Faltando Caractere ' de terminacao");    ///Acrescentar Linha e Coluna
                     return EOF;
                 }
                 else if(caractere == '\\'){
@@ -273,7 +278,8 @@ int a(){
             break;
             case 10 :
                 if(caractere == '\0'){
-                    printf("Erro: Faltando Caractere ' de terminacao");     ///Acrescentar Linha e Coluna
+                    saidaErro(ErroFaltaAspaSimples, automato->linha, automato->coluna);
+                    //printf("Erro: Faltando Caractere ' de terminacao");     ///Acrescentar Linha e Coluna
                     return EOF;
                 }
                 else{
@@ -302,7 +308,8 @@ int a(){
                     caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == '\0'){
-                    printf("Erro: Faltando Caractere \" de terminação");    ///Acrescentar Linha e Coluna
+                    saidaErro(ErroFaltaAspasDupla, automato->linha, automato->coluna);
+                    //printf("Erro: Faltando Caractere \" de terminação");    ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
                 else if(caractere == '"'){                                  ///Acrescentar Linha e Coluna
@@ -318,7 +325,8 @@ int a(){
             break;
             case 13 :
                 if(caractere == '\0'){
-                    printf("Erro: Faltando Caractere \" de terminação");    ///Acrescentar Linha e Coluna
+                    saidaErro(ErroFaltaAspasDupla, automato->linha, automato->coluna);
+                    //rintf("Erro: Faltando Caractere \" de terminação");    ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
                 else{
@@ -342,7 +350,8 @@ int a(){
             break;
             case 15 :
                 if(caractere == '\0'){
-                    printf("Erro: Final de Arquivo Inexperado");    ///Acrescentar Linha e Coluna
+                    saidaErro(ErroFimDeArquivoInesperado, automato->linha, automato->coluna);
+                    //printf("Erro: Final de Arquivo Inexperado");    ///Acrescentar Linha e Coluna
                     return EOF;                                      ///Arrumar o Retorno
                 }
                 else if(caractere == '\n'){
@@ -362,7 +371,8 @@ int a(){
                     caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == '\0'){
-                    printf("Erro: Bloco de Cometario Nao Terminado");       ///Acrescentar Linha e Coluna
+                    saidaErro(ErroComentarioNaoTerminado, automato->linha, automato->coluna);
+                    //printf("Erro: Bloco de Cometario Nao Terminado");       ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
                 else{
@@ -376,7 +386,8 @@ int a(){
                     caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == '\0'){
-                    printf("Erro: Bloco de Cometario Nao Terminado");       ///Acrescentar Linha e Coluna
+                    saidaErro(ErroComentarioNaoTerminado, automato->linha, automato->coluna);
+                    //printf("Erro: Bloco de Cometario Nao Terminado");       ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
                 else if(caractere == '/'){
