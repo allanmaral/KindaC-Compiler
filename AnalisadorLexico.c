@@ -1,28 +1,49 @@
 #include "AnalisadorLexico.h"
 
-Analisador* automato;
 
-void iniciaAnalisadorLexico(char *arquivo){
-    automato=malloc(sizeof(Analisador));
-    automato->lexema = (char*)malloc(32);
-    automato->nomeArquivo   = arquivo;// inicializar o leitor
+Automato* automato;
+LeitorArquivo* leitor;
+
+/** \brief Construtor do analisador lexico
+  *
+  * \param caminhoArquivo const char* Caminho do arquivo a ser lido
+  */
+void iniciaAnalisadorLexico(char *caminho){
+    automato=malloc(sizeof(Automato));
+    automato->lexema = (char*) malloc(32);
     automato->posicaoLexema =0;
     automato->tamLexema     =32;
 
+    leitor=malloc(sizeof(LeitorArquivo));
+    if(!inicializarLeitor(leitor,caminho,32)){
+        system("PAUSE");
+        exit(1);
+    }
 }
 
+/** \brief Procedimento que adiciona um caractere ao vetor de caracters (lexema)
+  *
+  *  \param caractere a ser adicionado
+  */
 void incrementaLexema(char caractere){
-    if(automato->posicaoLexema >= automato->tamLexema){
+    //Verifica se nao existe posicao disponivel realocando caso necessario
+    if(automato->posicaoLexema >= automato->tamLexema -1){
         automato->tamLexema += 32;
         automato->lexema=(char *)realloc(automato->lexema, automato->tamLexema);
 
     }
+    //Adiciona o caractere
     automato->lexema[automato->posicaoLexema] = caractere;
     automato->posicaoLexema++;
+    //Garante que o lexema sempre termine com \0
+    automato->lexema[automato->posicaoLexema] = '\0';
 }
 
+/** \brief Funcao que define as transicoes do automato
+  *
+  */
 int a(){
-
+    int lexema;
     char caractere; //= leitor->ultimoCaractereLido();    ///Arrumar
     ///Arrumar Acumulador de Lexema
     int estado = 1;     int pronto = 1;
@@ -32,85 +53,85 @@ int a(){
                 if(isspace(caractere)){
                     if(caractere == '\n'){
                         ///Não Incrementar Lexema
-                        caractere = leitor->proximoCaractere();
-                        ///Zera Coluna
-                        ///Incrementa Linha
+                        caractere = proximoCaractere(leitor);
+                        automato->coluna=0;
+                        automato->linha++;
                     }
                     else{
                         ///Não Incrementar Lexema
-                        caractere = leitor->proximoCaractere();
-                        ///Incrementa Coluna
+                        caractere = proximoCaractere(leitor);
+                        automato->coluna++;
                     }
                 }
                 else if(isalpha(caractere)){
                     estado = 2;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(isdigit(caractere)){
                     estado = 3;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     switch(caractere){
                         case '.':
                             estado = 4;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '\'':
                             estado = 9;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '"':
                             estado = 12;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '/':
                             estado = 14;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case EOF:
                             return EOF;
                         break;
                         case '|':
                             estado = 18;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '&':
                             estado = 19;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '-':
                             estado = 20;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '=':
                             estado = 21;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '<':
                             estado = 22;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '>':
                             estado = 23;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
                         case '!':
                             estado = 24;
-                            ///Incrementar Lexema
-                            caractere = leitor->proximoCaractere();
+                            incrementaLexema(caractere);
+                            caractere = proximoCaractere(leitor);
                         break;
 
                         case ';': return PONTO_VIRGULA; break;
@@ -136,8 +157,8 @@ int a(){
             case 2 :
                 if(isalnum(caractere)){
                     estado = 2;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     ///Verificar na tabela de tokens reservados
@@ -147,18 +168,18 @@ int a(){
             break;
             case 3 :
                 if(isdigit(caractere)){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == '.'){
                     estado = 5;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == 'e' || caractere == 'E'){
                     estado = 6;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     ///Verificar na tabela de numeros ou adicionar
@@ -168,24 +189,24 @@ int a(){
             case 4 :
                 if(isdigit(caractere)){
                     estado = 5;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == 'e' || caractere == 'E'){
                     estado = 6;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else{ return PONTO; }
             break;
             case 5 :
                 if(isdigit(caractere)){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == 'e' || caractere == 'E'){
                     estado = 6;
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     ///Verificar na tabela de numeros ou adicionar
@@ -195,13 +216,13 @@ int a(){
             case 6 :
                 if(isdigit(caractere)){
                     estado = 7;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == '+' || caractere == '-'){
                     estado = 8;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     printf("Erro: Numero Mal Formado");             ///Acrescentar Linha e Coluna
@@ -210,8 +231,8 @@ int a(){
             break;
             case 7 :
                 if(isdigit(caractere)){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     ///Verificar na tabela de numeros ou adicionar
@@ -221,8 +242,8 @@ int a(){
             case 8 :
                 if(isdigit(caractere)){
                     estado = 7;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     printf("Erro: Numero Mal Formado");             ///Acrescentar Linha e Coluna
@@ -238,15 +259,15 @@ int a(){
                     printf("Erro: Faltando Caractere ' de terminacao");    ///Acrescentar Linha e Coluna
                     return EOF;
                 }
-                else if(caracter == '\\'){
+                else if(caractere == '\\'){
                     estado = 10;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     estado = 11;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
             break;
             case 10 :
@@ -256,42 +277,42 @@ int a(){
                 }
                 else{
                     estado = 11;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
             break;
             case 11 :
                 if(caractere == '\''){
-                    ///Incrementar Lexema
+                    incrementaLexema(caractere);
                     ///Verificar na tabela de ids ou adicionar
                     return lexema;      ///Arrumar o retorno
                 }
                 else{
                     //printf("Warrning: Caractere Mal Formado");        ///Acrescentar Linha e Coluna
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     return -1;                                          /// Arrumar Reotorno
                 }
             break;
             case 12 :
                 if(caractere == '\\'){
                     estado = 13;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == EOF){
                     printf("Erro: Faltando Caractere \" de terminação");    ///Acrescentar Linha e Coluna
                     return EOF;                                             ///Arrumar o Retorno
                 }
                 else if(caractere == '"'){                                  ///Acrescentar Linha e Coluna
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     ///Verificar na tabela de literais ou adicionar
                     return lexema;
                 }
                 else{
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
             break;
             case 13 :
@@ -301,20 +322,20 @@ int a(){
                 }
                 else{
                     estado = 12;
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                 }
             break;
             case 14 :
                 if(caractere == '\\'){
                     estado = 15;
                     ///Resetar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == '*'){
                     estado = 16;
                     ///Resetar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
                 else{ return DIVISAO; }
             break;
@@ -325,19 +346,19 @@ int a(){
                 }
                 else if(caractere == '\n'){
                     ///Não Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                     estado = 1;
                 }
                 else{
                     ///Não Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
             break;
             case 16 :
                 if(caractere == '*'){
                     estado = 17;
                     ///Não Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == EOF){
                     printf("Erro: Bloco de Cometario Nao Terminado");       ///Acrescentar Linha e Coluna
@@ -345,13 +366,13 @@ int a(){
                 }
                 else{
                     ///Não Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
             break;
             case 17 :
                 if(caractere == '*'){
                     ///Não Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
                 else if(caractere == EOF){
                     printf("Erro: Bloco de Cometario Nao Terminado");       ///Acrescentar Linha e Coluna
@@ -360,66 +381,66 @@ int a(){
                 else if(caractere == '/'){
                     estado = 1;
                     ///Não Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
                 else{
                     estado = 16;
                     ///Não Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    caractere = proximoCaractere(leitor);
                 }
             break;
             case 18 :
                 if(caractere == '|'){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     return OU_CC;
                 }
                 else{ return OU; }
             break;
             case 19 :
                 if(caractere == '|'){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     return E;
                 }
                 else{ return E_COMERCIAL; }
             break;
             case 20 :
                 if(caractere == '>'){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     return PONTEIRO;
                 }
                 else{ return SUBTRACAO; }
             break;
             case 21 :
                 if(caractere == '='){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     return COMPARACAO;
                 }
                 else{ return ATRIBUICAO; }
             break;
             case 22 :
                 if(caractere == '='){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     return MENOR_IGUAL;
                 }
                 else{ return MENOR; }
             break;
             case 23 :
                 if(caractere == '='){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     return MAIOR_IGUAL;
                 }
                 else{ return MAIOR; }
             break;
             case 24 :
                 if(caractere == '='){
-                    ///Incrementar Lexema
-                    caractere = leitor->proximoCaractere();
+                    incrementaLexema(caractere);
+                    caractere = proximoCaractere(leitor);
                     return DIFERENTE;
                 }
                 else{ return NEGACAO; }
@@ -428,8 +449,11 @@ int a(){
     }
 }
 
+/** \brief Destrutor do Analizador Lexico
+  *
+  */
 void desalocaParametrosAnalizadorLex(){
+    destruirLeitor(leitor);
     free(automato->lexema);
-    free(automato->nomeArquivo);
     free(automato);
 }

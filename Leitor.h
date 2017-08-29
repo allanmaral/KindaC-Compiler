@@ -6,8 +6,7 @@
 
  /** \brief Leitor de arquivo
   */
- typedef struct _LeitorArquivo
-{
+ typedef struct _LeitorArquivo{
     char**  buffer;          /**< Buffer de leitura  */
     int     tamanhoBuffer;   /**< Tamanho de cada buffer de leitura */
     int     bufferAtual;     /**< Indice do buffer de leitura ativo */
@@ -27,14 +26,14 @@
   * \return 1 - ARQUIVO_ABERTO
   *
   */
-int InicializarLeitor(LeitorArquivo* arquivo, const char* caminhoArquivo, int tamanhoBuffer);
+int inicializarLeitor(LeitorArquivo* arquivo, const char* caminhoArquivo, int tamanhoBuffer);
 
 /** \brief Destrutor do leitor de arquivo
  *
  * \param arquivo LeitorArquivo* arquivo a ser destruido
  *
  */
-void DestruirLeitor(LeitorArquivo* arquivo);
+void destruirLeitor(LeitorArquivo* arquivo);
 
 /** \brief Lê o próximo caracter de um arquivo
  *
@@ -42,4 +41,4 @@ void DestruirLeitor(LeitorArquivo* arquivo);
  * \return char Caracter lido
  *
  */
-char ProximoCaractere(LeitorArquivo* arquivo);
+char proximoCaractere(LeitorArquivo* arquivo);

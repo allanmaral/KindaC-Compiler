@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "Leitor.h"
 
 #define DEFINICAO_TIPO   1
 #define ESTRUTURA        2
@@ -34,7 +35,7 @@
 #define CHAVE_DIR       30
 #define PARENTESE_ESQ   31
 #define PARENTESE_DIR   32
-#define EOF             33
+#define EOF             330
 #define MAIOR           34
 #define MENOR           35
 #define MAIOR_IGUAL     36
@@ -60,19 +61,36 @@
 #define NEGACAO         56
 #define VIRGULA         57
 
-typedef struct Analizador_Lexico{
-    char *nomeArquivo;//atributo do leitor
-    char *lexema;
-    int estado;
-    int posicaoLexema;
-    int tamLexema;
-    int linha;
-    int coluna;
+ /** \brief Automato
+  */
+typedef struct _Automato{
+    char *lexema;         /**< Vetor de caracteres adicionados ao lexema  */
+    int estado;           /**< Estado atual do automato  */
+    int posicaoLexema;    /**< Posicao a adicionar um caractere no lexema  */
+    int tamLexema;        /**< Tamanho total do vetor de caracters lexema  */
+    int linha;            /**< Linha atual do arquivo  */
+    int coluna;           /**< Coluna atual do arquivo  */
 
-} Analisador;
+} Automato;
 
-void iniciaAnalisadorLexico(char *arquivo);
+ /** \brief Construtor do analisador lexico
+  *
+  * \param caminhoArquivo const char* Caminho do arquivo a ser lido
+  */
+void iniciaAnalisadorLexico(char *caminho);
+
+ /** \brief Funcao que define as transicoes do automato
+  *
+  */
 int a();
-void leCaractere(char c);
+
+ /** \brief Procedimento que adiciona um caractere ao vetor de caracters (lexema)
+  *
+  *  \param caractere a ser adicionado
+  */
 void incrementaLexema(char caractere);
+
+/** \brief Destrutor do Analizador Lexico
+  *
+  */
 void desalocaParametrosAnalizadorLex();

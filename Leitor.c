@@ -1,5 +1,5 @@
-#include "Leitor.h"
 #include <stdlib.h>
+#include "Leitor.h"
 
 /** \brief Construtor do leitor de arquivo
   *
@@ -11,7 +11,7 @@
   * \return 1 - ARQUIVO_ABERTO
   *
   */
-int InicializarLeitor(LeitorArquivo* arquivo, const char* caminhoArquivo, int tamanhoBuffer) {
+int inicializarLeitor(LeitorArquivo* arquivo, const char* caminhoArquivo, int tamanhoBuffer) {
     arquivo->file = fopen(caminhoArquivo, "r");
     // Se for um arquivo valido
     if(arquivo->file) {
@@ -41,7 +41,7 @@ int InicializarLeitor(LeitorArquivo* arquivo, const char* caminhoArquivo, int ta
  * \param arquivo LeitorArquivo* arquivo a ser destruido
  *
  */
-void DestruirLeitor(LeitorArquivo* arquivo)
+void destruirLeitor(LeitorArquivo* arquivo)
 {
     if(arquivo->file)
     {
@@ -67,7 +67,7 @@ void DestruirLeitor(LeitorArquivo* arquivo)
  * \param arquivo LeitorArquivo* Leitor contendo o buffer
  *
  */
-void PreencherBuffer(int indiceBuffer, LeitorArquivo* arquivo)
+void preencherBuffer(int indiceBuffer, LeitorArquivo* arquivo)
 {
     int elementosLidos, i;
     // Le o arquivo
@@ -84,14 +84,14 @@ void PreencherBuffer(int indiceBuffer, LeitorArquivo* arquivo)
  * \return char Caracter lido
  *
  */
-char ProximoCaractere(LeitorArquivo* arquivo) {
+char proximoCaractere(LeitorArquivo* arquivo) {
     // Verifica se o arquivo é valido
     if(arquivo->file) {
         // Verifica se o arquivo já foi lido antes
         if(arquivo->caractereAtual == -1) {
             // Preenche os buffers
-            PreencherBuffer(0, arquivo);
-            PreencherBuffer(1, arquivo);
+            preencherBuffer(0, arquivo);
+            preencherBuffer(1, arquivo);
         }
 
         // Incrementa a posição do cursor
@@ -104,7 +104,7 @@ char ProximoCaractere(LeitorArquivo* arquivo) {
         }
         // Se o buffer anterior ainda não tiver sido atualizado e não for mais necessario
         if(arquivo->preencherProximo && arquivo->caractereAtual > 2048) {
-            PreencherBuffer((arquivo->bufferAtual+1) % 2, arquivo);
+            preencherBuffer((arquivo->bufferAtual+1) % 2, arquivo);
             arquivo->preencherProximo = 0;
         }
 
