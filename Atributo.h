@@ -3,15 +3,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-class Atributo
-{
+class Atributo{
     public:
         Atributo();
         int pegarToken();
         void atribuirToken(int t);
-        virtual ~Atributo();
+        ~Atributo();
     private:
         int token;
 };
 
-#endif // ATRIBUTO_H
+#endif // PROPRIEDADE_H

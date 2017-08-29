@@ -7,6 +7,7 @@ typedef enum {
     ErroFaltaAspasDupla,
     ErroFimDeArquivoInesperado,
     ErroComentarioNaoTerminado,
+    ErroCaractereMalFormado,
     ErroNumeroMalFormado,
     ErroArquivoInvalido
 } Erros;

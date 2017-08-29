@@ -1,12 +1,13 @@
+#ifndef LEITOR_H
+#define LEITOR_H
 #include <stdio.h>
-
 
 #define ARQUIVO_INVALIDO 0
 #define ARQUIVO_ABERTO   1
 
  /** \brief Leitor de arquivo
   */
- typedef struct _LeitorArquivo{
+typedef struct _LeitorArquivo{
     char**  buffer;          /**< Buffer de leitura  */
     int     tamanhoBuffer;   /**< Tamanho de cada buffer de leitura */
     int     bufferAtual;     /**< Indice do buffer de leitura ativo */
@@ -42,3 +43,5 @@ void destruirLeitor(LeitorArquivo* arquivo);
  *
  */
 char proximoCaractere(LeitorArquivo* arquivo);
+
+#endif // LEITOR_H

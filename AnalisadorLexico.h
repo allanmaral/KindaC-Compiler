@@ -1,3 +1,6 @@
+#ifndef ANALISADORLEXICO_H
+#define ANALISADORLEXICO_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -35,9 +38,6 @@
 #define CHAVE_DIR       30
 #define PARENTESE_ESQ   31
 #define PARENTESE_DIR   32
-#ifndef EOF
-#define EOF             -1
-#endif // EOF
 #define MAIOR           34
 #define MENOR           35
 #define MAIOR_IGUAL     36
@@ -59,20 +59,25 @@
 #define PORCENTO        52
 #define OU_CC           53
 #define NUM_INTEIRO     54
+#define NUM_REAL        58
 #define LITERAL         55
 #define NEGACAO         56
 #define VIRGULA         57
+#define ERRO            99
+
+#ifndef EOF
+    #define EOF         -1
+#endif // EOF
 
  /** \brief Automato
   */
 typedef struct _Automato{
-    char *lexema;         /**< Vetor de caracteres adicionados ao lexema  */
-    int estado;           /**< Estado atual do automato  */
-    int posicaoLexema;    /**< Posicao a adicionar um caractere no lexema  */
-    int tamLexema;        /**< Tamanho total do vetor de caracters lexema  */
-    int linha;            /**< Linha atual do arquivo  */
-    int coluna;           /**< Coluna atual do arquivo  */
-
+    char   *lexema;           /**< Vetor de caracteres adicionados ao lexema  */
+    int     estado;           /**< Estado atual do automato  */
+    int     posicaoLexema;    /**< Posicao a adicionar um caractere no lexema  */
+    int     tamLexema;        /**< Tamanho total do vetor de caracters lexema  */
+    int     linha;            /**< Linha atual do arquivo  */
+    int     coluna;           /**< Coluna atual do arquivo  */
 } Automato;
 
  /** \brief Construtor do analisador lexico
@@ -81,10 +86,16 @@ typedef struct _Automato{
   */
 void iniciaAnalisadorLexico(char *caminho);
 
+ /** \brief Função que obtem um caractere do leitor e incrementa uma coluna no automato
+  *
+  *  \return caractere obtido
+  */
+char pegarProximoCaractere();
+
  /** \brief Funcao que define as transicoes do automato
   *
   */
-int a();
+int proximoToken();
 
  /** \brief Procedimento que adiciona um caractere ao vetor de caracters (lexema)
   *
@@ -96,3 +107,6 @@ void incrementaLexema(char caractere);
   *
   */
 void desalocaParametrosAnalizadorLex();
+
+
+#endif // ANALISADORLEXICO_H

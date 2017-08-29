@@ -1,22 +1,22 @@
-#ifndef TABELASIMBOLOS_H
-#define TABELASIMBOLOS_H
-#include "NoTrie.h"
+#ifndef TABELASIMBOLOS_H_INCLUDED
+#define TABELASIMBOLOS_H_INCLUDED
 
+#include "TrieReal.h"
+#include "TrieIdentificador.h"
+#include "TrieInteiro.h"
+#include "TrieLiteral.h"
+#include "TrieReservada.h"
 
-class TabelaSimbolos
-{
-    public:
-        TabelaSimbolos();
-        void insere(char *entrada, Atributo *atributo);
-        Atributo* busca(char *entrada);
-        virtual void imprime();
-        virtual ~TabelaSimbolos();
-    private:
-        NoTrie *raiz;
-        NoTrie *insereRecursivo(char *entrada, int indice, NoTrie *pai, Atributo *atributo);
-        Atributo* buscaRecursivo(char *entrada, int indice, NoTrie *pai);
-        void imprimeRecursivo(char *saida, int indice, NoTrie *pai);
-        int altura;
-};
+#define TABELA_ID 1
+#define TABELA_REAL 2
+#define TABELA_INTEIRO 3
+#define TABELA_LITERAL 4
+#define TABELA_RESERVADA 5
 
-#endif // TABELASIMBOLOS_H
+void inicializaTabelaSimbolos();
+Atributo* buscaTabela(const int tabela, char* entrada);
+void insereTabela(const int tabela, char* entrada, Atributo* atr);
+void imprimeTabela(const int tabela);
+void destroiTabelaSimbolos();
+
+#endif // TABELASIMBOLOS_H_INCLUDED
