@@ -16,7 +16,9 @@ char pegarProximoCaractere(){
     automato->coluna++;
     printf("Somou uma coluna\n");
     printf("Chamou funcao do leitor proximoCaractere\n");
-    return proximoCaractere(leitor);
+    char c=proximoCaractere(leitor);
+    printf("char: %c\n",c);
+    return c;
 }
 
 /** \brief Construtor do analisador lexico
@@ -31,6 +33,9 @@ char pegarProximoCaractere(){
     automato->tamLexema     = 32;
     leitor = (LeitorArquivo*) malloc(sizeof(LeitorArquivo));
     int res = inicializarLeitor(leitor, caminho, 4096);
+
+    printf("Retorno do arquivo: %d\n",res);
+
     if(res == ARQUIVO_INVALIDO){
         saidaErro(ErroArquivoInvalido, 0, 0);
         exit(1);
@@ -66,6 +71,11 @@ int proximoToken(){
     automato->posicaoLexema = 0;
     int pronto = 1; automato->estado = 1;
     while(pronto != 0){
+        printf(" processando automato...\t estado: %d\t caractere: %c\n",automato->estado,automato->caractere);
+        if(automato->caractere==' '){
+            //int k;
+            //scanf("%d",&k);
+        }
         switch ( automato->estado ){
             case 1 :
                 if(isspace(automato->caractere)){
@@ -131,19 +141,19 @@ int proximoToken(){
                             incrementaLexema();
                         break;
 
-                        case ';' : return PONTO_VIRGULA; break;
-                        case ':' : return DOIS_PONTOS;   break;
-                        case ',' : return VIRGULA;       break;
-                        case '[' : return COLCHETE_ESQ;  break;
-                        case ']' : return COLCHETE_DIR;  break;
-                        case '(' : return PARENTESE_ESQ; break;
-                        case ')' : return PARENTESE_DIR; break;
-                        case '{' : return CHAVE_ESQ;     break;
-                        case '}' : return CHAVE_DIR;     break;
-                        case '+' : return ADICAO;        break;
-                        case '%' : return PORCENTO;      break;
-                        case '*' : return ASTERISCO;     break;
-                        case '\0': return EOF;           break;
+                        case ';' : automato->caractere = pegarProximoCaractere(); return PONTO_VIRGULA; break;
+                        case ':' : automato->caractere = pegarProximoCaractere(); return DOIS_PONTOS;   break;
+                        case ',' : automato->caractere = pegarProximoCaractere(); return VIRGULA;       break;
+                        case '[' : automato->caractere = pegarProximoCaractere(); return COLCHETE_ESQ;  break;
+                        case ']' : automato->caractere = pegarProximoCaractere(); return COLCHETE_DIR;  break;
+                        case '(' : automato->caractere = pegarProximoCaractere(); return PARENTESE_ESQ; break;
+                        case ')' : automato->caractere = pegarProximoCaractere(); return PARENTESE_DIR; break;
+                        case '{' : automato->caractere = pegarProximoCaractere(); return CHAVE_ESQ;     break;
+                        case '}' : automato->caractere = pegarProximoCaractere(); return CHAVE_DIR;     break;
+                        case '+' : automato->caractere = pegarProximoCaractere(); return ADICAO;        break;
+                        case '%' : automato->caractere = pegarProximoCaractere(); return PORCENTO;      break;
+                        case '*' : automato->caractere = pegarProximoCaractere(); return ASTERISCO;     break;
+                        case '\0': automato->caractere = pegarProximoCaractere(); return EOF;           break;
 
                         default:
                             saidaErro(ErroCaractereInvalido, automato->linha, automato->coluna);
@@ -157,14 +167,15 @@ int proximoToken(){
                     incrementaLexema();
                 }
                 else{
-                    Atributo *auxiliar = buscaTabela(TABELA_RESERVADA, automato->lexema);
+                    automato->caractere = pegarProximoCaractere();
+                    /*Atributo *auxiliar = buscaTabela(TABELA_RESERVADA, automato->lexema);
                     if(auxiliar != NULL){ return auxiliar->pegarToken(); }
                     else{
                         auxiliar = (Atributo*)malloc(sizeof(Atributo));
                         auxiliar->atribuirToken(LITERAL);
-                        insereTabela(TABELA_ID, automato->lexema, auxiliar);
+                        insereTabela(TABELA_ID, automato->lexema, auxiliar);*/
                         return ID;
-                    }
+                    //}
                 }
             break;
             case 3 :
@@ -180,10 +191,10 @@ int proximoToken(){
                     incrementaLexema();
                 }
                 else{
-                    Atributo *auxiliar;
+                   /* Atributo *auxiliar;
                     auxiliar = (Atributo*)malloc(sizeof(Atributo));
                     auxiliar->atribuirToken(NUM_INTEIRO);
-                    insereTabela(TABELA_INTEIRO, automato->lexema, auxiliar);
+                    insereTabela(TABELA_INTEIRO, automato->lexema, auxiliar);*/
                     return NUM_INTEIRO;
                 }
             break;
@@ -207,10 +218,10 @@ int proximoToken(){
                     automato->caractere = pegarProximoCaractere();
                 }
                 else{
-                    Atributo *auxiliar;
+                    /*Atributo *auxiliar;
                     auxiliar = (Atributo*)malloc(sizeof(Atributo));
                     auxiliar->atribuirToken(NUM_REAL);
-                    insereTabela(TABELA_REAL, automato->lexema, auxiliar);
+                    insereTabela(TABELA_REAL, automato->lexema, auxiliar);*/
                     return NUM_REAL;
                 }
             break;
@@ -231,10 +242,10 @@ int proximoToken(){
             case 7 :
                 if(isdigit(automato->caractere)){ incrementaLexema(); }
                 else{
-                    Atributo *auxiliar;
+                    /*Atributo *auxiliar;
                     auxiliar = (Atributo*)malloc(sizeof(Atributo));
                     auxiliar->atribuirToken(NUM_REAL);
-                    insereTabela(TABELA_REAL, automato->lexema, auxiliar);
+                    insereTabela(TABELA_REAL, automato->lexema, auxiliar);*/
                     return NUM_REAL;
                 }
             break;
@@ -280,10 +291,10 @@ int proximoToken(){
             case 11 :
                 if(automato->caractere == '\''){
                     incrementaLexema();
-                    Atributo *auxiliar;
+                    /*Atributo *auxiliar;
                     auxiliar = (Atributo*)malloc(sizeof(Atributo));
                     auxiliar->atribuirToken(LITERAL);
-                    insereTabela(TABELA_LITERAL, automato->lexema, auxiliar);
+                    insereTabela(TABELA_LITERAL, automato->lexema, auxiliar);*/
                     return LITERAL;
                 }
                 else if(automato->caractere == '\0'){
@@ -306,10 +317,10 @@ int proximoToken(){
                 }
                 else if(automato->caractere == '"'){
                     incrementaLexema();
-                    Atributo *auxiliar;
+                    /*Atributo *auxiliar;
                     auxiliar = (Atributo*)malloc(sizeof(Atributo));
                     auxiliar->atribuirToken(LITERAL);
-                    insereTabela(TABELA_LITERAL, automato->lexema, auxiliar);
+                    insereTabela(TABELA_LITERAL, automato->lexema, auxiliar);*/
                     return LITERAL;
                 }
                 else{
