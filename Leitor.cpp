@@ -64,12 +64,12 @@ void destruirLeitor(LeitorArquivo* arquivo){
  *
  */
 void preencherBuffer(int indiceBuffer, LeitorArquivo* arquivo){
-    int elementosLidos, i;
+    int elementosLidos;
     // Le o arquivo
     elementosLidos = fread(arquivo->buffer[indiceBuffer], 1, arquivo->tamanhoBuffer, arquivo->file);
     // Se não ler o mesmo numero de elementos, pode ser erro ou fim de arquivo
     if(elementosLidos < arquivo->tamanhoBuffer) {
-        for(i = elementosLidos-1; i < arquivo->tamanhoBuffer; i++) arquivo->buffer[indiceBuffer][i] = (char)0;
+        arquivo->buffer[indiceBuffer][elementosLidos] = (char)0;
     }
 }
 
@@ -87,9 +87,8 @@ char proximoCaractere(LeitorArquivo* arquivo) {
             // Preenche os buffers
             preencherBuffer(0, arquivo);
             preencherBuffer(1, arquivo);
+            arquivo->caractereAtual = 0;
         }
-        // Incrementa a posição do cursor
-        arquivo->caractereAtual += 1;
         // Se tiver passado do tamanho do buffer, passa pro próximo
         if(arquivo->caractereAtual >= arquivo->tamanhoBuffer) {
             arquivo->caractereAtual = 0;
@@ -101,7 +100,10 @@ char proximoCaractere(LeitorArquivo* arquivo) {
             preencherBuffer((arquivo->bufferAtual+1) % 2, arquivo);
             arquivo->preencherProximo = 0;
         }
-        return arquivo->buffer[arquivo->bufferAtual][arquivo->caractereAtual];
+        char resultado = arquivo->buffer[arquivo->bufferAtual][arquivo->caractereAtual];
+        // Incrementa a posição do cursor
+        arquivo->caractereAtual += 1;
+        return resultado;
     }
     else{ return (char)0; /*Tem que tratar o erro aqui*/ }
 }
