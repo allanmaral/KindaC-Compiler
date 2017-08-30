@@ -60,3 +60,10 @@
 #ifndef EOF
     #define EOF         -1
 #endif // EOF
+
+
+/** \brief Traduz o numero do token em uma string
+ *  \param token int Token a ser traduzido
+ *  \return String com nome do token
+ */
+void ImprimeToken(int token);
