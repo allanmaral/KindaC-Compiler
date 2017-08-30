@@ -30,9 +30,12 @@ char pegarProximoCaractere(){
     automato->posicaoLexema = 0;
     automato->tamLexema     = 32;
     leitor = (LeitorArquivo*) malloc(sizeof(LeitorArquivo));
-    int i = inicializarLeitor(leitor, caminho, 4096);
-    printf("Retorno do arquivo: %d\n",i);
-    if(i == 0) exit(1);
+    int res = inicializarLeitor(leitor, caminho, 4096);
+    if(res == ARQUIVO_INVALIDO){
+        saidaErro(ErroArquivoInvalido, 0, 0);
+        exit(1);
+    }
+    printf("Arquivo aberto com sucesso\n");
     automato->caractere = pegarProximoCaractere();
     printf("iniciou Corretamente\n");
 }

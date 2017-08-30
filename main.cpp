@@ -7,7 +7,8 @@ int main()
    iniciaAnalisadorLexico("./Text.txt");
    int c = 0;
    while(c != EOF){
-        printf("%d\n",proximoToken());
+        c = proximoToken();
+        printf("%d\n",c);
    }
    return 0;
 }

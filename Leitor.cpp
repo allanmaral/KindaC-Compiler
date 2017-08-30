@@ -69,7 +69,7 @@ void preencherBuffer(int indiceBuffer, LeitorArquivo* arquivo){
     elementosLidos = fread(arquivo->buffer[indiceBuffer], 1, arquivo->tamanhoBuffer, arquivo->file);
     // Se não ler o mesmo numero de elementos, pode ser erro ou fim de arquivo
     if(elementosLidos < arquivo->tamanhoBuffer) {
-        for(i = elementosLidos-1; i < arquivo->tamanhoBuffer; i++) arquivo->buffer[indiceBuffer] = (char)0;
+        for(i = elementosLidos-1; i < arquivo->tamanhoBuffer; i++) arquivo->buffer[indiceBuffer][i] = (char)0;
     }
 }
 
