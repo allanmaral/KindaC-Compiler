@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include "Leitor.h"
+
 
 #define DEFINICAO_TIPO   1
 #define ESTRUTURA        2
@@ -78,6 +78,7 @@ typedef struct _Automato{
     int     tamLexema;        /**< Tamanho total do vetor de caracters lexema  */
     int     linha;            /**< Linha atual do arquivo  */
     int     coluna;           /**< Coluna atual do arquivo  */
+    char    caractere;        /**< Ultimo caractere lindo pelo automato*/
 } Automato;
 
  /** \brief Construtor do analisador lexico
@@ -90,21 +91,12 @@ void iniciaAnalisadorLexico(char *caminho);
   *
   *  \return caractere obtido
   */
-char pegarProximoCaractere();
 
- /** \brief Funcao que define as transicoes do automato
-  *
-  */
 int proximoToken();
 
  /** \brief Procedimento que adiciona um caractere ao vetor de caracters (lexema)
   *
   *  \param caractere a ser adicionado
-  */
-void incrementaLexema(char caractere);
-
-/** \brief Destrutor do Analizador Lexico
-  *
   */
 void desalocaParametrosAnalizadorLex();
 
