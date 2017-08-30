@@ -13,6 +13,7 @@ class Trie{
     protected:
         int altura;
         No_Trie *raiz;
+        int calcularTamanhoLexema(char* lexema);
         virtual void imprimeLexema(char* entrada, Atributo * atr);
         virtual void imprimeCabecalho();
     private:

@@ -9,6 +9,7 @@ class TrieReservada:public Trie{
     protected:
         virtual void imprimeLexema(char* entrada, Atributo * atr);
         virtual void imprimeCabecalho();
+        void inicializarReservada();
 };
 
 #endif // TRIERESERVADA_H

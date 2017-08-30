@@ -6,6 +6,9 @@
 #include <ctype.h>
 #include "Tokens.h"
 
+#define TAMANHO_LEXEMA 32
+#define TAMANHO_BUFFER 4096
+
  /** \brief Automato
   */
 typedef struct _Automato{

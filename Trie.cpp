@@ -52,6 +52,7 @@ void Trie::insereRecursivo(char* entrada, int indice, No_Trie *pai, Atributo* at
  *
  */
 void Trie::imprime(){
+    imprimeCabecalho();
     char saida[altura + 1];
     imprimeRecursivo(saida, 0, raiz);
 }
@@ -110,6 +111,12 @@ Atributo* Trie::buscaRecursivo(char *entrada, int indice, No_Trie *pai){
  */
 Atributo* Trie::busca(char *entrada){
     return buscaRecursivo(entrada, 0, raiz);
+}
+int Trie::calcularTamanhoLexema(char *lexema){
+    int total=0;
+    while( lexema[total] != '\0')
+        total++;
+    return total;
 }
 void Trie::imprimeLexema(char* saida, Atributo * atr){
     fprintf(stdout,"[%s]\n", saida);
