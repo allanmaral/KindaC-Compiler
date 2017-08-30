@@ -157,6 +157,7 @@ int proximoToken(){
 
                         default:
                             saidaErro(ErroCaractereInvalido, automato->linha, automato->coluna);
+                            automato->caractere = pegarProximoCaractere();
                             return ERRO;
                     }
                 }

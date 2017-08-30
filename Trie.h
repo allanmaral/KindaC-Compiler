@@ -1,6 +1,7 @@
 #ifndef TRIE_H
 #define TRIE_H
 #include "No_Trie.h"
+#include "Tokens.h"
 
 class Trie{
     public:

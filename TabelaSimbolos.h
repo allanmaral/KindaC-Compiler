@@ -6,6 +6,7 @@
 #include "TrieInteiro.h"
 #include "TrieLiteral.h"
 #include "TrieReservada.h"
+#include "Tokens.h"
 
 #define TABELA_ID 1
 #define TABELA_REAL 2
