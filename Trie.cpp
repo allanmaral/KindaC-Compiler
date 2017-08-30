@@ -1,9 +1,7 @@
 #include "Trie.h"
 
-Trie::Trie(){
-    raiz = new No_Trie();
-    altura = 0;
-}
+Trie::Trie() { raiz = new No_Trie(); altura = 0; }
+
 /** \brief
  *  Função para fazer a inserção de lexemas dentro da tabela de simbolos
  * \param
@@ -16,6 +14,7 @@ Trie::Trie(){
 void Trie::insere(char* entrada, Atributo* atributo){
     insereRecursivo(entrada, 0, raiz, atributo);
 }
+
 /** \brief
  *  Função auxiliar para o metodo de inserção
  * \param
@@ -44,6 +43,7 @@ void Trie::insereRecursivo(char* entrada, int indice, No_Trie *pai, Atributo* at
         insereRecursivo(entrada, indice + 1, filho,atributo);
     }
 }
+
 /** \brief
  *  Função para imprimir todos os lexemas guardados dentro da tabela
  * \param
@@ -56,6 +56,7 @@ void Trie::imprime(){
     char saida[altura + 1];
     imprimeRecursivo(saida, 0, raiz);
 }
+
 /** \brief
  *  Função recursiva auxiliar para percorrer a trie
  * \param
@@ -78,6 +79,7 @@ void Trie::imprimeRecursivo(char* saida, int indice, No_Trie *n){
         }
     }
 }
+
 /** \brief
  *  Função recursiva auxiliar que percorre a trie
  * \param
@@ -101,6 +103,7 @@ Atributo* Trie::buscaRecursivo(char *entrada, int indice, No_Trie *pai){
     }
     return NULL;
 }
+
 /** \brief
  *  Função que busca um lexema na trie e retorna o atributo associado a ele
  * \param

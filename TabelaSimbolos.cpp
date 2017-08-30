@@ -33,7 +33,6 @@ Atributo* buscaTabela(const int tabela, char* entrada){
     return NULL;
 }
 void insereTabela(const int tabela, char* entrada, Atributo* atr){
-
     switch(tabela){
         case TABELA_ID:
             tabelaID->insere(entrada,atr);

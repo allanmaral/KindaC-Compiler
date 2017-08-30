@@ -2,8 +2,6 @@
 #define LEITOR_H
 #include <stdio.h>
 
-#define TAMANHO_BUFFER 4096
-
 #define ARQUIVO_INVALIDO 0
 #define ARQUIVO_ABERTO   1
 
@@ -29,14 +27,14 @@ typedef struct _LeitorArquivo{
   * \return 1 - ARQUIVO_ABERTO
   *
   */
-int inicializarLeitor(const char* caminhoArquivo);
+int inicializarLeitor(LeitorArquivo* arquivo, const char* caminhoArquivo, int tamanhoBuffer);
 
 /** \brief Destrutor do leitor de arquivo
  *
  * \param arquivo LeitorArquivo* arquivo a ser destruido
  *
  */
-void destruirLeitor();
+void destruirLeitor(LeitorArquivo* arquivo);
 
 /** \brief Lê o próximo caracter de um arquivo
  *
@@ -44,6 +42,6 @@ void destruirLeitor();
  * \return char Caracter lido
  *
  */
-char proximoCaractere();
+char proximoCaractere(LeitorArquivo* arquivo);
 
 #endif // LEITOR_H

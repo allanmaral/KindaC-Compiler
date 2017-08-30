@@ -34,6 +34,13 @@ void iniciaAnalisadorLexico(char *caminho);
 
 int proximoToken();
 
+ /** \brief Função que obtem um lexema do analisador lexico
+  *
+  *  \return lexema obtido
+  */
+
+char* pegarLexema();
+
  /** \brief Procedimento que adiciona um caractere ao vetor de caracters (lexema)
   *
   *  \param caractere a ser adicionado

@@ -12,6 +12,7 @@ Atributo* No_Trie::pegarAtributo() { return atributos; }
 void No_Trie::atribuirAtributo(Atributo *p) { atributos = p; }
 void No_Trie::atribuirChave(bool c) { chave = c; }
 bool No_Trie::EChave() { return chave; }
+
 No_Trie::~No_Trie(){
     for(int i = 0; i < TAMANHO_ALFABETO; i++){
         if(caracteres[i] != NULL){ delete caracteres[i]; }

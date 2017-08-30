@@ -12,16 +12,7 @@ typedef enum {
     ErroArquivoInvalido
 } Erros;
 
-/** \brief Inicializa o gerenciador de erro
- *  Qualquer erro existente sera removido
- */
-void inicializaGerenciadorErro();
-
-/** \brief Destroi o gerenciador de erro
- */
-void destroiGerenciadorErro();
-
-/** \brief Salva o erro na lista
+/** \brief Traduz o codigo de erro em string e envia para o stderr
  *
  * \param codigo int Codigo do erro a ser impresso
  * \param linha int Linha onde o erro ocorreu
@@ -29,11 +20,3 @@ void destroiGerenciadorErro();
  *
  */
 void saidaErro(int codigo, int linha, int coluna);
-
-/** \brief Imprime o proximo erro da lista no stderr
- */
-void proximoErro();
-
-/** \brief Imprime a lista de erros
- */
-void imprimeListaErros();

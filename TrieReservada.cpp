@@ -19,11 +19,7 @@ void TrieReservada::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"     TABELA DE PALAVRAS RESERVADAS     \n");
     fprintf(stdout,"---------------------------------------\n");
-    fprintf(stdout,"LEXEMA                   Token numérico\n");
-    /*printf("---------------------------------------\n");
-    printf("     TABELA DE PALAVRAS RESERVADAS     \n");
-    printf("---------------------------------------\n");
-    printf("LEXEMA                   Token numérico\n");*/
+    fprintf(stdout,"LEXEMA                   Token numerico\n");
 }
 void TrieReservada::inicializarReservada(){
     Atributo* auxiliar;
