@@ -63,7 +63,7 @@ void ImprimeToken(int token) {
             case VIRGULA         :  fprintf(stdout, "VIRGULA\n");                       break;
             case ERRO            :  fprintf(stdout, "ERRO\n");                          break;
             case EOF             :  fprintf(stdout, "EOF\n");                           break;
-            default              :
-                printf ("Valor invalido!\n");
+            case RETORNA         :  fprintf(stdout, "RETORNA\n");                       break;
+            default              :  fprintf(stdout, "Valor invalido! Token:%d\n", token);
         }
 }

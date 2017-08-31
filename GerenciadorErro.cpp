@@ -63,6 +63,7 @@ void saidaErro(int codigo, int linha, int coluna){
                         break;
                     }
                 }
+                break;
             }
         }
         novoErro->proximo = antecessor->proximo;
