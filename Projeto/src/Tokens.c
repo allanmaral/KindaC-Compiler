@@ -13,7 +13,6 @@ void ImprimeToken(int token) {
             case PUBLICO         :  fprintf(stdout, "PUBLICO\n");                       break;
             case PRIVADO         :  fprintf(stdout, "PRIVADO\n");                       break;
             case INTEIRO         :  fprintf(stdout, "INTEIRO\n");                       break;
-            case IMPRIME         :  fprintf(stdout, "IMPRIME\n");                       break;
             case REAL            :  fprintf(stdout, "REAL\n");                          break;
             case BOLEANO         :  fprintf(stdout, "BOLEANO\n");                       break;
             case CARACTERE       :  fprintf(stdout, "CARACTERE\n");                     break;
@@ -22,7 +21,9 @@ void ImprimeToken(int token) {
             case ENQUANTO        :  fprintf(stdout, "ENQUANTO\n");                      break;
             case ESCOLHA         :  fprintf(stdout, "ESCOLHA\n");                       break;
             case DESVIA          :  fprintf(stdout, "DESVIA\n");                        break;
+            case IMPRIME         :  fprintf(stdout, "IMPRIME\n");                       break;
             case LE_LINHA        :  fprintf(stdout, "LE_LINHA \n");                     break;
+            case RETORNA         :  fprintf(stdout, "RETORNA\n");                       break;
             case LANCA           :  fprintf(stdout, "LANCA\n");                         break;
             case TENTA           :  fprintf(stdout, "TENTA\n");                         break;
             case PEGA            :  fprintf(stdout, "PEGA\n");                          break;
@@ -30,6 +31,7 @@ void ImprimeToken(int token) {
             case NOVO            :  fprintf(stdout, "NOVO\n");                          break;
             case VERDADEIRO      :  fprintf(stdout, "VERDADEIRO\n");                    break;
             case FALSO           :  fprintf(stdout, "FALSO\n");                         break;
+            case ESSE            :  fprintf(stdout, "ESSE\n");                         break;
             case ID              :  fprintf(stdout, "ID.%s\n", pegarLexema());          break;
             case COLCHETE_ESQ    :  fprintf(stdout, "COLCHETE_ESQ\n");                  break;
             case COLCHETE_DIR    :  fprintf(stdout, "COLCHETE_DIR\n");                  break;
@@ -64,7 +66,6 @@ void ImprimeToken(int token) {
             case VIRGULA         :  fprintf(stdout, "VIRGULA\n");                       break;
             case ERRO            :  fprintf(stdout, "ERRO\n");                          break;
             case EOF             :  fprintf(stdout, "EOF\n");                           break;
-            case RETORNA         :  fprintf(stdout, "RETORNA\n");                       break;
             default              :  fprintf(stdout, "Valor invalido! Token:%d\n", token);
         }
 }
