@@ -14,10 +14,36 @@
 #define TABELA_LITERAL 4
 #define TABELA_RESERVADA 5
 
+/** \brief inicializaTabelaSimbolos
+ *  Função para instânciar as tabelas e definir parâmetros
+ */
 void inicializaTabelaSimbolos();
+/** \brief buscaTabela
+ *  Função para fazer a busca de um atributo dentro de uma tabela por um lexema
+ * \param
+ * tablela: referência a qual tabela será feita a busca
+ * \param
+ * \return
+ * Retorna o atributo referente ao lexema buscado
+ */
 Atributo* buscaTabela(const int tabela, char* entrada);
+/** \brief insereTabela
+ *  Função para inserir um lexema com o seu atributo dentro de uma das tabelas
+ * \param
+ * tabela: referência a qual tabela será feita a inserção
+ * \param
+ */
 void insereTabela(const int tabela, char* entrada, Atributo* atr);
+/** \brief imprimeTabela
+ *  Função para realizar a impressão de uma das tabelas
+ * \param
+ * tabela: tabela a ser impressa
+ * \param
+ */
 void imprimeTabela(const int tabela);
+/** \brief inicializaTabelaSimbolos
+ *  Função para desalocar as tabelas
+ */
 void destruirTabelaSimbolos();
 
 #endif // TABELASIMBOLOS_H_INCLUDED
