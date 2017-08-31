@@ -40,7 +40,6 @@ void destruirLeitor();
 
 /** \brief Lê o próximo caracter de um arquivo
  *
- * \param arquivo LeitorArquivo* Arquivo a ser lido
  * \return char Caracter lido
  *
  */
