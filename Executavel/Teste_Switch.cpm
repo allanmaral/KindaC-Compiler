@@ -1,0 +1,17 @@
+ int main(int argc,char** args){
+	switch(argc){
+		case 0 : 
+			try
+			  {
+				throw 20;
+			  }catch (int e){
+				print("An exception occurred. Exception Nr. " << e << '\n');
+			  }
+		break;
+		case 1:
+			int numero;
+			readln(numero);
+			return numero;
+		break;
+	}
+}

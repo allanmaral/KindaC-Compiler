@@ -1,0 +1,24 @@
+int main() {
+	float a = 123;
+	float b = 123e+45;
+	float c = 123e-45;
+	float f = 0.123;
+	float g = 0.123e+45;
+	float k = .123;
+	float l = .123e+45;
+	float m = .123e-45;
+	float n = .123E+45;
+	float o = .123E-45;
+	float p = 123.;
+	float q = 123.e+45;
+	float r = 123.e-45;
+
+	// Erros
+	float u = .0e;
+	float v = .0e+;
+	float w = .0e-;
+	float x = 1.e;
+	float y = 1.e+;
+	float z = 1.e-;
+	return 0;
+
