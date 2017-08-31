@@ -5,13 +5,12 @@
 #include "Leitor.h"
 
 Automato* automato;
-LeitorArquivo* leitor;
 
 /** \brief Função que obtem um caractere do leitor e incrementa uma coluna no automato
   *
   *  \return caractere obtido
   */
-char pegarProximoCaractere(){ automato->coluna++; return proximoCaractere(leitor); }
+char pegarProximoCaractere(){ automato->coluna++; return lerProximoCaractere(); }
 char* pegarLexema(){ return automato->lexema; }
 
 /** \brief Construtor do analisador lexico
@@ -25,8 +24,7 @@ void iniciaAnalisadorLexico(char *caminho){
     automato->tamLexema     = TAMANHO_LEXEMA;
     automato->linha         = 1;
     automato->coluna        = 0;
-    leitor = (LeitorArquivo*) malloc(sizeof(LeitorArquivo));
-    int res = inicializarLeitor(leitor, caminho, TAMANHO_BUFFER);
+    int res = inicializarLeitor(caminho);
     if(res == ARQUIVO_INVALIDO){
         saidaErro(ErroArquivoInvalido, 0, 0);
         exit(1);
@@ -386,8 +384,8 @@ int proximoToken(){
 /** \brief Destrutor do Analizador Lexico
   *
   */
-void desalocaParametrosAnalizadorLex(){
-    destruirLeitor(leitor);
+void destroiAnalizadorLexico(){
+    destruirLeitor();
     free(automato->lexema);
     free(automato);
 }

@@ -45,7 +45,7 @@ char* pegarLexema();
   *
   *  \param caractere a ser adicionado
   */
-void desalocaParametrosAnalizadorLex();
+void destroiAnalizadorLexico();
 
 
 #endif // ANALISADORLEXICO_H

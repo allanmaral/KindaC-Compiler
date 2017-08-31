@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <sys/resource.h>
+//#include <sys/resource.h>
 
 #include "AnalisadorLexico.h"
 #include "TabelaSimbolos.h"
@@ -15,11 +15,11 @@ void finalizaPrograma()
 }
 
 int main(){
-    struct rlimit lim;
+    //struct rlimit lim;
     //lim.rlim_cur = 1024000000;
-    lim.rlim_cur = 32000000;
-    lim.rlim_max = -1;
-    setrlimit(RLIMIT_STACK, &lim);
+    //lim.rlim_cur = 32000000;
+    //lim.rlim_max = -1;
+    //setrlimit(RLIMIT_STACK, &lim);
 
     // Funcção chamada na saida do programa, garante que memoria será desalocada
     atexit(finalizaPrograma);
