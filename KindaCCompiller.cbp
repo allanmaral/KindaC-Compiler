@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="KindaCCompiller" />
+		<Option makefile_is_custom="1" />
+		<Option execution_dir="KindaC-Compiler" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="KindaC-Compiler/KindaC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<MakeCommands>
+					<Build command="make remade" />
+					<CompileFile command="make remade" />
+					<Clean command="make remade" />
+					<DistClean command="$make -f $makefile distclean$target" />
+					<AskRebuildNeeded command="make remade" />
+					<SilentBuild command="make remade &gt; $(CMD_NULL)" />
+				</MakeCommands>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/KindaCCompiller" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="KindaC-Compiler/AnalisadorLexico.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="KindaC-Compiler/AnalisadorLexico.h" />
+		<Unit filename="KindaC-Compiler/Atributo.cpp" />
+		<Unit filename="KindaC-Compiler/Atributo.h" />
+		<Unit filename="KindaC-Compiler/GerenciadorErro.cpp" />
+		<Unit filename="KindaC-Compiler/GerenciadorErro.h" />
+		<Unit filename="KindaC-Compiler/Leitor.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="KindaC-Compiler/Leitor.h" />
+		<Unit filename="KindaC-Compiler/No_Trie.cpp" />
+		<Unit filename="KindaC-Compiler/No_Trie.h" />
+		<Unit filename="KindaC-Compiler/TabelaSimbolos.cpp" />
+		<Unit filename="KindaC-Compiler/TabelaSimbolos.h" />
+		<Unit filename="KindaC-Compiler/Tokens.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="KindaC-Compiler/Tokens.h" />
+		<Unit filename="KindaC-Compiler/Trie.cpp" />
+		<Unit filename="KindaC-Compiler/Trie.h" />
+		<Unit filename="KindaC-Compiler/TrieIdentificador.cpp" />
+		<Unit filename="KindaC-Compiler/TrieIdentificador.h" />
+		<Unit filename="KindaC-Compiler/TrieInteiro.cpp" />
+		<Unit filename="KindaC-Compiler/TrieInteiro.h" />
+		<Unit filename="KindaC-Compiler/TrieLiteral.cpp" />
+		<Unit filename="KindaC-Compiler/TrieLiteral.h" />
+		<Unit filename="KindaC-Compiler/TrieReal.cpp" />
+		<Unit filename="KindaC-Compiler/TrieReal.h" />
+		<Unit filename="KindaC-Compiler/TrieReservada.cpp" />
+		<Unit filename="KindaC-Compiler/TrieReservada.h" />
+		<Unit filename="KindaC-Compiler/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
