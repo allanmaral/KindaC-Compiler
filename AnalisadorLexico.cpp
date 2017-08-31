@@ -197,7 +197,7 @@ int proximoToken(){
                     return ERRO;
                 }
                 else if(automato->caractere == '\0'){
-                    saidaErro(ErroFaltaAspaSimples, automato->linha, automato->coluna);
+                    saidaErro(ErroCaractereMalFormado, automato->linha, automato->coluna);
                     return EOF;
                 }
                 else if(automato->caractere == '/') { automato->estado = 10; incrementaLexema(); }
@@ -220,11 +220,11 @@ int proximoToken(){
                     return LITERAL;
                 }
                 else if(automato->caractere == '\0'){
-                    saidaErro(ErroFaltaAspaSimples, automato->linha, automato->coluna);
+                    saidaErro(ErroCaractereMalFormado, automato->linha, automato->coluna);
                     return EOF;
                 }
                 else{
-                    saidaErro(ErroCaractereMalFormado, automato->linha, automato->coluna);
+                    saidaErro(ErroFaltaAspaSimples, automato->linha, automato->coluna);
                     return ERRO;
                 }
             break;

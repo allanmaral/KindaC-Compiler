@@ -98,7 +98,7 @@ void proximoErro()
             fprintf(stderr, "[l:%d, c:%d] - Erro: Faltando Caractere \" de terminacao\n", linha, coluna);
         break;
         case ErroFimDeArquivoInesperado:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Final de Arquivo Inexperado\n", linha, coluna);
+            fprintf(stderr, "[l:%d, c:%d] - Erro: Final de Arquivo Inesperado\n", linha, coluna);
         break;
         case ErroComentarioNaoTerminado:
             fprintf(stderr, "[l:%d, c:%d] - Erro: Bloco de Cometario Nao Terminado\n", linha, coluna);
