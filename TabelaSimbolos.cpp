@@ -68,7 +68,7 @@ void imprimeTabela(const int tabela){
             tabelaReservado->imprime();
     }
 }
-void destroiTabelaSimbolos(){
+void destruirTabelaSimbolos(){
     delete tabelaID;
     delete tabelaInteiro;
     delete tabelaLiteral;

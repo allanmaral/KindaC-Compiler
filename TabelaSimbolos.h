@@ -18,6 +18,6 @@ void inicializaTabelaSimbolos();
 Atributo* buscaTabela(const int tabela, char* entrada);
 void insereTabela(const int tabela, char* entrada, Atributo* atr);
 void imprimeTabela(const int tabela);
-void destroiTabelaSimbolos();
+void destruirTabelaSimbolos();
 
 #endif // TABELASIMBOLOS_H_INCLUDED

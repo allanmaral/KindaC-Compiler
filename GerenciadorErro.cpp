@@ -21,13 +21,13 @@ Erro* raiz = NULL;
 void inicializaGerenciadorErro()
 {
     // Se ouver algum erro, apague todos
-    if(raiz){ destroiGerenciadorErro(); }
+    if(raiz){ destruirGerenciadorErro(); }
     raiz = NULL;
 }
 
 /** \brief Destroi o gerenciador de erro
  */
-void destroiGerenciadorErro() {
+void destruirGerenciadorErro() {
     while(raiz) {
         Erro* tmp = raiz->proximo;
         delete raiz;

@@ -19,7 +19,7 @@ void inicializaGerenciadorErro();
 
 /** \brief Destroi o gerenciador de erro
  */
-void destroiGerenciadorErro();
+void destruirGerenciadorErro();
 
 /** \brief Salva o erro na lista
  *

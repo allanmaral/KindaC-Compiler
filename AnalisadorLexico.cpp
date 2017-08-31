@@ -6,11 +6,10 @@
 
 Automato* automato;
 
-/** \brief Função que obtem um caractere do leitor e incrementa uma coluna no automato
+/** \brief Função que atualiza o caractere do leitor e aumenta uma coluna
   *
-  *  \return caractere obtido
   */
-char pegarProximoCaractere(){ automato->coluna++; return lerProximoCaractere(); }
+void pegarProximoCaractere(){ automato->coluna++; automato->caractere = lerProximoCaractere(); }
 char* pegarLexema(){ return automato->lexema; }
 
 /** \brief Construtor do analisador lexico
@@ -19,7 +18,7 @@ char* pegarLexema(){ return automato->lexema; }
   */
 void iniciaAnalisadorLexico(char *caminho){
     automato = (Automato*)malloc(sizeof(Automato));
-    automato->lexema = (char*) malloc(TAMANHO_LEXEMA);
+    automato->lexema = (char*) malloc(TAMANHO_LEXEMA*(sizeof(char)));
     automato->posicaoLexema = 0;
     automato->tamLexema     = TAMANHO_LEXEMA;
     automato->linha         = 1;
@@ -29,29 +28,27 @@ void iniciaAnalisadorLexico(char *caminho){
         saidaErro(ErroArquivoInvalido, 0, 0);
         exit(1);
     }
-    automato->caractere = pegarProximoCaractere();
+    pegarProximoCaractere();
 }
 
-/** \brief Procedimento que adiciona um caractere ao vetor de caracters (lexema)
-  *
-  *  \param caractere a ser adicionado
+/** \brief Procedimento que adiciona o caractere atual
+  *       do automato ao seu vetor de caracters (lexema)
   */
 void incrementaLexema(){
     //Verifica se nao existe posicao disponivel realocando caso necessario
     if(automato->posicaoLexema >= automato->tamLexema -1){
         automato->tamLexema += TAMANHO_LEXEMA;
-        automato->lexema=(char *)realloc(automato->lexema, automato->tamLexema);
+        automato->lexema=(char *)realloc(automato->lexema, automato->tamLexema*(sizeof(char)));
     }
     //Adiciona o caractere
     automato->lexema[automato->posicaoLexema] = automato->caractere;
     automato->posicaoLexema++;
     //Garante que o lexema sempre termine com \0
     automato->lexema[automato->posicaoLexema] = '\0';
-    automato->caractere = pegarProximoCaractere();
+    pegarProximoCaractere();
 }
 
 /** \brief Funcao que define as transicoes do automato
-  *
   */
 int proximoToken(){
     automato->posicaoLexema = 0;
@@ -62,14 +59,14 @@ int proximoToken(){
                 if(isspace(automato->caractere)){
                     if(automato->caractere == '\n'){
                         automato->coluna = 0;
-                        automato->caractere = pegarProximoCaractere();
+                        pegarProximoCaractere();
                         automato->linha++;
                     }
                     else if(automato->caractere == '\t'){
 						automato->coluna += 3;
-                        automato->caractere = pegarProximoCaractere();
+                        pegarProximoCaractere();
                     }
-                    else{ automato->caractere = pegarProximoCaractere(); }
+                    else{ pegarProximoCaractere(); }
                 }
                 else if(isalpha(automato->caractere) || automato->caractere == '_'){
                     automato->estado = 2;
@@ -93,23 +90,23 @@ int proximoToken(){
                         case '>' : automato->estado = 23; incrementaLexema(); break;
                         case '!' : automato->estado = 24; incrementaLexema(); break;
 
-                        case ';' : automato->caractere = pegarProximoCaractere(); return PONTO_VIRGULA; break;
-                        case ':' : automato->caractere = pegarProximoCaractere(); return DOIS_PONTOS;   break;
-                        case ',' : automato->caractere = pegarProximoCaractere(); return VIRGULA;       break;
-                        case '[' : automato->caractere = pegarProximoCaractere(); return COLCHETE_ESQ;  break;
-                        case ']' : automato->caractere = pegarProximoCaractere(); return COLCHETE_DIR;  break;
-                        case '(' : automato->caractere = pegarProximoCaractere(); return PARENTESE_ESQ; break;
-                        case ')' : automato->caractere = pegarProximoCaractere(); return PARENTESE_DIR; break;
-                        case '{' : automato->caractere = pegarProximoCaractere(); return CHAVE_ESQ;     break;
-                        case '}' : automato->caractere = pegarProximoCaractere(); return CHAVE_DIR;     break;
-                        case '+' : automato->caractere = pegarProximoCaractere(); return ADICAO;        break;
-                        case '%' : automato->caractere = pegarProximoCaractere(); return PORCENTO;      break;
-                        case '*' : automato->caractere = pegarProximoCaractere(); return ASTERISCO;     break;
-                        case '\0': automato->caractere = pegarProximoCaractere(); return EOF;           break;
+                        case ';' : pegarProximoCaractere(); return PONTO_VIRGULA; break;
+                        case ':' : pegarProximoCaractere(); return DOIS_PONTOS;   break;
+                        case ',' : pegarProximoCaractere(); return VIRGULA;       break;
+                        case '[' : pegarProximoCaractere(); return COLCHETE_ESQ;  break;
+                        case ']' : pegarProximoCaractere(); return COLCHETE_DIR;  break;
+                        case '(' : pegarProximoCaractere(); return PARENTESE_ESQ; break;
+                        case ')' : pegarProximoCaractere(); return PARENTESE_DIR; break;
+                        case '{' : pegarProximoCaractere(); return CHAVE_ESQ;     break;
+                        case '}' : pegarProximoCaractere(); return CHAVE_DIR;     break;
+                        case '+' : pegarProximoCaractere(); return ADICAO;        break;
+                        case '%' : pegarProximoCaractere(); return PORCENTO;      break;
+                        case '*' : pegarProximoCaractere(); return ASTERISCO;     break;
+                        case '\0': pegarProximoCaractere(); return EOF;           break;
 
                         default:
                             saidaErro(ErroCaractereInvalido, automato->linha, automato->coluna);
-                            automato->caractere = pegarProximoCaractere();
+                            pegarProximoCaractere();
                             return ERRO;
                     }
                 }
@@ -155,7 +152,7 @@ int proximoToken(){
                 if(isdigit(automato->caractere)) { incrementaLexema(); }
                 else if(automato->caractere == 'e' || automato->caractere == 'E'){
                     automato->estado = 6;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else{
                     Atributo *auxiliar;
@@ -245,6 +242,10 @@ int proximoToken(){
                     insereTabela(TABELA_LITERAL, automato->lexema, auxiliar);
                     return LITERAL;
                 }
+                else if(automato->caractere == '\n'){
+                    saidaErro(ErroFaltaAspasDupla, automato->linha, automato->coluna);
+                    return ERRO;
+                }
                 else{ incrementaLexema(); }
             break;
             case 13 :
@@ -258,12 +259,12 @@ int proximoToken(){
                 if(automato->caractere == '/'){
                     automato->estado = 15;
                     automato->posicaoLexema = 0;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else if(automato->caractere == '*'){
                     automato->estado = 16;
                     automato->posicaoLexema = 0;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else{ return DIVISAO; }
             break;
@@ -272,106 +273,106 @@ int proximoToken(){
                 else if(automato->caractere == '\n'){
                     automato->linha++;
                     automato->coluna = 0;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                     automato->estado = 1;
                 }
                 else if(automato->caractere == '\t'){
                     automato->coluna += 3;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
-                else{ automato->caractere = pegarProximoCaractere(); }
+                else{ pegarProximoCaractere(); }
             break;
             case 16 :
                 if(automato->caractere == '*'){
                     automato->estado = 17;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else if(automato->caractere == '\n'){
                     automato->linha++;
                     automato->coluna = 0;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else if(automato->caractere == '\t'){
                     automato->coluna += 3;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else if(automato->caractere == '\0'){
                     saidaErro(ErroComentarioNaoTerminado, automato->linha, automato->coluna);
                     return EOF;
                 }
-                else{ automato->caractere = pegarProximoCaractere(); }
+                else{ pegarProximoCaractere(); }
             break;
             case 17 :
-                if(automato->caractere == '*'){ automato->caractere = pegarProximoCaractere(); }
+                if(automato->caractere == '*'){ pegarProximoCaractere(); }
                 else if(automato->caractere == '\0'){
                     saidaErro(ErroComentarioNaoTerminado, automato->linha, automato->coluna);
                     return EOF;
                 }
                 else if(automato->caractere == '/'){
                     automato->estado = 1;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else if(automato->caractere == '\n'){
                     automato->estado = 16;
                     automato->linha++;
                     automato->coluna = 0;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else if(automato->caractere == '\t'){
                     automato->estado = 16;
                     automato->coluna += 3;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
                 else{
                     automato->estado = 16;
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                 }
             break;
             case 18 :
                 if(automato->caractere == '|'){
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                     return OU_CC;
                 }
                 else{ return OU; }
             break;
             case 19 :
                 if(automato->caractere == '|'){
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                     return E;
                 }
                 else{ return E_COMERCIAL; }
             break;
             case 20 :
                 if(automato->caractere == '>'){
-                	automato->caractere = pegarProximoCaractere();
+                	pegarProximoCaractere();
                     return PONTEIRO;
                 }
                 else{ return SUBTRACAO; }
             break;
             case 21 :
                 if(automato->caractere == '='){
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                     return COMPARACAO;
                 }
                 else{ return ATRIBUICAO; }
             break;
             case 22 :
                 if(automato->caractere == '='){
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                     return MENOR_IGUAL;
                 }
                 else{ return MENOR; }
             break;
             case 23 :
                 if(automato->caractere == '='){
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                     return MAIOR_IGUAL;
                 }
                 else{ return MAIOR; }
             break;
             case 24 :
                 if(automato->caractere == '='){
-                    automato->caractere = pegarProximoCaractere();
+                    pegarProximoCaractere();
                     return DIFERENTE;
                 }
                 else{ return NEGACAO; }
@@ -384,7 +385,7 @@ int proximoToken(){
 /** \brief Destrutor do Analizador Lexico
   *
   */
-void destroiAnalizadorLexico(){
+void destruirAnalizadorLexico(){
     destruirLeitor();
     free(automato->lexema);
     free(automato);

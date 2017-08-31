@@ -9,9 +9,9 @@
 void finalizaPrograma()
 {
     imprimeListaErros();
-    destroiAnalizadorLexico();
-    destroiTabelaSimbolos();
-    destroiGerenciadorErro();
+    destruirAnalizadorLexico();
+    destruirTabelaSimbolos();
+    destruirGerenciadorErro();
 }
 
 int main(){
@@ -23,13 +23,14 @@ int main(){
 
     // Funcção chamada na saida do programa, garante que memoria será desalocada
     atexit(finalizaPrograma);
-
     inicializaGerenciadorErro();
     inicializaTabelaSimbolos();
     iniciaAnalisadorLexico((char*)"./Text.txt");
     int token = 0;
     while(token != EOF){
         token = proximoToken();
+
+
         ImprimeToken(token);
     }
     imprimeTabela(TABELA_LITERAL);
