@@ -32,7 +32,7 @@ PARENTESE_DIR
 CHAVE_ESQ
 IMPRIME
 PARENTESE_ESQ
-LITERAL."An exception occurred. Exception Nr. "
+LITERAL." Ocorreu erro "
 MENOR
 MENOR
 ID.e
@@ -66,7 +66,7 @@ EOF
 ---------------------------------------
           TABELA DE LITERAIS           
 ---------------------------------------
-"An exception occurred. Exception Nr. "
+" Ocorreu erro "
 '\n'
 ---------------------------------------
        TABELA DE IDENTIFICADORES       

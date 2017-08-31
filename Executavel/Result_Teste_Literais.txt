@@ -1,15 +1,9 @@
-[l:12, c:5] - Erro: Caractere Invalido
-[l:13, c:16] - Erro: Faltando Caractere ' de terminacao
-[l:14, c:16] - Erro: Faltando Caractere ' de terminacao
-[l:14, c:19] - Erro: Faltando Caractere ' de terminacao
-[l:15, c:16] - Erro: Faltando Caractere " de terminacao
-[l:18, c:1] - Erro: Bloco de Cometario Nao Terminado
-Nome: Teste_Literais.cpm
-INTEIRO
-ID.main
-PARENTESE_ESQ
-PARENTESE_DIR
-CHAVE_ESQ
+[l:9, c:1] - Erro: Caractere Invalido
+[l:10, c:12] - Erro: Faltando Caractere ' de terminacao
+[l:11, c:12] - Erro: Faltando Caractere ' de terminacao
+[l:11, c:15] - Erro: Faltando Caractere ' de terminacao
+[l:12, c:12] - Erro: Faltando Caractere " de terminacao
+[l:14, c:1] - Erro: Bloco de Cometario Nao Terminado
 CARACTERE
 ID.a
 ATRIBUICAO
@@ -89,7 +83,6 @@ e
 f
 g
 h
-main
 w
 x
 y
