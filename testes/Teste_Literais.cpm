@@ -4,13 +4,14 @@ int main() {
 	char d = '\\';
 	char e = '\n';
 	char f = '"';
-
+	
 	char* g = "abcde";
 	char* h = "'abcde'";
 	
 	// Erros
+	#
 	char z = '1;
-	char y = '1';
+	char y = '12';
 	char* x = "
-	char* w =  ###########
-         '  ' = f '[sf
+	char* w = /*
+

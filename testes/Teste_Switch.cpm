@@ -1,0 +1,32 @@
+ switch(automato->caractere){
+	case '.' : automato->estado =  4; incrementaLexema(); break;
+	case '\'': automato->estado =  9; incrementaLexema(); break;
+	case '"' : automato->estado = 12; incrementaLexema(); break;
+	case '/' : automato->estado = 14; incrementaLexema(); break;
+	case '|' : automato->estado = 18; incrementaLexema(); break;
+	case '&' : automato->estado = 19; incrementaLexema(); break;
+	case '-' : automato->estado = 20; incrementaLexema(); break;
+	case '=' : automato->estado = 21; incrementaLexema(); break;
+	case '<' : automato->estado = 22; incrementaLexema(); break;
+	case '>' : automato->estado = 23; incrementaLexema(); break;
+	case '!' : automato->estado = 24; incrementaLexema(); break;
+
+	case ';' : pegarProximoCaractere(); return PONTO_VIRGULA; break;
+	case ':' : pegarProximoCaractere(); return DOIS_PONTOS;   break;
+	case ',' : pegarProximoCaractere(); return VIRGULA;       break;
+	case '[' : pegarProximoCaractere(); return COLCHETE_ESQ;  break;
+	case ']' : pegarProximoCaractere(); return COLCHETE_DIR;  break;
+	case '(' : pegarProximoCaractere(); return PARENTESE_ESQ; break;
+	case ')' : pegarProximoCaractere(); return PARENTESE_DIR; break;
+	case '{' : pegarProximoCaractere(); return CHAVE_ESQ;     break;
+	case '}' : pegarProximoCaractere(); return CHAVE_DIR;     break;
+	case '+' : pegarProximoCaractere(); return ADICAO;        break;
+	case '%' : pegarProximoCaractere(); return PORCENTO;      break;
+	case '*' : pegarProximoCaractere(); return ASTERISCO;     break;
+	case '\0': pegarProximoCaractere(); return EOF;           break;
+
+	default:
+		saidaErro(ErroCaractereInvalido, automato->linha, automato->coluna);
+		pegarProximoCaractere();
+		return ERRO;
+}

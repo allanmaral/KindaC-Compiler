@@ -1,0 +1,132 @@
+[l:12, c:5] - Erro: Caractere Invalido
+[l:13, c:16] - Erro: Faltando Caractere ' de terminacao
+[l:14, c:16] - Erro: Faltando Caractere ' de terminacao
+[l:14, c:19] - Erro: Faltando Caractere ' de terminacao
+[l:15, c:16] - Erro: Faltando Caractere " de terminacao
+[l:18, c:1] - Erro: Bloco de Cometario Nao Terminado
+Nome: Teste_Literais.cpm
+INTEIRO
+ID.main
+PARENTESE_ESQ
+PARENTESE_DIR
+CHAVE_ESQ
+CARACTERE
+ID.a
+ATRIBUICAO
+LITERAL.'1'
+PONTO_VIRGULA
+CARACTERE
+ID.c
+ATRIBUICAO
+LITERAL.'\''
+PONTO_VIRGULA
+CARACTERE
+ID.d
+ATRIBUICAO
+LITERAL.'\\'
+PONTO_VIRGULA
+CARACTERE
+ID.e
+ATRIBUICAO
+LITERAL.'\n'
+PONTO_VIRGULA
+CARACTERE
+ID.f
+ATRIBUICAO
+LITERAL.'"'
+PONTO_VIRGULA
+CARACTERE
+ASTERISCO
+ID.g
+ATRIBUICAO
+LITERAL."abcde"
+PONTO_VIRGULA
+CARACTERE
+ASTERISCO
+ID.h
+ATRIBUICAO
+LITERAL."'abcde'"
+PONTO_VIRGULA
+ERRO
+CARACTERE
+ID.z
+ATRIBUICAO
+ERRO
+PONTO_VIRGULA
+CARACTERE
+ID.y
+ATRIBUICAO
+ERRO
+NUM_INTEIRO.2
+ERRO
+CARACTERE
+ASTERISCO
+ID.x
+ATRIBUICAO
+ERRO
+CARACTERE
+ASTERISCO
+ID.w
+ATRIBUICAO
+EOF
+---------------------------------------
+          TABELA DE LITERAIS           
+---------------------------------------
+"'abcde'"
+"abcde"
+'"'
+'1'
+'\''
+'\\'
+'\n'
+---------------------------------------
+       TABELA DE IDENTIFICADORES       
+---------------------------------------
+a
+c
+d
+e
+f
+g
+h
+main
+w
+x
+y
+z
+---------------------------------------
+           TABELA DE INTEIROS          
+---------------------------------------
+2
+---------------------------------------
+           TABELA DE REAIS             
+---------------------------------------
+---------------------------------------
+     TABELA DE PALAVRAS RESERVADAS     
+---------------------------------------
+LEXEMA                   Token numerico
+bool                      8
+break                     14
+case                      21
+catch                     20
+char                      9
+class                     3
+else                      11
+false                     24
+float                     7
+if                        10
+int                       6
+new                       22
+print                     15
+private                   5
+public                    4
+readln                    16
+return                    17
+struct                    2
+switch                    13
+this                      25
+throw                     18
+true                      23
+try                       19
+typedef                   1
+while                     12
