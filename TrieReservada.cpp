@@ -1,4 +1,5 @@
 #include "TrieReservada.h"
+#include "Tokens.h"
 
 TrieReservada::TrieReservada():Trie(){
     raiz = new No_Trie();
