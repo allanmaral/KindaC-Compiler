@@ -200,7 +200,7 @@ int proximoToken(){
                     saidaErro(ErroCaractereMalFormado, automato->linha, automato->coluna);
                     return EOF;
                 }
-                else if(automato->caractere == '/') { automato->estado = 10; incrementaLexema(); }
+                else if(automato->caractere == '\\') { automato->estado = 10; incrementaLexema(); }
                 else{ automato->estado = 11; incrementaLexema(); }
             break;
             case 10 :

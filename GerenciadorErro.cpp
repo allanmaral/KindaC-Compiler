@@ -54,17 +54,18 @@ void saidaErro(int codigo, int linha, int coluna){
     if(raiz) {
         while(antecessor->linha < linha) {
             if(antecessor->proximo){
-                antecessor = antecessor->proximo;
-            } else {
-                while(antecessor->coluna < coluna) {
-                    if(antecessor->proximo){
-                        antecessor = antecessor->proximo;
-                    } else {
-                        break;
+                if(antecessor->proximo->linha < linha){
+                    antecessor = antecessor->proximo;
+                } else if ((antecessor->proximo->linha == linha)) {
+                    while(antecessor->coluna < coluna) {
+                        if(antecessor->proximo) {
+                            if(antecessor->proximo->coluna <= coluna) {
+                                antecessor = antecessor->proximo;
+                            } else { break; }
+                        }
                     }
-                }
-                break;
-            }
+                } else {break;}
+            } else { break; }
         }
         novoErro->proximo = antecessor->proximo;
         antecessor->proximo = novoErro;
