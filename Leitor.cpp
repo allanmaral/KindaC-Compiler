@@ -26,7 +26,7 @@ int inicializarLeitor(const char* caminhoArquivo) {
         leitor->tamanhoBuffer = TAMANHO_BUFFER;
         leitor->bufferAtual = 0;
         leitor->caractereAtual = -1;
-        leitor->preencherProximo = 0;
+        leitor->preencherProximoBuffer = 0;
         return ARQUIVO_ABERTO;
     }
     // Arquivo invalido
@@ -97,12 +97,12 @@ char lerProximoCaractere() {
         if(leitor->caractereAtual >= leitor->tamanhoBuffer) {
             leitor->caractereAtual = 0;
             leitor->bufferAtual = (leitor->bufferAtual+1) % 2;
-            leitor->preencherProximo = 1;
+            leitor->preencherProximoBuffer = 1;
         }
         // Se o buffer anterior ainda não tiver sido atualizado e não for mais necessario
-        if(leitor->preencherProximo && leitor->caractereAtual > TAMANHO_BUFFER/2) {
+        if(leitor->preencherProximoBuffer && leitor->caractereAtual > TAMANHO_BUFFER/2) {
             preencherBuffer((leitor->bufferAtual+1) % 2);
-            leitor->preencherProximo = 0;
+            leitor->preencherProximoBuffer = 0;
         }
         char resultado = leitor->buffer[leitor->bufferAtual][leitor->caractereAtual];
         // Incrementa a posição do cursor

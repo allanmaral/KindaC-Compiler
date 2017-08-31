@@ -15,7 +15,7 @@ typedef struct _LeitorArquivo{
     int     bufferAtual;     /**< Indice do buffer de leitura ativo */
     int     caractereAtual;  /**< Indice do ultimo caractere lido no buffer de leitura ativo */
     FILE*   file;            /**< Arquivo aberto */
-    int     preencherProximo;
+    int     preencherProximoBuffer;
 } LeitorArquivo;
 
 
