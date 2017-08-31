@@ -13,6 +13,7 @@ void ImprimeToken(int token) {
             case PUBLICO         :  fprintf(stdout, "PUBLICO\n");                       break;
             case PRIVADO         :  fprintf(stdout, "PRIVADO\n");                       break;
             case INTEIRO         :  fprintf(stdout, "INTEIRO\n");                       break;
+            case IMPRIME         :  fprintf(stdout, "IMPRIME\n");                       break;
             case REAL            :  fprintf(stdout, "REAL\n");                          break;
             case BOLEANO         :  fprintf(stdout, "BOLEANO\n");                       break;
             case CARACTERE       :  fprintf(stdout, "CARACTERE\n");                     break;

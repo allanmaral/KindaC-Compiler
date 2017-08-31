@@ -102,3 +102,106 @@
 	"TrieReservada.h"
 	"Tokens.h"
 
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/AnalisadorLexico.c
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"Atributo.h"
+	"TabelaSimbolos.h"
+	"Leitor.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/AnalisadorLexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	"Tokens.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/Tokens.h
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/GerenciadorErro.h
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/Atributo.h
+	<stdlib.h>
+	<stdio.h>
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/TabelaSimbolos.h
+	"TrieReal.h"
+	"TrieIdentificador.h"
+	"TrieInteiro.h"
+	"TrieLiteral.h"
+	"TrieReservada.h"
+	"Tokens.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/TrieReal.h
+	"Trie.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/Trie.h
+	"No_Trie.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/No_Trie.h
+	"Atributo.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/TrieIdentificador.h
+	"Trie.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/TrieInteiro.h
+	"Trie.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/TrieLiteral.h
+	"Trie.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/TrieReservada.h
+	"Trie.h"
+
+1504211871 /home/einstein/Documentos/KindaC/Projeto/include/Leitor.h
+	<stdio.h>
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/Atributo.cpp
+	"Atributo.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/GerenciadorErro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/Leitor.c
+	<stdlib.h>
+	"Leitor.h"
+	"GerenciadorErro.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/No_Trie.cpp
+	"No_Trie.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/TabelaSimbolos.cpp
+	"TabelaSimbolos.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/Tokens.c
+	"Tokens.h"
+	"AnalisadorLexico.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/Trie.cpp
+	"Trie.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/TrieIdentificador.cpp
+	"TrieIdentificador.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/TrieInteiro.cpp
+	"TrieInteiro.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/TrieLiteral.cpp
+	"TrieLiteral.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/TrieReal.cpp
+	"TrieReal.h"
+
+1504211871 source:/home/einstein/Documentos/KindaC/Projeto/src/TrieReservada.cpp
+	"TrieReservada.h"
+	"Tokens.h"
+
+1504212666 source:/home/einstein/Documentos/KindaC/Projeto/src/main.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"TabelaSimbolos.h"
+	"Tokens.h"
+	"GerenciadorErro.h"
+

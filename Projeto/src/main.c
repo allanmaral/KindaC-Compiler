@@ -34,17 +34,17 @@ int main(int argc, char** args){
 
     nomeArquivo[0] = '\0';
     if(argc == 1){                  // Le o nome do arquivo do stdin
-        fscanf(stdin, "%s", nomeArquivo);
+       if(!fscanf(stdin, "%s", nomeArquivo)){
+            fprintf(stderr, "Falha ao ler o nome do Arquivo\n");
+            exit(1);
+       };
     } else if ( argc == 2 ) {       // Le o nome do arquivo da lista de argumento
         strcpy(nomeArquivo, args[1]);
     } else {
         fprintf(stderr, "Argumento invalido!\nExempo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
         exit(1);
     }
-
     adicionaExtencao(nomeArquivo);
-    fprintf(stdout, "Nome: %s\n", nomeArquivo);
-
     // Funcção chamada na saida do programa, garante que memoria será desalocada
     atexit(finalizaPrograma);
     inicializaGerenciadorErro();
@@ -62,7 +62,6 @@ int main(int argc, char** args){
     imprimeTabela(TABELA_INTEIRO);
     imprimeTabela(TABELA_REAL);
     imprimeTabela(TABELA_RESERVADA);
-    //getchar();
     return 0;
 }
 
