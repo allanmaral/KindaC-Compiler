@@ -66,7 +66,7 @@ int proximoToken(){
 						automato->coluna += 3;
                         pegarProximoCaractere();
                     }
-                    else{ pegarProximoCaractere(); }
+                    else { pegarProximoCaractere(); }
                 }
                 else if(isalpha(automato->caractere) || automato->caractere == '_'){
                     automato->estado = 2;
@@ -126,7 +126,7 @@ int proximoToken(){
                 }
             break;
             case 3 :
-                if(isdigit(automato->caractere)){ incrementaLexema(); }
+                if(isdigit(automato->caractere)) { incrementaLexema(); }
                 else if(automato->caractere == '.') { automato->estado = 5; incrementaLexema(); }
                 else if(automato->caractere == 'e' || automato->caractere == 'E'){
                     automato->estado = 6;
@@ -146,7 +146,7 @@ int proximoToken(){
                     automato->estado = 6;
                     incrementaLexema();
                 }
-                else{ return PONTO; }
+                else { return PONTO; }
             break;
             case 5 :
                 if(isdigit(automato->caractere)) { incrementaLexema(); }
@@ -168,7 +168,7 @@ int proximoToken(){
                     automato->estado = 8;
                     incrementaLexema();
                 }
-                else{
+                else {
                     saidaErro(ErroNumeroMalFormado, automato->linha, automato->coluna);
                     return ERRO;
                 }
@@ -201,14 +201,14 @@ int proximoToken(){
                     return EOF;
                 }
                 else if(automato->caractere == '\\') { automato->estado = 10; incrementaLexema(); }
-                else{ automato->estado = 11; incrementaLexema(); }
+                else { automato->estado = 11; incrementaLexema(); }
             break;
             case 10 :
                 if(automato->caractere == '\0'){
                     saidaErro(ErroCaractereMalFormado, automato->linha, automato->coluna);
                     return EOF;
                 }
-                else{ automato->estado = 11; incrementaLexema(); }
+                else { automato->estado = 11; incrementaLexema(); }
             break;
             case 11 :
                 if(automato->caractere == '\''){
@@ -246,14 +246,14 @@ int proximoToken(){
                     saidaErro(ErroFaltaAspasDupla, automato->linha, automato->coluna);
                     return ERRO;
                 }
-                else{ incrementaLexema(); }
+                else { incrementaLexema(); }
             break;
             case 13 :
                 if(automato->caractere == '\0'){
                     saidaErro(ErroFaltaAspasDupla, automato->linha, automato->coluna);
                     return EOF;
                 }
-                else{ automato->estado = 12; incrementaLexema(); }
+                else { automato->estado = 12; incrementaLexema(); }
             break;
             case 14 :
                 if(automato->caractere == '/'){
@@ -266,7 +266,7 @@ int proximoToken(){
                     automato->posicaoLexema = 0;
                     pegarProximoCaractere();
                 }
-                else{ return DIVISAO; }
+                else { return DIVISAO; }
             break;
             case 15 :
                 if(automato->caractere == '\0') { return EOF; }
@@ -280,7 +280,7 @@ int proximoToken(){
                     automato->coluna += 3;
                     pegarProximoCaractere();
                 }
-                else{ pegarProximoCaractere(); }
+                else { pegarProximoCaractere(); }
             break;
             case 16 :
                 if(automato->caractere == '*'){
@@ -300,7 +300,7 @@ int proximoToken(){
                     saidaErro(ErroComentarioNaoTerminado, automato->linha, automato->coluna);
                     return EOF;
                 }
-                else{ pegarProximoCaractere(); }
+                else { pegarProximoCaractere(); }
             break;
             case 17 :
                 if(automato->caractere == '*'){ pegarProximoCaractere(); }
@@ -323,59 +323,35 @@ int proximoToken(){
                     automato->coluna += 3;
                     pegarProximoCaractere();
                 }
-                else{
-                    automato->estado = 16;
-                    pegarProximoCaractere();
-                }
+                else { automato->estado = 16; pegarProximoCaractere(); }
             break;
             case 18 :
-                if(automato->caractere == '|'){
-                    pegarProximoCaractere();
-                    return OU_CC;
-                }
-                else{ return OU; }
+                if(automato->caractere == '|') { pegarProximoCaractere(); return OU_CC; }
+                else { return OU; }
             break;
             case 19 :
-                if(automato->caractere == '|'){
-                    pegarProximoCaractere();
-                    return E;
-                }
-                else{ return E_COMERCIAL; }
+                if(automato->caractere == '|') { pegarProximoCaractere(); return E; }
+                else { return E_COMERCIAL; }
             break;
             case 20 :
-                if(automato->caractere == '>'){
-                	pegarProximoCaractere();
-                    return PONTEIRO;
-                }
-                else{ return SUBTRACAO; }
+                if(automato->caractere == '>') { pegarProximoCaractere(); return PONTEIRO; }
+                else { return SUBTRACAO; }
             break;
             case 21 :
-                if(automato->caractere == '='){
-                    pegarProximoCaractere();
-                    return COMPARACAO;
-                }
-                else{ return ATRIBUICAO; }
+                if(automato->caractere == '=') { pegarProximoCaractere(); return COMPARACAO; }
+                else { return ATRIBUICAO; }
             break;
             case 22 :
-                if(automato->caractere == '='){
-                    pegarProximoCaractere();
-                    return MENOR_IGUAL;
-                }
-                else{ return MENOR; }
+                if(automato->caractere == '=') { pegarProximoCaractere(); return MENOR_IGUAL; }
+                else { return MENOR; }
             break;
             case 23 :
-                if(automato->caractere == '='){
-                    pegarProximoCaractere();
-                    return MAIOR_IGUAL;
-                }
-                else{ return MAIOR; }
+                if(automato->caractere == '=') { pegarProximoCaractere(); return MAIOR_IGUAL; }
+                else { return MAIOR; }
             break;
             case 24 :
-                if(automato->caractere == '='){
-                    pegarProximoCaractere();
-                    return DIFERENTE;
-                }
-                else{ return NEGACAO; }
+                if(automato->caractere == '=') { pegarProximoCaractere(); return DIFERENTE; }
+                else { return NEGACAO; }
             break;
         }
     }
@@ -385,8 +361,4 @@ int proximoToken(){
 /** \brief Destrutor do Analizador Lexico
   *
   */
-void destruirAnalizadorLexico(){
-    destruirLeitor();
-    free(automato->lexema);
-    free(automato);
-}
+void destruirAnalizadorLexico() { destruirLeitor(); free(automato->lexema); free(automato); }

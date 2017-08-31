@@ -5,8 +5,7 @@
 /** \brief Armazena os dados do erro
  *  Sera usado para ordenar erros de diferentes modulos do compilador
  */
-typedef struct _erro
-{
+typedef struct _erro{
     int codigo;
     int linha;
     int coluna;
@@ -18,17 +17,16 @@ Erro* raiz = NULL;
 /** \brief Inicializa o gerenciador de erro
  *  Qualquer erro existente sera removido
  */
-void inicializaGerenciadorErro()
-{
+void inicializaGerenciadorErro(){
     // Se ouver algum erro, apague todos
-    if(raiz){ destruirGerenciadorErro(); }
+    if(raiz) { destruirGerenciadorErro(); }
     raiz = NULL;
 }
 
 /** \brief Destroi o gerenciador de erro
  */
 void destruirGerenciadorErro() {
-    while(raiz) {
+    while(raiz){
         Erro* tmp = raiz->proximo;
         delete raiz;
         raiz = tmp;
@@ -38,10 +36,11 @@ void destruirGerenciadorErro() {
 
 /** \brief Traduz o codigo de erro em string e envia para o stderr
  *
- * \param codigo int Codigo do erro a ser impresso
- * \param linha int Linha onde o erro ocorreu
- * \param coluna int Coluna onde o erro ocorreu
- *
+ * \param
+ *  codigo int Codigo do erro a ser impresso
+ *  linha int Linha onde o erro ocorreu
+ *  coluna int Coluna onde o erro ocorreu
+ * \param
  */
 void saidaErro(int codigo, int linha, int coluna){
     // Insere erro na lista ordenado pela linha
@@ -51,8 +50,8 @@ void saidaErro(int codigo, int linha, int coluna){
     novoErro->coluna = coluna;
     novoErro->proximo = NULL;
     Erro* antecessor = raiz;
-    if(raiz) {
-        while(antecessor->linha < linha) {
+    if(raiz){
+        while(antecessor->linha < linha){
             if(antecessor->proximo){
                 if(antecessor->proximo->linha < linha){
                     antecessor = antecessor->proximo;
@@ -69,20 +68,15 @@ void saidaErro(int codigo, int linha, int coluna){
         }
         novoErro->proximo = antecessor->proximo;
         antecessor->proximo = novoErro;
-    } else {
-        raiz = novoErro;
-    }
+    } else { raiz = novoErro; }
 }
 
 /** \brief Imprime o proximo erro da lista no stderr
  */
-void proximoErro()
-{
+void proximoErro(){
     //Pega o proximo erro da lista
     Erro* erro = raiz;
-    if(erro){
-        raiz = erro->proximo;
-    } else { return; }
+    if(erro) { raiz = erro->proximo; } else { return; }
     //Imprime a mensagem do erro no stderr
     int linha = erro->linha, coluna = erro->coluna;
     switch(erro->codigo){
@@ -123,7 +117,5 @@ void proximoErro()
  */
 void imprimeListaErros() {
     // Enquanto houver erro na lista, imprime o erro
-    while(raiz) {
-        proximoErro();
-    }
+    while(raiz) { proximoErro(); }
 }

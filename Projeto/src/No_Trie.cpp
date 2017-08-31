@@ -5,6 +5,7 @@ No_Trie::No_Trie(){
     atributos = NULL;
     chave = false;
 }
+
 /** \brief pegarCaractere
  *  Função para retornar o filho correspondente à um caractere informado
  * \param
@@ -13,6 +14,7 @@ No_Trie::No_Trie(){
  *  O filho buscado a partir do caractere informado
  */
 No_Trie* No_Trie::pegarCaractere(char c) { return caracteres[(int)c]; }
+
 /** \brief atribuirCaractere
  *  Função para atribuir à posição do vetor de caractere um nó informadado
  * \param
@@ -21,10 +23,12 @@ No_Trie* No_Trie::pegarCaractere(char c) { return caracteres[(int)c]; }
  * \param
  */
 void No_Trie::atribuirCaractere(char c, No_Trie* n) { caracteres[(int)c] = n; }
+
 /** \brief pegarAtributo
  *  Retornar o atributo armazenado neste nó
  */
 Atributo* No_Trie::pegarAtributo() { return atributos; }
+
 /** \brief atribuirAtributo
  *  Função para atribuir um atributo passado como parâmetro a este nó
  * \param
@@ -32,14 +36,15 @@ Atributo* No_Trie::pegarAtributo() { return atributos; }
  * \param
  */
 void No_Trie::atribuirAtributo(Atributo *p) { atributos = p; }
+
 /** \brief atribuirChave
  *  Função para definir se o npo eh chave ou não
  * \param
  * c: booleano para ser atribuido a variavel da classe 'chave'
  * \param
  */
-
 void No_Trie::atribuirChave(bool c) { chave = c; }
+
 /** \brief EChave
  * Função que retorna se o nó eh um nó chave ou não
  * \param

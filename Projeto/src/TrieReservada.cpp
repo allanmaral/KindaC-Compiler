@@ -4,6 +4,7 @@
 TrieReservada::TrieReservada():Trie(){
     inicializarReservada();
 }
+
 /** \brief imprimeLexema
  *  Função para colocar a string associada a um lexema no stdout
  * \param
@@ -20,6 +21,7 @@ void TrieReservada::imprimeLexema(char* saida, Atributo *atr){
     }
     fprintf(stdout," %i\n", atr->pegarToken());
 }
+
 /** \brief imprimeCabecalho
  *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
  */
@@ -29,6 +31,7 @@ void TrieReservada::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"LEXEMA                   Token numerico\n");
 }
+
 void TrieReservada::inicializarReservada(){
     Atributo* auxiliar;
     auxiliar = new Atributo(); auxiliar->atribuirToken(DEFINICAO_TIPO); insere((char*)"typedef", auxiliar);

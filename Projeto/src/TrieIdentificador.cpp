@@ -1,6 +1,7 @@
 #include "TrieIdentificador.h"
 
 TrieIdentificador::TrieIdentificador():Trie(){}
+
 /** \brief imprimeLexema
  *  Função para colocar a string associada a um lexema no stdout
  * \param
@@ -10,6 +11,7 @@ TrieIdentificador::TrieIdentificador():Trie(){}
 void TrieIdentificador::imprimeLexema(char* saida, Atributo *atr){
     fprintf(stdout,"%s\n", saida);
 }
+
 /** \brief imprimeCabecalho
  *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
  */

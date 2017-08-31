@@ -1,66 +1,52 @@
 #include "Trie.h"
 
-Trie::Trie(){
-    raiz = new No_Trie();
-    altura = 0;
-}
+Trie::Trie() { raiz = new No_Trie(); altura = 0; }
+
 /** \brief insere
  *  Função para fazer a inserção de lexemas dentro da tabela de simbolos
  * \param
  *  entrada: lexema a ser inserido na tabela
  *  atributo: atributo associado ao lexema
  * \param
- * \return
- *  vazio
  */
 void Trie::insere(char* entrada, Atributo* atributo){
-
     int indice = 0;
     No_Trie *no = raiz;
     No_Trie *auxiliar = NULL;
     char caractere;
 
-    while(entrada[indice] != '\0'){///Percorre todo os caracteres da entrada
-
+    while(entrada[indice] != '\0'){ ///Percorre todo os caracteres da entrada
         caractere = entrada[indice];
-        auxiliar = no->pegarCaractere(caractere);///para cada caractere busca o filho correspondente do nó atual
-        if(auxiliar == NULL){///se esse filho nao existir, o cria e associa o nó atual a ele
+        auxiliar = no->pegarCaractere(caractere);   ///para cada caractere busca o filho correspondente do nó atual
+        if(auxiliar == NULL){   ///se esse filho nao existir, o cria e associa o nó atual a ele
             auxiliar = new No_Trie();
             no->atribuirCaractere(caractere, auxiliar);
             no = auxiliar;
-        }else{///se o filho existir, apenas desce um nível da árvore
+        } else{ ///se o filho existir, apenas desce um nível da árvore
             no = no->pegarCaractere(caractere);
         }
         indice++;
     }
-    if(altura < indice + 1){
-
-        altura = indice + 1;
-
-    }
+    if(altura < indice + 1) { altura = indice + 1; }
     ///ao chegar no final da string, coloca o nó atual como chave e associa o atributo à ele
     no->atribuirChave(true);
     no->atribuirAtributo(atributo);
 }
+
 /** \brief imprime
  *  Função para imprimir todos os lexemas guardados dentro da tabela
- * \param
- * \param
- * \return
- *
  */
 void Trie::imprime(){
     imprimeCabecalho();
     char saida[altura + 1];
     imprimeRecursivo(saida, 0, raiz);
 }
+
 /** \brief imprimeRecursivo
  *  Função recursiva auxiliar para percorrer a trie
  * \param
  *  saida: string parcial que é usada na impressão
  * \param
- * \return
- *
  */
 void Trie::imprimeRecursivo(char* saida, int indice, No_Trie *n){
     if(n->EChave()){///Para cada nó que for chave, imprime o caminho que foi percorrido pela recursão
@@ -68,7 +54,8 @@ void Trie::imprimeRecursivo(char* saida, int indice, No_Trie *n){
         imprimeLexema(saida, n->pegarAtributo());
     }
     No_Trie *filho = NULL;
-    for(unsigned int caractere = 0; caractere < TAMANHO_ALFABETO; caractere++){///Para cada filho não nulo do nó atual,
+    ///Para cada filho não nulo do nó atual,
+    for(unsigned int caractere = 0; caractere < TAMANHO_ALFABETO; caractere++){
         ///coloca o caractere correspondente na saida e desce um nível
         filho = n->pegarCaractere(caractere);
         if(filho != NULL){
@@ -77,6 +64,7 @@ void Trie::imprimeRecursivo(char* saida, int indice, No_Trie *n){
         }
     }
 }
+
 /** \brief busca
  *  Função que busca um lexema na trie e retorna o atributo associado a ele
  * \param
@@ -100,6 +88,7 @@ Atributo* Trie::busca(char *entrada){
     }
     return NULL;
 }
+
 /** \brief calcularTamanhoLexema
  *  FUnção para calcular o tamanho de lexemas
  * \param
@@ -108,18 +97,17 @@ Atributo* Trie::busca(char *entrada){
  *  Tamanho do lexema
  */
 int Trie::calcularTamanhoLexema(char *lexema){
-    int total=0;
-    while( lexema[total] != '\0')
-        total++;
+    int total = 0;
+    while( lexema[total] != '\0') { total++; }
     return total;
 }
+
 /** \brief imprimeLexema
  *  Função para colocar a string associada a um lexema no stdout
  * \param
  *  saida: lexema a ser impresso
  *  atr: atributo do lexema que será impresso juntamente com ele
  */
-
 void Trie::imprimeLexema(char* saida, Atributo * atr){
     fprintf(stdout,"[%s]\n", saida);
 }
