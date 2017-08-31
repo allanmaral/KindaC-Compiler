@@ -62,7 +62,7 @@ int main(int argc, char** args){
     imprimeTabela(TABELA_INTEIRO);
     imprimeTabela(TABELA_REAL);
     imprimeTabela(TABELA_RESERVADA);
-    getchar();
+    //getchar();
     return 0;
 }
 
