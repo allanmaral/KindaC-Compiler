@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "AnalisadorLexico.h"
 #include "GerenciadorErro.h"
 #include "Atributo.h"
@@ -9,24 +10,31 @@ Automato* automato;
 /** \brief Função que atualiza o caractere do leitor e aumenta uma coluna
   *
   */
-void pegarProximoCaractere(){ automato->coluna++; automato->caractere = lerProximoCaractere(); }
+void pegarProximoCaractere(){
+    automato->coluna++;
+    if(automato->modo == MODO_ARQUIVO) automato->caractere = lerProximoCaractere();
+    else if(automato->modo == MODO_ENTRADA) automato->caractere = getchar();
+}
 char* pegarLexema(){ return automato->lexema; }
 
 /** \brief Construtor do analisador lexico
   *
   * \param caminhoArquivo const char* Caminho do arquivo a ser lido
   */
-void iniciaAnalisadorLexico(char *caminho){
+void iniciaAnalisadorLexico(char *caminho,int modo){
     automato = (Automato*)malloc(sizeof(Automato));
     automato->lexema = (char*) malloc(TAMANHO_LEXEMA*(sizeof(char)));
     automato->posicaoLexema = 0;
     automato->tamLexema     = TAMANHO_LEXEMA;
     automato->linha         = 1;
     automato->coluna        = 0;
-    int res = inicializarLeitor(caminho);
-    if(res == ARQUIVO_INVALIDO){
-        saidaErro(ErroArquivoInvalido, 0, 0);
-        exit(1);
+    automato->modo          = modo;
+    if(modo == MODO_ARQUIVO){
+        int res = inicializarLeitor(caminho);
+        if(res == ARQUIVO_INVALIDO){
+            saidaErro(ErroArquivoInvalido, 0, 0);
+            exit(1);
+        }
     }
     pegarProximoCaractere();
 }
@@ -102,8 +110,8 @@ int proximoToken(){
                         case '+' : pegarProximoCaractere(); return ADICAO;        break;
                         case '%' : pegarProximoCaractere(); return PORCENTO;      break;
                         case '*' : pegarProximoCaractere(); return ASTERISCO;     break;
+                        case EOF : pegarProximoCaractere(); return EOF;           break;
                         case '\0': pegarProximoCaractere(); return EOF;           break;
-
                         default:
                             saidaErro(ErroCaractereInvalido, automato->linha, automato->coluna);
                             pegarProximoCaractere();
@@ -361,4 +369,7 @@ int proximoToken(){
 /** \brief Destrutor do Analizador Lexico
   *
   */
-void destruirAnalizadorLexico() { destruirLeitor(); free(automato->lexema); free(automato); }
+void destruirAnalizadorLexico() {
+    if(automato->modo == MODO_ARQUIVO)
+    destruirLeitor();
+    free(automato->lexema); free(automato); }

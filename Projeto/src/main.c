@@ -30,31 +30,28 @@ int main(int argc, char** args){
     //lim.rlim_cur = 32000000;
     //lim.rlim_max = -1;
     //setrlimit(RLIMIT_STACK, &lim);
-
-
+    //variavel para alterar o modo de obtencao de caracteres
+    int modo = 0;
     nomeArquivo[0] = '\0';
-    if(argc == 1){                  // Le o nome do arquivo do stdin
-       if(!fscanf(stdin, "%s", nomeArquivo)){
-            fprintf(stderr, "Falha ao ler o nome do Arquivo\n");
-            exit(1);
-       };
+    if(argc == 1){                  // altera o modo para obter caracters do stdin
+       modo = MODO_ENTRADA;
     } else if ( argc == 2 ) {       // Le o nome do arquivo da lista de argumento
+        modo = MODO_ARQUIVO;
         strcpy(nomeArquivo, args[1]);
+        adicionaExtencao(nomeArquivo);
     } else {
         fprintf(stderr, "Argumento invalido!\nExempo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
         exit(1);
     }
-    adicionaExtencao(nomeArquivo);
+
     // Funcção chamada na saida do programa, garante que memoria será desalocada
     atexit(finalizaPrograma);
     inicializaGerenciadorErro();
     inicializaTabelaSimbolos();
-    iniciaAnalisadorLexico(nomeArquivo);
+    iniciaAnalisadorLexico(nomeArquivo,modo);
     int token = 0;
     while(token != EOF){
         token = proximoToken();
-
-
         ImprimeToken(token);
     }
     imprimeTabela(TABELA_LITERAL);

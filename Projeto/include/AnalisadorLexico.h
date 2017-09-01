@@ -8,6 +8,8 @@
 
 #define TAMANHO_LEXEMA 32
 #define TAMANHO_BUFFER 4096
+#define MODO_ARQUIVO 77
+#define MODO_ENTRADA 7
 
  /** \brief Automato
   */
@@ -19,13 +21,15 @@ typedef struct _Automato{
     int     linha;            /**< Linha atual do arquivo  */
     int     coluna;           /**< Coluna atual do arquivo  */
     char    caractere;        /**< Ultimo caractere lindo pelo automato*/
+    int modo;                 /**< Modo de entrada de caracteres */
 } Automato;
 
  /** \brief Construtor do analisador lexico
   *
-  * \param caminhoArquivo const char* Caminho do arquivo a ser lido
+  * \param caminho char* Caminho do arquivo a ser lido
+  * \param modo int Modo de como o automato pegara caracteres do leitor ou do terminal
   */
-void iniciaAnalisadorLexico(char *caminho);
+void iniciaAnalisadorLexico(char *caminho,int modo);
 
  /** \brief Função que obtem um caractere do leitor e incrementa uma coluna no automato
   *

@@ -205,3 +205,107 @@
 	"Tokens.h"
 	"GerenciadorErro.h"
 
+1504276270 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/AnalisadorLexico.c
+	<stdio.h>
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"Atributo.h"
+	"TabelaSimbolos.h"
+	"Leitor.h"
+
+1504274602 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/AnalisadorLexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	"Tokens.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/Tokens.h
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/GerenciadorErro.h
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/Atributo.h
+	<stdlib.h>
+	<stdio.h>
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/TabelaSimbolos.h
+	"TrieReal.h"
+	"TrieIdentificador.h"
+	"TrieInteiro.h"
+	"TrieLiteral.h"
+	"TrieReservada.h"
+	"Tokens.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/TrieReal.h
+	"Trie.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/Trie.h
+	"No_Trie.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/No_Trie.h
+	"Atributo.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/TrieIdentificador.h
+	"Trie.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/TrieInteiro.h
+	"Trie.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/TrieLiteral.h
+	"Trie.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/TrieReservada.h
+	"Trie.h"
+
+1504271231 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/include/Leitor.h
+	<stdio.h>
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/Atributo.cpp
+	"Atributo.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/GerenciadorErro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/Leitor.c
+	<stdlib.h>
+	"Leitor.h"
+	"GerenciadorErro.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/No_Trie.cpp
+	"No_Trie.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/TabelaSimbolos.cpp
+	"TabelaSimbolos.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/Tokens.c
+	"Tokens.h"
+	"AnalisadorLexico.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/Trie.cpp
+	"Trie.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/TrieIdentificador.cpp
+	"TrieIdentificador.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/TrieInteiro.cpp
+	"TrieInteiro.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/TrieLiteral.cpp
+	"TrieLiteral.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/TrieReal.cpp
+	"TrieReal.h"
+
+1504271231 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/TrieReservada.cpp
+	"TrieReservada.h"
+	"Tokens.h"
+
+1504275140 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC-Compiler/Projeto/src/main.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"TabelaSimbolos.h"
+	"Tokens.h"
+	"GerenciadorErro.h"
+
