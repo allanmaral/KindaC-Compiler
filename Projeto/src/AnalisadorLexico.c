@@ -15,7 +15,7 @@ void pegarProximoCaractere(){
     if(automato->modo == MODO_ARQUIVO) automato->caractere = lerProximoCaractere();
     else if(automato->modo == MODO_ENTRADA) automato->caractere = getchar();
 }
-char* pegarLexema(){ return automato->lexema; }
+char* pegarLexema(){ return automato->lexemait ; }
 
 /** \brief Construtor do analisador lexico
   *
@@ -204,7 +204,7 @@ int proximoToken(){
                     incrementaLexema();
                     return ERRO;
                 }
-                else if(automato->caractere == '\0'){
+                else if(automato->caractere == '\0' || automato->caractere == EOF){
                     saidaErro(ErroCaractereMalFormado, automato->linha, automato->coluna);
                     return EOF;
                 }
@@ -212,7 +212,7 @@ int proximoToken(){
                 else { automato->estado = 11; incrementaLexema(); }
             break;
             case 10 :
-                if(automato->caractere == '\0'){
+                if(automato->caractere == '\0' || automato->caractere == EOF){
                     saidaErro(ErroCaractereMalFormado, automato->linha, automato->coluna);
                     return EOF;
                 }
@@ -227,7 +227,7 @@ int proximoToken(){
                     insereTabela(TABELA_LITERAL, automato->lexema, auxiliar);
                     return LITERAL;
                 }
-                else if(automato->caractere == '\0'){
+                else if(automato->caractere == '\0' || automato->caractere == EOF){
                     saidaErro(ErroCaractereMalFormado, automato->linha, automato->coluna);
                     return EOF;
                 }
@@ -238,7 +238,7 @@ int proximoToken(){
             break;
             case 12 :
                 if(automato->caractere == '\\') { automato->estado = 13; incrementaLexema(); }
-                else if(automato->caractere == '\0'){
+                else if(automato->caractere == '\0' || automato->caractere == EOF){
                     saidaErro(ErroFaltaAspasDupla, automato->linha, automato->coluna);
                     return EOF;
                 }
@@ -257,7 +257,7 @@ int proximoToken(){
                 else { incrementaLexema(); }
             break;
             case 13 :
-                if(automato->caractere == '\0'){
+                if(automato->caractere == '\0' || automato->caractere == EOF){
                     saidaErro(ErroFaltaAspasDupla, automato->linha, automato->coluna);
                     return EOF;
                 }
@@ -277,7 +277,8 @@ int proximoToken(){
                 else { return DIVISAO; }
             break;
             case 15 :
-                if(automato->caractere == '\0') { return EOF; }
+                if(automato->caractere == '\0' || automato->caractere == EOF)
+                { 	return EOF; }
                 else if(automato->caractere == '\n'){
                     automato->linha++;
                     automato->coluna = 0;
@@ -304,7 +305,7 @@ int proximoToken(){
                     automato->coluna += 3;
                     pegarProximoCaractere();
                 }
-                else if(automato->caractere == '\0'){
+                else if(automato->caractere == '\0' || automato->caractere == EOF){
                     saidaErro(ErroComentarioNaoTerminado, automato->linha, automato->coluna);
                     return EOF;
                 }
@@ -312,7 +313,7 @@ int proximoToken(){
             break;
             case 17 :
                 if(automato->caractere == '*'){ pegarProximoCaractere(); }
-                else if(automato->caractere == '\0'){
+                else if(automato->caractere == '\0' || automato->caractere == EOF){
                     saidaErro(ErroComentarioNaoTerminado, automato->linha, automato->coluna);
                     return EOF;
                 }

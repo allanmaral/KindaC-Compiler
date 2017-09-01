@@ -309,3 +309,99 @@
 	"Tokens.h"
 	"GerenciadorErro.h"
 
+1504206122 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\atributo.cpp
+	"Atributo.h"
+
+1504206122 c:\users\allan\documents\github\kindac-compiler\projeto\include\atributo.h
+	<stdlib.h>
+	<stdio.h>
+
+1504278329 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\gerenciadorerro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1504190225 c:\users\allan\documents\github\kindac-compiler\projeto\include\gerenciadorerro.h
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\leitor.c
+	<stdlib.h>
+	"Leitor.h"
+	"GerenciadorErro.h"
+
+1504205489 c:\users\allan\documents\github\kindac-compiler\projeto\include\leitor.h
+	<stdio.h>
+
+1504277952 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\main.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"TabelaSimbolos.h"
+	"Tokens.h"
+	"GerenciadorErro.h"
+
+1504277952 c:\users\allan\documents\github\kindac-compiler\projeto\include\analisadorlexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	"Tokens.h"
+
+1504143077 c:\users\allan\documents\github\kindac-compiler\projeto\include\tokens.h
+
+1504209989 c:\users\allan\documents\github\kindac-compiler\projeto\include\tabelasimbolos.h
+	"TrieReal.h"
+	"TrieIdentificador.h"
+	"TrieInteiro.h"
+	"TrieLiteral.h"
+	"TrieReservada.h"
+	"Tokens.h"
+
+1504209989 c:\users\allan\documents\github\kindac-compiler\projeto\include\triereal.h
+	"Trie.h"
+
+1504209989 c:\users\allan\documents\github\kindac-compiler\projeto\include\trie.h
+	"No_Trie.h"
+
+1504209989 c:\users\allan\documents\github\kindac-compiler\projeto\include\no_trie.h
+	"Atributo.h"
+
+1504209989 c:\users\allan\documents\github\kindac-compiler\projeto\include\trieidentificador.h
+	"Trie.h"
+
+1504209989 c:\users\allan\documents\github\kindac-compiler\projeto\include\trieinteiro.h
+	"Trie.h"
+
+1504209989 c:\users\allan\documents\github\kindac-compiler\projeto\include\trieliteral.h
+	"Trie.h"
+
+1504209989 c:\users\allan\documents\github\kindac-compiler\projeto\include\triereservada.h
+	"Trie.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\no_trie.cpp
+	"No_Trie.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\tabelasimbolos.cpp
+	"TabelaSimbolos.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\tokens.c
+	"Tokens.h"
+	"AnalisadorLexico.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\trie.cpp
+	"Trie.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\trieidentificador.cpp
+	"TrieIdentificador.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\trieinteiro.cpp
+	"TrieInteiro.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\trieliteral.cpp
+	"TrieLiteral.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\triereal.cpp
+	"TrieReal.h"
+
+1504217393 source:c:\users\allan\documents\github\kindac-compiler\projeto\src\triereservada.cpp
+	"TrieReservada.h"
+	"Tokens.h"
+

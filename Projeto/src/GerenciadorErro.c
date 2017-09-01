@@ -51,7 +51,7 @@ void saidaErro(int codigo, int linha, int coluna){
     novoErro->proximo = NULL;
     Erro* antecessor = raiz;
     if(raiz){
-        while(antecessor->linha < linha){
+        while(true){
             if(antecessor->proximo){
                 if(antecessor->proximo->linha < linha){
                     antecessor = antecessor->proximo;
