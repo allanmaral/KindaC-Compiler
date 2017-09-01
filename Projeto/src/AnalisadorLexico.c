@@ -15,7 +15,7 @@ void pegarProximoCaractere(){
     if(automato->modo == MODO_ARQUIVO) automato->caractere = lerProximoCaractere();
     else if(automato->modo == MODO_ENTRADA) automato->caractere = getchar();
 }
-char* pegarLexema(){ return automato->lexemait ; }
+char* pegarLexema(){ return automato->lexema ; }
 
 /** \brief Construtor do analisador lexico
   *
