@@ -2,22 +2,8 @@
 #define LEITOR_H
 #include <stdio.h>
 
-#define TAMANHO_BUFFER 4096
-
 #define ARQUIVO_INVALIDO 0
 #define ARQUIVO_ABERTO   1
-
- /** \brief Leitor de arquivo
-  */
-typedef struct _LeitorArquivo{
-    char**  buffer;          /**< Buffer de leitura  */
-    int     tamanhoBuffer;   /**< Tamanho de cada buffer de leitura */
-    int     bufferAtual;     /**< Indice do buffer de leitura ativo */
-    int     caractereAtual;  /**< Indice do ultimo caractere lido no buffer de leitura ativo */
-    FILE*   file;            /**< Arquivo aberto */
-    int     preencherProximoBuffer;
-} LeitorArquivo;
-
 
  /** \brief Construtor do leitor de arquivo
   *

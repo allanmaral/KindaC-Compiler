@@ -12,8 +12,7 @@ Automato* automato;
   */
 void pegarProximoCaractere(){
     automato->coluna++;
-    if(automato->modo == MODO_ARQUIVO) automato->caractere = lerProximoCaractere();
-    else if(automato->modo == MODO_ENTRADA) automato->caractere = getchar();
+    automato->caractere = lerProximoCaractere();
 }
 char* pegarLexema(){ return automato->lexema ; }
 
@@ -21,20 +20,17 @@ char* pegarLexema(){ return automato->lexema ; }
   *
   * \param caminhoArquivo const char* Caminho do arquivo a ser lido
   */
-void iniciaAnalisadorLexico(char *caminho,int modo){
+void iniciaAnalisadorLexico(char *caminho){
     automato = (Automato*)malloc(sizeof(Automato));
     automato->lexema = (char*) malloc(TAMANHO_LEXEMA*(sizeof(char)));
     automato->posicaoLexema = 0;
     automato->tamLexema     = TAMANHO_LEXEMA;
     automato->linha         = 1;
     automato->coluna        = 0;
-    automato->modo          = modo;
-    if(modo == MODO_ARQUIVO){
-        int res = inicializarLeitor(caminho);
-        if(res == ARQUIVO_INVALIDO){
-            saidaErro(ErroArquivoInvalido, 0, 0);
-            exit(1);
-        }
+    int res = inicializarLeitor(caminho);
+    if(res == ARQUIVO_INVALIDO){
+        saidaErro(ErroArquivoInvalido, 0, 0);
+        exit(1);
     }
     pegarProximoCaractere();
 }

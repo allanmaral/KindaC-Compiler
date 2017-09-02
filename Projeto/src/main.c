@@ -7,48 +7,30 @@
 #include "Tokens.h"
 #include "GerenciadorErro.h"
 
-#define TAMANHO_NOME_ARQUIVO 1024
-
 /** \brief Destroi objetos alocados durante a execução do programa
  *  Funcao chamada na saida do programa
  */
 void finalizaPrograma();
 
-/** \brief Adiciona a extenção .cpm ao nome do arquivo, se necessario
- *
- * \param nomeArquivo char* string de caracteres a ser modificada
- */
-void adicionaExtencao(char* nomeArquivo);
-
 
 /** \brief Ponto de entrada do programa
  */
 int main(int argc, char** args){
-    char nomeArquivo[TAMANHO_NOME_ARQUIVO];
-    //struct rlimit lim;
-    //lim.rlim_cur = 1024000000;
-    //lim.rlim_cur = 32000000;
-    //lim.rlim_max = -1;
-    //setrlimit(RLIMIT_STACK, &lim);
-    //variavel para alterar o modo de obtencao de caracteres
-    int modo = 0;
-    nomeArquivo[0] = '\0';
+    char* nomeArquivo = NULL;
     if(argc == 1){                  // altera o modo para obter caracters do stdin
-       modo = MODO_ENTRADA;
+       nomeArquivo = NULL;
     } else if ( argc == 2 ) {       // Le o nome do arquivo da lista de argumento
-        modo = MODO_ARQUIVO;
-        strcpy(nomeArquivo, args[1]);
-        adicionaExtencao(nomeArquivo);
+        nomeArquivo = args[1];
     } else {
-        fprintf(stderr, "Argumento invalido!\nExempo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
+        fprintf(stderr, "Argumento invalido!\nExemplo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
         exit(1);
     }
 
-    // Funcção chamada na saida do programa, garante que memoria será desalocada
+    // Função chamada na saida do programa, garante que memoria será desalocada
     atexit(finalizaPrograma);
     inicializaGerenciadorErro();
     inicializaTabelaSimbolos();
-    iniciaAnalisadorLexico(nomeArquivo,modo);
+    iniciaAnalisadorLexico(nomeArquivo);
     int token = 0;
     while(token != EOF){
         token = proximoToken();
@@ -70,22 +52,5 @@ void finalizaPrograma()
     destruirAnalizadorLexico();
     destruirTabelaSimbolos();
     destruirGerenciadorErro();
-}
-
-void adicionaExtencao(char* nomeArquivo)
-{
-    int i, possuiExtensao;
-    i = 0, possuiExtensao = 0;
-    // Adiciona a extenção .cpm se não houver
-    while(nomeArquivo[i]){
-        if(i+3 < TAMANHO_NOME_ARQUIVO) { //Evita erro de acesso a memoria não alocada
-            if(strcmp(&nomeArquivo[i], ".cpm") == 0) { possuiExtensao = 1; break; }
-        } else {
-            fprintf(stderr, "Nome do arquivo excede o tamanho suportado!\n");
-            exit(1);
-        }
-        i++;
-    }
-    if(!possuiExtensao){ strcpy(&nomeArquivo[i], ".cpm"); nomeArquivo[i+4] = '\0'; }
 }
 
