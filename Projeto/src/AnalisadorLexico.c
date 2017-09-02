@@ -7,7 +7,7 @@
 
 Automato* automato;
 
-/** \brief FunÃ§Ã£o que atualiza o caractere do leitor e aumenta uma coluna
+/** \brief Função que atualiza o caractere do leitor e aumenta uma coluna
   *
   */
 void pegarProximoCaractere(){
@@ -16,7 +16,7 @@ void pegarProximoCaractere(){
 }
 char* pegarLexema(){ return automato->lexema ; }
 
-/** \brief Construtor do analisador lexico
+/** \brief Construtor do analisador léxico
   *
   * \param caminhoArquivo const char* Caminho do arquivo a ser lido
   */
@@ -36,10 +36,10 @@ void iniciaAnalisadorLexico(char *caminho){
 }
 
 /** \brief Procedimento que adiciona o caractere atual
-  *       do automato ao seu vetor de caracters (lexema)
+  *       do autômato ao seu vetor de caracteres (lexema)
   */
 void incrementaLexema(){
-    //Verifica se nao existe posicao disponivel realocando caso necessario
+    //Verifica se não existe posição disponível realocando caso necessário
     if(automato->posicaoLexema >= automato->tamLexema -1){
         automato->tamLexema += TAMANHO_LEXEMA;
         automato->lexema=(char *)realloc(automato->lexema, automato->tamLexema*(sizeof(char)));
@@ -52,7 +52,7 @@ void incrementaLexema(){
     pegarProximoCaractere();
 }
 
-/** \brief Funcao que define as transicoes do automato
+/** \brief Função que define as transições do autômato
   */
 int proximoToken(){
     automato->posicaoLexema = 0;
@@ -363,7 +363,7 @@ int proximoToken(){
     return 0;
 }
 
-/** \brief Destrutor do Analizador Lexico
+/** \brief Destrutor do Analisador Léxico
   *
   */
 void destruirAnalizadorLexico() {

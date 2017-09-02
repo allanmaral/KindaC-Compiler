@@ -19,7 +19,6 @@ int inicializarLeitor(const char* caminhoArquivo);
 
 /** \brief Destrutor do leitor de arquivo
  *
- * \param arquivo LeitorArquivo* arquivo a ser destruido
  *
  */
 void destruirLeitor();

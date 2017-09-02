@@ -7,7 +7,7 @@
 #define TAMANHO_BUFFER 4096
 
 static char*   buffer = NULL;          /**< Buffer de leitura  */
-static int     caractereAtual;  /**< Indice do ultimo caractere lido no buffer de leitura ativo */
+static int     caractereAtual;         /**< Índice do último caractere lido */
 static FILE*   file = NULL;            /**< Arquivo aberto */
 
 /** \brief Construtor do leitor de arquivo
@@ -49,7 +49,7 @@ int inicializarLeitor(const char* caminhoArquivo){
 
 /** \brief Destrutor do leitor de arquivo
  *
- * \param arquivo LeitorArquivo* arquivo a ser destruido
+ * \param arquivo LeitorArquivo* arquivo a ser destruído
  *
  */
 void destruirLeitor(){
@@ -68,7 +68,7 @@ void destruirLeitor(){
  *
  */
 char lerProximoCaractere(){
-    // Verifica se o arquivo é valido
+    // Verifica se o arquivo é válido
     if(file){
         // Se tiver passado do tamanho do buffer, volta pro inicio
         if(caractereAtual >= TAMANHO_BUFFER){

@@ -2,8 +2,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/** \brief Lista de erros
+ *
+ */
+char ErroLiteral[ErroTamanhoEnumerador][256] = {
+    "Erro: Caractere Invalido",
+    "Erro: Caractere Vazio",
+    "Erro: Faltando Caractere ' de terminacao",
+    "Erro: Faltando Caractere \" de terminacao",
+    "Erro: Final de Arquivo Inesperado",
+    "Erro: Bloco de Cometario Nao Terminado",
+    "Erro: Caractere Mal Formado",
+    "Erro: Expoente nao possui digitos",
+    "Erro: Arquivo Invalido"
+};
+
 /** \brief Armazena os dados do erro
- *  Sera usado para ordenar erros de diferentes modulos do compilador
+ *  Será usado para ordenar erros de diferentes módulos do compilador
  */
 typedef struct _erro{
     int codigo;
@@ -15,15 +30,15 @@ typedef struct _erro{
 Erro* raiz = NULL;
 
 /** \brief Inicializa o gerenciador de erro
- *  Qualquer erro existente sera removido
+ *  Qualquer erro existente será removido
  */
 void inicializaGerenciadorErro(){
-    // Se ouver algum erro, apague todos
+    // Se houver algum erro, apague todos
     if(raiz) { destruirGerenciadorErro(); }
     raiz = NULL;
 }
 
-/** \brief Destroi o gerenciador de erro
+/** \brief Destrói o gerenciador de erro
  */
 void destruirGerenciadorErro() {
     while(raiz){
@@ -34,10 +49,10 @@ void destruirGerenciadorErro() {
     raiz = NULL;
 }
 
-/** \brief Traduz o codigo de erro em string e envia para o stderr
+/** \brief Traduz o código de erro em string e envia para o stderr
  *
  * \param
- *  codigo int Codigo do erro a ser impresso
+ *  codigo int Código do erro a ser impresso
  *  linha int Linha onde o erro ocorreu
  *  coluna int Coluna onde o erro ocorreu
  * \param
@@ -56,14 +71,14 @@ void saidaErro(int codigo, int linha, int coluna){
                 if(antecessor->proximo->linha < linha){
                     antecessor = antecessor->proximo;
                 } else if ((antecessor->proximo->linha == linha)) {
-                    while(true) {
-                        if(antecessor->proximo) {
-                            if(antecessor->proximo->coluna <= coluna) {
-                                antecessor = antecessor->proximo;
-                            } else { break; }
-                        } else { break; }
-                    } break;
-                } else {break;}
+                           while(true) {
+                               if(antecessor->proximo) {
+                                   if(antecessor->proximo->coluna <= coluna) {
+                                       antecessor = antecessor->proximo;
+                                   } else { break; }
+                               } else { break; }
+                           } break;
+                       } else {break;}
             } else { break; }
         }
         novoErro->proximo = antecessor->proximo;
@@ -71,44 +86,18 @@ void saidaErro(int codigo, int linha, int coluna){
     } else { raiz = novoErro; }
 }
 
-/** \brief Imprime o proximo erro da lista no stderr
+/** \brief Imprime o próximo erro da lista no stderr
  */
 void proximoErro(){
-    //Pega o proximo erro da lista
+    //Pega o próximo erro da lista
     Erro* erro = raiz;
     if(erro) { raiz = erro->proximo; } else { return; }
     //Imprime a mensagem do erro no stderr
     int linha = erro->linha, coluna = erro->coluna;
-    switch(erro->codigo){
-        case ErroCaractereInvalido:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Caractere Invalido\n", linha, coluna);
-        break;
-        case ErroCaractereVazio:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Caractere Vazio\n", linha, coluna);
-        break;
-        case ErroFaltaAspaSimples:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Faltando Caractere ' de terminacao\n", linha, coluna);
-        break;
-        case ErroFaltaAspasDupla:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Faltando Caractere \" de terminacao\n", linha, coluna);
-        break;
-        case ErroFimDeArquivoInesperado:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Final de Arquivo Inesperado\n", linha, coluna);
-        break;
-        case ErroComentarioNaoTerminado:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Bloco de Cometario Nao Terminado\n", linha, coluna);
-        break;
-        case ErroNumeroMalFormado:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Expoente nao possui digitos\n", linha, coluna);
-        break;
-        case ErroArquivoInvalido:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Arquivo Invalido\n", linha, coluna);
-        break;
-        case ErroCaractereMalFormado:
-            fprintf(stderr, "[l:%d, c:%d] - Erro: Caractere Mal Formado\n", linha, coluna);
-        break;
-        default:
-            fprintf(stderr, "[l:%d, c:%d] - Erro não definido (%d)\n", linha, coluna, erro->codigo);
+    if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {
+        fprintf(stderr, "[l:%d, c:%d] - %s\n", linha, coluna, ErroLiteral[erro->codigo]);
+    } else {
+        fprintf(stderr, "[l:%d, c:%d] - Erro não definido (%d)\n", linha, coluna, erro->codigo);
     }
     free(erro);
 }

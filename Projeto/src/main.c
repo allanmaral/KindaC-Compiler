@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <string.h>
-//#include <sys/resource.h>
 
 #include "AnalisadorLexico.h"
 #include "TabelaSimbolos.h"
 #include "Tokens.h"
 #include "GerenciadorErro.h"
 
-/** \brief Destroi objetos alocados durante a execuÃ§Ã£o do programa
- *  Funcao chamada na saida do programa
+/** \brief Destrói objetos alocados durante a execução do programa
+ *  Função chamada na saida do programa
  */
 void finalizaPrograma();
 
@@ -17,16 +16,16 @@ void finalizaPrograma();
  */
 int main(int argc, char** args){
     char* nomeArquivo = NULL;
-    if(argc == 1){                  // altera o modo para obter caracters do stdin
+    if(argc == 1){                  // altera o modo para obter caracteres do stdin
        nomeArquivo = NULL;
-    } else if ( argc == 2 ) {       // Le o nome do arquivo da lista de argumento
+    } else if ( argc == 2 ) {       // Lê o nome do arquivo da lista de argumento
         nomeArquivo = args[1];
     } else {
         fprintf(stderr, "Argumento invalido!\nExemplo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
         exit(1);
     }
 
-    // FunÃ§Ã£o chamada na saida do programa, garante que memoria serÃ¡ desalocada
+    // Função chamada na saída do programa, garante que memória será desalocada
     atexit(finalizaPrograma);
     inicializaGerenciadorErro();
     inicializaTabelaSimbolos();
@@ -44,7 +43,7 @@ int main(int argc, char** args){
     return 0;
 }
 
-/** \brief Destroi objetos alocados durante a execuÃ§Ã£o do programa
+/** \brief Destrói objetos alocados durante a execução do programa
  */
 void finalizaPrograma()
 {
