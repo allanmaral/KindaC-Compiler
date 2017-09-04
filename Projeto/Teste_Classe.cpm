@@ -1,0 +1,15 @@
+class No{
+	public:
+		no* prox;
+		int info;
+};
+int main(){
+	No *primeiro = new No();
+	No *segundo = new No();
+	primeiro->info = 0;
+	primeiro->prox = segundo;
+	segundo->info = 1;
+	delete primeiro;
+	delete segundo;
+	return 0;
+}

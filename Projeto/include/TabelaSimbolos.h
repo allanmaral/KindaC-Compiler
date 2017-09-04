@@ -1,11 +1,7 @@
 #ifndef TABELASIMBOLOS_H_INCLUDED
 #define TABELASIMBOLOS_H_INCLUDED
 
-#include "TrieReal.h"
-#include "TrieIdentificador.h"
-#include "TrieInteiro.h"
-#include "TrieLiteral.h"
-#include "TrieReservada.h"
+#include "Trie.h"
 #include "Tokens.h"
 
 #define TABELA_ID 1
@@ -14,10 +10,6 @@
 #define TABELA_LITERAL 4
 #define TABELA_RESERVADA 5
 
-/** \brief inicializaTabelaSimbolos
- *  Função para instânciar as tabelas e definir parâmetros
- */
-void inicializaTabelaSimbolos();
 /** \brief buscaTabela
  *  Função para fazer a busca de um atributo dentro de uma tabela por um lexema
  * \param
@@ -40,10 +32,6 @@ void insereTabela(const int tabela, char* entrada, Atributo* atr);
  * tabela: tabela a ser impressa
  * \param
  */
-void imprimeTabela(const int tabela);
-/** \brief inicializaTabelaSimbolos
- *  Função para desalocar as tabelas
- */
-void destruirTabelaSimbolos();
+void imprimeTabelas();
 
 #endif // TABELASIMBOLOS_H_INCLUDED

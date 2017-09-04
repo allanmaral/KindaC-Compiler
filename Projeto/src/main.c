@@ -3,7 +3,6 @@
 
 #include "AnalisadorLexico.h"
 #include "TabelaSimbolos.h"
-#include "Tokens.h"
 #include "GerenciadorErro.h"
 
 /** \brief Destrói objetos alocados durante a execução do programa
@@ -28,18 +27,13 @@ int main(int argc, char** args){
     // Função chamada na saída do programa, garante que memória será desalocada
     atexit(finalizaPrograma);
     inicializaGerenciadorErro();
-    inicializaTabelaSimbolos();
     iniciaAnalisadorLexico(nomeArquivo);
     int token = 0;
     while(token != EOF){
         token = proximoToken();
         ImprimeToken(token);
     }
-    imprimeTabela(TABELA_LITERAL);
-    imprimeTabela(TABELA_ID);
-    imprimeTabela(TABELA_INTEIRO);
-    imprimeTabela(TABELA_REAL);
-    imprimeTabela(TABELA_RESERVADA);
+    imprimeTabelas();
     return 0;
 }
 
@@ -49,7 +43,6 @@ void finalizaPrograma()
 {
     imprimeListaErros();
     destruirAnalizadorLexico();
-    destruirTabelaSimbolos();
     destruirGerenciadorErro();
 }
 

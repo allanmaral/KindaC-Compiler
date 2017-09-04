@@ -11,6 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
+				<Option parameters="Teste_Classe.cpm" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -35,39 +36,27 @@
 			<Add directory="include" />
 		</Compiler>
 		<Unit filename="include/AnalisadorLexico.h" />
-		<Unit filename="include/Atributo.h" />
 		<Unit filename="include/GerenciadorErro.h" />
 		<Unit filename="include/Leitor.h" />
-		<Unit filename="include/No_Trie.h" />
 		<Unit filename="include/TabelaSimbolos.h" />
 		<Unit filename="include/Tokens.h" />
 		<Unit filename="include/Trie.h" />
-		<Unit filename="include/TrieIdentificador.h" />
-		<Unit filename="include/TrieInteiro.h" />
-		<Unit filename="include/TrieLiteral.h" />
-		<Unit filename="include/TrieReal.h" />
-		<Unit filename="include/TrieReservada.h" />
 		<Unit filename="src/AnalisadorLexico.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/Atributo.cpp" />
 		<Unit filename="src/GerenciadorErro.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/Leitor.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/No_Trie.cpp" />
-		<Unit filename="src/TabelaSimbolos.cpp" />
+		<Unit filename="src/TabelaSimbolos.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="src/Tokens.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="src/Trie.cpp" />
-		<Unit filename="src/TrieIdentificador.cpp" />
-		<Unit filename="src/TrieInteiro.cpp" />
-		<Unit filename="src/TrieLiteral.cpp" />
-		<Unit filename="src/TrieReal.cpp" />
-		<Unit filename="src/TrieReservada.cpp" />
 		<Unit filename="src/main.c">
 			<Option compilerVar="CC" />
 		</Unit>

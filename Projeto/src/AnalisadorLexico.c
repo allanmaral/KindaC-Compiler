@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "AnalisadorLexico.h"
 #include "GerenciadorErro.h"
-#include "Atributo.h"
 #include "TabelaSimbolos.h"
 #include "Leitor.h"
 #define TAMANHO_LEXEMA 32
@@ -101,7 +100,7 @@ int proximoToken(){
 									  case '<' : estado = 22; incrementaLexema(); break;
 									  case '>' : estado = 23; incrementaLexema(); break;
 									  case '!' : estado = 24; incrementaLexema(); break;
-									  
+
 									  case ';' : pegarProximoCaractere(); return PONTO_VIRGULA; break;
 									  case ':' : pegarProximoCaractere(); return DOIS_PONTOS;   break;
 									  case ',' : pegarProximoCaractere(); return VIRGULA;       break;

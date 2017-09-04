@@ -1,7 +1,6 @@
 #include "Trie.h"
 
 Trie::Trie() { raiz = new No_Trie(); altura = 0; }
-
 /** \brief insere
  *  Função para fazer a inserção de lexemas dentro da tabela de simbolos
  * \param
@@ -24,7 +23,7 @@ void Trie::insere(char* entrada, Atributo* atributo){
             no = auxiliar;
         } else{ ///se o filho existir, apenas desce um nível da árvore
             no = no->pegarCaractere(caractere);
-        }
+          }
         indice++;
     }
     if(altura < indice + 1) { altura = indice + 1; }
@@ -32,7 +31,6 @@ void Trie::insere(char* entrada, Atributo* atributo){
     no->atribuirChave(true);
     no->atribuirAtributo(atributo);
 }
-
 /** \brief imprime
  *  Função para imprimir todos os lexemas guardados dentro da tabela
  */
@@ -41,7 +39,6 @@ void Trie::imprime(){
     char saida[altura + 1];
     imprimeRecursivo(saida, 0, raiz);
 }
-
 /** \brief imprimeRecursivo
  *  Função recursiva auxiliar para percorrer a trie
  * \param
@@ -64,7 +61,6 @@ void Trie::imprimeRecursivo(char* saida, int indice, No_Trie *n){
         }
     }
 }
-
 /** \brief busca
  *  Função que busca um lexema na trie e retorna o atributo associado a ele
  * \param
@@ -121,3 +117,219 @@ void Trie::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
 }
 Trie::~Trie() { delete raiz; }
+
+TrieIdentificador::TrieIdentificador():Trie(){}
+
+/** \brief imprimeLexema
+ *  Função para colocar a string associada a um lexema no stdout
+ * \param
+ *  saida: lexema a ser impresso
+ *  atr: atributo do lexema que será impresso juntamente com ele
+ */
+void TrieIdentificador::imprimeLexema(char* saida, Atributo *atr){
+    fprintf(stdout,"%s\n", saida);
+}
+
+/** \brief imprimeCabecalho
+ *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
+ */
+void TrieIdentificador::imprimeCabecalho(){
+    fprintf(stdout,"---------------------------------------\n");
+    fprintf(stdout,"       TABELA DE IDENTIFICADORES       \n");
+    fprintf(stdout,"---------------------------------------\n");
+}
+TrieIdentificador::~TrieIdentificador() { }
+
+TrieInteiro::TrieInteiro():Trie(){}
+
+/** \brief imprimeLexema
+ *  Função para colocar a string associada a um lexema no stdout
+ * \param
+ *  saida: lexema a ser impresso
+ *  atr: atributo do lexema que será impresso juntamente com ele
+ */
+void TrieInteiro::imprimeLexema(char* saida, Atributo *atr){
+    fprintf(stdout,"%s\n", saida);
+}
+
+/** \brief imprimeCabecalho
+ *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
+ */
+void TrieInteiro::imprimeCabecalho(){
+    fprintf(stdout,"---------------------------------------\n");
+    fprintf(stdout,"           TABELA DE INTEIROS          \n");
+    fprintf(stdout,"---------------------------------------\n");
+}
+TrieInteiro::~TrieInteiro() { }
+
+TrieLiteral::TrieLiteral():Trie(){}
+
+/** \brief imprimeLexema
+ *  Função para colocar a string associada a um lexema no stdout
+ * \param
+ *  saida: lexema a ser impresso
+ *  atr: atributo do lexema que será impresso juntamente com ele
+ */
+void TrieLiteral::imprimeLexema(char* saida, Atributo *atr){
+    fprintf(stdout,"%s\n", saida);
+}
+
+/** \brief imprimeCabecalho
+ *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
+ */
+void TrieLiteral::imprimeCabecalho(){
+    fprintf(stdout,"---------------------------------------\n");
+    fprintf(stdout,"          TABELA DE LITERAIS           \n");
+    fprintf(stdout,"---------------------------------------\n");
+}
+TrieLiteral::~TrieLiteral() { }
+
+TrieReal::TrieReal():Trie(){}
+
+/** \brief imprimeLexema
+ *  Função para colocar a string associada a um lexema no stdout
+ * \param
+ *  saida: lexema a ser impresso
+ *  atr: atributo do lexema que será impresso juntamente com ele
+ */
+void TrieReal::imprimeLexema(char* saida, Atributo *atr){
+    fprintf(stdout,"%s\n", saida);
+}
+
+/** \brief imprimeCabecalho
+ *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
+ */
+void TrieReal::imprimeCabecalho(){
+    fprintf(stdout,"---------------------------------------\n");
+    fprintf(stdout,"           TABELA DE REAIS             \n");
+    fprintf(stdout,"---------------------------------------\n");
+}
+TrieReal::~TrieReal() { }
+
+TrieReservada::TrieReservada():Trie(){
+    inicializarReservada();
+}
+
+/** \brief imprimeLexema
+ *  Função para colocar a string associada a um lexema no stdout
+ * \param
+ *  saida: lexema a ser impresso
+ *  atr: atributo do lexema que será impresso juntamente com ele
+ */
+void TrieReservada::imprimeLexema(char* saida, Atributo *atr){
+    int tam = calcularTamanhoLexema(saida);
+    tam = 26 - tam;
+    fprintf(stdout,"%s", saida);
+    while(tam > 1){
+        fprintf(stdout," ");
+        tam--;
+    }
+    fprintf(stdout," %i\n", atr->pegarToken());
+}
+
+/** \brief imprimeCabecalho
+ *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
+ */
+void TrieReservada::imprimeCabecalho(){
+    fprintf(stdout,"---------------------------------------\n");
+    fprintf(stdout,"     TABELA DE PALAVRAS RESERVADAS     \n");
+    fprintf(stdout,"---------------------------------------\n");
+    fprintf(stdout,"LEXEMA                   Token numerico\n");
+}
+
+void TrieReservada::inicializarReservada(){
+    Atributo* auxiliar;
+    auxiliar = new Atributo(); auxiliar->atribuirToken(DEFINICAO_TIPO); insere((char*)"typedef", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(ESTRUTURA);      insere((char*)"struct", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(CLASSE);         insere((char*)"class", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(PUBLICO);        insere((char*)"public", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(PRIVADO);        insere((char*)"private", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(INTEIRO);        insere((char*)"int", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(REAL);           insere((char*)"float", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(BOLEANO);        insere((char*)"bool", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(CARACTERE);      insere((char*)"char", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(SE);             insere((char*)"if", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(SENAO);          insere((char*)"else", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(ENQUANTO);       insere((char*)"while", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(ESCOLHA);        insere((char*)"switch", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(DESVIA);         insere((char*)"break", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(IMPRIME);        insere((char*)"print", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(LE_LINHA);       insere((char*)"readln", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(RETORNA);        insere((char*)"return", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(LANCA);          insere((char*)"throw", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(TENTA);          insere((char*)"try", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(PEGA);           insere((char*)"catch", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(CASO);           insere((char*)"case", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(NOVO);           insere((char*)"new", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(VERDADEIRO);     insere((char*)"true", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(FALSO);          insere((char*)"false", auxiliar);
+    auxiliar = new Atributo(); auxiliar->atribuirToken(ESSE);           insere((char*)"this", auxiliar);
+}
+TrieReservada::~TrieReservada() { }
+
+Atributo::Atributo() { /*Construtor*/ }
+int Atributo::pegarToken(){ return token; }
+void Atributo::atribuirToken(int t) { token = t; }
+Atributo::~Atributo() { /*Destrutor*/ }
+
+No_Trie::No_Trie(){
+    for(int i = 0; i < TAMANHO_ALFABETO; i++) { caracteres[i] = NULL; }
+    atributos = NULL;
+    chave = false;
+}
+
+/** \brief pegarCaractere
+ *  Função para retornar o filho correspondente à um caractere informado
+ * \param
+ * c: caractere a ser buscado no vetor de caracteres
+ * \return
+ *  O filho buscado a partir do caractere informado
+ */
+No_Trie* No_Trie::pegarCaractere(char c) { return caracteres[(int)c]; }
+
+/** \brief atribuirCaractere
+ *  Função para atribuir à posição do vetor de caractere um nó informadado
+ * \param
+ * c: caractere correspondente a posição do vetor de caracteres
+ * n: nó a ser atribuido nessa posição
+ * \param
+ */
+void No_Trie::atribuirCaractere(char c, No_Trie* n) { caracteres[(int)c] = n; }
+
+/** \brief pegarAtributo
+ *  Retornar o atributo armazenado neste nó
+ */
+Atributo* No_Trie::pegarAtributo() { return atributos; }
+
+/** \brief atribuirAtributo
+ *  Função para atribuir um atributo passado como parâmetro a este nó
+ * \param
+ * p: atributo a ser armazenado
+ * \param
+ */
+void No_Trie::atribuirAtributo(Atributo *p) { atributos = p; }
+
+/** \brief atribuirChave
+ *  Função para definir se o npo eh chave ou não
+ * \param
+ * c: booleano para ser atribuido a variavel da classe 'chave'
+ * \param
+ */
+void No_Trie::atribuirChave(bool c) { chave = c; }
+
+/** \brief EChave
+ * Função que retorna se o nó eh um nó chave ou não
+ * \param
+ * \param
+ * \return
+ *  Retorna a variavel chave
+ *
+ */
+bool No_Trie::EChave() { return chave; }
+
+No_Trie::~No_Trie(){
+    for(int i = 0; i < TAMANHO_ALFABETO; i++){
+        if(caracteres[i] != NULL){ delete caracteres[i]; }
+    }
+    if(atributos != NULL){ delete atributos; }
+}
