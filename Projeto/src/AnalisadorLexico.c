@@ -1,9 +1,14 @@
 #include <stdio.h>
+#include <string.h>
 #include "AnalisadorLexico.h"
 #include "GerenciadorErro.h"
 #include "TabelaSimbolos.h"
-#include "Leitor.h"
+
 #define TAMANHO_LEXEMA 32
+#define TAMANHO_NOME_ARQUIVO 1024
+#define TAMANHO_BUFFER 4096
+#define ARQUIVO_INVALIDO 0
+#define ARQUIVO_ABERTO   1
 
 static char caractereAtual;      /**< Último caractere lindo pelo autômato*/
 static int estado;               /**< Estado atual do autômato  */
@@ -13,12 +18,88 @@ static int tamLexema;            /**< Tamanho total do vetor de caracteres lexem
 static int linha;                /**< Linha atual do arquivo  */
 static int coluna;               /**< Coluna atual do arquivo  */
 
-/** \brief Função que atualiza o caractere do leitor e aumenta uma coluna
+/** Dados do leitor de arquivos
+ */
+static char*   buffer = NULL;          /**< Buffer de leitura  */
+static int     caractereAtualBuffer;   /**< Índice do último caractere lido */
+static FILE*   file = NULL;            /**< Arquivo aberto */
+
+
+/** \brief Construtor do leitor de arquivo
+  *
+  * \param arquivo LeitorArquivo*
+  * \param caminhoArquivo const char* Caminho do arquivo a ser lido
+  * \param tamanhoBuffer unsigned int tamanho do buffer de leitura
+  * \return int Retorna o resultado a operação:
+  * \return 0 - ARQUIVO_INVALIDO
+  * \return 1 - ARQUIVO_ABERTO
   *
   */
-static void pegarProximoCaractere(){
-    coluna++;
-    caractereAtual = lerProximoCaractere();
+int inicializarLeitor(const char* caminhoArquivo){
+    if(caminhoArquivo) {
+        char arquivo[TAMANHO_NOME_ARQUIVO];
+        strcpy(arquivo, caminhoArquivo);
+        // Se não tiver a extenção .cpm, adicione
+        if(strstr(caminhoArquivo, ".cpm") == NULL ) {
+            strcat(arquivo, ".cpm");
+        }
+        file = fopen(arquivo, "r");
+    } else {
+        file = stdin;
+    }
+
+    // Se for um arquivo valido
+    if(file){
+        // Inicialçiza o leitor
+        buffer = (char*)malloc(TAMANHO_BUFFER*sizeof(char));
+        caractereAtualBuffer = TAMANHO_BUFFER;
+        return ARQUIVO_ABERTO;
+    } else { // Arquivo invalido
+        // Inicializa o leitor com estados de erro
+        buffer = NULL;
+        caractereAtualBuffer = TAMANHO_BUFFER;
+        return ARQUIVO_INVALIDO;
+    }
+}
+
+/** \brief Destrutor do leitor de arquivo
+ *
+ * \param arquivo LeitorArquivo* arquivo a ser destruído
+ *
+ */
+void destruirLeitor(){
+    if(file && file != stdin) { fclose(file); }
+    free(buffer);
+
+    file = NULL;
+    buffer = NULL;
+    caractereAtualBuffer = TAMANHO_BUFFER;
+}
+
+/** \brief Lê o próximo caracter de um arquivo
+ *
+ *
+ * \return char Caracter lido
+ *
+ */
+ static void pegarProximoCaractere(){
+    // Verifica se o arquivo é válido
+    if(file){
+        // Se tiver passado do tamanho do buffer, volta pro inicio
+        if(caractereAtualBuffer >= TAMANHO_BUFFER){
+            int elementosLidos;
+            // Le o arquivo
+            elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, file);
+            // Se não ler o mesmo numero de elementos, pode ser erro ou fim de arquivo
+            if(elementosLidos < TAMANHO_BUFFER){
+                buffer[elementosLidos] = (char)0;
+            }
+            caractereAtualBuffer = 0;
+        }
+        caractereAtual = buffer[caractereAtualBuffer++];
+        coluna++;
+    }
+    else { saidaErro(ErroArquivoInvalido, 0, 0); caractereAtual = '\0';}
 }
 
 /** \brief Função que reinicializa o "automato"

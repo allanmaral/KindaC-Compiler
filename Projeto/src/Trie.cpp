@@ -1,4 +1,5 @@
 #include "Trie.h"
+#include "TabelaSimbolos.h"
 
 Trie::Trie() { raiz = new No_Trie(); altura = 0; }
 /** \brief insere
