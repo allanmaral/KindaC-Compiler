@@ -5,10 +5,7 @@
 #include "TabelaSimbolos.h"
 
 #define TAMANHO_LEXEMA 32
-#define TAMANHO_NOME_ARQUIVO 1024
 #define TAMANHO_BUFFER 4096
-#define ARQUIVO_INVALIDO 0
-#define ARQUIVO_ABERTO   1
 
 static char caractereAtual;      /**< Último caractere lindo pelo autômato*/
 static int estado;               /**< Estado atual do autômato  */
@@ -20,9 +17,9 @@ static int coluna;               /**< Coluna atual do arquivo  */
 
 /** Dados do leitor de arquivos
  */
-static char*   buffer = NULL;          /**< Buffer de leitura  */
-static int     caractereAtualBuffer;   /**< Índice do último caractere lido */
-static FILE*   file = NULL;            /**< Arquivo aberto */
+static char    buffer[TAMANHO_BUFFER];     /**< Buffer de leitura  */
+static int     caractereAtualBuffer = 0;   /**< Índice do último caractere lido */
+static FILE*   arquivo = NULL;             /**< Arquivo aberto */
 
 
 /** \brief Construtor do leitor de arquivo
@@ -30,36 +27,20 @@ static FILE*   file = NULL;            /**< Arquivo aberto */
   * \param arquivo LeitorArquivo*
   * \param caminhoArquivo const char* Caminho do arquivo a ser lido
   * \param tamanhoBuffer unsigned int tamanho do buffer de leitura
-  * \return int Retorna o resultado a operação:
-  * \return 0 - ARQUIVO_INVALIDO
-  * \return 1 - ARQUIVO_ABERTO
   *
   */
-int inicializarLeitor(const char* caminhoArquivo){
-    if(caminhoArquivo) {
-        char arquivo[TAMANHO_NOME_ARQUIVO];
-        strcpy(arquivo, caminhoArquivo);
-        // Se não tiver a extenção .cpm, adicione
-        if(strstr(caminhoArquivo, ".cpm") == NULL ) {
-            strcat(arquivo, ".cpm");
-        }
-        file = fopen(arquivo, "r");
-    } else {
-        file = stdin;
-    }
-
+void inicializarLeitor(){
     // Se for um arquivo valido
-    if(file){
+    if(arquivo){
         // Inicialçiza o leitor
-        buffer = (char*)malloc(TAMANHO_BUFFER*sizeof(char));
-        caractereAtualBuffer = TAMANHO_BUFFER;
-        return ARQUIVO_ABERTO;
-    } else { // Arquivo invalido
-        // Inicializa o leitor com estados de erro
-        buffer = NULL;
-        caractereAtualBuffer = TAMANHO_BUFFER;
-        return ARQUIVO_INVALIDO;
-    }
+        int elementosLidos;
+        elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, arquivo);
+        if(elementosLidos < TAMANHO_BUFFER){ buffer[elementosLidos] = (char)0; }
+
+    } else{ // Arquivo invalido
+          saidaErro(ErroArquivoInvalido, 0, 0);
+          exit(1);
+      }
 }
 
 /** \brief Destrutor do leitor de arquivo
@@ -68,11 +49,8 @@ int inicializarLeitor(const char* caminhoArquivo){
  *
  */
 void destruirLeitor(){
-    if(file && file != stdin) { fclose(file); }
-    free(buffer);
-
-    file = NULL;
-    buffer = NULL;
+    if(arquivo && arquivo != stdin){ fclose(arquivo); }
+    arquivo = NULL;
     caractereAtualBuffer = TAMANHO_BUFFER;
 }
 
@@ -83,47 +61,40 @@ void destruirLeitor(){
  *
  */
  static void pegarProximoCaractere(){
-    // Verifica se o arquivo é válido
-    if(file){
-        // Se tiver passado do tamanho do buffer, volta pro inicio
-        if(caractereAtualBuffer >= TAMANHO_BUFFER){
-            int elementosLidos;
-            // Le o arquivo
-            elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, file);
-            // Se não ler o mesmo numero de elementos, pode ser erro ou fim de arquivo
-            if(elementosLidos < TAMANHO_BUFFER){
-                buffer[elementosLidos] = (char)0;
-            }
-            caractereAtualBuffer = 0;
-        }
-        caractereAtual = buffer[caractereAtualBuffer++];
-        coluna++;
+    // Se tiver passado do tamanho do buffer, volta pro inicio
+    if(caractereAtualBuffer >= TAMANHO_BUFFER){
+        int elementosLidos;
+        // Le o arquivo
+        elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, arquivo);
+        // Se não ler o mesmo numero de elementos, pode ser erro ou fim de arquivo
+        if(elementosLidos < TAMANHO_BUFFER){ buffer[elementosLidos] = (char)0; }
+        caractereAtualBuffer = 0;
     }
-    else { saidaErro(ErroArquivoInvalido, 0, 0); caractereAtual = '\0';}
+    caractereAtual = buffer[caractereAtualBuffer++];
+    coluna++;
 }
 
 /** \brief Função que reinicializa o "automato"
   *
   */
-static void reinicializaAutomato(){ pegarProximoCaractere(); posicaoLexema = 0; estado =1;}
+static void reinicializaAutomato(){ pegarProximoCaractere(); posicaoLexema = 0; estado = 1; }
 
-char* pegarLexema(){ return lexema ; }
+char* pegarLexema(){ return lexema; }
 
 /** \brief Construtor do analisador léxico
   *
   * \param caminhoArquivo const char* Caminho do arquivo a ser lido
   */
-void iniciaAnalisadorLexico(char *caminho){
+void iniciaAnalisadorLexico(FILE* fluxo){
     lexema = (char*) malloc(TAMANHO_LEXEMA*(sizeof(char)));
     posicaoLexema = 0;
     tamLexema     = TAMANHO_LEXEMA;
     linha         = 1;
     coluna        = 0;
-    int res = inicializarLeitor(caminho);
-    if(res == ARQUIVO_INVALIDO){
-        saidaErro(ErroArquivoInvalido, 0, 0);
-        exit(1);
-    }
+    arquivo       = fluxo;
+    int elementosLidos;
+    elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, arquivo);
+    if(elementosLidos < TAMANHO_BUFFER){ buffer[elementosLidos] = (char)0; }
     pegarProximoCaractere();
 }
 
@@ -194,8 +165,8 @@ int proximoToken(){
 									  case '+' : pegarProximoCaractere(); return ADICAO;        break;
 									  case '%' : pegarProximoCaractere(); return PORCENTO;      break;
 									  case '*' : pegarProximoCaractere(); return ASTERISCO;     break;
-									  case EOF : pegarProximoCaractere(); return EOF;           break;
-									  case '\0': pegarProximoCaractere(); return EOF;           break;
+									  case EOF : pegarProximoCaractere(); return TOKEN_EOF;     break;
+									  case '\0': pegarProximoCaractere(); return TOKEN_EOF;     break;
 									  default:
 										  saidaErro(ErroCaractereInvalido, linha, coluna);
 										  reinicializaAutomato();
@@ -284,15 +255,14 @@ int proximoToken(){
                     reinicializaAutomato();
                 } else if(caractereAtual == '\0' || caractereAtual == EOF){
                            saidaErro(ErroCaractereMalFormado, linha, coluna);
-                           return EOF;
-                       }
-                       else if(caractereAtual == '\\') { estado = 10; incrementaLexema(); }
-                            else { estado = 11; incrementaLexema(); }
-					   	    break;
+                           return TOKEN_EOF;
+                       } else if(caractereAtual == '\\') { estado = 10; incrementaLexema(); }
+                              else { estado = 11; incrementaLexema(); }
+                break;
             case 10 :
                 if(caractereAtual == '\0' || caractereAtual == EOF){
                     saidaErro(ErroCaractereMalFormado, linha, coluna);
-                    return EOF;
+                    return TOKEN_EOF;
                 }
                 else { estado = 11; incrementaLexema(); }
 				break;
@@ -306,7 +276,7 @@ int proximoToken(){
                     return LITERAL;
                 } else if(caractereAtual == '\0' || caractereAtual == EOF){
                            saidaErro(ErroCaractereMalFormado, linha, coluna);
-                           return EOF;
+                           return TOKEN_EOF;
                        } else{
                              saidaErro(ErroFaltaAspaSimples, linha, coluna);
                              reinicializaAutomato();
@@ -316,7 +286,7 @@ int proximoToken(){
                 if(caractereAtual == '\\') { estado = 13; incrementaLexema(); }
                 else if(caractereAtual == '\0' || caractereAtual == EOF){
                     saidaErro(ErroFaltaAspasDupla, linha, coluna);
-                    return EOF;
+                    return TOKEN_EOF;
                 } else if(caractereAtual == '"'){
                            incrementaLexema();
                            Atributo *auxiliar;
@@ -334,7 +304,7 @@ int proximoToken(){
             case 13 :
                 if(caractereAtual == '\0' || caractereAtual == EOF){
                     saidaErro(ErroFaltaAspasDupla, linha, coluna);
-                    return EOF;
+                    return TOKEN_EOF;
                 } else { estado = 12; incrementaLexema(); }
             break;
             case 14 :
@@ -349,7 +319,7 @@ int proximoToken(){
                        } else { return DIVISAO; }
                          break;
             case 15 :
-                if(caractereAtual == '\0' || caractereAtual == EOF) { return EOF; }
+                if(caractereAtual == '\0' || caractereAtual == EOF) { return TOKEN_EOF; }
                 else if(caractereAtual == '\n'){
                          linha++;
                          coluna = 0;
@@ -373,14 +343,14 @@ int proximoToken(){
                                   pegarProximoCaractere();
                               } else if(caractereAtual == '\0' || caractereAtual == EOF){
                                          saidaErro(ErroComentarioNaoTerminado, linha, coluna);
-                                         return EOF;
+                                         return TOKEN_EOF;
                                      } else { pegarProximoCaractere(); }
                                        break;
             case 17 :
                 if(caractereAtual == '*'){ pegarProximoCaractere(); }
                 else if(caractereAtual == '\0' || caractereAtual == EOF){
                          saidaErro(ErroComentarioNaoTerminado, linha, coluna);
-                         return EOF;
+                         return TOKEN_EOF;
                      } else if(caractereAtual == '/'){
                                 estado = 1;
                                 pegarProximoCaractere();

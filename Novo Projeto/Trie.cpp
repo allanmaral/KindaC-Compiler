@@ -1,5 +1,6 @@
 #include "Trie.h"
 #include "TabelaSimbolos.h"
+#include "AnalisadorLexico.h"
 
 Trie::Trie() { raiz = new No_Trie(); altura = 0; }
 /** \brief insere

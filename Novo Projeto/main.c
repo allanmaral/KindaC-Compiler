@@ -29,32 +29,38 @@ void finalizaPrograma();
 /** \brief Ponto de entrada do programa
  */
 int main(int argc, char** args){
-    char* nomeArquivo = NULL;
-    if(argc == 1){                  // altera o modo para obter caracteres do stdin
-       nomeArquivo = NULL;
-    } else if ( argc == 2 ) {       // Lê o nome do arquivo da lista de argumento
-        nomeArquivo = args[1];
-    } else {
-        fprintf(stderr, "Argumento invalido!\nExemplo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
-        exit(1);
-    }
+    FILE* arquivo = stdin;
+    if ( argc == 2 ) {
+        char caminhoArquivo[strlen(args[1])+5];
+        strcpy(caminhoArquivo, args[1]);
+        // Se não tiver a extenção .cpm, adicione
+        if(strstr(caminhoArquivo, ".cpm") == NULL ){
+            strcat(caminhoArquivo, ".cpm");
+        }
+        arquivo = fopen(caminhoArquivo, "r");
+        if(!arquivo){
+            fprintf(stderr, "Arquivo invalido!");
+            exit(1);
+        }
+    } else if( argc > 2){
+               fprintf(stderr, "Argumento invalido!\nExemplo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
+               exit(1);
+           }
 
     // Função chamada na saída do programa, garante que memória será desalocada
     atexit(finalizaPrograma);
     inicializaGerenciadorErro();
-    iniciaAnalisadorLexico(nomeArquivo);
+    iniciaAnalisadorLexico(arquivo);
     int token = 0;
-    while(token != EOF){
+    while(token != TOKEN_EOF){
         token = proximoToken();
-        if((token > 0 && token < 58) || token == EOF) {
+        if((token >= DEFINICAO_TIPO && token <= TOKEN_EOF)) {
             if(token == ID || token == NUM_INTEIRO || token == NUM_REAL || token == LITERAL) {
                 fprintf(stdout, "%s.%s\n", tokenLiteral[token-1], pegarLexema());
-            } else if(token == EOF) {
-                       fprintf(stdout, "%s\n", tokenLiteral[58]);
-                   } else {
-                         fprintf(stdout, "%s\n", tokenLiteral[token-1]);
-                     }
-        } else {
+            } else{
+                  fprintf(stdout, "%s\n", tokenLiteral[token-1]);
+              }
+        } else{
             fprintf(stdout, "Valor invalido! Token:%d\n", token);
         }
     }

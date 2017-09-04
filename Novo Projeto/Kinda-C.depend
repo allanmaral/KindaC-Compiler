@@ -1,0 +1,42 @@
+# depslib dependency file v1.0
+1504549036 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/GerenciadorErro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1504549035 /home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/GerenciadorErro.h
+
+1504564756 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/AnalisadorLexico.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"TabelaSimbolos.h"
+
+1504564262 /home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/AnalisadorLexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+
+1504564085 /home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/TabelaSimbolos.h
+	"Trie.h"
+
+1504550695 /home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/Trie.h
+	<stdlib.h>
+	<stdio.h>
+
+1504564375 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/main.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"TabelaSimbolos.h"
+	"GerenciadorErro.h"
+
+1504549036 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/TabelaSimbolos.c
+	"TabelaSimbolos.h"
+
+1504564412 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/Trie.cpp
+	"Trie.h"
+	"TabelaSimbolos.h"
+	"AnalisadorLexico.h"
+
