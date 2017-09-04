@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="KindaC" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../Executavel/KindaC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Option parameters="Teste_Classe.cpm" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../Executavel/KindaC" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-x c++" />
+			<Add directory="include" />
+		</Compiler>
+		<Unit filename="include/AnalisadorLexico.h" />
+		<Unit filename="include/GerenciadorErro.h" />
+		<Unit filename="include/Leitor.h" />
+		<Unit filename="include/TabelaSimbolos.h" />
+		<Unit filename="include/Tokens.h" />
+		<Unit filename="include/Trie.h" />
+		<Unit filename="src/AnalisadorLexico.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/GerenciadorErro.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Leitor.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/TabelaSimbolos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Tokens.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/Trie.cpp" />
+		<Unit filename="src/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,146 @@
+[l:13, c:14] - Erro: Expoente nao possui digitos
+[l:14, c:15] - Erro: Expoente nao possui digitos
+[l:15, c:15] - Erro: Expoente nao possui digitos
+[l:16, c:14] - Erro: Expoente nao possui digitos
+[l:17, c:15] - Erro: Expoente nao possui digitos
+REAL
+ID.a
+ATRIBUICAO
+NUM_INTEIRO.123
+PONTO_VIRGULA
+REAL
+ID.b
+ATRIBUICAO
+NUM_REAL.123e+45
+PONTO_VIRGULA
+REAL
+ID.c
+ATRIBUICAO
+NUM_REAL.123e-45
+PONTO_VIRGULA
+REAL
+ID.f
+ATRIBUICAO
+NUM_REAL.0.123
+PONTO_VIRGULA
+REAL
+ID.k
+ATRIBUICAO
+NUM_REAL..123
+PONTO_VIRGULA
+REAL
+ID.n
+ATRIBUICAO
+NUM_REAL..123+45
+PONTO_VIRGULA
+REAL
+ID.o
+ATRIBUICAO
+NUM_REAL..123-45
+PONTO_VIRGULA
+REAL
+ID.p
+ATRIBUICAO
+NUM_REAL.123.
+PONTO_VIRGULA
+REAL
+ID.q
+ATRIBUICAO
+NUM_REAL.123.+45
+PONTO_VIRGULA
+REAL
+ID.r
+ATRIBUICAO
+NUM_REAL.123.-45
+PONTO_VIRGULA
+REAL
+ID.u
+ATRIBUICAO
+ERRO
+PONTO_VIRGULA
+REAL
+ID.v
+ATRIBUICAO
+ERRO
+PONTO_VIRGULA
+REAL
+ID.w
+ATRIBUICAO
+ERRO
+PONTO_VIRGULA
+REAL
+ID.x
+ATRIBUICAO
+ERRO
+PONTO_VIRGULA
+REAL
+ID.y
+ATRIBUICAO
+ERRO
+EOF
+---------------------------------------
+          TABELA DE LITERAIS           
+---------------------------------------
+---------------------------------------
+       TABELA DE IDENTIFICADORES       
+---------------------------------------
+a
+b
+c
+f
+k
+n
+o
+p
+q
+r
+u
+v
+w
+x
+y
+---------------------------------------
+           TABELA DE INTEIROS          
+---------------------------------------
+123
+---------------------------------------
+           TABELA DE REAIS             
+---------------------------------------
+.123
+.123+45
+.123-45
+0.123
+123.
+123.+45
+123.-45
+123e+45
+123e-45
+---------------------------------------
+     TABELA DE PALAVRAS RESERVADAS     
+---------------------------------------
+LEXEMA                   Token numerico
+bool                      8
+break                     14
+case                      21
+catch                     20
+char                      9
+class                     3
+else                      11
+false                     24
+float                     7
+if                        10
+int                       6
+new                       22
+print                     15
+private                   5
+public                    4
+readln                    16
+return                    17
+struct                    2
+switch                    13
+this                      25
+throw                     18
+true                      23
+try                       19
+typedef                   1
+while                     12

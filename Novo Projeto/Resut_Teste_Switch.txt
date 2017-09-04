@@ -1,0 +1,116 @@
+INTEIRO
+ID.main
+PARENTESE_ESQ
+INTEIRO
+ID.argc
+VIRGULA
+CARACTERE
+ASTERISCO
+ASTERISCO
+ID.args
+PARENTESE_DIR
+CHAVE_ESQ
+ESCOLHA
+PARENTESE_ESQ
+ID.argc
+PARENTESE_DIR
+CHAVE_ESQ
+CASO
+NUM_INTEIRO.0
+DOIS_PONTOS
+TENTA
+CHAVE_ESQ
+LANCA
+NUM_INTEIRO.20
+PONTO_VIRGULA
+CHAVE_DIR
+PEGA
+PARENTESE_ESQ
+INTEIRO
+ID.e
+PARENTESE_DIR
+CHAVE_ESQ
+IMPRIME
+PARENTESE_ESQ
+LITERAL." Ocorreu erro "
+MENOR
+MENOR
+ID.e
+MENOR
+MENOR
+LITERAL.'\n'
+PARENTESE_DIR
+PONTO_VIRGULA
+CHAVE_DIR
+DESVIA
+PONTO_VIRGULA
+CASO
+NUM_INTEIRO.1
+DOIS_PONTOS
+INTEIRO
+ID.numero
+PONTO_VIRGULA
+LE_LINHA 
+PARENTESE_ESQ
+ID.numero
+PARENTESE_DIR
+PONTO_VIRGULA
+RETORNA
+ID.numero
+PONTO_VIRGULA
+DESVIA
+PONTO_VIRGULA
+CHAVE_DIR
+CHAVE_DIR
+EOF
+---------------------------------------
+          TABELA DE LITERAIS           
+---------------------------------------
+" Ocorreu erro "
+'\n'
+---------------------------------------
+       TABELA DE IDENTIFICADORES       
+---------------------------------------
+argc
+args
+e
+main
+numero
+---------------------------------------
+           TABELA DE INTEIROS          
+---------------------------------------
+0
+1
+20
+---------------------------------------
+           TABELA DE REAIS             
+---------------------------------------
+---------------------------------------
+     TABELA DE PALAVRAS RESERVADAS     
+---------------------------------------
+LEXEMA                   Token numerico
+bool                      8
+break                     14
+case                      21
+catch                     20
+char                      9
+class                     3
+else                      11
+false                     24
+float                     7
+if                        10
+int                       6
+new                       22
+print                     15
+private                   5
+public                    4
+readln                    16
+return                    17
+struct                    2
+switch                    13
+this                      25
+throw                     18
+true                      23
+try                       19
+typedef                   1
+while                     12
