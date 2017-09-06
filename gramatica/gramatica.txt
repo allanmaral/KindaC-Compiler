@@ -1,0 +1,83 @@
+
+program -> functionDecl program
+	   typeDecl	program
+	   varDecl 	program
+	   classDecl	program
+	   functionDecl	
+
+typeDecl -> typedef sturct{ type idList; varDecl } ID; typeDecl | epsilon
+
+classDecl -> class ID {localDecl }; | class ID : ID {localDec}
+
+localDecl-> functionDecl localDecl |
+	    varDecl localDecl	   |
+	    public		   | private
+
+varDecl -> type idList; varDecl    | epsilon
+
+idList -> pointer ID array         |
+	  idList , pointer ID array|
+
+pointer -> * | epsilion
+
+array -> [ NUM ] | epsilon
+
+functionDecl -> type pointer ID (formalList){varDecl stmtList}
+
+formalList -> type pointer ID array fomalRest | epsilon
+
+formalRest -> , type pointer ID array formalRest | epsilon
+
+type -> int | float | bool | ID | char 
+
+stmtList -> stmt |
+	    stmt stmtList |
+
+stmt -> if ( expr ) stmt else stmt    |
+      	while ( expr ) stmt           |
+	switch ( expr ) { caseblock } |
+	break;                        |
+        print (eprList );	      |
+	readln ( expr );	      |
+	return expr;		      |
+	throw;			      |
+	{stmList} 		      |
+	ID ( exprList )		      |
+	try stmt catch ("...") stmt   |
+	expr			      |
+
+caseblock -> case NUM ":" stmtList caseBlock |
+	     case NUM ":" caseBlock
+
+exṕrList -> epsilon |
+	    eprtListTail
+
+exprListTail -> expr   |
+                expr , exprListTail
+
+expr -> primary            |
+	unaryOP expr       |
+	expr binOP expr    |
+	expr = expr        |
+	expr "->" expr 	   |
+	expr "." expr  	   |
+	new ID ( exprList) 
+
+primary -> ID | NUM | LITERAL |
+	   'ASCII'            |
+	   ( expr )           |
+	   ID ( exprList )    |
+	   expr [ expr ]      |
+	   "&" expr           |
+	   "*" expr           |
+	   true | false | this
+
+unaryOP -> "-" | "!" | "+"
+
+binOP -> "==" | "<" | "<=" | ">=" | ">" | "!=" | "+" |
+	 "-"  | "!" | "*"  | "/"  | "%" | "&"  | "&&"| "||"
+
+
+
+
+
