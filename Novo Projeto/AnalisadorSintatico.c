@@ -1,50 +1,5 @@
 #include "AnalisadorLexico.h"
 
-static int followExprMultDivE []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, TOKEN_EOF};
-
-static int followExprMultDivEL []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, TOKEN_EOF};
-
-static int followExprUnaria []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
-
-static int followExprAceCamp []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
-
-static int followExprAceCampL []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
-
-static int followExprNovo []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
-
-static int followExprNovoL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
-
-static int followPrimario []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-
-static int followPrimarioL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-
-static int followPrimarioID []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-
-static int followPrimarioIDL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
-									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
-									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-
-
 static int tokenAtual;
 
 void casar(int token){
@@ -447,7 +402,7 @@ void ListaSentenca(){
 			Sentenca();
 			ListaSentenca();
 		break;
-		default: /* Epsilon*/ break;
+		default: /* Epsilon */ break;
 	}
 }
 
@@ -798,4 +753,234 @@ void ExprSomaL(){
 		break;
 		default: /* Epsilon */ break;
 	}
+}
+
+static int followExprMultDivE []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, TOKEN_EOF};
+void ExprMultDivE(){
+    switch(tokenAtual){
+		case ID:        case ASTERISCO:         case NUM_INTEIRO:
+        case NUM_REAL:  case PARENTESE_ESQ:     case NEGACAO:
+        case LITERAL:   case E_COMERCIAL:       case VERDADEIRO:
+        case FALSO:     case ESSE:              case NOVO:
+        case ADICAO:    case SUBTRACAO:
+			ExprUnaria();
+			ExprMultDivEL();
+		break;
+		default: /* ERRO */ break;
+	}
+}
+
+static int followExprMultDivEL []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, TOKEN_EOF};
+void ExprMultDivEL(){
+    switch(tokenAtual){
+        case ASTERISCO:
+            casar(ASTERISCO);
+            ExprUnaria();
+            ExprMultDivEL();
+        break;
+        case DIVISAO:
+            casar(DIVISAO);
+            ExprUnaria();
+            ExprMultDivEL();
+        break;
+        case PORCENTO:
+            casar(PORCENTO);
+            ExprUnaria();
+            ExprMultDivEL();
+        break;
+        case E_COMERCIAL:
+            casar(E_COMERCIAL);
+            ExprUnaria();
+            ExprMultDivEL();
+        break;
+        default: /* epsilon */ break;
+    }
+}
+
+static int followExprUnaria []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
+void ExprUnaria(){
+    switch(tokenAtual){
+        case ADICAO:
+            casar(ADICAO);
+            ExprAceCamp();
+        break;
+        case SUBTRACAO:
+            casar(SUBTRACAO);
+            ExprAceCamp();
+        break;
+        case NEGACAO:
+            casar(NEGACAO);
+            ExprAceCamp();
+        break;
+		case ID:                case ASTERISCO:         case NUM_INTEIRO:
+        case NUM_REAL:          case PARENTESE_ESQ:     case LITERAL:
+        case E_COMERCIAL:       case VERDADEIRO:        case FALSO:
+        case ESSE:              case NOVO:
+			ExprAceCamp();
+		break;
+		default: /* ERRO */ break;
+	}
+}
+
+static int followExprAceCamp []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
+void ExprAceCamp(){
+    switch(tokenAtual){
+        case ID:                case ASTERISCO:         case NUM_INTEIRO:
+        case NUM_REAL:          case PARENTESE_ESQ:     case LITERAL:
+        case E_COMERCIAL:       case VERDADEIRO:        case FALSO:
+        case ESSE:              case NOVO:
+            ExprNovo();
+            ExprAceCampL();
+        break;
+        default: /* ERRO */ break;
+    }
+}
+
+static int followExprAceCampL []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
+void ExprAceCampL(){
+    switch(tokenAtual){
+        case PONTEIRO:
+            casar(PONTEIRO);
+            ExprNovo();
+            ExprAceCampL();
+        break;
+        case PONTO:
+            casar(PONTO);
+            ExprNovo();
+            ExprAceCampL();
+        break;
+        default: /* epsilon */ break;
+    }
+}
+
+static int followExprNovo []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
+void ExprNovo(){
+    switch(tokenAtual){
+        case ID:                case ASTERISCO:         case NUM_INTEIRO:
+        case NUM_REAL:          case PARENTESE_ESQ:     case LITERAL:
+        case E_COMERCIAL:       case VERDADEIRO:        case FALSO:
+        case ESSE:              case NOVO:
+            Primario();
+            ExprNovoL();
+        break;
+        default: /* ERRO */ break;
+    }
+}
+
+static int followExprNovoL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
+void ExprNovoL(){
+    switch(tokenAtual){
+        case COLCHETE_ESQ:
+            casar(COLCHETE_ESQ);
+            Expr();
+            casarOuPular(COLCHETE_DIR, followExprNovoL);
+            ExprNovoL();
+        break;
+        default: /* epsilon */ break;
+    }
+}
+
+static int followPrimario []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
+void Primario() {
+    switch(tokenAtual){
+        case ID:
+            PrimarioID();
+        case ASTERISCO:         case NUM_INTEIRO:       case NUM_REAL:
+        case PARENTESE_ESQ:     case LITERAL:           case E_COMERCIAL:
+        case VERDADEIRO:        case FALSO:             case ESSE:
+        case NOVO:
+            PrimarioL();
+        break;
+        default: /* ERRO */ break;
+    }
+}
+
+static int followPrimarioL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
+void PrimarioL(){
+    switch(tokenAtual){
+        case ASTERISCO:
+            casar(ASTERISCO);
+            Primario();
+        break;
+        case NUM_INTEIRO:
+            casar(NUM_INTEIRO);
+        break;
+        case NUM_REAL:
+            casar(NUM_REAL);
+        break;
+        case PARENTESE_ESQ:
+            casar(PARENTESE_ESQ);
+            Expr();
+            casarOuPular(PARENTESE_DIR, followPrimarioL);
+        break;
+        case LITERAL:
+            casar(LITERAL);
+        break;
+        case E_COMERCIAL:
+            casar(E_COMERCIAL);
+            Primario();
+        break;
+        case VERDADEIRO:
+            casar(VERDADEIRO);
+        break;
+        case FALSO:
+            casar(FALSO);
+        break;
+        case ESSE:
+            casar(ESSE);
+        break;
+        case NOVO:
+            casar(NOVO);
+            casarOuPular(ID, followPrimarioL);
+            casarOuPular(PARENTESE_ESQ, followPrimarioL);
+            ListaExpr();
+            casarOuPular(PARENTESE_DIR, followPrimarioL);
+        break;
+        default: /* ERRO */ break;
+    }
+}
+
+static int followPrimarioID []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
+void PrimarioID(){
+    switch(tokenAtual){
+        case ID:
+            casar(ID);
+            PrimarioIDL();
+        break;
+        default: /* ERRO */ break;
+    }
+}
+
+static int followPrimarioIDL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
+void PrimarioIDL(){
+    switch(tokenAtual) {
+        case PARENTESE_ESQ:
+            casar(PARENTESE_ESQ);
+            ListaExpr();
+            casarOuPular(PARENTESE_DIR, followPrimarioIDL);
+        break;
+        default: /* epsilon */ break;
+    }
 }
