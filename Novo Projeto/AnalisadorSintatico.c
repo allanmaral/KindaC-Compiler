@@ -356,6 +356,7 @@ void ListaForma(){
 		default: /* Epsilon */ break;
 	}
 }
+
 static int followListaFormaCont []	= {PARENTESE_DIR, TOKEN_EOF};
 void ListaFormaCont(){
 	switch(tokenAtual){
@@ -395,10 +396,11 @@ void TipoL(){
 static int followListaSentenca [] = {CHAVE_DIR, CASO, TOKEN_EOF};
 void ListaSentenca(){
 	switch(tokenAtual){
-		case CHAVE_ESQ: case ID: case ASTERISCO: case NUM_INTEIRO: case NUM_REAL: case PARENTESE_ESQ: case NEGACAO:
-		case CARACTERE: case LITERAL: case E_COMERCIAL: case E: case VERDADEIRO: case FALSO: case ESSE:  case NOVO:
-		case ADICAO: case SUBTRACAO: case SE: case ENQUANTO: case ESCOLHA: case DESVIA: case IMPRIME: case LE_LINHA:
-		case RETORNA: case LANCA: case TENTA:
+		case CHAVE_ESQ: case ID:       case ASTERISCO:   case NUM_INTEIRO: case NUM_REAL:   case PARENTESE_ESQ: 
+		case CARACTERE: case LITERAL:  case E_COMERCIAL: case E:           case VERDADEIRO: case FALSO:      
+		case ADICAO:    case SUBTRACAO:case SE:          case ENQUANTO:    case ESCOLHA:    case DESVIA:        
+		case RETORNA:   case LANCA:    case TENTA:       case NEGACAO:     case NOVO:       case LE_LINHA:
+		case ESSE:      case IMPRIME: 
 			Sentenca();
 			ListaSentenca();
 		break;
@@ -410,14 +412,14 @@ void ListaSentenca(){
 static int followSentenca [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
 void Sentenca(){
 	switch(tokenAtual){
-		case ID: case ASTERISCO: case NUM_INTEIRO: case NUM_REAL: case PARENTESE_ESQ: case NEGACAO:
-		case CARACTERE: case LITERAL: case E_COMERCIAL: case VERDADEIRO: case FALSO: case ESSE:  case NOVO:
-		case ADICAO: case SUBTRACAO:
+		case ID:        case ASTERISCO: case NUM_INTEIRO: case NUM_REAL:   case PARENTESE_ESQ: 
+		case CARACTERE: case LITERAL:   case E_COMERCIAL: case VERDADEIRO: case FALSO: 
+		case ADICAO:    case SUBTRACAO: case ESSE:        case NOVO:	   case NEGACAO:
 			Expr();
 			casarOuPular(PONTO_VIRGULA,followSentenca);
 		break;
-		case CHAVE_ESQ: case SE: case ENQUANTO: case ESCOLHA: case DESVIA: case IMPRIME: case LE_LINHA:
-		case RETORNA: case LANCA: case TENTA:
+		case CHAVE_ESQ: case SE:    case ENQUANTO: case ESCOLHA: case DESVIA: 
+		case RETORNA:   case LANCA: case TENTA:    case IMPRIME: case LE_LINHA:
 			SentencaL();
 		break;
 		default: /*Epsilon*/ break;

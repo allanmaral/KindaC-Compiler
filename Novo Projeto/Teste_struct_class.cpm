@@ -1,0 +1,16 @@
+class Ponto{
+private:
+	float x;
+	float y;
+
+public:
+	float * getDist(int x1,int y1){ 
+		return sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
+	}
+}
+
+typedef struct {
+	No* proximo;
+	Ponto* ponteiro;
+} No;
+
