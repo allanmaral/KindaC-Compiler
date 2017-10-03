@@ -39,6 +39,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="AnalisadorLexico.h" />
+		<Unit filename="AnalisadorSintatico.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="GerenciadorErro.c">
 			<Option compilerVar="CC" />
 		</Unit>
