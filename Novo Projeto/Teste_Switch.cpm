@@ -1,12 +1,11 @@
  int main(int argc,char** args){
 	switch(argc){
 		case 0 : 
-			try
-			  {
-				throw 20;
-			  }catch (int e){
-				print(" Ocorreu erro " << e << '\n');
-			  }
+			try{
+				throw;
+			}catch (...){
+				print(" Ocorreu erro \n");
+			}
 		break;
 		case 1:
 			int numero;
