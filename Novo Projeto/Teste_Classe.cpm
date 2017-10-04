@@ -9,7 +9,7 @@ int main(){
 	primeiro->info = 0;
 	primeiro->prox = segundo;
 	segundo->info = 1;
-	delete primeiro;
-	delete segundo;
+	/*delete primeiro;
+	delete segundo;*/
 	return 0;
 }

@@ -40,3 +40,51 @@
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 
+1507080435 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"TabelaSimbolos.h"
+
+1507080383 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+
+1507080225 c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
+
+1507053682 c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
+	"Trie.h"
+
+1507053682 c:\users\allan\documents\github\kindac-compiler\novo projeto\trie.h
+	<stdlib.h>
+	<stdio.h>
+
+1507082789 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1507053682 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.c
+	"TabelaSimbolos.h"
+
+1507053682 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\trie.cpp
+	"Trie.h"
+	"TabelaSimbolos.h"
+	"AnalisadorLexico.h"
+
+1507083895 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"AnalisadorSintatico.h"
+	"TabelaSimbolos.h"
+	"GerenciadorErro.h"
+
+1507085067 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+
+1507083327 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
+

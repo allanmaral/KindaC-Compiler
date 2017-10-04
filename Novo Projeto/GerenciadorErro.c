@@ -24,6 +24,8 @@ typedef struct _erro{
     int codigo;
     int linha;
     int coluna;
+    char* tokenEsperado;
+    char* tokenEncontrado;
     struct _erro* proximo;
 } Erro;
 
@@ -57,12 +59,14 @@ void destruirGerenciadorErro() {
  *  coluna int Coluna onde o erro ocorreu
  * \param
  */
-void saidaErro(int codigo, int linha, int coluna){
+void saidaErro(int codigo, int linha, int coluna, char* tokenEncontrado, char* tokenEsperado){
     // Insere erro na lista ordenado pela linha
     Erro* novoErro = (Erro*)malloc(sizeof(Erro));
     novoErro->codigo = codigo;
     novoErro->linha = linha;
     novoErro->coluna = coluna;
+    novoErro->tokenEncontrado = tokenEncontrado;
+    novoErro->tokenEsperado = tokenEsperado;
     novoErro->proximo = NULL;
     Erro* antecessor = raiz;
     if(raiz){
@@ -94,11 +98,13 @@ void proximoErro(){
     if(erro) { raiz = erro->proximo; } else { return; }
     //Imprime a mensagem do erro no stderr
     int linha = erro->linha, coluna = erro->coluna;
-    if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {
-        fprintf(stderr, "[l:%d, c:%d] - %s\n", linha, coluna, ErroLiteral[erro->codigo]);
-    } else {
-        fprintf(stderr, "[l:%d, c:%d] - Erro não definido (%d)\n", linha, coluna, erro->codigo);
-    }
+    if(erro->codigo == ErroSintatico) {
+        fprintf(stderr, "[l:%d, c:%d] - Erro: \"%s\" esperado antes de \"%s\"\n", linha, coluna, erro->tokenEsperado, erro->tokenEncontrado);
+    } else if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {
+               fprintf(stderr, "[l:%d, c:%d] - %s\n", linha, coluna, ErroLiteral[erro->codigo]);
+           } else {
+                 fprintf(stderr, "[l:%d, c:%d] - Erro não definido (%d)\n", linha, coluna, erro->codigo);
+           }
     free(erro);
 }
 

@@ -1,11 +1,12 @@
 #include "AnalisadorLexico.h"
+#include "GerenciadorErro.h"
 
 static int tokenAtual;
 
 /** Lista de Literais dos Tokens
  */
-static char tokenLiteral[59][16] = {
-        "DEFINICAO_TIPO", "ESTRUTURA", "CLASSE", "PUBLICO", "PRIVADO",
+static char tokenLiteral[60][16] = {
+        "", "DEFINICAO_TIPO", "ESTRUTURA", "CLASSE", "PUBLICO", "PRIVADO",
         "INTEIRO", "REAL", "BOLEANO", "CARACTERE", "SE", "SENAO",
         "ENQUANTO", "ESCOLHA", "DESVIA", "IMPRIME", "LE_LINHA", "RETORNA",
         "LANCA", "TENTA", "PEGA", "CASO", "NOVO", "VERDADEIRO", "FALSO",
@@ -21,6 +22,8 @@ void casar(int tokenEsperado){
     // Faz alguma coisa aqui
     if(tokenAtual == tokenEsperado){
         fprintf(stdout, "CASOU: %s\n", tokenLiteral[tokenEsperado]);
+    } else {
+        fprintf(stdout, "NAO CASOU: LIDO: \"%s\" ESPERADO: \"%s\"\n", tokenLiteral[tokenAtual], tokenLiteral[tokenEsperado]);
     }
     tokenAtual = proximoToken();
 }
@@ -47,12 +50,12 @@ void casarOuPular(int token, int* sinc){
     if(tokenAtual == token) {
         casar(token);
     } else {
-          /// LANCA ERRO AQUI
+          saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], tokenLiteral[token]);
           pular(sinc);
       }
 }
 
-void Programa();
+//void Programa();
 void ProgramaA();
 void ProgramaB();
 void DeclClasse();
@@ -101,11 +104,14 @@ void PrimarioID();
 void PrimarioIDL();
 void PrimarioL();
 
-
+void InicializarAnalizadorSintatico()
+{
+    tokenAtual = proximoToken();
+}
 
 static int followPrograma [] = {TOKEN_EOF};
 void Programa(){
-    fprintf(stdout, "Programa");
+    fprintf(stdout, "Programa\n");
 	switch(tokenAtual){
 		case DEFINICAO_TIPO:
 			casar(DEFINICAO_TIPO);
@@ -130,12 +136,15 @@ void Programa(){
 			DeclClasse();
 			Programa();
 		break;
+		case TOKEN_EOF:
+            return; // NULL
+        break;
 	}
 }
 
 static int followProgramaA [] = {TOKEN_EOF};
 void ProgramaA(){
-    fprintf(stdout, "ProgramaA");
+    fprintf(stdout, "ProgramaA\n");
 	switch(tokenAtual){
 		case PARENTESE_ESQ:
 			casar(PARENTESE_ESQ);
@@ -166,9 +175,11 @@ void ProgramaA(){
 
 static int followProgramaB [] = {TOKEN_EOF};
 void ProgramaB(){
-    fprintf(stdout, "ProgramaB");
+    fprintf(stdout, "ProgramaB\n");
 	switch(tokenAtual){
-		case DEFINICAO_TIPO: case ID: case INTEIRO: case REAL: case BOLEANO: case CARACTERE: case CLASSE:
+		case DEFINICAO_TIPO:            case ID:                    case INTEIRO:
+        case REAL:                      case BOLEANO:               case CARACTERE:
+        case CLASSE:
 			Programa();
 		break;
 		default: /* Epsilon */ break;
@@ -177,7 +188,7 @@ void ProgramaB(){
 
 static int followDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
 void DeclClasse(){
-    fprintf(stdout, "DeclClasse");
+    fprintf(stdout, "DeclClasse\n");
 	switch(tokenAtual){
 		case CLASSE:
 			casar(CLASSE);
@@ -190,7 +201,7 @@ void DeclClasse(){
 
 static int followDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
 void DeclClasseL(){
-    fprintf(stdout, "DeclClasseL");
+    fprintf(stdout, "DeclClasseL\n");
 	switch(tokenAtual){
 		case CHAVE_ESQ:
 			casar(CHAVE_ESQ);
@@ -212,7 +223,7 @@ void DeclClasseL(){
 
 static int followDeclLocal [] = {CHAVE_DIR, TOKEN_EOF};
 void DeclLocal(){
-    fprintf(stdout, "DeclLocal");
+    fprintf(stdout, "DeclLocal\n");
 	switch(tokenAtual){
 		case ID: case INTEIRO: case REAL: case BOLEANO: case CARACTERE:
 			Tipo();
@@ -223,10 +234,12 @@ void DeclLocal(){
 		case PUBLICO:
 			casar(PUBLICO);
 			casarOuPular(DOIS_PONTOS, followDeclLocal);
+			DeclLocal();
 		break;
 		case PRIVADO:
 			casar(PRIVADO);
 			casarOuPular(DOIS_PONTOS, followDeclLocal);
+			DeclLocal();
 		break;
 		default: /* ERRO */ break;
 	}
@@ -234,7 +247,7 @@ void DeclLocal(){
 
 static int followDeclLocalL [] = {CHAVE_DIR, TOKEN_EOF};
 void DeclLocalL(){
-    fprintf(stdout, "DeclLocalL");
+    fprintf(stdout, "DeclLocalL\n");
 	switch(tokenAtual){
 		case PARENTESE_ESQ:
 			casar(PARENTESE_ESQ);
@@ -266,7 +279,7 @@ void DeclLocalL(){
 
 static int followDeclLocalLL [] = {CHAVE_DIR, TOKEN_EOF};
 void DeclLocalLL(){
-    fprintf(stdout, "DeclLocalLL");
+    fprintf(stdout, "DeclLocalLL\n");
 	switch(tokenAtual){
 		case ID:        case NUM_INTEIRO:   case NUM_REAL:
         case ASTERISCO: case PARENTESE_ESQ: case NEGACAO:
@@ -301,7 +314,7 @@ void DeclLocalLL(){
 
 static int followDeclVar [] = {CHAVE_DIR, TOKEN_EOF};
 void DeclVar(){
-    fprintf(stdout, "DeclVar");
+    fprintf(stdout, "DeclVar\n");
 	switch(tokenAtual){
 		case INTEIRO: case REAL: case BOLEANO: case CARACTERE: case ID:
 			Tipo();
@@ -318,7 +331,7 @@ void DeclVar(){
 
 static int followListaId [] = {PONTO_VIRGULA, TOKEN_EOF};
 void ListaId(){
-    fprintf(stdout, "ListaId");
+    fprintf(stdout, "ListaId\n");
 	switch(tokenAtual){
 		case ASTERISCO:
 			Ponteiro();
@@ -337,7 +350,7 @@ void ListaId(){
 
 static int followListaIdCont [] = {PONTO_VIRGULA, TOKEN_EOF};
 void ListaIdCont(){
-    fprintf(stdout, "ListaIdCont");
+    fprintf(stdout, "ListaIdCont\n");
 	switch(tokenAtual){
 		case VIRGULA:
 			Ponteiro();
@@ -351,7 +364,7 @@ void ListaIdCont(){
 
 static int followPonteiro [] = {ID, TOKEN_EOF};
 void Ponteiro(){
-    fprintf(stdout, "Ponteiro");
+    fprintf(stdout, "Ponteiro\n");
 	switch(tokenAtual){
 		case ASTERISCO:
 			casar(ASTERISCO);
@@ -362,7 +375,7 @@ void Ponteiro(){
 
 static int followArranjo [] = {VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
 void Arranjo(){
-    fprintf(stdout, "Arranjo");
+    fprintf(stdout, "Arranjo\n");
 	switch(tokenAtual){
 		case CHAVE_ESQ:
 			casar(CHAVE_ESQ);
@@ -376,9 +389,10 @@ void Arranjo(){
 
 static int followListaForma [] = {PARENTESE_DIR, TOKEN_EOF};
 void ListaForma(){
-    fprintf(stdout, "ListaForma");
+    fprintf(stdout, "ListaForma\n");
 	switch(tokenAtual){
-		case ID: case INTEIRO: case REAL: case BOLEANO: case CARACTERE:
+		case ID:            case INTEIRO:               case REAL:
+        case BOLEANO:       case CARACTERE:
 			Tipo();
 			Ponteiro();
 			casarOuPular(ID, followListaForma);
@@ -391,7 +405,7 @@ void ListaForma(){
 
 static int followListaFormaCont []	= {PARENTESE_DIR, TOKEN_EOF};
 void ListaFormaCont(){
-    fprintf(stdout, "ListaFormaCont");
+    fprintf(stdout, "ListaFormaCont\n");
 	switch(tokenAtual){
 		case VIRGULA:
 			Tipo();
@@ -406,11 +420,14 @@ void ListaFormaCont(){
 
 static int followTipo [] = {ID, ASTERISCO, TOKEN_EOF};
 void Tipo(){
-    fprintf(stdout, "Tipo");
+    fprintf(stdout, "Tipo\n");
 	switch(tokenAtual){
-		case INTEIRO: case REAL: case BOLEANO: case CARACTERE:
+		case INTEIRO:           case REAL:              case BOLEANO:
+        case CARACTERE:
 			TipoL();
-		case ID: casarOuPular(ID,followTipo);
+        break;
+		case ID:
+		    casarOuPular(ID,followTipo);
 		break;
 		default: /*ERRO*/ break;
 	}
@@ -418,19 +435,27 @@ void Tipo(){
 
 static int followTipoL [] = {ID, ASTERISCO, TOKEN_EOF};
 void TipoL(){
-    fprintf(stdout, "TipoL");
+    fprintf(stdout, "TipoL\n");
 	switch(tokenAtual){
-		case INTEIRO: casar(INTEIRO);	  break;
-		case REAL: casar(REAL); 	 	  break;
-		case BOLEANO: casar(BOLEANO);	  break;
-		case CARACTERE: casar(CARACTERE); break;
+		case INTEIRO:
+		    casar(INTEIRO);
+        break;
+		case REAL:
+		    casar(REAL);
+        break;
+		case BOLEANO:
+		    casar(BOLEANO);
+        break;
+		case CARACTERE:
+		    casar(CARACTERE);
+        break;
 		default: /*ERRO*/ 				  break;
 	}
 }
 
 static int followListaSentenca [] = {CHAVE_DIR, CASO, TOKEN_EOF};
 void ListaSentenca(){
-    fprintf(stdout, "ListaSentenca");
+    fprintf(stdout, "ListaSentenca\n");
 	switch(tokenAtual){
 		case CHAVE_ESQ: case ID:       case ASTERISCO:   case NUM_INTEIRO: case NUM_REAL:   case PARENTESE_ESQ:
 		case CARACTERE: case LITERAL:  case E_COMERCIAL: case E:           case VERDADEIRO: case FALSO:
@@ -447,7 +472,7 @@ void ListaSentenca(){
 
 static int followSentenca [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
 void Sentenca(){
-    fprintf(stdout, "Sentenca");
+    fprintf(stdout, "Sentenca\n");
 	switch(tokenAtual){
 		case ID:        case ASTERISCO: case NUM_INTEIRO: case NUM_REAL:   case PARENTESE_ESQ:
 		case CARACTERE: case LITERAL:   case E_COMERCIAL: case VERDADEIRO: case FALSO:
@@ -465,7 +490,7 @@ void Sentenca(){
 
 static int followSentencaL [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
 void SentencaL(){
-    fprintf(stdout, "SentencaL");
+    fprintf(stdout, "SentencaL\n");
 	switch(tokenAtual){
 		case CHAVE_ESQ:
 			ListaSentenca();
@@ -510,6 +535,7 @@ void SentencaL(){
 		case RETORNA:
 			casar(RETORNA);
 			Expr();
+			casarOuPular(PONTO_VIRGULA, followSentencaL);
 		break;
 		case LANCA:
 			 casar(LANCA);
@@ -530,7 +556,7 @@ void SentencaL(){
 
 static int followSe [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
 void Se(){
-    fprintf(stdout, "Se");
+    fprintf(stdout, "Se\n");
 	switch(tokenAtual){
 		case SE:
 			casar(SE);
@@ -549,7 +575,7 @@ static int followSenao []			= {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, 
 	SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA,
 	LANCA, TENTA, PEGA, TOKEN_EOF};
 void Senao(){
-    fprintf(stdout, "Senao");
+    fprintf(stdout, "Senao\n");
 	switch(tokenAtual){
 		case SENAO:
 			casar(SENAO);
@@ -561,7 +587,7 @@ void Senao(){
 
 static int followBlocoCaso []		= {CHAVE_DIR, TOKEN_EOF};
 void BlocoCaso(){
-    fprintf(stdout, "BlocoCaso");
+    fprintf(stdout, "BlocoCaso\n");
 	switch(tokenAtual){
 		case CASO:
 			casar(CASO);
@@ -580,7 +606,7 @@ void BlocoCaso(){
 
 static int followListaExpr []		= {PARENTESE_DIR, TOKEN_EOF};
 void ListaExpr(){
-    fprintf(stdout, "ListaExpr");
+    fprintf(stdout, "ListaExpr\n");
 	switch(tokenAtual) {
 		case ID:        case ASTERISCO:     case NUM_INTEIRO:
 		case NUM_REAL:  case PARENTESE_ESQ: case NEGACAO:
@@ -597,7 +623,7 @@ void ListaExpr(){
 
 static int followListaExprCont []	= {PARENTESE_DIR, TOKEN_EOF};
 void ListaExprCont(){
-    fprintf(stdout, "ListaExprCont");
+    fprintf(stdout, "ListaExprCont\n");
 	switch(tokenAtual) {
 		case VIRGULA:
 			casar(VIRGULA);
@@ -609,7 +635,7 @@ void ListaExprCont(){
 
 static int followExpr []			= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
 void Expr() {
-    fprintf(stdout, "Expr");
+    fprintf(stdout, "Expr\n");
 	switch(tokenAtual) {
 		case ID:        case ASTERISCO:     case NUM_INTEIRO:
 		case NUM_REAL:  case PARENTESE_ESQ: case NEGACAO:
@@ -625,7 +651,7 @@ void Expr() {
 
 static int followExprAtrib []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
 void ExprAtrib() {
-    fprintf(stdout, "ExprAtrib");
+    fprintf(stdout, "ExprAtrib\n");
 	switch(tokenAtual) {
 		case ATRIBUICAO:
 			casar(ATRIBUICAO);
@@ -638,7 +664,7 @@ void ExprAtrib() {
 
 static int followExprOuBool []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, TOKEN_EOF};
 void ExprOuBool(){
-    fprintf(stdout, "ExprOuBool");
+    fprintf(stdout, "ExprOuBool\n");
 	switch(tokenAtual) {
 		case ID:        case ASTERISCO:     case NUM_INTEIRO:
 		case NUM_REAL:  case PARENTESE_ESQ: case NEGACAO:
@@ -654,7 +680,7 @@ void ExprOuBool(){
 
 static int followExprOuBoolL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, TOKEN_EOF};
 void ExprOuBoolL(){
-    fprintf(stdout, "ExprOuBoolL");
+    fprintf(stdout, "ExprOuBoolL\n");
 	switch(tokenAtual){
 		case OU_CC:
 			casar(OU_CC);
@@ -667,7 +693,7 @@ void ExprOuBoolL(){
 
 static int followExprEBool []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, TOKEN_EOF};
 void ExprEBool(){
-    fprintf(stdout, "ExprEBool");
+    fprintf(stdout, "ExprEBool\n");
 	switch(tokenAtual) {
 		case ID:        case ASTERISCO:     case NUM_INTEIRO:
 		case NUM_REAL:  case PARENTESE_ESQ: case NEGACAO:
@@ -683,7 +709,7 @@ void ExprEBool(){
 
 static int followExprEBoolL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, TOKEN_EOF};
 void ExprEBoolL(){
-    fprintf(stdout, "ExprEBoolL");
+    fprintf(stdout, "ExprEBoolL\n");
 	switch(tokenAtual){
 		case E:
 			ExprIgualdade();
@@ -695,7 +721,7 @@ void ExprEBoolL(){
 
 static int followExprIgualdade [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, TOKEN_EOF};
 void ExprIgualdade(){
-    fprintf(stdout, "ExprIgualdade");
+    fprintf(stdout, "ExprIgualdade\n");
 	switch(tokenAtual){
 		case ID:            case ASTERISCO:         case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ:     case NEGACAO:
@@ -711,7 +737,7 @@ void ExprIgualdade(){
 
 static int followExprIgualdadeL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, TOKEN_EOF};
 void ExprIgualdadeL(){
-    fprintf(stdout, "ExprIgualdadeL");
+    fprintf(stdout, "ExprIgualdadeL\n");
 	switch(tokenAtual){
 		case COMPARACAO:
 			casar(COMPARACAO);
@@ -729,7 +755,7 @@ void ExprIgualdadeL(){
 
 static int followExprRelacional [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO, DIFERENTE, TOKEN_EOF};
 void ExprRelacional(){
-    fprintf(stdout, "ExprRelacional");
+    fprintf(stdout, "ExprRelacional\n");
 	switch(tokenAtual){
 		case ID:            case ASTERISCO:         case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ:     case NEGACAO:
@@ -745,7 +771,7 @@ void ExprRelacional(){
 
 static int followExprRelacionalL []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO, DIFERENTE, TOKEN_EOF};
 void ExprRelacionalL(){
-    fprintf(stdout, "ExprRelacionalL");
+    fprintf(stdout, "ExprRelacionalL\n");
 	switch(tokenAtual){
 		case MENOR:
 			casar(MENOR);
@@ -773,7 +799,7 @@ void ExprRelacionalL(){
 
 static int followExprSoma [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, TOKEN_EOF};
 void ExprSoma(){
-    fprintf(stdout, "ExprSoma");
+    fprintf(stdout, "ExprSoma\n");
 	switch(tokenAtual){
 		case ID:        case ASTERISCO:         case NUM_INTEIRO:
         case NUM_REAL:  case PARENTESE_ESQ:     case NEGACAO:
@@ -789,7 +815,7 @@ void ExprSoma(){
 
 static int followExprSomaL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, TOKEN_EOF};
 void ExprSomaL(){
-    fprintf(stdout, "ExprSomaL");
+    fprintf(stdout, "ExprSomaL\n");
 	switch(tokenAtual){
 		case ADICAO:
 			casar(ADICAO);
@@ -814,7 +840,7 @@ static int followExprMultDivE []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENT
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, TOKEN_EOF};
 void ExprMultDivE(){
-    fprintf(stdout, "ExprMultDivE");
+    fprintf(stdout, "ExprMultDivE\n");
     switch(tokenAtual){
 		case ID:        case ASTERISCO:         case NUM_INTEIRO:
         case NUM_REAL:  case PARENTESE_ESQ:     case NEGACAO:
@@ -832,7 +858,7 @@ static int followExprMultDivEL []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PAREN
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, TOKEN_EOF};
 void ExprMultDivEL(){
-    fprintf(stdout, "ExprMultDivEL");
+    fprintf(stdout, "ExprMultDivEL\n");
     switch(tokenAtual){
         case ASTERISCO:
             casar(ASTERISCO);
@@ -862,7 +888,7 @@ static int followExprUnaria []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTE
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
 void ExprUnaria(){
-    fprintf(stdout, "ExprUnaria");
+    fprintf(stdout, "ExprUnaria\n");
     switch(tokenAtual){
         case ADICAO:
             casar(ADICAO);
@@ -890,7 +916,7 @@ static int followExprAceCamp []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENT
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
 void ExprAceCamp(){
-    fprintf(stdout, "ExprAceCamp");
+    fprintf(stdout, "ExprAceCamp\n");
     switch(tokenAtual){
         case ID:                case ASTERISCO:         case NUM_INTEIRO:
         case NUM_REAL:          case PARENTESE_ESQ:     case LITERAL:
@@ -907,7 +933,7 @@ static int followExprAceCampL []	= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENT
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
 void ExprAceCampL(){
-    fprintf(stdout, "ExprAceCampL");
+    fprintf(stdout, "ExprAceCampL\n");
     switch(tokenAtual){
         case PONTEIRO:
             casar(PONTEIRO);
@@ -927,7 +953,7 @@ static int followExprNovo []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
 void ExprNovo(){
-    fprintf(stdout, "ExprNovo");
+    fprintf(stdout, "ExprNovo\n");
     switch(tokenAtual){
         case ID:                case ASTERISCO:         case NUM_INTEIRO:
         case NUM_REAL:          case PARENTESE_ESQ:     case LITERAL:
@@ -944,7 +970,7 @@ static int followExprNovoL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTES
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
 void ExprNovoL(){
-    fprintf(stdout, "ExprNovoL");
+    fprintf(stdout, "ExprNovoL\n");
     switch(tokenAtual){
         case COLCHETE_ESQ:
             casar(COLCHETE_ESQ);
@@ -960,7 +986,7 @@ static int followPrimario []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
 void Primario() {
-    fprintf(stdout, "Primario");
+    fprintf(stdout, "Primario\n");
     switch(tokenAtual){
         case ID:
             PrimarioID();
@@ -978,7 +1004,7 @@ static int followPrimarioL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTES
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
 void PrimarioL(){
-    fprintf(stdout, "PrimarioL");
+    fprintf(stdout, "PrimarioL\n");
     switch(tokenAtual){
         case ASTERISCO:
             casar(ASTERISCO);
@@ -1026,7 +1052,7 @@ static int followPrimarioID []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTE
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
 void PrimarioID(){
-    fprintf(stdout, "PrimarioID");
+    fprintf(stdout, "PrimarioID\n");
     switch(tokenAtual){
         case ID:
             casar(ID);
@@ -1040,7 +1066,7 @@ static int followPrimarioIDL []		= {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENT
 									   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
 									   OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
 void PrimarioIDL(){
-    fprintf(stdout, "PrimarioIDL");
+    fprintf(stdout, "PrimarioIDL\n");
     switch(tokenAtual) {
         case PARENTESE_ESQ:
             casar(PARENTESE_ESQ);

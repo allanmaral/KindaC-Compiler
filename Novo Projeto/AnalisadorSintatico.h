@@ -1,0 +1,5 @@
+
+
+void InicializarAnalizadorSintatico();
+
+void Programa();

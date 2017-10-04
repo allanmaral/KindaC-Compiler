@@ -81,6 +81,18 @@ static void reinicializaAutomato(){ pegarProximoCaractere(); posicaoLexema = 0; 
 
 char* pegarLexema(){ return lexema; }
 
+/** \brief Função que obtem a linha do arquivo lido pelo automato
+ *
+ *  \return linha atual do arquivo
+ */
+int pegarLinha() { return linha; }
+
+/** \brief Função que obtem a coluna do arquivo lido pelo automato
+ *
+ *  \return coluna atual do arquivo
+ */
+int pegarColuna() { return coluna; }
+
 /** \brief Construtor do analisador léxico
   *
   * \param caminhoArquivo const char* Caminho do arquivo a ser lido

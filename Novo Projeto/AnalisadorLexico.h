@@ -91,6 +91,18 @@ int proximoToken();
   */
 char* pegarLexema();
 
+/** \brief Função que obtem a linha do arquivo lido pelo automato
+ *
+ *  \return linha atual do arquivo
+ */
+int pegarLinha();
+
+/** \brief Função que obtem a coluna do arquivo lido pelo automato
+ *
+ *  \return coluna atual do arquivo
+ */
+int pegarColuna();
+
  /** \brief Destrutor do Analisador Léxico
   *
   */

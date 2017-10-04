@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "AnalisadorLexico.h"
+#include "AnalisadorSintatico.h"
 #include "TabelaSimbolos.h"
 #include "GerenciadorErro.h"
 
@@ -51,7 +52,9 @@ int main(int argc, char** args){
     atexit(finalizaPrograma);
     inicializaGerenciadorErro();
     iniciaAnalisadorLexico(arquivo);
-    int token = 0;
+    InicializarAnalizadorSintatico();
+    Programa();
+    /*int token = 0;
     while(token != TOKEN_EOF){
         token = proximoToken();
         if((token >= DEFINICAO_TIPO && token <= TOKEN_EOF)) {
@@ -63,7 +66,7 @@ int main(int argc, char** args){
         } else{
             fprintf(stdout, "Valor invalido! Token:%d\n", token);
         }
-    }
+    }*/
     imprimeTabelas();
     return 0;
 }

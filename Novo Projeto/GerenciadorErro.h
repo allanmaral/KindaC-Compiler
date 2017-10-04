@@ -10,6 +10,7 @@ typedef enum {
     ErroCaractereMalFormado,
     ErroNumeroMalFormado,
     ErroArquivoInvalido,
+    ErroSintatico,
     ErroTamanhoEnumerador
 } Erros;
 
@@ -29,7 +30,7 @@ void destruirGerenciadorErro();
  * \param coluna int Coluna onde o erro ocorreu
  *
  */
-void saidaErro(int codigo, int linha, int coluna);
+void saidaErro(int codigo, int linha, int coluna, char* tokenEncontrado = 0, char* tokenEsperado = 0);
 
 /** \brief Imprime o próximo erro da lista no stderr
  */
