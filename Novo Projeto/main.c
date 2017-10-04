@@ -26,7 +26,6 @@ char tokenLiteral[59][16] = {
  */
 void finalizaPrograma();
 
-
 /** \brief Ponto de entrada do programa
  */
 int main(int argc, char** args){
@@ -67,6 +66,7 @@ int main(int argc, char** args){
             fprintf(stdout, "Valor invalido! Token:%d\n", token);
         }
     }*/
+    imprimeListaErros();
     imprimeTabelas();
     return 0;
 }

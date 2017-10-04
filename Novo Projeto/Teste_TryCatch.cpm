@@ -1,0 +1,9 @@
+int main(){
+	int a, b, c;
+	try {
+		a = b + c;
+	} catch(...) {
+		print("Teste");
+	}
+	return 0;
+}

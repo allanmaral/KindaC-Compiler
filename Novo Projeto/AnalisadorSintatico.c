@@ -5,7 +5,7 @@ static int tokenAtual;
 
 /** Lista de Literais dos Tokens
  */
-static char tokenLiteral[60][16] = {
+static char tokenLiteral[61][16] = {
         "", "DEFINICAO_TIPO", "ESTRUTURA", "CLASSE", "PUBLICO", "PRIVADO",
         "INTEIRO", "REAL", "BOLEANO", "CARACTERE", "SE", "SENAO",
         "ENQUANTO", "ESCOLHA", "DESVIA", "IMPRIME", "LE_LINHA", "RETORNA",
@@ -15,7 +15,7 @@ static char tokenLiteral[60][16] = {
         "MAIOR_IGUAL", "MENOR_IGUAL", "COMPARACAO", "ATRIBUICAO", "ADICAO",
         "SUBTRACAO", "DIVISAO", "ASTERISCO", "OU", "PONTO", "DOIS_PONTOS",
         "PONTO_VIRGULA", "PONTEIRO", "E_COMERCIAL", "E", "DIFERENTE", "PORCENTO",
-        "OU_CC", "NUM_INTEIRO", "LITERAL", "NEGACAO", "VIRGULA", "NUM_REAL", "EOF"
+        "OU_CC", "NUM_INTEIRO", "LITERAL", "NEGACAO", "VIRGULA", "NUM_REAL", "EOF", "TRES_PONTOS"
 };
 
 void casar(int tokenEsperado){
@@ -353,6 +353,7 @@ void ListaIdCont(){
     fprintf(stdout, "ListaIdCont\n");
 	switch(tokenAtual){
 		case VIRGULA:
+		    casar(VIRGULA);
 			Ponteiro();
 			casarOuPular(ID, followListaIdCont);
 			Arranjo();
@@ -493,6 +494,7 @@ void SentencaL(){
     fprintf(stdout, "SentencaL\n");
 	switch(tokenAtual){
 		case CHAVE_ESQ:
+		    casar(CHAVE_ESQ);
 			ListaSentenca();
 			casarOuPular(CHAVE_DIR,followSentencaL);
 		break;
@@ -517,6 +519,7 @@ void SentencaL(){
 		break;
 		case DESVIA:
 			casar(DESVIA);
+			casarOuPular(PONTO_VIRGULA, followSentencaL);
 		break;
 		case IMPRIME:
 			casar(IMPRIME);
@@ -545,9 +548,9 @@ void SentencaL(){
 			casar(TENTA);
 			Sentenca();
 			casarOuPular(PEGA,followSentencaL);
-			casarOuPular(PARENTESE_DIR,followSentencaL);
-			ListaExpr();
 			casarOuPular(PARENTESE_ESQ,followSentencaL);
+			casarOuPular(TRES_PONTOS, followSentencaL);
+			casarOuPular(PARENTESE_DIR,followSentencaL);
 			Sentenca();
 		break;
 		default: /*ERRO*/ break;
@@ -627,6 +630,7 @@ void ListaExprCont(){
 	switch(tokenAtual) {
 		case VIRGULA:
 			casar(VIRGULA);
+			Expr();
 			ListaExprCont();
 		break;
 		default: /* epsilon */ break;
@@ -712,6 +716,7 @@ void ExprEBoolL(){
     fprintf(stdout, "ExprEBoolL\n");
 	switch(tokenAtual){
 		case E:
+		    casar(E);
 			ExprIgualdade();
 			ExprEBoolL();
 		break;
@@ -990,6 +995,7 @@ void Primario() {
     switch(tokenAtual){
         case ID:
             PrimarioID();
+        break;
         case ASTERISCO:         case NUM_INTEIRO:       case NUM_REAL:
         case PARENTESE_ESQ:     case LITERAL:           case E_COMERCIAL:
         case VERDADEIRO:        case FALSO:             case ESSE:

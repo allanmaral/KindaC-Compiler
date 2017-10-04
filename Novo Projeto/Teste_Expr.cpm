@@ -1,11 +1,14 @@
 int main(){
-	float a=20;
-	float b=30;
-	bool c = false;
-    int d = 10;
-	prinf("%f",a+(b*(20/a)/10));
-	prinf("%d",a+10*b-50*d/20);
-	c=(false|((false||true&&true)&&false)) // false
+	float a, b;
+	bool c;
+	int d;
+	a=20;
+	b=30;
+	c = false;
+    d = 10;
+	print("%f",a+(b*(20/a)/10));
+	print("%d",a+10*b-50*d/20);
+	c=(false|((false||true&&true)&&false)); // false
 	//Erro
 	a=b*+4;
 	b=d+->9;

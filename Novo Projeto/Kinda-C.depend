@@ -40,14 +40,14 @@
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 
-1507080435 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
+1507091963 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
 	<stdio.h>
 	<string.h>
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"TabelaSimbolos.h"
 
-1507080383 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
+1507087734 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -74,7 +74,7 @@
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 
-1507083895 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
+1507091984 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
 	<stdio.h>
 	<string.h>
 	"AnalisadorLexico.h"
@@ -82,7 +82,7 @@
 	"TabelaSimbolos.h"
 	"GerenciadorErro.h"
 
-1507085067 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+1507092245 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 

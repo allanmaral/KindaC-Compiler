@@ -218,8 +218,18 @@ int proximoToken(){
                 else if(caractereAtual == 'e' || caractereAtual == 'E'){
                          estado = 6;
                          incrementaLexema();
-                     } else { return PONTO; }
+                     } else if(caractereAtual == '.') {
+                                estado = 25;
+                                incrementaLexema();
+                            } else { return PONTO; }
 					   break;
+            case 25:
+                if(caractereAtual == '.') { pegarProximoCaractere(); return TRES_PONTOS; }
+                else {
+                    saidaErro(ErroNumeroMalFormado, linha, coluna);
+                    reinicializaAutomato();
+                }
+                break;
             case 5 :
                 if(isdigit(caractereAtual)) { incrementaLexema(); }
                 else if(caractereAtual == 'e' || caractereAtual == 'E'){
@@ -382,7 +392,7 @@ int proximoToken(){
                 else { return OU; }
 				break;
             case 19 :
-                if(caractereAtual == '|') { pegarProximoCaractere(); return E; }
+                if(caractereAtual == '&') { pegarProximoCaractere(); return E; }
                 else { return E_COMERCIAL; }
 				break;
             case 20 :
