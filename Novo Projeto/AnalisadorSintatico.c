@@ -116,14 +116,14 @@ void Programa(){
 		case DEFINICAO_TIPO:
 			casar(DEFINICAO_TIPO);
 			casarOuPular(ESTRUTURA, followPrograma);
-			casarOuPular(COLCHETE_ESQ, followPrograma);
+			casarOuPular(CHAVE_ESQ, followPrograma);
 			Tipo();
 			ListaId();
 			casarOuPular(PONTO_VIRGULA, followPrograma);
 			DeclVar();
-			casarOuPular(COLCHETE_DIR, followPrograma);
+			casarOuPular(CHAVE_DIR, followPrograma);
 			casarOuPular(ID, followPrograma);
-			casarOuPular(VIRGULA, followPrograma);
+			casarOuPular(PONTO_VIRGULA, followPrograma);
 			Programa();
 		break;
 		case ID: case INTEIRO: case REAL: case BOLEANO: case CARACTERE:
@@ -409,6 +409,7 @@ void ListaFormaCont(){
     fprintf(stdout, "ListaFormaCont\n");
 	switch(tokenAtual){
 		case VIRGULA:
+			casar(VIRGULA);
 			Tipo();
 			Ponteiro();
 			casarOuPular(ID,followListaFormaCont);
