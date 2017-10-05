@@ -67,7 +67,7 @@
 #define NUM_REAL        58
 #define TOKEN_EOF       59
 #define TRES_PONTOS     60
-
+#define ASCII           61
 #ifndef EOF
     #define EOF         -1
 #endif // EOF

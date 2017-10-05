@@ -21,7 +21,7 @@ class Literal:public Primario{
     public:
         char* literal;
 };
-class ASCII:public Primario{
+class Ascii:public Primario{
     public:
         char caractere;
 };

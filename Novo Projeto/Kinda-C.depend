@@ -139,7 +139,7 @@
 
 1507161893 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.h
 
-1507172783 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.c
+1507231833 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.c
 	<stdio.h>
 	<string.h>
 	"AnalisadorLexico.h"
@@ -147,7 +147,7 @@
 	"TabelaSimbolos.h"
 	"ASA.h"
 
-1507172469 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.h
+1507231552 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.h
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
@@ -162,12 +162,12 @@
 	<stdlib.h>
 	<stdio.h>
 
-1507171894 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.c
+1507232303 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
 
-1507179899 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.h
+1507231967 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.h
 	"TabelaSimbolos.h"
 
 1507088714 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.c

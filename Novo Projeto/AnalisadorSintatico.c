@@ -6,7 +6,7 @@ static int tokenAtual;
 
 /** Lista de Literais dos Tokens
  */
-static char tokenLiteral[61][16] = {
+static char tokenLiteral[62][16] = {
         "",                 "DEFINICAO_TIPO",   "ESTRUTURA",        "CLASSE",           "PUBLICO",
         "PRIVADO",          "INTEIRO",          "REAL",             "BOLEANO",          "CARACTERE",
         "SE",               "SENAO",            "ENQUANTO",         "ESCOLHA",          "DESVIA",
@@ -19,7 +19,7 @@ static char tokenLiteral[61][16] = {
         "PONTO",            "DOIS_PONTOS",      "PONTO_VIRGULA",    "PONTEIRO",         "E_COMERCIAL",
         "E",                "DIFERENTE",        "PORCENTO",         "OU_CC",            "NUM_INTEIRO",
         "LITERAL",          "NEGACAO",          "VIRGULA",          "NUM_REAL",         "EOF",
-        "TRES_PONTOS"
+        "TRES_PONTOS",      "ASCII"
 };
 
 void casar(int tokenEsperado){
@@ -253,10 +253,10 @@ void DeclLocalLL(){
     fprintf(stdout, "DeclLocalLL\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
-        case NUM_REAL:         case PARENTESE_ESQ: case NEGACAO:
+        case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             Expr();
             ListaIdCont();
             casarOuPular(PONTO_VIRGULA, followDeclLocalLL);
@@ -440,7 +440,7 @@ void ListaSentenca(){
         case ENQUANTO:        case ESCOLHA:        case DESVIA:
         case RETORNA:       case LANCA:            case TENTA:
         case NEGACAO:         case NOVO:           case LE_LINHA:
-        case ESSE:          case IMPRIME:
+        case ESSE:          case IMPRIME:          case ASCII:
             Sentenca();
             ListaSentenca();
         break;
@@ -455,7 +455,7 @@ static int followSentenca [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL,
 void Sentenca(){
     fprintf(stdout, "Sentenca\n");
     switch(tokenAtual){
-        case ID:            case ASTERISCO:         case NUM_INTEIRO:
+        case ID:            case ASTERISCO:         case NUM_INTEIRO:    case ASCII:
         case NUM_REAL:       case PARENTESE_ESQ:     case CARACTERE:
         case LITERAL:       case E_COMERCIAL:         case VERDADEIRO:
         case FALSO:         case ADICAO:            case SUBTRACAO:
@@ -600,7 +600,7 @@ void ListaExpr(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             Expr();
             ListaExprCont();
         break;
@@ -630,7 +630,7 @@ void Expr() {
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             ExprOuBool();
             ExprAtrib();
         break;
@@ -659,7 +659,7 @@ void ExprOuBool(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             ExprEBool();
             ExprOuBoolL();
         break;
@@ -688,7 +688,7 @@ void ExprEBool(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             ExprIgualdade();
             ExprEBoolL();
         break;
@@ -717,7 +717,7 @@ void ExprIgualdade(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             ExprRelacional();
             ExprIgualdadeL();
         break;
@@ -752,7 +752,7 @@ void ExprRelacional(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             ExprSoma();
             ExprRelacionalL();
         break;
@@ -798,7 +798,7 @@ void ExprSoma(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             ExprMultDivE();
             ExprSomaL();
         break;
@@ -839,7 +839,7 @@ void ExprMultDivE(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:
+        case ADICAO:        case SUBTRACAO:     case ASCII:
             ExprUnaria();
             ExprMultDivEL();
         break;
@@ -897,7 +897,7 @@ void ExprUnaria(){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case LITERAL:
         case E_COMERCIAL:   case VERDADEIRO:    case FALSO:
-        case ESSE:          case NOVO:
+        case ESSE:          case NOVO:          case ASCII:
             ExprAceCamp();
         break;
         default: /* ERRO */ break;
@@ -913,7 +913,7 @@ void ExprAceCamp(){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case LITERAL:
         case E_COMERCIAL:   case VERDADEIRO:    case FALSO:
-        case ESSE:          case NOVO:
+        case ESSE:          case NOVO:          case ASCII:
             ExprNovo();
             ExprAceCampL();
         break;
@@ -950,7 +950,7 @@ void ExprNovo(){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case LITERAL:
         case E_COMERCIAL:   case VERDADEIRO:    case FALSO:
-        case ESSE:          case NOVO:
+        case ESSE:          case NOVO:          case ASCII:
             Primario();
             ExprNovoL();
         break;
@@ -986,7 +986,7 @@ void Primario() {
         case ASTERISCO:     case NUM_INTEIRO:   case NUM_REAL:
         case PARENTESE_ESQ: case LITERAL:       case E_COMERCIAL:
         case VERDADEIRO:    case FALSO:         case ESSE:
-        case NOVO:
+        case NOVO:          case ASCII:
             PrimarioL();
         break;
         default: /* ERRO */ break;
@@ -1007,6 +1007,9 @@ void PrimarioL(){
         break;
         case LITERAL:
             casar(LITERAL);
+        break;
+        case ASCII:
+            casar(ASCII);
         break;
         case PARENTESE_ESQ:
             casar(PARENTESE_ESQ);

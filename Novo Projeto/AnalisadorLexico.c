@@ -296,7 +296,7 @@ int proximoToken(){
                     auxiliar = (Atributo*)malloc(sizeof(Atributo));
                     auxiliar->atribuirToken(LITERAL);
                     obtemTabelaLiteral()->insere(lexema,auxiliar);
-                    return LITERAL;
+                    return ASCII;
                 } else if(caractereAtual == '\0' || caractereAtual == EOF){
                            saidaErro(ErroCaractereMalFormado, linha, coluna);
                            return TOKEN_EOF;
