@@ -2,24 +2,34 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="AnalisadorSintatico.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="AnalisadorLexico.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="17940" topLine="147" />
+			<Cursor1 position="851" topLine="22" />
 		</Cursor>
 	</File>
 	<File name="main.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="135" topLine="0" />
+			<Cursor1 position="1837" topLine="46" />
 		</Cursor>
 	</File>
-	<File name="AnalisadorLexico.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1764" topLine="45" />
-		</Cursor>
-	</File>
-	<File name="Trie.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Trie.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2068" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="ASA.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="482" topLine="9" />
+		</Cursor>
+	</File>
+	<File name="AnalisadorSintatico.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6171" topLine="144" />
+		</Cursor>
+	</File>
+	<File name="GerenciadorErro.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="381" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

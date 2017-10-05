@@ -1,5 +1,6 @@
 #include "AnalisadorLexico.h"
 #include "GerenciadorErro.h"
+#include "ASA.h"
 
 static int tokenAtual;
 

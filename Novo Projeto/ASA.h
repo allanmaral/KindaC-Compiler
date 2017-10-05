@@ -13,12 +13,7 @@ class Programa{
         DeclTipo *listaTipo;
         DeclVariavel *listaVariavel;
 };
-class ID{};
-class Tipo{
-    public:
-        Tipo(int tipo);
-        int tipo;
-};
+class Id{};
 class Expr{};
 class Primario:public Expr{};
 class Literal:public Primario{
@@ -53,7 +48,6 @@ class NumReal:public Num{
 class Arranjo{
     NumInteiro num;
 };
-class Ponteiro{};
 class ListaExpr{
     public:
         Expr expressao;
@@ -61,9 +55,9 @@ class ListaExpr{
 };
 class ListaFormal{
     public:
-        Tipo tipo;
-        Ponteiro *ponteiro;
-        ID id;
+        int tipo;
+        bool ponteiro;
+        Id id;
         Arranjo *arranjo;
         ListaFormal *lista;
 };
@@ -118,7 +112,7 @@ class Escopo:public Sentenca{
 };
 class ChamadaFuncao:public Sentenca{
     public:
-        ID id;
+        Id id;
         ListaExpr *parametros;
 };
 class Try:public Sentenca{
@@ -132,8 +126,8 @@ class SentencaExpr:public Sentenca{
 };
 class DeclFuncao{
     public:
-        Tipo tipo;
-        ID id;
+        int tipo;
+        Id id;
         ListaFormal *parametros;
         DeclVariavel *variaveis;
         ListaSentenca sentenca;
@@ -142,12 +136,12 @@ class DeclFuncao{
 class ListaId{
     public:
         ListaId *listaId;
-        Ponteiro *ponteiro;
+        bool ponteiro;
         Arranjo *Arranjo;
 };
 class DeclVariavel{
     public:
-        Tipo tipo;
+        int tipo;
         ListaId variaveis;
         DeclVariavel *listaVariaveis;
 };
@@ -176,8 +170,8 @@ class DeclLocalPrivate:public DeclLocal{
 };
 class DeclClasse{
     public:
-        ID id;
-        ID *heranca;
+        Id id;
+        Id *heranca;
         DeclLocal lista;
 };
 class ExprUnaria:public Expr{

@@ -35,6 +35,7 @@
 			<Add option="-x c++" />
 			<Add directory="include" />
 		</Compiler>
+		<Unit filename="ASA.h" />
 		<Unit filename="AnalisadorLexico.c">
 			<Option compilerVar="CC" />
 		</Unit>
