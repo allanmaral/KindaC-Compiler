@@ -1,8 +1,7 @@
-#include "Trie.h"
 #include "TabelaSimbolos.h"
 #include "AnalisadorLexico.h"
 
-Trie::Trie() { raiz = new No_Trie(); altura = 0; }
+TabelaSimbolos::TabelaSimbolos() { raiz = new No_Trie(); altura = 0; }
 /** \brief insere
  *  Função para fazer a inserção de lexemas dentro da tabela de simbolos
  * \param
@@ -10,7 +9,7 @@ Trie::Trie() { raiz = new No_Trie(); altura = 0; }
  *  atributo: atributo associado ao lexema
  * \param
  */
-void Trie::insere(char* entrada, Atributo* atributo){
+void TabelaSimbolos::insere(char* entrada, Atributo* atributo){
     int indice = 0;
     No_Trie *no = raiz;
     No_Trie *auxiliar = NULL;
@@ -36,18 +35,18 @@ void Trie::insere(char* entrada, Atributo* atributo){
 /** \brief imprime
  *  Função para imprimir todos os lexemas guardados dentro da tabela
  */
-void Trie::imprime(){
+void TabelaSimbolos::imprime(){
     imprimeCabecalho();
     char saida[altura + 1];
     imprimeRecursivo(saida, 0, raiz);
 }
 /** \brief imprimeRecursivo
- *  Função recursiva auxiliar para percorrer a trie
+ *  Função recursiva auxiliar para percorrer a TabelaSimbolos
  * \param
  *  saida: string parcial que é usada na impressão
  * \param
  */
-void Trie::imprimeRecursivo(char* saida, int indice, No_Trie *n){
+void TabelaSimbolos::imprimeRecursivo(char* saida, int indice, No_Trie *n){
     if(n->EChave()){///Para cada nó que for chave, imprime o caminho que foi percorrido pela recursão
         saida[indice] = '\0';
         imprimeLexema(saida, n->pegarAtributo());
@@ -64,14 +63,14 @@ void Trie::imprimeRecursivo(char* saida, int indice, No_Trie *n){
     }
 }
 /** \brief busca
- *  Função que busca um lexema na trie e retorna o atributo associado a ele
+ *  Função que busca um lexema na TabelaSimbolos e retorna o atributo associado a ele
  * \param
  *  entrada: lexema a ser buscado
  * \param
  * \return
  *  Atributo associado a esse lexema
  */
-Atributo* Trie::busca(char *entrada){
+Atributo* TabelaSimbolos::busca(char *entrada){
     int indice = 0;
     No_Trie *no = raiz;
     while(entrada[indice] != '\0'){///enquanto percorre toda a entrada buscada
@@ -94,7 +93,7 @@ Atributo* Trie::busca(char *entrada){
  * \return
  *  Tamanho do lexema
  */
-int Trie::calcularTamanhoLexema(char *lexema){
+int TabelaSimbolos::calcularTamanhoLexema(char *lexema){
     int total = 0;
     while( lexema[total] != '\0') { total++; }
     return total;
@@ -106,21 +105,21 @@ int Trie::calcularTamanhoLexema(char *lexema){
  *  saida: lexema a ser impresso
  *  atr: atributo do lexema que será impresso juntamente com ele
  */
-void Trie::imprimeLexema(char* saida, Atributo * atr){
+void TabelaSimbolos::imprimeLexema(char* saida, Atributo * atr){
     fprintf(stdout,"[%s]\n", saida);
 }
 
 /** \brief imprimeCabecalho
  *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
  */
-void Trie::imprimeCabecalho(){
+void TabelaSimbolos::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"---------------TABELA------------------\n");
     fprintf(stdout,"---------------------------------------\n");
 }
-Trie::~Trie() { delete raiz; }
+TabelaSimbolos::~TabelaSimbolos() { delete raiz; }
 
-TrieIdentificador::TrieIdentificador():Trie(){}
+TabelaIdentificador::TabelaIdentificador():TabelaSimbolos(){}
 
 /** \brief imprimeLexema
  *  Função para colocar a string associada a um lexema no stdout
@@ -128,21 +127,21 @@ TrieIdentificador::TrieIdentificador():Trie(){}
  *  saida: lexema a ser impresso
  *  atr: atributo do lexema que será impresso juntamente com ele
  */
-void TrieIdentificador::imprimeLexema(char* saida, Atributo *atr){
+void TabelaIdentificador::imprimeLexema(char* saida, Atributo *atr){
     fprintf(stdout,"%s\n", saida);
 }
 
 /** \brief imprimeCabecalho
  *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
  */
-void TrieIdentificador::imprimeCabecalho(){
+void TabelaIdentificador::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"       TABELA DE IDENTIFICADORES       \n");
     fprintf(stdout,"---------------------------------------\n");
 }
-TrieIdentificador::~TrieIdentificador() { }
+TabelaIdentificador::~TabelaIdentificador() { }
 
-TrieInteiro::TrieInteiro():Trie(){}
+TabelaInteiro::TabelaInteiro():TabelaSimbolos(){}
 
 /** \brief imprimeLexema
  *  Função para colocar a string associada a um lexema no stdout
@@ -150,21 +149,21 @@ TrieInteiro::TrieInteiro():Trie(){}
  *  saida: lexema a ser impresso
  *  atr: atributo do lexema que será impresso juntamente com ele
  */
-void TrieInteiro::imprimeLexema(char* saida, Atributo *atr){
+void TabelaInteiro::imprimeLexema(char* saida, Atributo *atr){
     fprintf(stdout,"%s\n", saida);
 }
 
 /** \brief imprimeCabecalho
  *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
  */
-void TrieInteiro::imprimeCabecalho(){
+void TabelaInteiro::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"           TABELA DE INTEIROS          \n");
     fprintf(stdout,"---------------------------------------\n");
 }
-TrieInteiro::~TrieInteiro() { }
+TabelaInteiro::~TabelaInteiro() { }
 
-TrieLiteral::TrieLiteral():Trie(){}
+TabelaLiteral::TabelaLiteral():TabelaSimbolos(){}
 
 /** \brief imprimeLexema
  *  Função para colocar a string associada a um lexema no stdout
@@ -172,21 +171,21 @@ TrieLiteral::TrieLiteral():Trie(){}
  *  saida: lexema a ser impresso
  *  atr: atributo do lexema que será impresso juntamente com ele
  */
-void TrieLiteral::imprimeLexema(char* saida, Atributo *atr){
+void TabelaLiteral::imprimeLexema(char* saida, Atributo *atr){
     fprintf(stdout,"%s\n", saida);
 }
 
 /** \brief imprimeCabecalho
  *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
  */
-void TrieLiteral::imprimeCabecalho(){
+void TabelaLiteral::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"          TABELA DE LITERAIS           \n");
     fprintf(stdout,"---------------------------------------\n");
 }
-TrieLiteral::~TrieLiteral() { }
+TabelaLiteral::~TabelaLiteral() { }
 
-TrieReal::TrieReal():Trie(){}
+TabelaReal::TabelaReal():TabelaSimbolos(){}
 
 /** \brief imprimeLexema
  *  Função para colocar a string associada a um lexema no stdout
@@ -194,21 +193,21 @@ TrieReal::TrieReal():Trie(){}
  *  saida: lexema a ser impresso
  *  atr: atributo do lexema que será impresso juntamente com ele
  */
-void TrieReal::imprimeLexema(char* saida, Atributo *atr){
+void TabelaReal::imprimeLexema(char* saida, Atributo *atr){
     fprintf(stdout,"%s\n", saida);
 }
 
 /** \brief imprimeCabecalho
  *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
  */
-void TrieReal::imprimeCabecalho(){
+void TabelaReal::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"           TABELA DE REAIS             \n");
     fprintf(stdout,"---------------------------------------\n");
 }
-TrieReal::~TrieReal() { }
+TabelaReal::~TabelaReal() { }
 
-TrieReservada::TrieReservada():Trie(){
+TabelaReservada::TabelaReservada():TabelaSimbolos(){
     inicializarReservada();
 }
 
@@ -218,7 +217,7 @@ TrieReservada::TrieReservada():Trie(){
  *  saida: lexema a ser impresso
  *  atr: atributo do lexema que será impresso juntamente com ele
  */
-void TrieReservada::imprimeLexema(char* saida, Atributo *atr){
+void TabelaReservada::imprimeLexema(char* saida, Atributo *atr){
     int tam = calcularTamanhoLexema(saida);
     tam = 26 - tam;
     fprintf(stdout,"%s", saida);
@@ -232,14 +231,14 @@ void TrieReservada::imprimeLexema(char* saida, Atributo *atr){
 /** \brief imprimeCabecalho
  *  Função para colocar no stdout a descrição da tabela antes de imprimi-la
  */
-void TrieReservada::imprimeCabecalho(){
+void TabelaReservada::imprimeCabecalho(){
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"     TABELA DE PALAVRAS RESERVADAS     \n");
     fprintf(stdout,"---------------------------------------\n");
     fprintf(stdout,"LEXEMA                   Token numerico\n");
 }
 
-void TrieReservada::inicializarReservada(){
+void TabelaReservada::inicializarReservada(){
     Atributo* auxiliar;
     auxiliar = new Atributo(); auxiliar->atribuirToken(DEFINICAO_TIPO); insere((char*)"typedef", auxiliar);
     auxiliar = new Atributo(); auxiliar->atribuirToken(ESTRUTURA);      insere((char*)"struct", auxiliar);
@@ -267,7 +266,7 @@ void TrieReservada::inicializarReservada(){
     auxiliar = new Atributo(); auxiliar->atribuirToken(FALSO);          insere((char*)"false", auxiliar);
     auxiliar = new Atributo(); auxiliar->atribuirToken(ESSE);           insere((char*)"this", auxiliar);
 }
-TrieReservada::~TrieReservada() { }
+TabelaReservada::~TabelaReservada() { }
 
 Atributo::Atributo() { /*Construtor*/ }
 int Atributo::pegarToken(){ return token; }

@@ -3,10 +3,11 @@
 #include "AnalisadorLexico.h"
 #include "GerenciadorErro.h"
 #include "TabelaSimbolos.h"
+#include "ASA.h"
 
 #define TAMANHO_LEXEMA 32
 #define TAMANHO_BUFFER 4096
-
+static TabelaReservada tabelaReservado;
 static char caractereAtual;      /**< Último caractere lindo pelo autômato*/
 static int estado;               /**< Estado atual do autômato  */
 static char* lexema;             /**< Vetor de caracteres adicionados ao lexema  */
@@ -189,12 +190,12 @@ int proximoToken(){
                 if(isalnum(caractereAtual)) { incrementaLexema(); }
                 else if(caractereAtual == '_') { incrementaLexema(); }
 					 else{
-					 	 Atributo *auxiliar = buscaTabela(TABELA_RESERVADA, lexema);
+					 	 Atributo *auxiliar = tabelaReservado.busca(lexema);
 					 	 if(auxiliar != NULL) { return auxiliar->pegarToken(); }
 					 	 else{
 					 	     auxiliar = (Atributo*)malloc(sizeof(Atributo));
-					 	 	 auxiliar->atribuirToken(LITERAL);
-					 	 	 insereTabela(TABELA_ID, lexema, auxiliar);
+					 	 	 auxiliar->atribuirToken(ID);
+					 	 	 obtemTabelaIdentificador()->insere(lexema,auxiliar);
 					 	 	 return ID;
 					 	 }
 					 }
@@ -209,7 +210,7 @@ int proximoToken(){
 					 	 	    Atributo *auxiliar;
 					 	 	    auxiliar = (Atributo*)malloc(sizeof(Atributo));
 					 	 	    auxiliar->atribuirToken(NUM_INTEIRO);
-					 	 	    insereTabela(TABELA_INTEIRO, lexema, auxiliar);
+					 	 	    obtemTabelaInteiro()->insere(lexema,auxiliar);
 					 	 	    return NUM_INTEIRO;
 					 	    }
 						    break;
@@ -239,7 +240,7 @@ int proximoToken(){
                            Atributo *auxiliar;
                            auxiliar = (Atributo*)malloc(sizeof(Atributo));
                            auxiliar->atribuirToken(NUM_REAL);
-                           insereTabela(TABELA_REAL, lexema, auxiliar);
+                           obtemTabelaReal()->insere(lexema,auxiliar);
                            return NUM_REAL;
                        }
 					   break;
@@ -259,7 +260,7 @@ int proximoToken(){
                     Atributo *auxiliar;
                     auxiliar = (Atributo*)malloc(sizeof(Atributo));
                     auxiliar->atribuirToken(NUM_REAL);
-                    insereTabela(TABELA_REAL, lexema, auxiliar);
+                    obtemTabelaReal()->insere(lexema,auxiliar);
                     return NUM_REAL;
                 }
 				break;
@@ -294,7 +295,7 @@ int proximoToken(){
                     Atributo *auxiliar;
                     auxiliar = (Atributo*)malloc(sizeof(Atributo));
                     auxiliar->atribuirToken(LITERAL);
-                    insereTabela(TABELA_LITERAL, lexema, auxiliar);
+                    obtemTabelaLiteral()->insere(lexema,auxiliar);
                     return LITERAL;
                 } else if(caractereAtual == '\0' || caractereAtual == EOF){
                            saidaErro(ErroCaractereMalFormado, linha, coluna);
@@ -314,7 +315,7 @@ int proximoToken(){
                            Atributo *auxiliar;
                            auxiliar = (Atributo*)malloc(sizeof(Atributo));
                            auxiliar->atribuirToken(LITERAL);
-                           insereTabela(TABELA_LITERAL, lexema, auxiliar);
+                           obtemTabelaLiteral()->insere(lexema,auxiliar);
                            return LITERAL;
                        } else if(caractereAtual == '\n'){
                                   coluna=0;
@@ -419,7 +420,9 @@ int proximoToken(){
     }
     return 0;
 }
-
+void imprimeTabelaPalavrasReservadas(){
+    tabelaReservado.imprime();
+}
 /** \brief Destrutor do Analisador Léxico
   *
   */

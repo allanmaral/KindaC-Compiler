@@ -1,10 +1,11 @@
 #ifndef ASA_H
 #define ASA_H
-
+#include "TabelaSimbolos.h"
 class DeclFuncao;
 class DeclTipo;
 class DeclVariavel;
 class DeclClasse;
+
 
 class Programa{
     public:
@@ -137,7 +138,7 @@ class ListaId{
     public:
         ListaId *listaId;
         bool ponteiro;
-        Arranjo *Arranjo;
+        Arranjo *arranjo;
 };
 class DeclVariavel{
     public:
@@ -202,4 +203,10 @@ class New:public Primario{
     public:
         ListaExpr *listaExpr;
 };
+
+TabelaIdentificador* obtemTabelaIdentificador();
+TabelaInteiro    * obtemTabelaInteiro();
+TabelaLiteral  * obtemTabelaLiteral();
+TabelaReal   * obtemTabelaReal();
+
 #endif // ASA_H

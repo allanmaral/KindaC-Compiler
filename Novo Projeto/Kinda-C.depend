@@ -139,3 +139,65 @@
 
 1507161893 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.h
 
+1507172783 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"TabelaSimbolos.h"
+	"ASA.h"
+
+1507172469 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+
+1507088714 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.h
+
+1507170136 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/TabelaSimbolos.h
+	<stdlib.h>
+	<stdio.h>
+
+1504571013 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Trie.h
+	<stdlib.h>
+	<stdio.h>
+
+1507171894 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.c
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"ASA.h"
+
+1507179899 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.h
+	"TabelaSimbolos.h"
+
+1507088714 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1507172620 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/main.c
+	<stdio.h>
+	<string.h>
+	"ASA.h"
+	"AnalisadorLexico.h"
+	"AnalisadorSintatico.h"
+	"TabelaSimbolos.h"
+	"GerenciadorErro.h"
+
+1507088714 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.h
+
+1504571013 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/TabelaSimbolos.c
+	"TabelaSimbolos.h"
+
+1504571013 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Trie.cpp
+	"Trie.h"
+	"TabelaSimbolos.h"
+	"AnalisadorLexico.h"
+
+1507170135 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/TabelaSimbolos.cpp
+	"TabelaSimbolos.h"
+	"AnalisadorLexico.h"
+
+1507172324 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.cpp
+	"ASA.h"
+

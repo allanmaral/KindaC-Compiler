@@ -109,5 +109,5 @@ int pegarColuna();
   */
 void destruirAnalizadorLexico();
 
-
+void imprimeTabelaPalavrasReservadas();
 #endif // ANALISADORLEXICO_H

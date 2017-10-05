@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-
+#include "ASA.h"
 #include "AnalisadorLexico.h"
 #include "AnalisadorSintatico.h"
 #include "TabelaSimbolos.h"
@@ -67,7 +67,11 @@ int main(int argc, char** args){
         }
     }*/
     imprimeListaErros();
-    imprimeTabelas();
+    obtemTabelaLiteral()->imprime();
+    obtemTabelaIdentificador()->imprime();
+    obtemTabelaInteiro()->imprime();
+    obtemTabelaReal()->imprime();
+    imprimeTabelaPalavrasReservadas();
     return 0;
 }
 

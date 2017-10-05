@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="Teste_Classe.cpm" />
+				<Option parameters="Teste_NumReal.cpm" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -35,6 +35,7 @@
 			<Add option="-x c++" />
 			<Add directory="include" />
 		</Compiler>
+		<Unit filename="ASA.cpp" />
 		<Unit filename="ASA.h" />
 		<Unit filename="AnalisadorLexico.c">
 			<Option compilerVar="CC" />
@@ -47,12 +48,8 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="GerenciadorErro.h" />
-		<Unit filename="TabelaSimbolos.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="TabelaSimbolos.cpp" />
 		<Unit filename="TabelaSimbolos.h" />
-		<Unit filename="Trie.cpp" />
-		<Unit filename="Trie.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
