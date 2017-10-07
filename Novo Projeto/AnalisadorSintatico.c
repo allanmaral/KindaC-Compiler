@@ -22,16 +22,16 @@ static char tokenLiteral[62][16] = {
         "TRES_PONTOS",      "ASCII"
 };
 
-static char esperadosLiteral[3][32] = {
-        "'{' ou ':'",       "'typedef', 'class' ou Tipo",       "inicializador"
-};
-
 typedef enum {
     EsperadosChaveOuDoisPontos = 0,
     EsperadosDefinicaoClassTipo,
     EsperadosInicializador,
     EsperadosTamanhoEnumerador
 } Esperados;
+
+static char esperadosLiteral[EsperadosTamanhoEnumerador][32] = {
+        "'{' ou ':'",       "'typedef', 'class' ou Tipo",       "inicializador"
+};
 
 void casar(int tokenEsperado){
     // Faz alguma coisa aqui
@@ -43,18 +43,19 @@ void casar(int tokenEsperado){
       tokenAtual = proximoToken();
 }
 
-void pular(int* sinc){
+void pular(int sinc[]){
     int sincronizado = 0;
-    int indice = 0;
     // Enquanto ainda nao tiver sido sincronizado, verifica se o token atual pertence ao sinc
     while(!sincronizado) {
+        int indice = -1;
         // Percorre a lista de sync
         do {
+            indice++;
             if(tokenAtual == sinc[indice]) {
+                fprintf(stdout, "###### Sincronizou: %s\n", tokenLiteral[sinc[indice]]);
                 sincronizado = 1;
                 return;
             }
-            indice++;
         } while(sinc[indice] != TOKEN_EOF);
         // Se chegar aqui, o erro ainda nao foi sincronizado
         tokenAtual = proximoToken();
@@ -125,10 +126,9 @@ void Programa(){
         break;
         default:
             /* ERRO */
-            /*saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosDefinicaoClassTipo]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosDefinicaoClassTipo]);
             pular(firstPrograma);
-            fprintf(stdout, "Token: %s ", tokenLiteral[tokenAtual]);*/
-            //return Programa();
+            return Programa();
         break;
 
     }
@@ -226,6 +226,7 @@ void DeclClasseL(){
 }
 
 static int followDeclLocal [] = {CHAVE_DIR, TOKEN_EOF};
+static int sincDeclLocal [] = {CHAVE_DIR, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, PARENTESE_ESQ, COLCHETE_ESQ, VIRGULA, PONTO_VIRGULA, TOKEN_EOF};
 void DeclLocal(){
     fprintf(stdout, "DeclLocal\n");
     switch(tokenAtual){
@@ -233,20 +234,20 @@ void DeclLocal(){
         case CARACTERE:     case ID:
             Tipo();
             Ponteiro();
-            casarOuPular(ID, followDeclLocal);
+            casarOuPular(ID, sincDeclLocal);
             DeclLocalL();
         break;
         case PUBLICO:
             casar(PUBLICO);
-            casarOuPular(DOIS_PONTOS, followDeclLocal);
+            casarOuPular(DOIS_PONTOS, sincDeclLocal);
             DeclLocal();
         break;
         case PRIVADO:
             casar(PRIVADO);
-            casarOuPular(DOIS_PONTOS, followDeclLocal);
+            casarOuPular(DOIS_PONTOS, sincDeclLocal);
             DeclLocal();
         break;
-        default: /* ERRO */ break;
+        default: /* epsilon */ break;
     }
 }
 
@@ -263,13 +264,8 @@ void DeclLocalL(){
             casarOuPular(CHAVE_DIR, followDeclLocalL);
             DeclLocal();
         break;
-        case COLCHETE_ESQ:
+        case COLCHETE_ESQ:  case VIRGULA:
             Arranjo();
-            ListaIdCont();
-            casarOuPular(PONTO_VIRGULA, followDeclLocalL);
-            DeclLocal();
-        break;
-        case VIRGULA:
             ListaIdCont();
             casarOuPular(PONTO_VIRGULA, followDeclLocalL);
             DeclLocal();

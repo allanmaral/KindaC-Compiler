@@ -85,7 +85,7 @@
 	"TabelaSimbolos.h"
 	"GerenciadorErro.h"
 
-1507351385 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+1507390278 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
@@ -205,7 +205,7 @@
 1507172324 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.cpp
 	"ASA.h"
 
-1507347692 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
+1507387031 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
 	"TabelaSimbolos.h"
 
 1507346053 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.cpp
