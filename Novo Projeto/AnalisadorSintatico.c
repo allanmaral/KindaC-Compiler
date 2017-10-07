@@ -22,6 +22,17 @@ static char tokenLiteral[62][16] = {
         "TRES_PONTOS",      "ASCII"
 };
 
+static char esperadosLiteral[3][32] = {
+        "'{' ou ':'",       "'typedef', 'class' ou Tipo",       "inicializador"
+};
+
+typedef enum {
+    EsperadosChaveOuDoisPontos = 0,
+    EsperadosDefinicaoClassTipo,
+    EsperadosInicializador,
+    EsperadosTamanhoEnumerador
+} Esperados;
+
 void casar(int tokenEsperado){
     // Faz alguma coisa aqui
     if(tokenAtual == tokenEsperado){
@@ -78,28 +89,31 @@ void InicializarAnalizadorSintatico(){
     tokenAtual = proximoToken();
 }
 
-static int followPrograma [] = {TOKEN_EOF};
+//static int followPrograma [] = {TOKEN_EOF};
+static int sincPrograma [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, ESTRUTURA, CHAVE_ESQ,
+                              PONTO_VIRGULA, PARENTESE_ESQ, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
+static int firstPrograma [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
 void Programa(){
     fprintf(stdout, "Programa\n");
     switch(tokenAtual){
         case DEFINICAO_TIPO:
             casar(DEFINICAO_TIPO);
-            casarOuPular(ESTRUTURA, followPrograma);
-            casarOuPular(CHAVE_ESQ, followPrograma);
+            casarOuPular(ESTRUTURA, sincPrograma);
+            casarOuPular(CHAVE_ESQ, sincPrograma);
             Tipo();
             ListaId();
-            casarOuPular(PONTO_VIRGULA, followPrograma);
+            casarOuPular(PONTO_VIRGULA, sincPrograma);
             DeclVar();
-            casarOuPular(CHAVE_DIR, followPrograma);
-            casarOuPular(ID, followPrograma);
-            casarOuPular(PONTO_VIRGULA, followPrograma);
+            casarOuPular(CHAVE_DIR, sincPrograma);
+            casarOuPular(ID, sincPrograma);
+            casarOuPular(PONTO_VIRGULA, sincPrograma);
             Programa();
         break;
         case INTEIRO:       case REAL:          case BOLEANO:
         case CARACTERE:     case ID:
             Tipo();
             Ponteiro();
-            casarOuPular(ID, followPrograma);
+            casarOuPular(ID, sincPrograma);
             ProgramaA();
         break;
         case CLASSE:
@@ -109,20 +123,31 @@ void Programa(){
         case TOKEN_EOF:
             return; // NULL
         break;
+        default:
+            /* ERRO */
+            /*saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosDefinicaoClassTipo]);
+            pular(firstPrograma);
+            fprintf(stdout, "Token: %s ", tokenLiteral[tokenAtual]);*/
+            //return Programa();
+        break;
+
     }
 }
 
 static int followProgramaA [] = {TOKEN_EOF};
+static int sincProgramaA [] = {CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO,
+                               LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA,
+                               IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, DEFINICAO_TIPO, CLASSE, TOKEN_EOF};
 void ProgramaA(){
     fprintf(stdout, "ProgramaA\n");
     switch(tokenAtual){
         case PARENTESE_ESQ:
             casar(PARENTESE_ESQ);
             ListaForma();
-            casarOuPular(PARENTESE_DIR, followProgramaA);
-            casarOuPular(CHAVE_ESQ, followProgramaA);
+            casarOuPular(PARENTESE_DIR, sincProgramaA);
+            casarOuPular(CHAVE_ESQ, sincProgramaA);
             DeclLocalLL();
-            casarOuPular(CHAVE_DIR, followProgramaA);
+            casarOuPular(CHAVE_DIR, sincProgramaA);
             Programa();
         break;
         case COLCHETE_ESQ:
@@ -140,6 +165,10 @@ void ProgramaA(){
             casar(PONTO_VIRGULA);
             ProgramaB();
         break;
+        default:
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosInicializador]);
+            pular(sincProgramaA);
+        break;
     }
 }
 
@@ -156,38 +185,43 @@ void ProgramaB(){
     }
 }
 
-static int followDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
+//static int followDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
+static int sincDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ, DOIS_PONTOS, TOKEN_EOF};
 void DeclClasse(){
     fprintf(stdout, "DeclClasse\n");
     switch(tokenAtual){
         case CLASSE:
             casar(CLASSE);
-            casarOuPular(ID, followDeclClasse);
+            casarOuPular(ID, sincDeclClasse);
             DeclClasseL();
         break;
-        default: /* ERRO */ break;
     }
 }
 
-static int followDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
+//static int followDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
+static int sincDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ, CHAVE_DIR, PONTO_VIRGULA, TOKEN_EOF};
 void DeclClasseL(){
     fprintf(stdout, "DeclClasseL\n");
     switch(tokenAtual){
         case CHAVE_ESQ:
             casar(CHAVE_ESQ);
             DeclLocal();
-            casarOuPular(CHAVE_DIR, followDeclClasseL);
-            casarOuPular(PONTO_VIRGULA, followDeclClasseL);
+            casarOuPular(CHAVE_DIR, sincDeclClasseL);
+            casarOuPular(PONTO_VIRGULA, sincDeclClasseL);
         break;
         case DOIS_PONTOS:
             casar(DOIS_PONTOS);
-            casarOuPular(ID, followDeclClasseL);
-            casarOuPular(CHAVE_ESQ, followDeclClasseL);
+            casarOuPular(ID, sincDeclClasseL);
+            casarOuPular(CHAVE_ESQ, sincDeclClasseL);
             DeclLocal();
-            casarOuPular(CHAVE_DIR, followDeclClasseL);
-            casarOuPular(PONTO_VIRGULA, followDeclClasseL);
+            casarOuPular(CHAVE_DIR, sincDeclClasseL);
+            casarOuPular(PONTO_VIRGULA, sincDeclClasseL);
         break;
-        default: /* ERRO */ break;
+        default:
+            /* ERRO */
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosChaveOuDoisPontos]);
+            pular(sincDeclClasseL);
+        break;
     }
 }
 
