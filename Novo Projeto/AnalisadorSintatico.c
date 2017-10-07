@@ -26,11 +26,13 @@ typedef enum {
     EsperadosChaveOuDoisPontos = 0,
     EsperadosDefinicaoClassTipo,
     EsperadosInicializador,
+    EsperadosDeclaracaoMembro,
     EsperadosTamanhoEnumerador
 } Esperados;
 
 static char esperadosLiteral[EsperadosTamanhoEnumerador][32] = {
-        "'{' ou ':'",       "'typedef', 'class' ou Tipo",       "inicializador"
+        "'{' ou ':'",       "'typedef', 'class' ou Tipo",       "inicializador",
+        "declaracao de membros"
 };
 
 void casar(int tokenEsperado){
@@ -252,29 +254,38 @@ void DeclLocal(){
 }
 
 static int followDeclLocalL [] = {CHAVE_DIR, TOKEN_EOF};
+static int sincDeclLocalL   [] = {CHAVE_DIR, CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, TOKEN_EOF};
+static int firstDeclLocalLL [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL,
+                                  VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, ASCII, CHAVE_ESQ, SE, ENQUANTO,
+                                  ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, INTEIRO, REAL, BOLEANO,
+                                  CARACTERE, TOKEN_EOF };
 void DeclLocalL(){
     fprintf(stdout, "DeclLocalL\n");
     switch(tokenAtual){
         case PARENTESE_ESQ:
             casar(PARENTESE_ESQ);
             ListaForma();
-            casarOuPular(PARENTESE_DIR, followDeclLocalL);
-            casarOuPular(CHAVE_ESQ, followDeclLocalL);
+            casarOuPular(PARENTESE_DIR, sincDeclLocalL);
+            casarOuPular(CHAVE_ESQ, firstDeclLocalLL);
             DeclLocalLL();
-            casarOuPular(CHAVE_DIR, followDeclLocalL);
+            casarOuPular(CHAVE_DIR, sincDeclLocalL);
             DeclLocal();
         break;
         case COLCHETE_ESQ:  case VIRGULA:
             Arranjo();
             ListaIdCont();
-            casarOuPular(PONTO_VIRGULA, followDeclLocalL);
+            casarOuPular(PONTO_VIRGULA, sincDeclLocalL);
             DeclLocal();
         break;
         case PONTO_VIRGULA:
             casar(PONTO_VIRGULA);
             DeclLocal();
         break;
-        default: /* ERRO */ break;
+        default:
+            /* ERRO */
+            saidaErro(ErroSIntaticoDepois, pegarLinha(), pegarColuna(), esperadosLiteral[EsperadosDeclaracaoMembro], tokenLiteral[PONTO_VIRGULA]);
+            pular(followDeclLocalL);
+        break;
     }
 }
 

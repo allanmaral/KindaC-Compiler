@@ -53,7 +53,7 @@
 	<stdlib.h>
 	<ctype.h>
 
-1507346053 c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
+1507392481 c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
 
 1507346053 c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
 	<stdlib.h>
@@ -63,7 +63,7 @@
 	<stdlib.h>
 	<stdio.h>
 
-1507346053 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
+1507392879 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
 	"GerenciadorErro.h"
 	<stdio.h>
 	<stdlib.h>
@@ -205,7 +205,7 @@
 1507172324 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.cpp
 	"ASA.h"
 
-1507387031 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
+1507392324 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
 	"TabelaSimbolos.h"
 
 1507346053 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.cpp

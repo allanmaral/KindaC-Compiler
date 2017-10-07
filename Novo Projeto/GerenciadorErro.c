@@ -14,7 +14,9 @@ char ErroLiteral[ErroTamanhoEnumerador][256] = {
     "Erro: Bloco de Cometario Nao Terminado",
     "Erro: Caractere Mal Formado",
     "Erro: Expoente nao possui digitos",
-    "Erro: Arquivo Invalido"
+    "Erro: Arquivo Invalido",
+    "antes",
+    "depois"
 };
 
 /** \brief Armazena os dados do erro
@@ -98,8 +100,8 @@ void proximoErro(){
     if(erro) { raiz = erro->proximo; } else { return; }
     //Imprime a mensagem do erro no stderr
     int linha = erro->linha, coluna = erro->coluna;
-    if(erro->codigo == ErroSintatico) {
-        fprintf(stderr, "[l:%d, c:%d] - Erro: \"%s\" esperado antes de \"%s\"\n", linha, coluna, erro->tokenEsperado, erro->tokenEncontrado);
+    if(erro->codigo == ErroSintatico || erro->codigo == ErroSIntaticoDepois) {
+        fprintf(stderr, "[l:%d, c:%d] - Erro: \"%s\" esperado %s de \"%s\"\n", linha, coluna, erro->tokenEsperado, ErroLiteral[erro->codigo], erro->tokenEncontrado);
     } else if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {
                fprintf(stderr, "[l:%d, c:%d] - %s\n", linha, coluna, ErroLiteral[erro->codigo]);
            } else {

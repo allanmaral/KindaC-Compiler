@@ -11,6 +11,7 @@ typedef enum {
     ErroNumeroMalFormado,
     ErroArquivoInvalido,
     ErroSintatico,
+    ErroSIntaticoDepois,
     ErroTamanhoEnumerador
 } Erros;
 
