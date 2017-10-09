@@ -92,40 +92,43 @@
 
 1507346053 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
 
-1507093112 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
+1507580613 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
 	<stdio.h>
 	<string.h>
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"TabelaSimbolos.h"
+	"ASA.h"
 
-1507093112 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
+1507580613 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
 	<stdio.h>
 	<stdlib.h>
 	<ctype.h>
 
-1507093112 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
+1507580613 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
 
-1507093112 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
-	"Trie.h"
+1507580613 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
+	<stdlib.h>
+	<stdio.h>
 
 1507093112 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\trie.h
 	<stdlib.h>
 	<stdio.h>
 
-1507161838 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+1507580613 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
 
-1507093112 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
+1507580613 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
 	"GerenciadorErro.h"
 	<stdio.h>
 	<stdlib.h>
 
-1507093112 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\main.c
+1507580613 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\main.c
 	<stdio.h>
 	<string.h>
+	"ASA.h"
 	"AnalisadorLexico.h"
 	"AnalisadorSintatico.h"
 	"TabelaSimbolos.h"
@@ -141,7 +144,8 @@
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 
-1507161893 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.h
+1507592773 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.h
+	"TabelaSimbolos.h"
 
 1507231833 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.c
 	<stdio.h>
@@ -214,4 +218,11 @@
 1507346053 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
+
+1507580613 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
+	"TabelaSimbolos.h"
+	"AnalisadorLexico.h"
+
+1507582555 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.cpp
+	"ASA.h"
 
