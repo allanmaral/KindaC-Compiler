@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="Teste_NumReal.cpm" />
+				<Option parameters="Teste_Classe.cpm" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -44,6 +44,7 @@
 		<Unit filename="AnalisadorSintatico.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="AnalisadorSintatico.h" />
 		<Unit filename="GerenciadorErro.c">
 			<Option compilerVar="CC" />
 		</Unit>

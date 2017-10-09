@@ -27,12 +27,16 @@ typedef enum {
     EsperadosDefinicaoClassTipo,
     EsperadosInicializador,
     EsperadosDeclaracaoMembro,
+    EsperadosIdentificador,
+    EsperadosTipo,
+    EsperadosSenteca,
     EsperadosTamanhoEnumerador
 } Esperados;
 
 static char esperadosLiteral[EsperadosTamanhoEnumerador][32] = {
-        "'{' ou ':'",       "'typedef', 'class' ou Tipo",       "inicializador",
-        "declaracao de membros"
+        "'{' ou ':'",               "'typedef', 'class' ou Tipo",       "Inicializador",
+        "declaracao de membros",    "Identificador",                    "Tipo",
+        "Sentenca"
 };
 
 void casar(int tokenEsperado){
@@ -290,6 +294,11 @@ void DeclLocalL(){
 }
 
 static int followDeclLocalLL [] = {CHAVE_DIR, TOKEN_EOF};
+static int sincDeclLocalLL [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ,
+                                  NEGACAO, LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE,
+                                  NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, LE_LINHA,
+                                  RETORNA, IMPRIME, LANCA, TENTA, INTEIRO, REAL, BOLEANO, CARACTERE,
+                                  COLCHETE_ESQ, VIRGULA, CHAVE_DIR, TOKEN_EOF};
 void DeclLocalLL(){
     fprintf(stdout, "DeclLocalLL\n");
     switch(tokenAtual){
@@ -300,7 +309,7 @@ void DeclLocalLL(){
         case ADICAO:        case SUBTRACAO:     case ASCII:
             Expr();
             ListaIdCont();
-            casarOuPular(PONTO_VIRGULA, followDeclLocalLL);
+            casarOuPular(PONTO_VIRGULA, sincDeclLocalLL);
             ListaSentenca();
         break;
         case CHAVE_ESQ:     case SE:            case ENQUANTO:
@@ -314,10 +323,10 @@ void DeclLocalLL(){
         case CARACTERE:
             TipoL();
             Ponteiro();
-            casarOuPular(ID, followDeclLocalLL);
+            casarOuPular(ID, sincDeclLocalLL);
             Arranjo();
             ListaIdCont();
-            casarOuPular(PONTO_VIRGULA, followDeclLocalLL);
+            casarOuPular(PONTO_VIRGULA, sincDeclLocalLL);
             DeclLocalLL();
         break;
         default: /* Epsilon */ break;
@@ -325,6 +334,7 @@ void DeclLocalLL(){
 }
 
 static int followDeclVar [] = {CHAVE_DIR, TOKEN_EOF};
+static int sincDeclVar [] = {CHAVE_DIR, INTEIRO, REAL, BOLEANO, CARACTERE, ID, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 void DeclVar(){
     fprintf(stdout, "DeclVar\n");
     switch(tokenAtual){
@@ -332,36 +342,37 @@ void DeclVar(){
         case CARACTERE:     case ID:
             Tipo();
             Ponteiro();
-            casarOuPular(ID, followDeclVar);
+            casarOuPular(ID, sincDeclVar);
             Arranjo();
             ListaIdCont();
-            casarOuPular(PONTO_VIRGULA, followDeclVar);
+            casarOuPular(PONTO_VIRGULA, sincDeclVar);
             DeclVar();
         break;
         default: /* Epsilon */ break;
     }
 }
 
-static int followListaId [] = {PONTO_VIRGULA, TOKEN_EOF};
+//static int followListaId [] = {PONTO_VIRGULA, TOKEN_EOF};
+static int sincListaId [] = {PONTO_VIRGULA, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 void ListaId(){
     fprintf(stdout, "ListaId\n");
     switch(tokenAtual){
+        case ID:
         case ASTERISCO:
             Ponteiro();
-            casarOuPular(ID, followListaId);
+            casarOuPular(ID, sincListaId);
             Arranjo();
             ListaIdCont();
         break;
-        case ID:
-            casar(ID);
-            Arranjo();
-            ListaIdCont();
+        default:
+            /* ERRO */
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosIdentificador]);
+            pular(sincListaId);
         break;
-        default: /* ERRO */ break;
     }
 }
 
-static int followListaIdCont [] = {PONTO_VIRGULA, TOKEN_EOF};
+static int followListaIdCont [] = {PONTO_VIRGULA, VIRGULA, COLCHETE_ESQ, TOKEN_EOF};
 void ListaIdCont(){
     fprintf(stdout, "ListaIdCont\n");
     switch(tokenAtual){
@@ -387,22 +398,26 @@ void Ponteiro(){
     }
 }
 
-static int followArranjo [] = {VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
+//static int followArranjo [] = {VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
+static int sincArranjo [] = {VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, COLCHETE_DIR, TOKEN_EOF};
 void Arranjo(){
     fprintf(stdout, "Arranjo\n");
     switch(tokenAtual){
         case COLCHETE_ESQ:
             casar(COLCHETE_ESQ);
-            if(tokenAtual == NUM_INTEIRO || tokenAtual == NUM_REAL) { // NUM REAL AQUI É ERRO
-                casarOuPular(NUM_INTEIRO, followArranjo);
-            }
-            casarOuPular(COLCHETE_DIR, followArranjo);
+            if(tokenAtual == NUM_INTEIRO){
+                casarOuPular(NUM_INTEIRO, sincArranjo);
+            } else if (tokenAtual == NUM_REAL) { // NUM REAL AQUI É ERRO (SEMANTICO)
+                  casarOuPular(NUM_REAL, sincArranjo);
+              }
+            casarOuPular(COLCHETE_DIR, sincArranjo);
         break;
         default: /* Epsilon */ break;
     }
 }
 
-static int followListaForma [] = {PARENTESE_DIR, TOKEN_EOF};
+//static int followListaForma [] = {PARENTESE_DIR, TOKEN_EOF};
+static int sincListaForma [] = {PARENTESE_DIR, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 void ListaForma(){
     fprintf(stdout, "ListaForma\n");
     switch(tokenAtual){
@@ -410,7 +425,7 @@ void ListaForma(){
         case CARACTERE:     case ID:
             Tipo();
             Ponteiro();
-            casarOuPular(ID, followListaForma);
+            casarOuPular(ID, sincListaForma);
             Arranjo();
             ListaFormaCont();
         break;
@@ -418,7 +433,8 @@ void ListaForma(){
     }
 }
 
-static int followListaFormaCont [] = {PARENTESE_DIR, TOKEN_EOF};
+//static int followListaFormaCont [] = {PARENTESE_DIR, TOKEN_EOF};
+static int sincListaFormaCont [] = {PARENTESE_DIR, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 void ListaFormaCont(){
     fprintf(stdout, "ListaFormaCont\n");
     switch(tokenAtual){
@@ -426,11 +442,11 @@ void ListaFormaCont(){
             casar(VIRGULA);
             Tipo();
             Ponteiro();
-            casarOuPular(ID, followListaFormaCont);
+            casarOuPular(ID, sincListaFormaCont);
             Arranjo();
             ListaFormaCont();
         break;
-        default: /* Epsilon*/ break;
+        default: /* Epsilon */ break;
     }
 }
 
@@ -443,9 +459,13 @@ void Tipo(){
             TipoL();
         break;
         case ID:
-            casarOuPular(ID, followTipo);
+            casar(ID);
         break;
-        default: /*ERRO*/ break;
+        default:
+            /*ERRO*/
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosTipo]);
+            pular(followTipo);
+        break;
     }
 }
 
@@ -465,7 +485,11 @@ void TipoL(){
         case CARACTERE:
             casar(CARACTERE);
         break;
-        default: /*ERRO*/ break;
+        default:
+            /*ERRO*/
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosTipo]);
+            pular(followTipoL);
+        break;
     }
 }
 
@@ -474,14 +498,14 @@ void ListaSentenca(){
     fprintf(stdout, "ListaSentenca\n");
     switch(tokenAtual){
         case CHAVE_ESQ:     case ID:            case ASTERISCO:
-        case NUM_INTEIRO:     case NUM_REAL:      case PARENTESE_ESQ:
-        case CARACTERE:     case LITERAL:          case E_COMERCIAL:
-        case E:               case VERDADEIRO:     case FALSO:
-        case ADICAO:        case SUBTRACAO:        case SE:
-        case ENQUANTO:        case ESCOLHA:        case DESVIA:
-        case RETORNA:       case LANCA:            case TENTA:
-        case NEGACAO:         case NOVO:           case LE_LINHA:
-        case ESSE:          case IMPRIME:          case ASCII:
+        case NUM_INTEIRO:   case NUM_REAL:      case PARENTESE_ESQ:
+        case CARACTERE:     case LITERAL:       case E_COMERCIAL:
+        case E:             case VERDADEIRO:    case FALSO:
+        case ADICAO:        case SUBTRACAO:     case SE:
+        case ENQUANTO:      case ESCOLHA:       case DESVIA:
+        case RETORNA:       case LANCA:         case TENTA:
+        case NEGACAO:       case NOVO:          case LE_LINHA:
+        case ESSE:          case IMPRIME:       case ASCII:
             Sentenca();
             ListaSentenca();
         break;
@@ -491,32 +515,36 @@ void ListaSentenca(){
 
 
 static int followSentenca [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
-                                E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA,
-                                DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
+                                ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO,
+                                ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
 void Sentenca(){
     fprintf(stdout, "Sentenca\n");
     switch(tokenAtual){
-        case ID:            case ASTERISCO:         case NUM_INTEIRO:    case ASCII:
-        case NUM_REAL:       case PARENTESE_ESQ:     case CARACTERE:
-        case LITERAL:       case E_COMERCIAL:         case VERDADEIRO:
-        case FALSO:         case ADICAO:            case SUBTRACAO:
-        case ESSE:            case NOVO:                  case NEGACAO:
+        case ID:            case ASTERISCO:     case NUM_INTEIRO:   case ASCII:
+        case NUM_REAL:      case PARENTESE_ESQ: case CARACTERE:
+        case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
+        case FALSO:         case ADICAO:        case SUBTRACAO:
+        case ESSE:          case NOVO:          case NEGACAO:
             Expr();
             casarOuPular(PONTO_VIRGULA, followSentenca);
         break;
-        case CHAVE_ESQ:     case SE:                case ENQUANTO:
-        case ESCOLHA:         case DESVIA:             case RETORNA:
-        case LANCA:         case TENTA:                case IMPRIME:
+        case CHAVE_ESQ:     case SE:            case ENQUANTO:
+        case ESCOLHA:       case DESVIA:        case RETORNA:
+        case LANCA:         case TENTA:         case IMPRIME:
         case LE_LINHA:
             SentencaL();
         break;
-        default: /*Epsilon*/ break;
+        default:
+            /* ERRO */
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosSenteca]);
+            pular(followSentenca);
+        break;
     }
 }
 
 static int followSentencaL [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
-                                 E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA,
-                                 DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
+                                 ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO,
+                                 ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
 void SentencaL(){
     fprintf(stdout, "SentencaL\n");
     switch(tokenAtual){

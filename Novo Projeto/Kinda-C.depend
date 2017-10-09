@@ -76,7 +76,7 @@
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 
-1507346053 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
+1507470329 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
 	<stdio.h>
 	<string.h>
 	"ASA.h"
@@ -85,7 +85,7 @@
 	"TabelaSimbolos.h"
 	"GerenciadorErro.h"
 
-1507390278 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+1507470203 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
