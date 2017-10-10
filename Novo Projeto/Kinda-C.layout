@@ -2,29 +2,19 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="GerenciadorErro.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="AnalisadorLexico.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="369" topLine="0" />
+			<Cursor1 position="17775" topLine="21" />
 		</Cursor>
 	</File>
-	<File name="AnalisadorSintatico.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="VisitanteImpressao.h" open="1" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="0" topLine="0" />
+			<Cursor1 position="623" topLine="20" />
 		</Cursor>
 	</File>
-	<File name="ASA.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Visitante.h" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="318" topLine="3" />
-		</Cursor>
-	</File>
-	<File name="AnalisadorSintatico.c" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="12374" topLine="276" />
-		</Cursor>
-	</File>
-	<File name="TabelaSimbolos.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8209" topLine="9" />
+			<Cursor1 position="40" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="TabelaSimbolos.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -32,29 +22,54 @@
 			<Cursor1 position="0" topLine="108" />
 		</Cursor>
 	</File>
-	<File name="ASA.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="GerenciadorErro.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="402" topLine="0" />
+			<Cursor1 position="369" topLine="4" />
 		</Cursor>
 	</File>
-	<File name="AnalisadorLexico.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="ASA.h" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="17775" topLine="21" />
+			<Cursor1 position="532" topLine="6" />
 		</Cursor>
 	</File>
-	<File name="AnalisadorLexico.h" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
+	<File name="ASA.cpp" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="429" topLine="9" />
+			<Cursor1 position="473" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="GerenciadorErro.c" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="VisitanteImpressao.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3363" topLine="79" />
+			<Cursor1 position="7868" topLine="206" />
+		</Cursor>
+	</File>
+	<File name="GerenciadorErro.c" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3363" topLine="80" />
+		</Cursor>
+	</File>
+	<File name="AnalisadorLexico.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="429" topLine="24" />
+		</Cursor>
+	</File>
+	<File name="TabelaSimbolos.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8209" topLine="9" />
 		</Cursor>
 	</File>
 	<File name="main.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2082" topLine="47" />
+		</Cursor>
+	</File>
+	<File name="AnalisadorSintatico.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="25298" topLine="680" />
+		</Cursor>
+	</File>
+	<File name="AnalisadorSintatico.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

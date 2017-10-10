@@ -51,6 +51,9 @@
 		<Unit filename="GerenciadorErro.h" />
 		<Unit filename="TabelaSimbolos.cpp" />
 		<Unit filename="TabelaSimbolos.h" />
+		<Unit filename="Visitante.h" />
+		<Unit filename="VisitanteImpressao.cpp" />
+		<Unit filename="VisitanteImpressao.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
