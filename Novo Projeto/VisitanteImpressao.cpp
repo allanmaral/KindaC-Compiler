@@ -12,7 +12,7 @@ void VisitanteImpressao::calculaNivel(){
         fprintf(stdout, "   ");
     }
 }
-void VisitanteImpressao::visita(Programa *prog){
+void VisitanteImpressao::visita(NoPrograma *prog){
 	fprintf(stdout,"\n\n-PROGRAMA\n");
 	if(prog->listaClasse) prog->listaClasse->aceita(this);
 	if(prog->listaFuncao) prog->listaFuncao->aceita(this);

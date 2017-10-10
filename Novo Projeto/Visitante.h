@@ -4,7 +4,7 @@
 class Visitante{
 	public:
 		virtual ~Visitante(){};
-		virtual void visita(Programa *prog) = 0;
+		virtual void visita(NoPrograma *prog) = 0;
 		virtual void visita(Id       *id  ) = 0;
 		virtual void visita(Literal  *lit ) = 0;
 		virtual void visita(Ascii    *asc ) = 0;

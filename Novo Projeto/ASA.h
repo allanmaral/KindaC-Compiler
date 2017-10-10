@@ -10,9 +10,9 @@ class DeclVariavel;
 class DeclClasse;
 
 
-class Programa{
+class NoPrograma{
     public:
-        Programa(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *listaTipo, DeclVariavel *listaVariavel);
+        NoPrograma(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *listaTipo, DeclVariavel *listaVariavel);
         void aceita(Visitante *v);
         DeclClasse *listaClasse;
         DeclFuncao *listaFuncao;

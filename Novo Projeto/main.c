@@ -52,7 +52,7 @@ int main(int argc, char** args){
     inicializaGerenciadorErro();
     iniciaAnalisadorLexico(arquivo);
     InicializarAnalizadorSintatico();
-    Programa();
+    ProgramaL();
     /*int token = 0;
     while(token != TOKEN_EOF){
         token = proximoToken();

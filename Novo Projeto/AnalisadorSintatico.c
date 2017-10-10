@@ -4,6 +4,11 @@
 
 static int tokenAtual;
 
+static DeclClasse   *listaClasse;
+static DeclFuncao   *listaFuncao;
+static DeclTipo     *listaTipo;
+static DeclVariavel *listaVariavel;
+
 /** Lista de Literais dos Tokens
  */
 static char tokenLiteral[62][16] = {
@@ -83,7 +88,7 @@ void casarOuPular(int token, int* sinc){
 }
 
 
-//void Programa();
+void ProgramaL();
 void ProgramaA();       void ProgramaB();       void DeclClasse();      void DeclClasseL();
 void DeclLocal();       void DeclLocalL();      void DeclLocalLL();     void DeclVar();
 void ListaId();         void ListaIdCont();     void Ponteiro();        void Arranjo();
@@ -101,12 +106,17 @@ void InicializarAnalizadorSintatico(){
     tokenAtual = proximoToken();
 }
 
+NoPrograma *Programa(){
+    ProgramaL();
+    return new NoPrograma(listaClasse, listaFuncao, listaTipo, listaVariavel);
+}
+
 //static int followPrograma [] = {TOKEN_EOF};
 static int sincPrograma [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, ESTRUTURA, CHAVE_ESQ,
                               PONTO_VIRGULA, PARENTESE_ESQ, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 static int firstPrograma [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
-void Programa(){
-    fprintf(stdout, "Programa\n");
+void ProgramaL(){
+    fprintf(stdout, "ProgramaL\n");
     switch(tokenAtual){
         case DEFINICAO_TIPO:
             casar(DEFINICAO_TIPO);
@@ -119,7 +129,7 @@ void Programa(){
             casarOuPular(CHAVE_DIR, sincPrograma);
             casarOuPular(ID, sincPrograma);
             casarOuPular(PONTO_VIRGULA, sincPrograma);
-            Programa();
+            ProgramaL();
         break;
         case INTEIRO:       case REAL:          case BOLEANO:
         case CARACTERE:     case ID:
@@ -130,7 +140,7 @@ void Programa(){
         break;
         case CLASSE:
             DeclClasse();
-            Programa();
+            ProgramaL();
         break;
         case TOKEN_EOF:
             return; // NULL
@@ -139,7 +149,7 @@ void Programa(){
             /* ERRO */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosDefinicaoClassTipo]);
             pular(firstPrograma);
-            return Programa();
+            return ProgramaL();
         break;
 
     }
@@ -159,7 +169,7 @@ void ProgramaA(){
             casarOuPular(CHAVE_ESQ, sincProgramaA);
             DeclLocalLL();
             casarOuPular(CHAVE_DIR, sincProgramaA);
-            Programa();
+            ProgramaL();
         break;
         case COLCHETE_ESQ:
             Arranjo();
@@ -190,7 +200,7 @@ void ProgramaB(){
         case DEFINICAO_TIPO:    case INTEIRO:        case REAL:
         case BOLEANO:            case CARACTERE:        case ID:
         case CLASSE:
-            Programa();
+            ProgramaL();
         break;
         default: /* Epsilon */ break;
     }

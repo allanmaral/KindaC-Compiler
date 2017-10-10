@@ -1,5 +1,7 @@
-
+#include "ASA.h"
 
 void InicializarAnalizadorSintatico();
 
-void Programa();
+NoPrograma *Programa();
+
+void ProgramaL();

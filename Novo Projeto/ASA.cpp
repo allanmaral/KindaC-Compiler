@@ -6,7 +6,7 @@ static TabelaInteiro tabelaInteiro;
 static TabelaLiteral tabelaLiteral;
 static TabelaReal tabelaReal;
 
-Programa::Programa(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *listaTipo, DeclVariavel *listaVariavel){
+NoPrograma::NoPrograma(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *listaTipo, DeclVariavel *listaVariavel){
     this->listaClasse = listaClasse;
     this->listaFuncao = listaFuncao;
     this->listaTipo = listaTipo;
@@ -15,7 +15,7 @@ Programa::Programa(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *l
 void Id::aceita(Visitante *v){
     v->visita(this);
 }
-void Programa::aceita(Visitante *v){
+void NoPrograma::aceita(Visitante *v){
     v->visita(this);
 }
 Literal::Literal(char *literal){

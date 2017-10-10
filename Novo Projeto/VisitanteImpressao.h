@@ -9,7 +9,7 @@ class VisitanteImpressao: public Visitante{
 		 VisitanteImpressao();
 		 ~VisitanteImpressao(){};
 		 void calculaNivel();
-		 void visita(Programa *prog);
+		 void visita(NoPrograma *prog);
 		 void visita(Id       *id  );
 		 void visita(Literal  *lit );
 		 void visita(Ascii    *asc );
