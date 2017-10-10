@@ -19,11 +19,6 @@ class NoPrograma{
         DeclTipo *listaTipo;
         DeclVariavel *listaVariavel;
 };
-class Id{
-public:
-    char* literal;
-    void aceita(Visitante *v);
-};
 class Expr{
 public:
     virtual void aceita(Visitante *v) = 0;
@@ -31,6 +26,11 @@ public:
 class Primario:public Expr{
 public:
    virtual void aceita(Visitante *v) = 0;
+};
+class Id:public Primario{
+public:
+    char* literal;
+    void aceita(Visitante *v);
 };
 class Literal:public Primario{
     public:

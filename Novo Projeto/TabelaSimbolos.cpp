@@ -274,7 +274,7 @@ Atributo::Atributo() { lexema=NULL; }
 int Atributo::pegarToken(){ return token; }
 char* Atributo::pegarLexema(){ return lexema; }
 void Atributo::atribuirToken(int t) { token = t; }
-void Atributo::atribuirLexema(char* l) { lexema=new char();strcpy(lexema,l);}
+void Atributo::atribuirLexema(char* l) { lexema=new char(strlen(l)+ 1);strcpy(lexema,l);}
 Atributo::~Atributo() { /*Destrutor*/ }
 
 No_Trie::No_Trie(){

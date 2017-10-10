@@ -241,7 +241,7 @@ int proximoToken(){
                 if(isdigit(caractereAtual)) { incrementaLexema(); }
                 else if(caractereAtual == 'e' || caractereAtual == 'E'){
                          estado = 6;
-                         pegarProximoCaractere();
+                         incrementaLexema();
                      } else{
                            Atributo *auxiliar;
                            auxiliar = (Atributo*)malloc(sizeof(Atributo));
