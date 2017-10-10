@@ -21,6 +21,7 @@ class Primario:public Expr{};
 class Literal:public Primario{
     public:
         Literal(char *literal);
+        ~Literal();
         char* literal;
 };
 class Ascii:public Primario{

@@ -1,4 +1,5 @@
 #include "ASA.h"
+#include <string.h>
 static TabelaIdentificador tabelaID;
 static TabelaInteiro tabelaInteiro;
 static TabelaLiteral tabelaLiteral;
@@ -12,7 +13,10 @@ Programa::Programa(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *l
     this->listaVariavel = listaVariavel;
 }
 Literal::Literal(char *literal){
-    this->literal = literal;
+    strcpy(this->literal, literal);
+}
+Literal::~Literal(){
+    delete []literal;
 }
 Ascii::Ascii(char caractere){
     this->caractere = caractere;
