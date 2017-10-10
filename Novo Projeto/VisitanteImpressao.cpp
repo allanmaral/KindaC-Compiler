@@ -75,7 +75,11 @@ void VisitanteImpressao::visita(NumReal   *nr ){
 	nivel--;
 }
 void VisitanteImpressao::visita(Arranjo   *arr){
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-ARRANJO\n");
     arr->num.aceita(this);
+    nivel--;
 }
 void VisitanteImpressao::visita(ListaExpr *le ){
     if(le->expressao)le->expressao->aceita(this);
@@ -193,7 +197,12 @@ void VisitanteImpressao::visita(DeclFuncao    *decF){
     nivel--;
 }
 void VisitanteImpressao::visita(ListaId       *lid ){
-    ///arrumar
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-ID_LIST\n");
+    if(lid->arranjo) lid->arranjo->aceita(this);
+    if(lid->lista) lid->lista->aceita(this);
+    nivel--;
 }
 void VisitanteImpressao::visita(DeclVariavel  *decV){
     nivel++;

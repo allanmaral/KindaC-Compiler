@@ -1,9 +1,10 @@
 #include "ASA.h"
 #include "Visitante.h"
-TabelaIdentificador tabelaID;
-TabelaInteiro tabelaInteiro;
-TabelaLiteral tabelaLiteral;
-TabelaReal tabelaReal;
+#include <string.h>
+static TabelaIdentificador tabelaID;
+static TabelaInteiro tabelaInteiro;
+static TabelaLiteral tabelaLiteral;
+static TabelaReal tabelaReal;
 
 Programa::Programa(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *listaTipo, DeclVariavel *listaVariavel){
     this->listaClasse = listaClasse;
@@ -18,7 +19,10 @@ void Programa::aceita(Visitante *v){
     v->visita(this);
 }
 Literal::Literal(char *literal){
-    this->literal = literal;
+    strcpy(this->literal, literal);
+}
+Literal::~Literal(){
+    delete []literal;
 }
 void Literal::aceita(Visitante *v){
     v->visita(this);

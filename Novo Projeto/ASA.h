@@ -36,6 +36,7 @@ class Literal:public Primario{
     public:
         Literal(char *literal);
         void aceita(Visitante *v);
+        ~Literal();
         char* literal;
 };
 class Ascii:public Primario{
