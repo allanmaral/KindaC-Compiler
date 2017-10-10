@@ -43,8 +43,9 @@ static char esperadosLiteral[EsperadosTamanhoEnumerador][32] = {
 void casar(int tokenEsperado){
     // Faz alguma coisa aqui
     if(tokenAtual == tokenEsperado){
-        if(tokenEsperado==ID|tokenEsperado==LITERAL|tokenEsperado==ASCII|tokenEsperado==NUM_INTEIRO|tokenEsperado==NUM_REAL){
-             fprintf(stdout, "CASOU: %s.%s\n", tokenLiteral[tokenEsperado],pegarUltimoAtributo()->pegarLexema());
+        if(tokenAtual == NUM_INTEIRO || tokenAtual == NUM_REAL || tokenEsperado == LITERAL ||
+           tokenAtual == ASCII || tokenAtual == ID){
+            fprintf(stdout, "CASOU: %s.%s\n", tokenLiteral[tokenEsperado], pegarLexema());
         } else{
               fprintf(stdout, "CASOU: %s\n", tokenLiteral[tokenEsperado]);
           }
@@ -63,7 +64,6 @@ void pular(int sinc[]){
         do {
             indice++;
             if(tokenAtual == sinc[indice]) {
-                fprintf(stdout, "###### Sincronizou: %s\n", tokenLiteral[sinc[indice]]);
                 sincronizado = 1;
                 return;
             }
