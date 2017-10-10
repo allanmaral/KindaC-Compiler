@@ -8,10 +8,13 @@ class Atributo{
     public:
         Atributo();
         int pegarToken();
+        char* pegarLexema();
         void atribuirToken(int t);
+        void atribuirLexema(char* l);
         ~Atributo();
     private:
         int token;
+        char* lexema;
 };
 
 #endif // PROPRIEDADE_H

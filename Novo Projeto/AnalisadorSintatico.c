@@ -43,7 +43,11 @@ static char esperadosLiteral[EsperadosTamanhoEnumerador][32] = {
 void casar(int tokenEsperado){
     // Faz alguma coisa aqui
     if(tokenAtual == tokenEsperado){
-        fprintf(stdout, "CASOU: %s\n", tokenLiteral[tokenEsperado]);
+        if(tokenEsperado==ID|tokenEsperado==LITERAL|tokenEsperado==ASCII|tokenEsperado==NUM_INTEIRO|tokenEsperado==NUM_REAL){
+             fprintf(stdout, "CASOU: %s.%s\n", tokenLiteral[tokenEsperado],pegarUltimoAtributo()->pegarLexema());
+        } else{
+              fprintf(stdout, "CASOU: %s\n", tokenLiteral[tokenEsperado]);
+          }
     } else {
         fprintf(stdout, "NAO CASOU: LIDO: \"%s\" ESPERADO: \"%s\"\n", tokenLiteral[tokenAtual], tokenLiteral[tokenEsperado]);
       }

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
-
+#include "TabelaSimbolos.h"
 /** Lista de Tokens
  *
  */
@@ -103,6 +103,12 @@ int pegarLinha();
  *  \return coluna atual do arquivo
  */
 int pegarColuna();
+
+/** \brief Função que obtem o ultimo atributo inserido nas tabelas
+ *
+ *  \return ultimo atributo inserido
+ */
+Atributo* pegarUltimoAtributo();
 
  /** \brief Destrutor do Analisador Léxico
   *

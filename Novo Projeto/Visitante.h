@@ -43,8 +43,10 @@ class Visitante{
 		virtual void visita(ExprBinaria       *expB ) = 0;
 		virtual void visita(ExprAtrib         *atr  ) = 0;
 		virtual void visita(ExprAceCamp       *expAC) = 0;
+        virtual void visita(True              *tr) = 0;
+        virtual void visita(False             *fa) = 0;
+        virtual void visita(This              *th) = 0;
 		virtual void visita(New               *n    ) = 0;
-
 
 };
 

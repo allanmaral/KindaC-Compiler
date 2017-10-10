@@ -14,10 +14,10 @@ void VisitanteImpressao::calculaNivel(){
 }
 void VisitanteImpressao::visita(Programa *prog){
 	fprintf(stdout,"\n\n-PROGRAMA\n");
-	/*if(prog->listaClasse) prog->listaClasse->aceita(this);
+	if(prog->listaClasse) prog->listaClasse->aceita(this);
 	if(prog->listaFuncao) prog->listaFuncao->aceita(this);
 	if(prog->listaTipo)   prog->listaTipo->aceita(this);
-	if(prog->listaVariavel) prog->listaVariavel->aceita(this);*/
+	if(prog->listaVariavel) prog->listaVariavel->aceita(this);
 }
 void VisitanteImpressao::visita(Id       *id ){
 	nivel++;
@@ -126,7 +126,10 @@ void VisitanteImpressao::visita(BlocoCaso     *bc ){
 	nivel--;
 }
 void VisitanteImpressao::visita(Break         *des){
-    //des->aceita(this);
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-DESVIA\n");
+    nivel--;
 }
 void VisitanteImpressao::visita(Switch        *sw ){
     nivel++;
@@ -260,6 +263,7 @@ void VisitanteImpressao::visita(DeclClasse        *decC ){
          calculaNivel();
          fprintf(stdout, "-HERANCA\n");
          decC->heranca->aceita(this);
+         nivel--;
     }
     if(decC->lista) decC->aceita(this);
     nivel--;
@@ -280,7 +284,7 @@ void VisitanteImpressao::visita(ExprBinaria       *expB ){
     nivel--;
 }
 void VisitanteImpressao::visita(ExprAtrib         *atr  ){
-     nivel++;
+    nivel++;
     calculaNivel();
     fprintf(stdout, "-ATRIB\n");
     if(atr->exprEsquerda) atr->exprEsquerda->aceita(this);
@@ -295,6 +299,25 @@ void VisitanteImpressao::visita(ExprAceCamp       *expAC){
     if(expAC->exprDireita) expAC->exprDireita->aceita(this);
     nivel--;
 }
+ void VisitanteImpressao::visita(True              *tr){
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-VERDADEIRO\n");
+    nivel--;
+ }
+ void VisitanteImpressao::visita(False             *fa) {
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-FALSO\n");
+    nivel--;
+ }
+
+ void VisitanteImpressao::visita(This              *th) {
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-ESSE\n");
+    nivel--;
+ }
 void VisitanteImpressao::visita(New               *n    ){
      nivel++;
     calculaNivel();

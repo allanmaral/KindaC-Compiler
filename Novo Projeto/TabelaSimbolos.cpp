@@ -1,5 +1,7 @@
 #include "TabelaSimbolos.h"
 #include "AnalisadorLexico.h"
+#include <stdio.h>
+#include <string.h>
 
 TabelaSimbolos::TabelaSimbolos() { raiz = new No_Trie(); altura = 0; }
 /** \brief insere
@@ -268,9 +270,11 @@ void TabelaReservada::inicializarReservada(){
 }
 TabelaReservada::~TabelaReservada() { }
 
-Atributo::Atributo() { /*Construtor*/ }
+Atributo::Atributo() { lexema=NULL; }
 int Atributo::pegarToken(){ return token; }
+char* Atributo::pegarLexema(){ return lexema; }
 void Atributo::atribuirToken(int t) { token = t; }
+void Atributo::atribuirLexema(char* l) { lexema=new char();strcpy(lexema,l);}
 Atributo::~Atributo() { /*Destrutor*/ }
 
 No_Trie::No_Trie(){

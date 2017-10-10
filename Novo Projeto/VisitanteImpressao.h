@@ -48,6 +48,9 @@ class VisitanteImpressao: public Visitante{
 		 void visita(ExprBinaria       *expB );
 		 void visita(ExprAtrib         *atr  );
 		 void visita(ExprAceCamp       *expAC);
+		 void visita(True              *tr);
+         void visita(False             *fa);
+         void visita(This              *th);
 		 void visita(New               *n    );
 };
 
