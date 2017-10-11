@@ -80,7 +80,7 @@ void VisitanteImpressao::visita(NoArranjo   *arr){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-ARRANJO\n");
-    arr->num.aceita(this);
+    arr->num->aceita(this);
     nivel--;
 }
 void VisitanteImpressao::visita(NoListaExpr *le ){
@@ -138,7 +138,7 @@ void VisitanteImpressao::visita(NoSwitch        *sw ){
 	calculaNivel();
 	fprintf(stdout, "-ESCOLHA\n");
 	if(sw->expressao) sw->expressao->aceita(this);
-	sw->blocoCaso.aceita(this);
+	sw->blocoCaso->aceita(this);
 	nivel--;
 }
 void VisitanteImpressao::visita(NoPrint         *imp){
@@ -169,7 +169,7 @@ void VisitanteImpressao::visita(NoChamadaFuncao *cha){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-CHAMADA\n");
-	cha->id.aceita(this);
+	cha->id->aceita(this);
 	if(cha->parametros) cha->parametros->aceita(this);
 	nivel--;
 }
@@ -194,10 +194,10 @@ void VisitanteImpressao::visita(NoDeclFuncao    *decF){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-FUNC_DEC\n");
-    decF->id.aceita(this);
+    decF->id->aceita(this);
     if(decF->parametros) decF->parametros->aceita(this);
     if(decF->variaveis) decF->variaveis->aceita(this);
-    decF->sentenca.aceita(this);
+    decF->sentenca->aceita(this);
     if(decF->lista) decF->lista->aceita(this);
     nivel--;
 }
@@ -213,7 +213,7 @@ void VisitanteImpressao::visita(NoDeclVariavel  *decV){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-VAR_DEC\n");
-    decV->variaveis.aceita(this);
+    decV->variaveis->aceita(this);
     if(decV->lista) decV->lista->aceita(this);
     nivel--;
 }
@@ -228,7 +228,7 @@ void VisitanteImpressao::visita(NoDeclLocalFuncao  *decLF   ){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-FUC_LOC_DEC\n");
-    decLF->funcao.aceita(this);
+    decLF->funcao->aceita(this);
     if(decLF->lista) decLF->lista->aceita(this);
     nivel--;
 }
@@ -236,7 +236,7 @@ void VisitanteImpressao::visita(NoDeclLocalVariavel *decLV  ){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-VAR_LOC_DEC\n");
-    decLV->variavel.aceita(this);
+    decLV->variavel->aceita(this);
     if(decLV->lista) decLV->lista->aceita(this);
     nivel--;
 
@@ -259,7 +259,7 @@ void VisitanteImpressao::visita(NoDeclClasse        *decC ){
      nivel++;
     calculaNivel();
     fprintf(stdout, "-CLASSE_DEC\n");
-    decC->id.aceita(this);
+    decC->id->aceita(this);
     if(decC->heranca){
          nivel++;
          calculaNivel();

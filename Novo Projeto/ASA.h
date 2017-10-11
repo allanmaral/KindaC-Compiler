@@ -81,9 +81,9 @@ class NoNumReal:public NoNum{
 };
 class NoArranjo{
     public:
-        NoArranjo(NoNumInteiro num);
+        NoArranjo(NoNumInteiro *num);
         void aceita(Visitante *v);
-        NoNumInteiro num;
+        NoNumInteiro *num;
 };
 class NoListaExpr{
     public:
@@ -94,11 +94,11 @@ class NoListaExpr{
 };
 class NoListaFormal{
     public:
-        NoListaFormal(int tipo, bool ponteiro, NoId id, NoArranjo *arranjo, NoListaFormal *lista);
+        NoListaFormal(int tipo, bool ponteiro, NoId *id, NoArranjo *arranjo, NoListaFormal *lista);
         void aceita(Visitante *v);
         int tipo;
         bool ponteiro;
-        NoId id;
+        NoId *id;
         NoArranjo *arranjo;
         NoListaFormal *lista;
 };
@@ -143,10 +143,10 @@ class NoBlocoCaso{
 };
 class NoSwitch:public NoSentenca{
     public:
-        NoSwitch(NoExpr *expressao, NoBlocoCaso blocoCaso);
+        NoSwitch(NoExpr *expressao, NoBlocoCaso *blocoCaso);
         void aceita(Visitante *v);
         NoExpr *expressao;
-        NoBlocoCaso blocoCaso;
+        NoBlocoCaso *blocoCaso;
 };
 class NoBreak:public NoSentenca{
     void aceita(Visitante *v);
@@ -180,9 +180,9 @@ class NoEscopo:public NoSentenca{
 };
 class NoChamadaFuncao:public NoSentenca{
     public:
-        NoChamadaFuncao(NoId id, NoListaExpr *parametros);
+        NoChamadaFuncao(NoId *id, NoListaExpr *parametros);
         void aceita(Visitante *v);
-        NoId id;
+        NoId *id;
         NoListaExpr *parametros;
 };
 class NoTry:public NoSentenca{
@@ -200,13 +200,13 @@ class NoSentencaExpr:public NoSentenca{
 };
 class NoDeclFuncao{
     public:
-        NoDeclFuncao(int tipo, NoId id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca sentenca, NoDeclFuncao *lista);
+        NoDeclFuncao(int tipo, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca *sentenca, NoDeclFuncao *lista);
         void aceita(Visitante *v);
         int tipo;
-        NoId id;
+        NoId *id;
         NoListaFormal *parametros;
         NoDeclVariavel *variaveis;
-        NoListaSentenca sentenca;
+        NoListaSentenca *sentenca;
         NoDeclFuncao *lista;
 };
 class NoListaId{
@@ -219,10 +219,10 @@ class NoListaId{
 };
 class NoDeclVariavel{
     public:
-        NoDeclVariavel(int tipo, NoListaId variaveis, NoDeclVariavel *lista);
+        NoDeclVariavel(int tipo, NoListaId *variaveis, NoDeclVariavel *lista);
         void aceita(Visitante *v);
         int tipo;
-        NoListaId variaveis;
+        NoListaId *variaveis;
         NoDeclVariavel *lista;
 };
 class NoDeclTipo{
@@ -237,16 +237,16 @@ class NoDeclLocal{
 };
 class NoDeclLocalFuncao:public NoDeclLocal{
     public:
-        NoDeclLocalFuncao(NoDeclFuncao funcao, NoDeclLocal *lista);
+        NoDeclLocalFuncao(NoDeclFuncao *funcao, NoDeclLocal *lista);
         void aceita(Visitante *v);
-        NoDeclFuncao funcao;
+        NoDeclFuncao *funcao;
         NoDeclLocal *lista;
 };
 class NoDeclLocalVariavel:public NoDeclLocal{
     public:
-        NoDeclLocalVariavel(NoDeclVariavel variavel, NoDeclLocal *lista);
+        NoDeclLocalVariavel(NoDeclVariavel *variavel, NoDeclLocal *lista);
         void aceita(Visitante *v);
-        NoDeclVariavel variavel;
+        NoDeclVariavel *variavel;
         NoDeclLocal *lista;
 };
 class NoDeclLocalPublic:public NoDeclLocal{
@@ -263,9 +263,9 @@ class NoDeclLocalPrivate:public NoDeclLocal{
 };
 class NoDeclClasse{
     public:
-        NoDeclClasse(NoId id, NoId *heranca, NoDeclLocal *lista);
+        NoDeclClasse(NoId *id, NoId *heranca, NoDeclLocal *lista);
         void aceita(Visitante *v);
-        NoId id;
+        NoId *id;
         NoId *heranca;
         NoDeclLocal *lista;
 };
