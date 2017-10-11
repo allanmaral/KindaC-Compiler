@@ -39,10 +39,9 @@ class NoId:public NoPrimario{
 };
 class NoLiteral:public NoPrimario{
     public:
-        NoLiteral(char *literal);
+        NoLiteral(Atributo *entradaTabela);
         void aceita(Visitante *v);
-        ~NoLiteral();
-        char* literal;
+        Atributo *entradaTabela;
 };
 class NoAscii:public NoPrimario{
     public:

@@ -23,12 +23,8 @@ NoId::NoId(Atributo *entradaTabela){
 void NoPrograma::aceita(Visitante *v){
     v->visita(this);
 }
-NoLiteral::NoLiteral(char *literal){
-    this->literal = new char[strlen(literal)+1];
-    strcpy(this->literal, literal);
-}
-NoLiteral::~NoLiteral(){
-    delete []literal;
+NoLiteral::NoLiteral(Atributo *entradaTabela){
+    this->entradaTabela = entradaTabela;
 }
 void NoLiteral::aceita(Visitante *v){
     v->visita(this);
