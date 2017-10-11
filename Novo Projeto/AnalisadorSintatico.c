@@ -97,8 +97,8 @@ void ProgramaA();       void ProgramaB();       void DeclClasse();      void Dec
 void DeclLocal();       void DeclLocalL();      void DeclLocalLL();     void DeclVar();
 void ListaId();         void ListaIdCont();     void Ponteiro();        void Arranjo();
 void ListaForma();      void ListaFormaCont();  void Tipo();            void TipoL();
-void ListaSentenca();   void Sentenca();        void SentencaL();       void Se();
-void Senao();           void BlocoCaso();       NoListaExpr *ListaExpr();       void ListaExprCont();
+NoListaSentenca *ListaSentenca();   NoSentenca *Sentenca();        void SentencaL();       NoSe *Se();
+NoSenao *Senao();           NoBlocoCaso *BlocoCaso();       NoListaExpr *ListaExpr();       NoListaExpr *ListaExprCont();
 
 NoExpr *Expr();            NoExpr *ExprAtrib(NoExpr *exprEsquerda);       NoExpr *ExprOuBool();      NoExpr *ExprOuBoolL(NoExpr *exprEsquerda);
 NoExpr *ExprEBool();       NoExpr *ExprEBoolL(NoExpr *exprEsquerda);      NoExpr * ExprIgualdade();  NoExpr *ExprIgualdadeL(NoExpr *exprEsquerda);
@@ -515,7 +515,7 @@ void TipoL(){
 }
 
 static int followListaSentenca [] = {CHAVE_DIR, CASO, TOKEN_EOF};
-void ListaSentenca(){
+NoListaSentenca *ListaSentenca(){
     fprintf(stdout, "ListaSentenca\n");
     switch(tokenAtual){
         case CHAVE_ESQ:     case ID:            case ASTERISCO:
@@ -538,7 +538,7 @@ void ListaSentenca(){
 static int followSentenca [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
                                 ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO,
                                 ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
-void Sentenca(){
+NoSentenca *Sentenca(){
     fprintf(stdout, "Sentenca\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -644,32 +644,38 @@ void SentencaL(){
 static int followSe [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
                           E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA,
                           DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
-void Se(){
+NoSe *Se(){
     fprintf(stdout, "Se\n");
     switch(tokenAtual){
-        case SE:
+        case SE: {
             casar(SE);
             casarOuPular(PARENTESE_ESQ, followSe);
-            Expr();
+            NoExpr * expr = Expr();
             casarOuPular(PARENTESE_DIR, followSe);
-            Sentenca();
-            Senao();
-        break;
-        default: /*ERRO*/ break; /// Inalcançável
+            NoSentenca *sentenca = Sentenca();
+            return new NoSe(expr, sentenca, Senao());
+        } break;
+        default:
+            /*ERRO*/
+            return NULL;
+        break; /// Inalcançável
     }
 }
 
 static int followSenao [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
                              E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA,
                              DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
-void Senao(){
+NoSenao *Senao(){
     fprintf(stdout, "Senao\n");
     switch(tokenAtual){
-        case SENAO:
+        case SENAO: {
             casar(SENAO);
-            Sentenca();
+            return new NoSenao(Sentenca());
+        } break;
+        default:
+            /* Epsilon */
+            return NULL;
         break;
-        default: /* Epsilon */ break;
     }
 }
 
@@ -678,21 +684,27 @@ static int sincBlocoCaso [] = {CHAVE_DIR, DOIS_PONTOS, CASO,  CHAVE_ESQ, ID, AST
                                PARENTESE_ESQ, CARACTERE, LITERAL, E_COMERCIAL, E, VERDADEIRO, FALSO, ADICAO,
                                SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, RETORNA, LANCA, TENTA, NEGACAO, NOVO,
                                LE_LINHA, ESSE, IMPRIME, ASCII, TOKEN_EOF};
-void BlocoCaso(){
+NoBlocoCaso *BlocoCaso(){
     fprintf(stdout, "BlocoCaso\n");
     switch(tokenAtual){
-        case CASO:
+        case CASO: {
             casar(CASO);
+            NoNum *num;
             if(tokenAtual == NUM_INTEIRO) {
                 casarOuPular(NUM_INTEIRO, sincBlocoCaso);
+                num = new NoNumInteiro(pegarUltimoAtributo());
             } else if (tokenAtual == NUM_REAL) {
                        casarOuPular(NUM_INTEIRO, sincBlocoCaso);
+                       num = new NoNumReal(pegarUltimoAtributo());
                    }
             casarOuPular(DOIS_PONTOS, sincBlocoCaso);
-            ListaSentenca();
-            BlocoCaso();
+            NoListaSentenca *listaSentenca = ListaSentenca();
+            return new NoBlocoCaso(num, listaSentenca, BlocoCaso());
+        } break;
+        default:
+            /* Epsilon */
+            return NULL;
         break;
-        default: /* Epsilon */ break;
     }
 }
 
@@ -704,25 +716,25 @@ NoListaExpr *ListaExpr(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:
-            Expr();
-            ListaExprCont();
-        break;
-        default: /* Epsilon */ break;
+        case ADICAO:        case SUBTRACAO:     case ASCII: {
+            NoExpr *expr = Expr();
+            return new NoListaExpr(expr, ListaExprCont());
+        } break;
+        default: return NULL; break;
     }
 }
 
 
 static int followListaExprCont [] = {PARENTESE_DIR, TOKEN_EOF};
-void ListaExprCont(){
+NoListaExpr *ListaExprCont(){
     fprintf(stdout, "ListaExprCont\n");
     switch(tokenAtual){
-        case VIRGULA:
+        case VIRGULA: {
             casar(VIRGULA);
-            Expr();
-            ListaExprCont();
-        break;
-        default: /* Epsilon */ break;
+            NoExpr* expr = Expr();
+            return new NoListaExpr(expr, ListaExprCont());
+        } break;
+        default: return NULL; break;
     }
 }
 

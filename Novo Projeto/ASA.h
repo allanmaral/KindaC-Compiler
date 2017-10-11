@@ -127,18 +127,19 @@ class NoListaSentenca{
         NoSentenca *sentenca;
         NoListaSentenca *lista;
 };
-class NoSe:public NoSentenca{
-    public:
-        NoSe(NoExpr *expressao, NoSentenca *sentenca);
-        void aceita(Visitante *v);
-        NoExpr *expressao;
-        NoSentenca *sentenca;
-};
 class NoSenao:public NoSentenca{
     public:
         NoSenao(NoSentenca *sentenca);
         void aceita(Visitante *v);
         NoSentenca *sentenca;
+};
+class NoSe:public NoSentenca{
+    public:
+        NoSe(NoExpr *expressao, NoSentenca *sentenca, NoSenao *senao);
+        void aceita(Visitante *v);
+        NoExpr *expressao;
+        NoSentenca *sentenca;
+        NoSenao *senao;
 };
 class NoEnquanto:public NoSentenca{
     public:

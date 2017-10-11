@@ -95,9 +95,10 @@ NoListaSentenca::NoListaSentenca(NoSentenca *sentenca, NoListaSentenca *lista){
 void NoListaSentenca::aceita(Visitante *v){
     v->visita(this);
 }
-NoSe::NoSe(NoExpr *expressao, NoSentenca *sentenca){
+NoSe::NoSe(NoExpr *expressao, NoSentenca *sentenca, NoSenao *senao){
     this->expressao = expressao;
     this->sentenca = sentenca;
+    this->senao = senao;
 }
 void NoSe::aceita(Visitante *v){
     v->visita(this);
