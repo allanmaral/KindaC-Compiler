@@ -171,7 +171,7 @@
 	<stdlib.h>
 	<stdio.h>
 
-1507730329 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.c
+1507732497 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
@@ -184,7 +184,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1507725950 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/main.c
+1507731936 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/main.c
 	<stdio.h>
 	<string.h>
 	"ASA.h"
@@ -192,8 +192,9 @@
 	"AnalisadorSintatico.h"
 	"TabelaSimbolos.h"
 	"GerenciadorErro.h"
+	"VisitanteImpressao.h"
 
-1507692469 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.h
+1507731023 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.h
 	"ASA.h"
 
 1504571013 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/TabelaSimbolos.c
@@ -238,7 +239,7 @@
 	"AnalisadorLexico.h"
 	<string.h>
 
-1507724374 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteImpressao.cpp
+1507733937 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteImpressao.cpp
 	<stdio.h>
 	<stdlib.h>
 	"ASA.h"

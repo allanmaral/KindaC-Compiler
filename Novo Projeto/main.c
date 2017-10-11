@@ -5,7 +5,7 @@
 #include "AnalisadorSintatico.h"
 #include "TabelaSimbolos.h"
 #include "GerenciadorErro.h"
-
+#include "VisitanteImpressao.h"
 /** Lista de Literais dos Tokens
  */
 char tokenLiteral[59][16] = {
@@ -52,7 +52,8 @@ int main(int argc, char** args){
     inicializaGerenciadorErro();
     iniciaAnalisadorLexico(arquivo);
     InicializarAnalizadorSintatico();
-    ProgramaL();
+    ///ASA Croncreta
+    //ProgramaL();
     /*int token = 0;
     while(token != TOKEN_EOF){
         token = proximoToken();
@@ -66,6 +67,11 @@ int main(int argc, char** args){
             fprintf(stdout, "Valor invalido! Token:%d\n", token);
         }
     }*/
+
+    ///teste ASA expr
+    VisitanteImpressao vp;
+    vp.visita(testeExpr());
+
     imprimeListaErros();
     obtemTabelaLiteral()->imprime();
     obtemTabelaIdentificador()->imprime();

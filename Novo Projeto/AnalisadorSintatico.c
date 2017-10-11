@@ -1264,3 +1264,6 @@ NoPrimario* PrimarioIDL(NoId *id){
         break;
     }
 }
+NoRetorna *testeExpr(){
+    return new NoRetorna(Expr());
+};

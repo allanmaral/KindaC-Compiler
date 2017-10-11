@@ -24,31 +24,25 @@ void VisitanteImpressao::visita(NoPrograma *prog){
 void VisitanteImpressao::visita(NoId       *id ){
 	nivel++;
 	calculaNivel();
-	fprintf(stdout, "-ID\n");
-	///pegar o valor do id
+	fprintf(stdout, "-ID.%s\n",id->entradaTabela->pegarLexema());
 	nivel--;
 
 }
 void VisitanteImpressao::visita(NoLiteral  *lit ){
 	nivel++;
 	calculaNivel();
-	fprintf(stdout, "-LITERAL\n");
-	///pegar o valor do literal
+	fprintf(stdout, "-LITERAL.%s\n",lit->entradaTabela->pegarLexema());
 	nivel--;
 
 }
 void VisitanteImpressao::visita(NoAscii    *asc ){
 	nivel++;
 	calculaNivel();
-	fprintf(stdout, "-ASCII\n");
-	///pegar o valor do ascii
+	fprintf(stdout, "-ASCII.%s\n",asc->entradaTabela->pegarLexema());
 	nivel--;
 }
 void VisitanteImpressao::visita(NoParenteses *pa){
-	nivel++;
-	calculaNivel();
 	if(pa->expressao)pa->expressao->aceita(this);
-	nivel--;
 }
 void VisitanteImpressao::visita(NoConteudo  *con){
 	nivel++;
@@ -65,15 +59,13 @@ void VisitanteImpressao::visita(NoEndereco  *ende ){
 void VisitanteImpressao::visita(NoNumInteiro *ni){
     nivel++;
 	calculaNivel();
-	fprintf(stdout, "-NUM_INTEIRO\n");
-	///pegar o numero inteiro
+	fprintf(stdout, "-NUM_INTEIRO.%s\n",ni->entradaTabela->pegarLexema());
 	nivel--;
 }
 void VisitanteImpressao::visita(NoNumReal   *nr ){
     nivel++;
 	calculaNivel();
-	fprintf(stdout, "-NUM_REAL\n");
-	///pegar o numero real
+	fprintf(stdout, "-NUM_REAL.%s\n",nr->entradaTabela->pegarLexema());
 	nivel--;
 }
 void VisitanteImpressao::visita(NoArranjo   *arr){
@@ -271,18 +263,24 @@ void VisitanteImpressao::visita(NoDeclClasse        *decC ){
     nivel--;
 }
 void VisitanteImpressao::visita(NoExprUnaria    	  *expU ){
-     nivel++;
+    nivel++;
     calculaNivel();
-    fprintf(stdout, "-EXPR_UNARIA\n");
+    fprintf(stdout, "-EXPR_UNARIA.%s\n",pegarTokenLiteral(expU->operador));
     if(expU->expressao) expU->expressao->aceita(this);
     nivel--;
 }
 void VisitanteImpressao::visita(NoExprBinaria       *expB ){
-     nivel++;
+    nivel++;
     calculaNivel();
-    fprintf(stdout, "-EXPR_BINARIA\n");
-    if(expB->exprEsquerda) expB->exprEsquerda->aceita(this);
-    if(expB->exprDireita) expB->exprDireita->aceita(this);
+    fprintf(stdout, "-EXPR_BINARIA.%s\n",pegarTokenLiteral(expB->operador));
+    if(expB->exprEsquerda) {
+
+        expB->exprEsquerda->aceita(this);
+    }
+    if(expB->exprDireita){
+
+        expB->exprDireita->aceita(this);
+    }
     nivel--;
 }
 void VisitanteImpressao::visita(NoExprAtrib         *atr  ){

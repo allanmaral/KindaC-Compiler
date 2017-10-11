@@ -6,4 +6,5 @@ void InicializarAnalizadorSintatico();
 
 NoPrograma *Programa();
 
+NoRetorna *testeExpr();
 void ProgramaL();
