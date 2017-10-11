@@ -98,12 +98,12 @@ void DeclLocal();       void DeclLocalL();      void DeclLocalLL();     void Dec
 void ListaId();         void ListaIdCont();     void Ponteiro();        void Arranjo();
 void ListaForma();      void ListaFormaCont();  void Tipo();            void TipoL();
 void ListaSentenca();   void Sentenca();        void SentencaL();       void Se();
-void Senao();           void BlocoCaso();       void ListaExpr();       void ListaExprCont();
+void Senao();           void BlocoCaso();       NoListaExpr *ListaExpr();       void ListaExprCont();
 NoExpr *Expr();            void ExprAtrib();       void ExprOuBool();      void ExprOuBoolL();
 void ExprEBool();       void ExprEBoolL();      void ExprIgualdade();   void ExprIgualdadeL();
 void ExprRelacional();  void ExprRelacionalL(); void ExprSoma();        void ExprSomaL();
 void ExprMultDivE();    void ExprMultDivEL();   void ExprUnaria();      void ExprAceCamp();
-void ExprAceCampL();    void ExprNovo();        void ExprNovoL();       NoPrimario* Primario();
+void ExprAceCampL();    NoPrimario *ExprNovo();        NoPrimario *ExprNovoL(NoPrimario* primario);       NoPrimario* Primario();
 NoPrimario *PrimarioID();      NoPrimario *PrimarioIDL(NoId* id);     NoPrimario *PrimarioL();
 
 void InicializarAnalizadorSintatico(){
@@ -695,7 +695,7 @@ void BlocoCaso(){
 }
 
 static int followListaExpr [] = {PARENTESE_DIR, TOKEN_EOF};
-void ListaExpr(){
+NoListaExpr *ListaExpr(){
     fprintf(stdout, "ListaExpr\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -1082,20 +1082,21 @@ void ExprAceCampL(){
 static int followExprNovo [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                 DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                 E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
-void ExprNovo(){
+NoPrimario *ExprNovo(){
     fprintf(stdout, "ExprNovo\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case LITERAL:
         case E_COMERCIAL:   case VERDADEIRO:    case FALSO:
-        case ESSE:          case NOVO:          case ASCII:
-            Primario();
-            ExprNovoL();
-        break;
+        case ESSE:          case NOVO:          case ASCII: {
+            NoPrimario* primario = Primario();
+            return ExprNovoL(primario);
+        } break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprNovo);
+            return NULL;
         break;
     }
 }
@@ -1103,16 +1104,19 @@ void ExprNovo(){
 static int followExprNovoL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                  DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                  E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-void ExprNovoL(){
+NoPrimario *ExprNovoL(NoPrimario* primario){
     fprintf(stdout, "ExprNovoL\n");
     switch(tokenAtual){
-        case COLCHETE_ESQ:
+        case COLCHETE_ESQ: {
             casar(COLCHETE_ESQ);
-            Expr();
+            NoExpr* expr = Expr();
             casarOuPular(COLCHETE_DIR, followExprNovoL);
-            ExprNovoL();
+            return ExprNovoL(new NoColchetes(primario, expr));
+        } break;
+        default:
+            /* Epsilon */
+            return primario;
         break;
-        default: /* Epsilon */ break;
     }
 }
 
@@ -1146,56 +1150,56 @@ static int followPrimarioL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE
 NoPrimario* PrimarioL(){
     fprintf(stdout, "PrimarioL\n");
     switch(tokenAtual){
-        case NUM_INTEIRO:
+        case NUM_INTEIRO: {
             casar(NUM_INTEIRO);
             return new NoNumInteiro(pegarUltimoAtributo());
-        break;
-        case NUM_REAL:
+        } break;
+        case NUM_REAL: {
             casar(NUM_REAL);
             return new NoNumReal(pegarUltimoAtributo());
-        break;
-        case LITERAL:
+        } break;
+        case LITERAL: {
             casar(LITERAL);
             return new NoLiteral(pegarUltimoAtributo());
-        break;
-        case ASCII:
+        } break;
+        case ASCII: {
             casar(ASCII);
             return new NoAscii(pegarUltimoAtributo());
-        break;
-        case PARENTESE_ESQ:
+        } break;
+        case PARENTESE_ESQ: {
             casar(PARENTESE_ESQ);
             NoExpr* expr = Expr();
             casarOuPular(PARENTESE_DIR, followPrimarioL);
             return new NoParenteses(expr);
-        break;
-        case E_COMERCIAL:
+        } break;
+        case E_COMERCIAL: {
             casar(E_COMERCIAL);
             return new NoEndereco(Primario());
-        break;
-        case ASTERISCO:
+        } break;
+        case ASTERISCO: {
             casar(ASTERISCO);
             return new NoConteudo(Primario());
-        break;
-        case VERDADEIRO:
+        } break;
+        case VERDADEIRO: {
             casar(VERDADEIRO);
             return new NoVerdadeiro();
-        break;
-        case FALSO:
+        } break;
+        case FALSO: {
             casar(FALSO);
             return new NoFalso();
-        break;
-        case ESSE:
+        } break;
+        case ESSE: {
             casar(ESSE);
-            return NoEsse();
-        break;
-        case NOVO:
+            return new NoEsse();
+        } break;
+        case NOVO: {
             casar(NOVO);
             casarOuPular(ID, followPrimarioL);
             casarOuPular(PARENTESE_ESQ, followPrimarioL);
             NoListaExpr *listaExpr = LisListaExpr();
             casarOuPular(PARENTESE_DIR, followPrimarioL);
             return new NoNovo(listaExpr);
-        break;
+        } break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
@@ -1211,11 +1215,11 @@ static int followPrimarioID [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTES
 NoPrimario* PrimarioID(){
     fprintf(stdout, "PrimarioID\n");
     switch(tokenAtual){
-        case ID:
+        case ID: {
             casar(ID);
             NoId *id = new NoId(pegarUltimoAtributo());
             return PrimarioIDL(id);
-        break;
+        } break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
@@ -1231,12 +1235,12 @@ static int followPrimarioIDL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTE
 NoPrimario* PrimarioIDL(NoId *id){
     fprintf(stdout, "PrimarioIDL\n");
     switch(tokenAtual){
-        case PARENTESE_ESQ:
+        case PARENTESE_ESQ: {
             casar(PARENTESE_ESQ);
             NoListaExpr* listaExpr = ListaExpr();
             casarOuPular(PARENTESE_DIR, followPrimarioIDL);
             return new NoChamadaFuncao(id, listaExpr);
-        break;
+        } break;
         default:
             /* Epsilon */
             return id;
