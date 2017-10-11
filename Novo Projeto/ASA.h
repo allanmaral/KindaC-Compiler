@@ -129,20 +129,20 @@ class NoListaSentenca{
 };
 class NoSe:public NoSentenca{
     public:
-        NoIf(NoExpr *expressao, NoSentenca *sentenca);
+        NoSe(NoExpr *expressao, NoSentenca *sentenca);
         void aceita(Visitante *v);
         NoExpr *expressao;
         NoSentenca *sentenca;
 };
 class NoSenao:public NoSentenca{
     public:
-        NoElse(NoSentenca *sentenca);
+        NoSenao(NoSentenca *sentenca);
         void aceita(Visitante *v);
         NoSentenca *sentenca;
 };
 class NoEnquanto:public NoSentenca{
     public:
-        NoWhile(NoExpr *expressao, NoSentenca *sentenca);
+        NoEnquanto(NoExpr *expressao, NoSentenca *sentenca);
         void aceita(Visitante *v);
         NoExpr *expressao;
         NoSentenca *sentenca;
@@ -157,7 +157,7 @@ class NoBlocoCaso{
 };
 class NoEscolha:public NoSentenca{
     public:
-        NoSwitch(NoExpr *expressao, NoBlocoCaso *blocoCaso);
+        NoEscolha(NoExpr *expressao, NoBlocoCaso *blocoCaso);
         void aceita(Visitante *v);
         NoExpr *expressao;
         NoBlocoCaso *blocoCaso;
@@ -167,19 +167,19 @@ class NoDesvia:public NoSentenca{
 };
 class NoImprime:public NoSentenca{
     public:
-        NoPrint(NoListaExpr *listaExpr);
+        NoImprime(NoListaExpr *listaExpr);
         void aceita(Visitante *v);
         NoListaExpr *listaExpr;
 };
 class NoLeLinha:public NoSentenca{
     public:
-        NoReadLn(NoExpr *expressao);
+        NoLeLinha(NoExpr *expressao);
         void aceita(Visitante *v);
         NoExpr *expressao;
 };
 class NoRetorna:public NoSentenca{
     public:
-        NoReturn(NoExpr *expressao);
+        NoRetorna(NoExpr *expressao);
         void aceita(Visitante *v);
         NoExpr *expressao;
 };
@@ -201,7 +201,7 @@ class NoChamadaFuncao:public NoPrimario{
 };
 class NoTenta:public NoSentenca{
     public:
-        NoTry(NoSentenca *sentencaTry, NoSentenca *sentencaCatch);
+        NoTenta(NoSentenca *sentencaTry, NoSentenca *sentencaCatch);
         void aceita(Visitante *v);
         NoSentenca *sentencaTry;
         NoSentenca *sentencaCatch;
