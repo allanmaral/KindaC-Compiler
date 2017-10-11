@@ -1,6 +1,8 @@
 #ifndef VISITANTEIMPRESSAO_H
 #define VISITANTEIMPRESSAO_H
 #include "Visitante.h"
+
+
 class VisitanteImpressao: public Visitante{
 	private:
 	int nivel;
@@ -53,6 +55,7 @@ class VisitanteImpressao: public Visitante{
          void visita(NoThis              *th);
 		 void visita(NoNew               *n    );
 		 void visita(NoTipo              *tp   );
+		 void visita(NoColchetes    *nc);
 };
 
 #endif // VISITANTEIMPRESSAO_H

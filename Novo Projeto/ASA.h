@@ -307,10 +307,11 @@ class NoExprAtrib:public NoExpr{
 };
 class NoExprAceCamp:public NoExpr{
     public:
-        NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita);
+        NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita, int terminal);
         void aceita(Visitante *v);
         NoExpr *exprEsquerda;
         NoExpr *exprDireita;
+        int terminal;
 };
 class NoVerdadeiro:public NoPrimario{
     void aceita(Visitante *v);

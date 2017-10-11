@@ -338,3 +338,6 @@ void VisitanteImpressao::visita(NoTipo               *tp  ){
     nivel--;
     nivel--;
 }
+void VisitanteImpressao::visita(NoColchetes *nc){
+    //TUDO
+}

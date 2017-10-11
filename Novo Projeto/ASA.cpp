@@ -265,9 +265,10 @@ NoExprAtrib::NoExprAtrib(NoExpr *exprEsquerda, NoExpr *exprDireita){
 void NoExprAtrib::aceita(Visitante *v){
     v->visita(this);
 }
-NoExprAceCamp::NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita){
+NoExprAceCamp::NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita, int terminal){
     this->exprEsquerda = exprEsquerda;
     this->exprDireita = exprDireita;
+    this->terminal = terminal;
 }
 void NoExprAceCamp::aceita(Visitante *v){
     v->visita(this);
