@@ -45,9 +45,9 @@ class NoLiteral:public NoPrimario{
 };
 class NoAscii:public NoPrimario{
     public:
-        NoAscii(char caractere);
+        NoAscii(Atributo *entradaTabela);
         void aceita(Visitante *v);
-        char caractere;
+        Atributo *entradaTabela;
 };
 class NoParenteses:public NoPrimario{
     public:

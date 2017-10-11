@@ -29,8 +29,8 @@ NoLiteral::NoLiteral(Atributo *entradaTabela){
 void NoLiteral::aceita(Visitante *v){
     v->visita(this);
 }
-NoAscii::NoAscii(char caractere){
-    this->caractere = caractere;
+NoAscii::NoAscii(Atributo *entradaTabela){
+    this->entradaTabela = entradaTabela;
 }
 void NoAscii::aceita(Visitante *v){
     v->visita(this);
