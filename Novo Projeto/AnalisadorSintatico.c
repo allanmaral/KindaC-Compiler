@@ -99,12 +99,12 @@ void ListaId();         void ListaIdCont();     void Ponteiro();        void Arr
 void ListaForma();      void ListaFormaCont();  void Tipo();            void TipoL();
 void ListaSentenca();   void Sentenca();        void SentencaL();       void Se();
 void Senao();           void BlocoCaso();       void ListaExpr();       void ListaExprCont();
-void Expr();            void ExprAtrib();       void ExprOuBool();      void ExprOuBoolL();
+NoExpr *Expr();            void ExprAtrib();       void ExprOuBool();      void ExprOuBoolL();
 void ExprEBool();       void ExprEBoolL();      void ExprIgualdade();   void ExprIgualdadeL();
 void ExprRelacional();  void ExprRelacionalL(); void ExprSoma();        void ExprSomaL();
 void ExprMultDivE();    void ExprMultDivEL();   void ExprUnaria();      void ExprAceCamp();
-void ExprAceCampL();    void ExprNovo();        void ExprNovoL();       void Primario();
-void PrimarioID();      void PrimarioIDL();     void PrimarioL();
+void ExprAceCampL();    void ExprNovo();        void ExprNovoL();       NoPrimario* Primario();
+NoPrimario *PrimarioID();      NoPrimario *PrimarioIDL(NoId* id);     NoPrimario *PrimarioL();
 
 void InicializarAnalizadorSintatico(){
     tokenAtual = proximoToken();
@@ -725,7 +725,7 @@ void ListaExprCont(){
 }
 
 static int followExpr [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
-void Expr() {
+NoExpr* Expr() {
     fprintf(stdout, "Expr\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -1119,22 +1119,23 @@ void ExprNovoL(){
 static int followPrimario [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                 DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                 E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-void Primario() {
+NoPrimario* Primario() {
     fprintf(stdout, "Primario\n");
     switch(tokenAtual){
         case ID:
-            PrimarioID();
+            return PrimarioID();
         break;
         case ASTERISCO:     case NUM_INTEIRO:   case NUM_REAL:
         case PARENTESE_ESQ: case LITERAL:       case E_COMERCIAL:
         case VERDADEIRO:    case FALSO:         case ESSE:
         case NOVO:          case ASCII:
-            PrimarioL();
+            return PrimarioL();
         break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followPrimario);
+            return NULL;
         break;
     }
 }
@@ -1142,7 +1143,7 @@ void Primario() {
 static int followPrimarioL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                  DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                  E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, PARENTESE_ESQ, TOKEN_EOF};
-void PrimarioL(){
+NoPrimario* PrimarioL(){
     fprintf(stdout, "PrimarioL\n");
     switch(tokenAtual){
         case NUM_INTEIRO:
