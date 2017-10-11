@@ -289,6 +289,9 @@ NoColchetes::NoColchetes(NoPrimario *primario, Expr *expressao){
     this->primario = primario;
     this->expressao = expressao;
 }
+void NoColchetes::aceita(Visitante *v){
+    v->visita(this);
+}
 TabelaIdentificador* obtemTabelaIdentificador(){return &tabelaID;};
 TabelaLiteral* obtemTabelaLiteral(){return &tabelaLiteral;};
 TabelaInteiro* obtemTabelaInteiro(){return &tabelaInteiro;};
