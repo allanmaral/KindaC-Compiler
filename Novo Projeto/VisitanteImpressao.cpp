@@ -333,7 +333,7 @@ void VisitanteImpressao::visita(NoTipo               *tp  ){
     fprintf(stdout, "-TIPO\n");
     nivel++;
     calculaNivel();
-    if(tp->primitivo == ID) { fprintf(stdout, "-ID.%s", tp->atributo->pegarLexema()); }
+    if(tp->primitivo == ID) { fprintf(stdout, "-ID.%s", tp->entradaTabela->pegarLexema()); }
     else { fprintf(stdout, "-%s", pegarTokenLiteral(tp->primitivo)); }
     nivel--;
     nivel--;

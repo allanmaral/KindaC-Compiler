@@ -20,12 +20,12 @@ class NoPrograma{
         NoDeclVariavel *listaVariavel;
 };
 class NoExpr{
-public:
-    virtual void aceita(Visitante *v) = 0;
+    public:
+        virtual void aceita(Visitante *v) = 0;
 };
 class NoPrimario:public NoExpr{
-public:
-   virtual void aceita(Visitante *v) = 0;
+    public:
+       virtual void aceita(Visitante *v) = 0;
 };
 class NoId:public NoPrimario{
 public:
@@ -64,20 +64,20 @@ class NoEndereco:public NoPrimario{
         NoPrimario *primario;
 };
 class NoNum:public NoPrimario{
-public:
-    virtual void aceita(Visitante *v) = 0;
+    public:
+        virtual void aceita(Visitante *v) = 0;
 };
 class NoNumInteiro:public NoNum{
     public:
-        NoNumInteiro(int num);
+        NoNumInteiro(Atributo *entradaTabela);
         void aceita(Visitante *v);
-        int num;
+        Atributo *entradaTabela;
 };
 class NoNumReal:public NoNum{
     public:
-        NoNumReal(float num);
+        NoNumReal(Atributo *entradaTabela);
         void aceita(Visitante *v);
-        float num;
+        Atributo *entradaTabela;
 };
 class NoArranjo{
     public:
@@ -92,19 +92,26 @@ class NoListaExpr{
         NoExpr *expressao;
         NoListaExpr *lista;
 };
+class NoTipo{
+    public:
+        NoTipo(int primitivo, Atributo *entradaTabela);
+        void aceita(Visitante *v);
+        int primitivo;
+        Atributo *entradaTabela;
+};
 class NoListaFormal{
     public:
-        NoListaFormal(int tipo, bool ponteiro, NoId *id, NoArranjo *arranjo, NoListaFormal *lista);
+        NoListaFormal(NoTipo *tipo, bool ponteiro, NoId *id, NoArranjo *arranjo, NoListaFormal *lista);
         void aceita(Visitante *v);
-        int tipo;
+        NoTipo *tipo;
         bool ponteiro;
         NoId *id;
         NoArranjo *arranjo;
         NoListaFormal *lista;
 };
 class NoSentenca{
-public:
-    virtual void aceita(Visitante *v) =0;
+    public:
+        virtual void aceita(Visitante *v) =0;
 };
 class NoListaSentenca{
     public:
@@ -313,14 +320,6 @@ class NoNew:public NoPrimario{
         void aceita(Visitante *v);
         NoListaExpr *listaExpr;
 };
-class NoTipo{
-    public:
-        NoTipo(int Primitivo);
-        void aceita(Visitante *v);
-        int primitivo;
-        Atributo* atributo;
-};
-
 TabelaIdentificador* obtemTabelaIdentificador();
 TabelaInteiro    * obtemTabelaInteiro();
 TabelaLiteral  * obtemTabelaLiteral();

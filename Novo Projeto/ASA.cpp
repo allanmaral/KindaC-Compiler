@@ -54,14 +54,14 @@ NoEndereco::NoEndereco(NoPrimario *primario){
 void NoEndereco::aceita(Visitante *v){
     v->visita(this);
 }
-NoNumInteiro::NoNumInteiro(int num){
-    this->num = num;
+NoNumInteiro::NoNumInteiro(Atributo *entradaTabela){
+    this->entradaTabela = entradaTabela;
 }
 void NoNumInteiro::aceita(Visitante *v){
     v->visita(this);
 }
-NoNumReal::NoNumReal(float num){
-    this->num = num;
+NoNumReal::NoNumReal(Atributo *entradaTabela){
+    this->entradaTabela = entradaTabela;
 }
 void NoNumReal::aceita(Visitante *v){
     v->visita(this);
@@ -79,7 +79,7 @@ NoListaExpr::NoListaExpr(NoExpr *expressao, NoListaExpr *lista){
 void NoListaExpr::aceita(Visitante *v){
     v->visita(this);
 }
-NoListaFormal::NoListaFormal(int tipo, bool ponteiro, NoId *id, NoArranjo *arranjo, NoListaFormal *lista){
+NoListaFormal::NoListaFormal(NoTipo *tipo, bool ponteiro, NoId *id, NoArranjo *arranjo, NoListaFormal *lista){
     this->tipo = tipo;
     this->ponteiro = ponteiro;
     this->id = id;
@@ -279,8 +279,9 @@ NoNew::NoNew(NoListaExpr *listaExpr){
 void NoNew::aceita(Visitante *v){
     v->visita(this);
 }
-NoTipo::NoTipo(int primitivo):primitivo(primitivo), atributo(NULL){
-    if(primitivo == ID){ atributo = pegarUltimoAtributo(); }
+NoTipo::NoTipo(int primitivo, Atributo *entradaTabela){
+    this->primitivo = primitivo;
+    this->entradaTabela = entradaTabela;
 }
 void NoTipo::aceita(Visitante *v){
     v->visita(this);

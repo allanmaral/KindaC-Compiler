@@ -145,7 +145,7 @@
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 
-1507693363 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.h
+1507694669 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.h
 	"TabelaSimbolos.h"
 
 1507644326 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.c
@@ -230,7 +230,7 @@
 	<stdio.h>
 	<string.h>
 
-1507693188 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.cpp
+1507694654 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.cpp
 	"ASA.h"
 	"Visitante.h"
 	"AnalisadorLexico.h"
