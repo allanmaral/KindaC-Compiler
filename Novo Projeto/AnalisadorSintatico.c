@@ -99,12 +99,13 @@ void ListaId();         void ListaIdCont();     void Ponteiro();        void Arr
 void ListaForma();      void ListaFormaCont();  void Tipo();            void TipoL();
 void ListaSentenca();   void Sentenca();        void SentencaL();       void Se();
 void Senao();           void BlocoCaso();       NoListaExpr *ListaExpr();       void ListaExprCont();
-NoExpr *Expr();            void ExprAtrib();       void ExprOuBool();      void ExprOuBoolL();
-void ExprEBool();       void ExprEBoolL();      void ExprIgualdade();   void ExprIgualdadeL();
-void ExprRelacional();  void ExprRelacionalL(); void ExprSoma();        void ExprSomaL();
-NoExpr *ExprMultDivE();    NoExpr *ExprMultDivEL(NoExpr *exprEsquerda);   NoExpr *ExprUnaria();      NoExpr *ExprAceCamp();
-NoExpr *ExprAceCampL(NoExpr *exprEsquerda);     NoPrimario *ExprNovo();                 NoPrimario *ExprNovoL(NoPrimario* primario);
-NoPrimario* Primario();                         NoPrimario *PrimarioID();               NoPrimario *PrimarioIDL(NoId* id);
+
+NoExpr *Expr();            NoExpr *ExprAtrib(NoExpr *exprEsquerda);       NoExpr *ExprOuBool();      NoExpr *ExprOuBoolL(NoExpr *exprEsquerda);
+NoExpr *ExprEBool();       NoExpr *ExprEBoolL(NoExpr *exprEsquerda);      NoExpr * ExprIgualdade();  NoExpr *ExprIgualdadeL(NoExpr *exprEsquerda);
+NoExpr * ExprRelacional(); NoExpr * ExprRelacionalL(NoExpr *exprEsquerda);NoExpr *ExprSoma();        NoExpr *ExprSomaL(NoExpr *exprEsquerda);
+NoExpr *ExprMultDivE();    NoExpr *ExprMultDivEL(NoExpr *exprEsquerda);   NoExpr *ExprUnaria();
+NoExpr *ExprAceCamp();     NoExpr *ExprAceCampL(NoExpr *exprEsquerda);    NoPrimario *ExprNovo();    NoPrimario *ExprNovoL(NoPrimario* primario);
+NoPrimario* Primario();    NoPrimario *PrimarioID();                      NoPrimario *PrimarioIDL(NoId* id);
 NoPrimario *PrimarioL();
 
 void InicializarAnalizadorSintatico(){
@@ -203,7 +204,7 @@ void ProgramaB(){
     fprintf(stdout, "ProgramaB\n");
     switch(tokenAtual){
         case DEFINICAO_TIPO:    case INTEIRO:        case REAL:
-        case BOLEANO:            case CARACTERE:        case ID:
+        case BOLEANO:           case CARACTERE:       case ID:
         case CLASSE:
             ProgramaL();
         break;
@@ -733,227 +734,233 @@ NoExpr* Expr() {
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:
-            ExprOuBool();
-            ExprAtrib();
-        break;
+        case ADICAO:        case SUBTRACAO:     case ASCII: {
+            NoExpr *exprOuBool = ExprOuBool();
+            return ExprAtrib(exprOuBool);
+        } break;
         default:
             /* ERRO */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExpr);
+            return NULL;
         break;
     }
 }
 
 static int followExprAtrib [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
-void ExprAtrib() {
+NoExpr * ExprAtrib(NoExpr *exprEsquerda) {
     fprintf(stdout, "ExprAtrib\n");
     switch(tokenAtual){
-        case ATRIBUICAO:
+        case ATRIBUICAO: {
             casar(ATRIBUICAO);
-            ExprOuBool();
-            ExprAtrib();
-        break;
-        default: /* Epsilon */ break;
+            NoExpr* exprDireita =  ExprOuBool();
+            return ExprAtrib(new NoExprAtrib(exprEsquerda,exprDireita));
+        } break;
+        default: return exprEsquerda; break;
     }
 }
 
 static int followExprOuBool [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, TOKEN_EOF};
-void ExprOuBool(){
+NoExpr * ExprOuBool(){
     fprintf(stdout, "ExprOuBool\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:
-            ExprEBool();
-            ExprOuBoolL();
-        break;
+        case ADICAO:        case SUBTRACAO:     case ASCII: {
+            NoExpr *exprEBool = ExprEBool();
+            return ExprOuBoolL(exprEBool);
+        } break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprOuBool);
+            return NULL;
         break;
     }
 }
 
 static int followExprOuBoolL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, TOKEN_EOF};
-void ExprOuBoolL(){
+NoExpr * ExprOuBoolL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprOuBoolL\n");
     switch(tokenAtual){
-        case OU_CC:
+        case OU_CC: {
             casar(OU_CC);
-            ExprEBool();
-            ExprOuBoolL();
-        break;
-        default: /* Epsilon */ break;
+            NoExpr* exprDireita =  ExprEBool();
+            return ExprOuBoolL(new NoExprBinaria(OU_CC, exprEsquerda, exprDireita));
+        } break;
+        default: return exprEsquerda; break;
     }
 }
 
 static int followExprEBool [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, TOKEN_EOF};
-void ExprEBool(){
+NoExpr * ExprEBool(){
     fprintf(stdout, "ExprEBool\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:
-            ExprIgualdade();
-            ExprEBoolL();
-        break;
+        case ADICAO:        case SUBTRACAO:     case ASCII: {
+            NoExpr *exprIgualdade = ExprIgualdade();
+           return ExprEBoolL(exprIgualdade);
+        } break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprEBool);
+            return NULL;
         break;
     }
 }
 
 static int followExprEBoolL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, TOKEN_EOF};
-void ExprEBoolL(){
+NoExpr * ExprEBoolL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprEBoolL\n");
     switch(tokenAtual){
-        case E:
+        case E: {
             casar(E);
-            ExprIgualdade();
-            ExprEBoolL();
-        break;
-        default: /* Epsilon */ break;
+            NoExpr* exprDireita =  ExprIgualdade();
+            return ExprEBoolL(new NoExprBinaria(E, exprEsquerda, exprDireita));
+        } break;
+        default: return exprEsquerda; break;
     }
 }
 
 static int followExprIgualdade [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, TOKEN_EOF};
-void ExprIgualdade(){
+NoExpr * ExprIgualdade(){
     fprintf(stdout, "ExprIgualdade\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:
-            ExprRelacional();
-            ExprIgualdadeL();
-        break;
+        case ADICAO:        case SUBTRACAO:     case ASCII: {
+            NoExpr *exprRelacional = ExprRelacional();
+            return ExprIgualdadeL(exprRelacional);
+        } break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprIgualdade);
+            return NULL;
         break;
     }
 }
 
 static int followExprIgualdadeL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, TOKEN_EOF};
-void ExprIgualdadeL(){
+NoExpr * ExprIgualdadeL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprIgualdadeL\n");
     switch(tokenAtual){
-        case COMPARACAO:
+        case COMPARACAO: {
             casar(COMPARACAO);
-            ExprRelacional();
-            ExprIgualdadeL();
-        break;
-        case DIFERENTE:
+            NoExpr* exprDireita = ExprRelacional();
+            return ExprIgualdadeL(new NoExprBinaria(COMPARACAO, exprEsquerda, exprDireita));
+        } break;
+        case DIFERENTE: {
             casar(DIFERENTE);
-            ExprRelacional();
-            ExprIgualdadeL();
-        break;
-        default: /* Epsilon */ break;
+            NoExpr* exprDireita = ExprRelacional();
+            return ExprIgualdadeL(new NoExprBinaria(DIFERENTE, exprEsquerda, exprDireita));
+        } break;
+        default: return exprEsquerda; break;
     }
 }
 
 static int followExprRelacional [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                       DIFERENTE, TOKEN_EOF};
-void ExprRelacional(){
+NoExpr * ExprRelacional(){
     fprintf(stdout, "ExprRelacional\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:
-            ExprSoma();
-            ExprRelacionalL();
-        break;
+        case ADICAO:        case SUBTRACAO:     case ASCII:{
+            NoExpr *exprSoma=ExprSoma();
+            return ExprRelacionalL(exprSoma);
+        }break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprRelacional);
+            return NULL;
         break;
     }
 }
 
 static int followExprRelacionalL []    = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                        DIFERENTE, TOKEN_EOF};
-void ExprRelacionalL(){
+NoExpr * ExprRelacionalL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprRelacionalL\n");
     switch(tokenAtual){
-        case MENOR:
+        case MENOR: {
             casar(MENOR);
-            ExprSoma();
-            ExprRelacionalL();
-        break;
-        case MENOR_IGUAL:
+            NoExpr* exprDireita = ExprSoma();
+            return ExprRelacionalL(new NoExprBinaria(MENOR, exprEsquerda, exprDireita));
+        } break;
+        case MENOR_IGUAL: {
             casar(MENOR_IGUAL);
-            ExprSoma();
-            ExprRelacionalL();
-        break;
-        case MAIOR_IGUAL:
+            NoExpr* exprDireita = ExprSoma();
+            return ExprRelacionalL(new NoExprBinaria(MENOR_IGUAL, exprEsquerda, exprDireita));
+        } break;
+        case MAIOR_IGUAL: {
             casar(MAIOR_IGUAL);
-            ExprSoma();
-            ExprRelacionalL();
-        break;
-        case MAIOR:
+            NoExpr* exprDireita = ExprSoma();
+            return ExprRelacionalL(new NoExprBinaria(MAIOR_IGUAL, exprEsquerda, exprDireita));
+        } break;
+        case MAIOR: {
             casar(MAIOR);
-            ExprSoma();
-            ExprRelacionalL();
-        break;
-        default: /* Epsilon */ break;
+            NoExpr* exprDireita = ExprSoma();
+            return ExprRelacionalL(new NoExprBinaria(MAIOR, exprEsquerda, exprDireita));
+        } break;
+        default: return exprEsquerda; break;
     }
 }
 
 static int followExprSoma [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                 DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, TOKEN_EOF};
-void ExprSoma(){
+NoExpr * ExprSoma(){
     fprintf(stdout, "ExprSoma\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:
-            ExprMultDivE();
-            ExprSomaL();
-        break;
+        case ADICAO:        case SUBTRACAO:     case ASCII: {
+            NoExpr *exprMultDivE=ExprMultDivE();
+            return ExprSomaL(exprMultDivE);
+        } break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprSoma);
+            return NULL;
         break;
     }
 }
 
 static int followExprSomaL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                  DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, TOKEN_EOF};
-void ExprSomaL(){
+NoExpr * ExprSomaL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprSomaL\n");
     switch(tokenAtual){
-        case ADICAO:
+        case ADICAO: {
             casar(ADICAO);
-            ExprMultDivE();
-            ExprSomaL();
-        break;
-        case SUBTRACAO:
+            NoExpr* exprDireita = ExprMultDivE();
+            return ExprSomaL(new NoExprBinaria(ADICAO, exprEsquerda, exprDireita));
+        } break;
+        case SUBTRACAO: {
             casar(SUBTRACAO);
-            ExprMultDivE();
-            ExprSomaL();
-        break;
-        case OU:
+            NoExpr* exprDireita = ExprMultDivE();
+            return ExprSomaL(new NoExprBinaria(SUBTRACAO, exprEsquerda, exprDireita));
+        } break;
+        case OU: {
             casar(OU);
-            ExprMultDivE();
-            ExprSomaL();
-        break;
-        default: /* Epsilon */ break;
+            NoExpr* exprDireita = ExprMultDivE();
+            return ExprSomaL(new NoExprBinaria(OU, exprEsquerda, exprDireita));
+        } break;
+        default: return exprEsquerda; break;
     }
 }
 
