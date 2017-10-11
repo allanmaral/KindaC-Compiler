@@ -6,7 +6,7 @@ static TabelaInteiro tabelaInteiro;
 static TabelaLiteral tabelaLiteral;
 static TabelaReal tabelaReal;
 
-NoPrograma::NoPrograma(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *listaTipo, DeclVariavel *listaVariavel){
+NoPrograma::NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo, NoDeclVariavel *listaVariavel){
     this->listaClasse = listaClasse;
     this->listaFuncao = listaFuncao;
     this->listaTipo = listaTipo;
@@ -33,19 +33,19 @@ NoAscii::NoAscii(char caractere){
 void NoAscii::aceita(Visitante *v){
     v->visita(this);
 }
-NoParenteses::NoParenteses(Expr *expressao){
+NoParenteses::NoParenteses(NoExpr *expressao){
     this->expressao = expressao;
 }
 void NoParenteses::aceita(Visitante *v){
     v->visita(this);
 }
-NoConteudo::NoConteudo(Primario *primario){
+NoConteudo::NoConteudo(NoPrimario *primario){
     this->primario = primario;
 }
 void NoConteudo::aceita(Visitante *v){
     v->visita(this);
 }
-NoEndereco::NoEndereco(Primario *primario){
+NoEndereco::NoEndereco(NoPrimario *primario){
     this->primario = primario;
 }
 void NoEndereco::aceita(Visitante *v){
@@ -63,20 +63,20 @@ NoNumReal::NoNumReal(float num){
 void NoNumReal::aceita(Visitante *v){
     v->visita(this);
 }
-NoArranjo::NoArranjo(NumInteiro num):num(num){
+NoArranjo::NoArranjo(NoNumInteiro num):num(num){
     this->num = num;
 }
 void NoArranjo::aceita(Visitante *v){
     v->visita(this);
 }
-NoListaExpr::NoListaExpr(Expr *expressao, ListaExpr *lista){
+NoListaExpr::NoListaExpr(NoExpr *expressao, NoListaExpr *lista){
     this->expressao = expressao;
     this->lista = lista;
 }
 void NoListaExpr::aceita(Visitante *v){
     v->visita(this);
 }
-NoListaFormal::NoListaFormal(int tipo, bool ponteiro, Id id, Arranjo *arranjo, ListaFormal *lista){
+NoListaFormal::NoListaFormal(int tipo, bool ponteiro, NoId id, NoArranjo *arranjo, NoListaFormal *lista){
     this->tipo = tipo;
     this->ponteiro = ponteiro;
     this->id = id;
@@ -86,34 +86,34 @@ NoListaFormal::NoListaFormal(int tipo, bool ponteiro, Id id, Arranjo *arranjo, L
 void NoListaFormal::aceita(Visitante *v){
     v->visita(this);
 }
-NoListaSentenca::NoListaSentenca(Sentenca *sentenca, ListaSentenca *lista){
+NoListaSentenca::NoListaSentenca(NoSentenca *sentenca, NoListaSentenca *lista){
     this->sentenca = sentenca;
     this->lista = lista;
 }
 void NoListaSentenca::aceita(Visitante *v){
     v->visita(this);
 }
-NoIf::NoIf(Expr *expressao, Sentenca *sentenca){
+NoIf::NoIf(NoExpr *expressao, NoSentenca *sentenca){
     this->expressao = expressao;
     this->sentenca = sentenca;
 }
 void NoIf::aceita(Visitante *v){
     v->visita(this);
 }
-NoElse::NoElse(Sentenca *sentenca){
+NoElse::NoElse(NoSentenca *sentenca){
     this->sentenca = sentenca;
 }
 void NoElse::aceita(Visitante *v){
     v->visita(this);
 }
-NoWhile::NoWhile(Expr *expressao, Sentenca *sentenca){
+NoWhile::NoWhile(NoExpr *expressao, NoSentenca *sentenca){
     this->expressao = expressao;
     this->sentenca = sentenca;
 }
 void NoWhile::aceita(Visitante *v){
     v->visita(this);
 }
-NoBlocoCaso::NoBlocoCaso(Num *num, ListaSentenca *listaSentenca, BlocoCaso *lista){
+NoBlocoCaso::NoBlocoCaso(NoNum *num, NoListaSentenca *listaSentenca, NoBlocoCaso *lista){
     this->num = num;
     this->listaSentenca = listaSentenca;
     this->lista = lista;
@@ -121,58 +121,58 @@ NoBlocoCaso::NoBlocoCaso(Num *num, ListaSentenca *listaSentenca, BlocoCaso *list
 void NoBlocoCaso::aceita(Visitante *v){
     v->visita(this);
 }
-NoSwitch::NoSwitch(Expr *expressao, BlocoCaso blocoCaso):blocoCaso(blocoCaso){
+NoSwitch::NoSwitch(NoExpr *expressao, NoBlocoCaso blocoCaso):blocoCaso(blocoCaso){
     this->expressao = expressao;
     this->blocoCaso = blocoCaso;
 }
 void NoSwitch::aceita(Visitante *v){
     v->visita(this);
 }
-NoPrint::NoPrint(ListaExpr *listaExpr){
+NoPrint::NoPrint(NoListaExpr *listaExpr){
     this->listaExpr = listaExpr;
 }
 void NoPrint::aceita(Visitante *v){
     v->visita(this);
 }
-NoReadLn::NoReadLn(Expr *expressao){
+NoReadLn::NoReadLn(NoExpr *expressao){
     this->expressao = expressao;
 }
 void NoReadLn::aceita(Visitante *v){
     v->visita(this);
 }
-NoReturn::NoReturn(Expr *expressao){
+NoReturn::NoReturn(NoExpr *expressao){
     this->expressao = expressao;
 }
 void NoReturn::aceita(Visitante *v){
     v->visita(this);
 }
-NoEscopo::NoEscopo(ListaSentenca *lista){
+NoEscopo::NoEscopo(NoListaSentenca *lista){
     this->lista = lista;
 }
 void NoEscopo::aceita(Visitante *v){
     v->visita(this);
 }
-NoChamadaFuncao::NoChamadaFuncao(Id id, ListaExpr *parametros){
+NoChamadaFuncao::NoChamadaFuncao(NoId id, NoListaExpr *parametros){
     this->id = id;
     this->parametros = parametros;
 }
 void NoChamadaFuncao::aceita(Visitante *v){
     v->visita(this);
 }
-NoTry::NoTry(Sentenca *sentencaTry, Sentenca *sentencaCatch){
+NoTry::NoTry(NoSentenca *sentencaTry, NoSentenca *sentencaCatch){
     this->sentencaTry = sentencaTry;
     this->sentencaCatch = sentencaCatch;
 }
 void NoTry::aceita(Visitante *v){
     v->visita(this);
 }
-NoSentencaExpr::NoSentencaExpr(Expr *expressao){
+NoSentencaExpr::NoSentencaExpr(NoExpr *expressao){
     this->expressao = expressao;
 }
-void NoSentencaExpr::aceita(Visitante *v){
+void NoSentencaExpr::aceita(NoVisitante *v){
     v->visita(this);
 }
-NoDeclFuncao::NoDeclFuncao(int tipo, Id id, ListaFormal *parametros, DeclVariavel *variaveis, ListaSentenca sentenca, DeclFuncao *lista):sentenca(sentenca){
+NoDeclFuncao::NoDeclFuncao(int tipo, NoId id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca sentenca, NoDeclFuncao *lista):sentenca(sentenca){
     this->tipo = tipo;
     this->id = id;
     this->parametros = parametros;
@@ -183,7 +183,7 @@ NoDeclFuncao::NoDeclFuncao(int tipo, Id id, ListaFormal *parametros, DeclVariave
 void NoDeclFuncao::aceita(Visitante *v){
     v->visita(this);
 }
-NoListaId::NoListaId(ListaId *lista, bool ponteiro, Arranjo *arranjo){
+NoListaId::NoListaId(NoListaId *lista, bool ponteiro, NoArranjo *arranjo){
     this->lista = lista;
     this->ponteiro = ponteiro;
     this->arranjo = arranjo;
@@ -191,7 +191,7 @@ NoListaId::NoListaId(ListaId *lista, bool ponteiro, Arranjo *arranjo){
 void NoListaId::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclVariavel::NoDeclVariavel(int tipo, ListaId variaveis, DeclVariavel *lista):variaveis(variaveis){
+NoDeclVariavel::NoDeclVariavel(int tipo, NoListaId variaveis, NoDeclVariavel *lista):variaveis(variaveis){
     this->tipo = tipo;
     this->variaveis = variaveis;
     this->lista = lista;
@@ -199,20 +199,20 @@ NoDeclVariavel::NoDeclVariavel(int tipo, ListaId variaveis, DeclVariavel *lista)
 void NoDeclVariavel::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclTipo::NoDeclTipo(DeclVariavel *campo){
+NoDeclTipo::NoDeclTipo(NoDeclVariavel *campo){
     this->campo = campo;
 }
 void NoDeclTipo::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclLocalFuncao::NoDeclLocalFuncao(DeclFuncao funcao, DeclLocal *lista):funcao(funcao){
+NoDeclLocalFuncao::NoDeclLocalFuncao(NoDeclFuncao funcao, NoDeclLocal *lista):funcao(funcao){
     this->funcao = funcao;
     this->lista = lista;
 }
 void NoDeclLocalFuncao::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclLocalVariavel::NoDeclLocalVariavel(DeclVariavel variavel, DeclLocal *lista):variavel(variavel){
+NoDeclLocalVariavel::NoDeclLocalVariavel(NoDeclVariavel variavel, NoDeclLocal *lista):variavel(variavel){
     this->variavel = variavel;
     this->lista = lista;
 }
@@ -220,20 +220,20 @@ void NoDeclLocalVariavel::aceita(Visitante *v){
     v->visita(this);
 }
 
-NoDeclLocalPublic::NoDeclLocalPublic(DeclLocal *lista){
+NoDeclLocalPublic::NoDeclLocalPublic(NoDeclLocal *lista){
     this->lista = lista;
 }
 void NoDeclLocalPublic::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclLocalPrivate::NoDeclLocalPrivate(DeclLocal *lista){
+NoDeclLocalPrivate::NoDeclLocalPrivate(NoDeclLocal *lista){
     this->lista = lista;
 }
 void NoDeclLocalPrivate::aceita(Visitante *v){
     v->visita(this);
 }
 
-NoDeclClasse::NoDeclClasse(Id id, Id *heranca, DeclLocal *lista){
+NoDeclClasse::NoDeclClasse(NoId id, NoId *heranca, NoDeclLocal *lista){
     this->id = id;
     this->heranca = heranca;
     this->lista = lista;
@@ -241,14 +241,14 @@ NoDeclClasse::NoDeclClasse(Id id, Id *heranca, DeclLocal *lista){
 void NoDeclClasse::aceita(Visitante *v){
     v->visita(this);
 }
-NoExprUnaria::NoExprUnaria(int operador, Expr *expressao){
+NoExprUnaria::NoExprUnaria(int operador, NoExpr *expressao){
     this->operador = operador;
     this->expressao = expressao;
 }
 void NoExprUnaria::aceita(Visitante *v){
     v->visita(this);
 }
-NoExprBinaria::NoExprBinaria(int operador, Expr *exprEsquerda, Expr *exprDireita){
+NoExprBinaria::NoExprBinaria(int operador, NoExpr *exprEsquerda, NoExpr *exprDireita){
     this->operador = operador;
     this->exprEsquerda = exprEsquerda;
     this->exprDireita = exprDireita;
@@ -256,21 +256,21 @@ NoExprBinaria::NoExprBinaria(int operador, Expr *exprEsquerda, Expr *exprDireita
 void NoExprBinaria::aceita(Visitante *v){
     v->visita(this);
 }
-NoExprAtrib::NoExprAtrib(Expr *exprEsquerda, Expr *exprDireita){
+NoExprAtrib::NoExprAtrib(NoExpr *exprEsquerda, NoExpr *exprDireita){
     this->exprEsquerda = exprEsquerda;
     this->exprDireita = exprDireita;
 }
 void NoExprAtrib::aceita(Visitante *v){
     v->visita(this);
 }
-NoExprAceCamp::NoExprAceCamp(Expr *exprEsquerda, Expr *exprDireita){
+NoExprAceCamp::NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita){
     this->exprEsquerda = exprEsquerda;
     this->exprDireita = exprDireita;
 }
 void NoExprAceCamp::aceita(Visitante *v){
     v->visita(this);
 }
-NoNew::NoNew(ListaExpr *listaExpr){
+NoNew::NoNew(NoListaExpr *listaExpr){
     this->listaExpr = listaExpr;
 }
 void NoNew::aceita(Visitante *v){
