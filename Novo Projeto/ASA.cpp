@@ -169,7 +169,7 @@ void NoTry::aceita(Visitante *v){
 NoSentencaExpr::NoSentencaExpr(NoExpr *expressao){
     this->expressao = expressao;
 }
-void NoSentencaExpr::aceita(NoVisitante *v){
+void NoSentencaExpr::aceita(Visitante *v){
     v->visita(this);
 }
 NoDeclFuncao::NoDeclFuncao(int tipo, NoId id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca sentenca, NoDeclFuncao *lista):sentenca(sentenca){

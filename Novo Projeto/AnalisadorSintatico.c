@@ -4,10 +4,10 @@
 
 static int tokenAtual;
 
-static DeclClasse   *listaClasse;
-static DeclFuncao   *listaFuncao;
-static DeclTipo     *listaTipo;
-static DeclVariavel *listaVariavel;
+static NoDeclClasse   *listaClasse;
+static NoDeclFuncao   *listaFuncao;
+static NoDeclTipo     *listaTipo;
+static NoDeclVariavel *listaVariavel;
 
 /** Lista de Literais dos Tokens
  */

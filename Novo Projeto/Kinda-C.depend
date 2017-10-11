@@ -243,3 +243,53 @@
 1507641171 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteImpressao.h
 	"Visitante.h"
 
+1507684064 source:d:\documentos\github\kindac-compiler\novo projeto\analisadorlexico.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"ASA.h"
+
+1507684064 d:\documentos\github\kindac-compiler\novo projeto\analisadorlexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	"TabelaSimbolos.h"
+
+1507684064 d:\documentos\github\kindac-compiler\novo projeto\tabelasimbolos.h
+	<stdlib.h>
+	<stdio.h>
+
+1507433311 d:\documentos\github\kindac-compiler\novo projeto\gerenciadorerro.h
+
+1507691158 d:\documentos\github\kindac-compiler\novo projeto\asa.h
+	"TabelaSimbolos.h"
+
+1507691121 source:d:\documentos\github\kindac-compiler\novo projeto\analisadorsintatico.c
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"ASA.h"
+
+1507433311 source:d:\documentos\github\kindac-compiler\novo projeto\gerenciadorerro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1507684065 source:d:\documentos\github\kindac-compiler\novo projeto\main.c
+	<stdio.h>
+	<string.h>
+	"ASA.h"
+	"AnalisadorLexico.h"
+	"AnalisadorSintatico.h"
+	"TabelaSimbolos.h"
+	"GerenciadorErro.h"
+
+1507684064 d:\documentos\github\kindac-compiler\novo projeto\analisadorsintatico.h
+	"ASA.h"
+
+1507684064 source:d:\documentos\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
+	"TabelaSimbolos.h"
+	"AnalisadorLexico.h"
+	<stdio.h>
+	<string.h>
+

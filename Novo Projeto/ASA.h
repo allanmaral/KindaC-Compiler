@@ -53,7 +53,7 @@ class NoParenteses:public NoPrimario{
 };
 class NoConteudo:public NoPrimario{
     public:
-        NoConteudo(Primario *primario);
+        NoConteudo(NoPrimario *primario);
         void aceita(Visitante *v);
         NoPrimario *primario;
 };
@@ -83,7 +83,7 @@ class NoArranjo{
     public:
         NoArranjo(NoNumInteiro num);
         void aceita(Visitante *v);
-        NumInteiro num;
+        NoNumInteiro num;
 };
 class NoListaExpr{
     public:
@@ -170,7 +170,7 @@ class NoReturn:public NoSentenca{
         NoExpr *expressao;
 };
 class NoThrow:public NoSentenca{
-    void aceita(NoVisitante *v);
+    void aceita(Visitante *v);
 };
 class NoEscopo:public NoSentenca{
     public:
@@ -291,7 +291,7 @@ class NoExprAtrib:public NoExpr{
         NoExpr *exprEsquerda;
         NoExpr *exprDireita;
 };
-class NoExprAceCamp:public EExpr{
+class NoExprAceCamp:public NoExpr{
     public:
         NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita);
         void aceita(Visitante *v);
@@ -309,7 +309,7 @@ class NoThis:public NoPrimario{
 };
 class NoNew:public NoPrimario{
     public:
-        New(NoListaExpr *listaExpr);
+        NoNew(NoListaExpr *listaExpr);
         void aceita(Visitante *v);
         NoListaExpr *listaExpr;
 };
