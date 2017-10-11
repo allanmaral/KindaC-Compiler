@@ -55,6 +55,12 @@ class NoParenteses:public NoPrimario{
         void aceita(Visitante *v);
         NoExpr *expressao;
 };
+class NoColchetes:public NoPrimario{
+    public:
+        NoColchetes(NoPrimario *primario, NoExpr *expressao);
+        NoPrimario *primario;
+        NoExpr *expressao;
+};
 class NoConteudo:public NoPrimario{
     public:
         NoConteudo(NoPrimario *primario);

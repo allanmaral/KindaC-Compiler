@@ -285,7 +285,10 @@ NoTipo::NoTipo(int primitivo, Atributo *entradaTabela){
 void NoTipo::aceita(Visitante *v){
     v->visita(this);
 }
-
+NoColchetes(NoPrimario *primario, Expr *expressao){
+    this->primario = primario;
+    this->expressao = expressao;
+}
 TabelaIdentificador* obtemTabelaIdentificador(){return &tabelaID;};
 TabelaLiteral* obtemTabelaLiteral(){return &tabelaLiteral;};
 TabelaInteiro* obtemTabelaInteiro(){return &tabelaInteiro;};
