@@ -36,45 +36,24 @@
 			<Add directory="include" />
 		</Compiler>
 		<Unit filename="ASA.cpp" />
-		<Unit filename="ASA.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
+		<Unit filename="ASA.h" />
 		<Unit filename="AnalisadorLexico.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="AnalisadorLexico.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
+		<Unit filename="AnalisadorLexico.h" />
 		<Unit filename="AnalisadorSintatico.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="AnalisadorSintatico.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
+		<Unit filename="AnalisadorSintatico.h" />
 		<Unit filename="GerenciadorErro.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="GerenciadorErro.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
+		<Unit filename="GerenciadorErro.h" />
 		<Unit filename="TabelaSimbolos.cpp" />
-		<Unit filename="TabelaSimbolos.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
-		<Unit filename="Visitante.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
+		<Unit filename="TabelaSimbolos.h" />
+		<Unit filename="Visitante.h" />
 		<Unit filename="VisitanteImpressao.cpp" />
-		<Unit filename="VisitanteImpressao.h">
-			<Option compile="1" />
-			<Option link="1" />
-		</Unit>
+		<Unit filename="VisitanteImpressao.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

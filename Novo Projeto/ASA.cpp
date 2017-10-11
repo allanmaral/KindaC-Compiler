@@ -279,6 +279,15 @@ NoNovo::NoNovo(NoListaExpr *listaExpr){
 void NoNovo::aceita(Visitante *v){
     v->visita(this);
 }
+void NoEsse::aceita(Visitante *v){
+    v->visita(this);
+}
+void NoVerdadeiro::aceita(Visitante *v){
+    v->visita(this);
+}
+void NoFalso::aceita(Visitante *v){
+    v->visita(this);
+}
 NoTipo::NoTipo(int primitivo, Atributo *entradaTabela){
     this->primitivo = primitivo;
     this->entradaTabela = entradaTabela;
