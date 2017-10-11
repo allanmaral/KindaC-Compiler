@@ -123,11 +123,11 @@ NoBlocoCaso::NoBlocoCaso(NoNum *num, NoListaSentenca *listaSentenca, NoBlocoCaso
 void NoBlocoCaso::aceita(Visitante *v){
     v->visita(this);
 }
-NoSwitch::NoSwitch(NoExpr *expressao, NoBlocoCaso *blocoCaso):blocoCaso(blocoCaso){
+NoEscolha::NoEscolha(NoExpr *expressao, NoBlocoCaso *blocoCaso):blocoCaso(blocoCaso){
     this->expressao = expressao;
     this->blocoCaso = blocoCaso;
 }
-void NoSwitch::aceita(Visitante *v){
+void NoEscolha::aceita(Visitante *v){
     v->visita(this);
 }
 NoImprime::NoImprime(NoListaExpr *listaExpr){
@@ -286,7 +286,7 @@ NoTipo::NoTipo(int primitivo, Atributo *entradaTabela){
 void NoTipo::aceita(Visitante *v){
     v->visita(this);
 }
-NoColchetes::NoColchetes(NoPrimario *primario, Expr *expressao){
+NoColchetes::NoColchetes(NoPrimario *primario, NoExpr *expressao){
     this->primario = primario;
     this->expressao = expressao;
 }
