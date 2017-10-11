@@ -95,7 +95,7 @@ void VisitanteImpressao::visita(NoListaSentenca *ls ){
     if(ls->sentenca) ls->sentenca->aceita(this);
     if(ls->lista) ls->lista->aceita(this);
 }
-void VisitanteImpressao::visita(NoIf            *se ){
+void VisitanteImpressao::visita(NoSe            *se ){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-SE\n");
@@ -104,14 +104,14 @@ void VisitanteImpressao::visita(NoIf            *se ){
 	nivel--;
 
 }
-void VisitanteImpressao::visita(NoElse          *sen){
+void VisitanteImpressao::visita(NoSenao          *sen){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-SENAO\n");
 	if(sen->sentenca)sen->sentenca->aceita(this);
 	nivel--;
 }
-void VisitanteImpressao::visita(NoWhile         *enq){
+void VisitanteImpressao::visita(NoEnquanto         *enq){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-ENQUANTO\n");
@@ -127,13 +127,13 @@ void VisitanteImpressao::visita(NoBlocoCaso     *bc ){
 	if(bc->lista) bc->lista->aceita(this);
 	nivel--;
 }
-void VisitanteImpressao::visita(NoBreak         *des){
+void VisitanteImpressao::visita(NoDesvia         *des){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-DESVIA\n");
     nivel--;
 }
-void VisitanteImpressao::visita(NoSwitch        *sw ){
+void VisitanteImpressao::visita(NoEscolha        *sw ){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-ESCOLHA\n");
@@ -141,21 +141,21 @@ void VisitanteImpressao::visita(NoSwitch        *sw ){
 	sw->blocoCaso->aceita(this);
 	nivel--;
 }
-void VisitanteImpressao::visita(NoPrint         *imp){
+void VisitanteImpressao::visita(NoImprime         *imp){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-IMPRIME\n");
 	if(imp->listaExpr) imp->listaExpr->aceita(this);
 	nivel--;
 }
-void VisitanteImpressao::visita(NoReadLn        *leL){
+void VisitanteImpressao::visita(NoLeLinha        *leL){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-LE_LINHA\n");
 	if(leL->expressao) leL->expressao->aceita(this);
 	nivel--;
 }
-void VisitanteImpressao::visita(NoReturn        *ret){
+void VisitanteImpressao::visita(NoRetorna        *ret){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-RETORNA\n");
@@ -173,7 +173,7 @@ void VisitanteImpressao::visita(NoChamadaFuncao *cha){
 	if(cha->parametros) cha->parametros->aceita(this);
 	nivel--;
 }
-void VisitanteImpressao::visita(NoTry           *te ){
+void VisitanteImpressao::visita(NoTenta           *te ){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-TENTA\n");
@@ -301,26 +301,26 @@ void VisitanteImpressao::visita(NoExprAceCamp       *expAC){
     if(expAC->exprDireita) expAC->exprDireita->aceita(this);
     nivel--;
 }
- void VisitanteImpressao::visita(NoTrue              *tr){
+ void VisitanteImpressao::visita(NoVerdadeiro              *tr){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-VERDADEIRO\n");
     nivel--;
  }
- void VisitanteImpressao::visita(NoFalse             *fa) {
+ void VisitanteImpressao::visita(NoFalso             *fa) {
     nivel++;
     calculaNivel();
     fprintf(stdout, "-FALSO\n");
     nivel--;
  }
 
- void VisitanteImpressao::visita(NoThis              *th) {
+ void VisitanteImpressao::visita(NoEsse              *th) {
     nivel++;
     calculaNivel();
     fprintf(stdout, "-ESSE\n");
     nivel--;
  }
-void VisitanteImpressao::visita(NoNew               *n    ){
+void VisitanteImpressao::visita(NoNovo               *n    ){
      nivel++;
     calculaNivel();
     fprintf(stdout, "-NOVO\n");
