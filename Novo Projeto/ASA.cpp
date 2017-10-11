@@ -95,24 +95,24 @@ NoListaSentenca::NoListaSentenca(NoSentenca *sentenca, NoListaSentenca *lista){
 void NoListaSentenca::aceita(Visitante *v){
     v->visita(this);
 }
-NoIf::NoIf(NoExpr *expressao, NoSentenca *sentenca){
+NoSe::NoSe(NoExpr *expressao, NoSentenca *sentenca){
     this->expressao = expressao;
     this->sentenca = sentenca;
 }
-void NoIf::aceita(Visitante *v){
+void NoSe::aceita(Visitante *v){
     v->visita(this);
 }
-NoElse::NoElse(NoSentenca *sentenca){
+NoSenao::NoSenao(NoSentenca *sentenca){
     this->sentenca = sentenca;
 }
-void NoElse::aceita(Visitante *v){
+void NoSenao::aceita(Visitante *v){
     v->visita(this);
 }
-NoWhile::NoWhile(NoExpr *expressao, NoSentenca *sentenca){
+NoEnquanto::NoEnquanto(NoExpr *expressao, NoSentenca *sentenca){
     this->expressao = expressao;
     this->sentenca = sentenca;
 }
-void NoWhile::aceita(Visitante *v){
+void NoEnquanto::aceita(Visitante *v){
     v->visita(this);
 }
 NoBlocoCaso::NoBlocoCaso(NoNum *num, NoListaSentenca *listaSentenca, NoBlocoCaso *lista){
@@ -130,22 +130,22 @@ NoSwitch::NoSwitch(NoExpr *expressao, NoBlocoCaso *blocoCaso):blocoCaso(blocoCas
 void NoSwitch::aceita(Visitante *v){
     v->visita(this);
 }
-NoPrint::NoPrint(NoListaExpr *listaExpr){
+NoImprime::NoImprime(NoListaExpr *listaExpr){
     this->listaExpr = listaExpr;
 }
-void NoPrint::aceita(Visitante *v){
+void NoImprime::aceita(Visitante *v){
     v->visita(this);
 }
-NoReadLn::NoReadLn(NoExpr *expressao){
+NoLeLinha::NoLeLinha(NoExpr *expressao){
     this->expressao = expressao;
 }
-void NoReadLn::aceita(Visitante *v){
+void NoLeLinha::aceita(Visitante *v){
     v->visita(this);
 }
-NoReturn::NoReturn(NoExpr *expressao){
+NoRetorna::NoRetorna(NoExpr *expressao){
     this->expressao = expressao;
 }
-void NoReturn::aceita(Visitante *v){
+void NoRetorna::aceita(Visitante *v){
     v->visita(this);
 }
 NoEscopo::NoEscopo(NoListaSentenca *lista){
@@ -161,11 +161,11 @@ NoChamadaFuncao::NoChamadaFuncao(NoId *id, NoListaExpr *parametros){
 void NoChamadaFuncao::aceita(Visitante *v){
     v->visita(this);
 }
-NoTry::NoTry(NoSentenca *sentencaTry, NoSentenca *sentencaCatch){
+NoTenta::NoTenta(NoSentenca *sentencaTry, NoSentenca *sentencaCatch){
     this->sentencaTry = sentencaTry;
     this->sentencaCatch = sentencaCatch;
 }
-void NoTry::aceita(Visitante *v){
+void NoTenta::aceita(Visitante *v){
     v->visita(this);
 }
 NoSentencaExpr::NoSentencaExpr(NoExpr *expressao){
@@ -272,10 +272,10 @@ NoExprAceCamp::NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita){
 void NoExprAceCamp::aceita(Visitante *v){
     v->visita(this);
 }
-NoNew::NoNew(NoListaExpr *listaExpr){
+NoNovo::NoNovo(NoListaExpr *listaExpr){
     this->listaExpr = listaExpr;
 }
-void NoNew::aceita(Visitante *v){
+void NoNovo::aceita(Visitante *v){
     v->visita(this);
 }
 NoTipo::NoTipo(int primitivo, Atributo *entradaTabela){
@@ -285,7 +285,7 @@ NoTipo::NoTipo(int primitivo, Atributo *entradaTabela){
 void NoTipo::aceita(Visitante *v){
     v->visita(this);
 }
-NoColchetes(NoPrimario *primario, Expr *expressao){
+NoColchetes::NoColchetes(NoPrimario *primario, Expr *expressao){
     this->primario = primario;
     this->expressao = expressao;
 }

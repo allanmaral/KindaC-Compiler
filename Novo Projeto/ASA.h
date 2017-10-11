@@ -126,20 +126,20 @@ class NoListaSentenca{
         NoSentenca *sentenca;
         NoListaSentenca *lista;
 };
-class NoIf:public NoSentenca{
+class NoSe:public NoSentenca{
     public:
         NoIf(NoExpr *expressao, NoSentenca *sentenca);
         void aceita(Visitante *v);
         NoExpr *expressao;
         NoSentenca *sentenca;
 };
-class NoElse:public NoSentenca{
+class NoSenao:public NoSentenca{
     public:
         NoElse(NoSentenca *sentenca);
         void aceita(Visitante *v);
         NoSentenca *sentenca;
 };
-class NoWhile:public NoSentenca{
+class NoEnquanto:public NoSentenca{
     public:
         NoWhile(NoExpr *expressao, NoSentenca *sentenca);
         void aceita(Visitante *v);
@@ -154,35 +154,35 @@ class NoBlocoCaso{
         NoListaSentenca *listaSentenca;
         NoBlocoCaso *lista;
 };
-class NoSwitch:public NoSentenca{
+class NoEscolha:public NoSentenca{
     public:
         NoSwitch(NoExpr *expressao, NoBlocoCaso *blocoCaso);
         void aceita(Visitante *v);
         NoExpr *expressao;
         NoBlocoCaso *blocoCaso;
 };
-class NoBreak:public NoSentenca{
+class NoDesvia:public NoSentenca{
     void aceita(Visitante *v);
 };
-class NoPrint:public NoSentenca{
+class NoImprime:public NoSentenca{
     public:
         NoPrint(NoListaExpr *listaExpr);
         void aceita(Visitante *v);
         NoListaExpr *listaExpr;
 };
-class NoReadLn:public NoSentenca{
+class NoLeLinha:public NoSentenca{
     public:
         NoReadLn(NoExpr *expressao);
         void aceita(Visitante *v);
         NoExpr *expressao;
 };
-class NoReturn:public NoSentenca{
+class NoRetorna:public NoSentenca{
     public:
         NoReturn(NoExpr *expressao);
         void aceita(Visitante *v);
         NoExpr *expressao;
 };
-class NoThrow:public NoSentenca{
+class NoLanca:public NoSentenca{
     void aceita(Visitante *v);
 };
 class NoEscopo:public NoSentenca{
@@ -198,7 +198,7 @@ class NoChamadaFuncao:public NoPrimario{
         NoId *id;
         NoListaExpr *parametros;
 };
-class NoTry:public NoSentenca{
+class NoTenta:public NoSentenca{
     public:
         NoTry(NoSentenca *sentencaTry, NoSentenca *sentencaCatch);
         void aceita(Visitante *v);
@@ -311,16 +311,16 @@ class NoExprAceCamp:public NoExpr{
         NoExpr *exprEsquerda;
         NoExpr *exprDireita;
 };
-class NoTrue:public NoPrimario{
+class NoVerdadeiro:public NoPrimario{
     void aceita(Visitante *v);
 };
-class NoFalse:public NoPrimario{
+class NoFalso:public NoPrimario{
     void aceita(Visitante *v);
 };
-class NoThis:public NoPrimario{
+class NoEsse:public NoPrimario{
     void aceita(Visitante *v);
 };
-class NoNew:public NoPrimario{
+class NoNovo:public NoPrimario{
     public:
         NoNew(NoListaExpr *listaExpr);
         void aceita(Visitante *v);
