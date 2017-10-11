@@ -322,7 +322,7 @@ class NoEsse:public NoPrimario{
 };
 class NoNovo:public NoPrimario{
     public:
-        NoNew(NoListaExpr *listaExpr);
+        NoNovo(NoListaExpr *listaExpr);
         void aceita(Visitante *v);
         NoListaExpr *listaExpr;
 };
