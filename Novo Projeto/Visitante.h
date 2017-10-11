@@ -47,6 +47,7 @@ class Visitante{
         virtual void visita(NoFalse             *fa) = 0;
         virtual void visita(NoThis              *th) = 0;
 		virtual void visita(NoNew               *n    ) = 0;
+		virtual void visita(NoTipo              *tp   ) = 0;
 
 };
 

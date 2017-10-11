@@ -3,6 +3,8 @@
 #include "ASA.h"
 #include "Visitante.h"
 #include "VisitanteImpressao.h"
+#include "AnalisadorLexico.h"
+#include "AnalisadorSintatico.h"
 
 VisitanteImpressao::VisitanteImpressao(){
 	nivel=0;
@@ -323,5 +325,16 @@ void VisitanteImpressao::visita(NoNew               *n    ){
     calculaNivel();
     fprintf(stdout, "-NOVO\n");
     if(n->listaExpr) n->listaExpr->aceita(this);
+    nivel--;
+}
+void VisitanteImpressao::visita(NoTipo               *tp  ){
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-TIPO\n");
+    nivel++;
+    calculaNivel();
+    if(tp->primitivo == ID) { fprintf(stdout, "-ID.%s", tp->atributo->pegarLexema()); }
+    else { fprintf(stdout, "-%s", pegarTokenLiteral(tp->primitivo)); }
+    nivel--;
     nivel--;
 }

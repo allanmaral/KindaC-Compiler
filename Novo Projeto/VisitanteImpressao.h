@@ -52,6 +52,7 @@ class VisitanteImpressao: public Visitante{
          void visita(NoFalse             *fa);
          void visita(NoThis              *th);
 		 void visita(NoNew               *n    );
+		 void visita(NoTipo              *tp   );
 };
 
 #endif // VISITANTEIMPRESSAO_H

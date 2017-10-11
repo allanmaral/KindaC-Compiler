@@ -1,6 +1,8 @@
 #include "ASA.h"
 #include "Visitante.h"
+#include "AnalisadorLexico.h"
 #include <string.h>
+
 static TabelaIdentificador tabelaID;
 static TabelaInteiro tabelaInteiro;
 static TabelaLiteral tabelaLiteral;
@@ -277,6 +279,13 @@ NoNew::NoNew(NoListaExpr *listaExpr){
 void NoNew::aceita(Visitante *v){
     v->visita(this);
 }
+NoTipo::NoTipo(int primitivo):primitivo(primitivo), atributo(NULL){
+    if(primitivo == ID){ atributo = pegarUltimoAtributo(); }
+}
+void NoTipo::aceita(Visitante *v){
+    v->visita(this);
+}
+
 TabelaIdentificador* obtemTabelaIdentificador(){return &tabelaID;};
 TabelaLiteral* obtemTabelaLiteral(){return &tabelaLiteral;};
 TabelaInteiro* obtemTabelaInteiro(){return &tabelaInteiro;};

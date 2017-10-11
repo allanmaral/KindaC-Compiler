@@ -27,6 +27,10 @@ static char tokenLiteral[62][16] = {
         "TRES_PONTOS",      "ASCII"
 };
 
+const char* pegarTokenLiteral(int token){
+    return tokenLiteral[token];
+}
+
 typedef enum {
     EsperadosChaveOuDoisPontos = 0,
     EsperadosDefinicaoClassTipo,

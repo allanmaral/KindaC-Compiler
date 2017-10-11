@@ -313,6 +313,13 @@ class NoNew:public NoPrimario{
         void aceita(Visitante *v);
         NoListaExpr *listaExpr;
 };
+class NoTipo{
+    public:
+        NoTipo(int Primitivo);
+        void aceita(Visitante *v);
+        int primitivo;
+        Atributo* atributo;
+};
 
 TabelaIdentificador* obtemTabelaIdentificador();
 TabelaInteiro    * obtemTabelaInteiro();
