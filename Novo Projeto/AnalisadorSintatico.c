@@ -1147,49 +1147,59 @@ void PrimarioL(){
     switch(tokenAtual){
         case NUM_INTEIRO:
             casar(NUM_INTEIRO);
+            return new NoNumInteiro(pegarUltimoAtributo());
         break;
         case NUM_REAL:
             casar(NUM_REAL);
+            return new NoNumReal(pegarUltimoAtributo());
         break;
         case LITERAL:
             casar(LITERAL);
+            return new NoLiteral(pegarUltimoAtributo());
         break;
         case ASCII:
             casar(ASCII);
+            return new NoAscii(pegarUltimoAtributo());
         break;
         case PARENTESE_ESQ:
             casar(PARENTESE_ESQ);
-            Expr();
+            NoExpr* expr = Expr();
             casarOuPular(PARENTESE_DIR, followPrimarioL);
+            return new NoParenteses(expr);
         break;
         case E_COMERCIAL:
             casar(E_COMERCIAL);
-            Primario();
+            return new NoEndereco(Primario());
         break;
         case ASTERISCO:
             casar(ASTERISCO);
-            Primario();
+            return new NoConteudo(Primario());
         break;
         case VERDADEIRO:
             casar(VERDADEIRO);
+            return new NoVerdadeiro();
         break;
         case FALSO:
             casar(FALSO);
+            return new NoFalso();
         break;
         case ESSE:
             casar(ESSE);
+            return NoEsse();
         break;
         case NOVO:
             casar(NOVO);
             casarOuPular(ID, followPrimarioL);
             casarOuPular(PARENTESE_ESQ, followPrimarioL);
-            ListaExpr();
+            NoListaExpr *listaExpr = LisListaExpr();
             casarOuPular(PARENTESE_DIR, followPrimarioL);
+            return new NoNovo(listaExpr);
         break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followPrimarioL);
+            return NULL;
         break;
     }
 }
@@ -1197,17 +1207,19 @@ void PrimarioL(){
 static int followPrimarioID [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                   DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                   E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-void PrimarioID(){
+NoPrimario* PrimarioID(){
     fprintf(stdout, "PrimarioID\n");
     switch(tokenAtual){
         case ID:
             casar(ID);
-            PrimarioIDL();
+            NoId *id = new NoId(pegarUltimoAtributo());
+            return PrimarioIDL(id);
         break;
         default:
             /* Erro */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followPrimarioID);
+            return NULL;
         break;
     }
 }
@@ -1215,14 +1227,18 @@ void PrimarioID(){
 static int followPrimarioIDL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                    DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                    E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-void PrimarioIDL(){
+NoPrimario* PrimarioIDL(NoId *id){
     fprintf(stdout, "PrimarioIDL\n");
     switch(tokenAtual){
         case PARENTESE_ESQ:
             casar(PARENTESE_ESQ);
-            ListaExpr();
+            NoListaExpr* listaExpr = ListaExpr();
             casarOuPular(PARENTESE_DIR, followPrimarioIDL);
+            return new NoChamadaFuncao(id, listaExpr);
         break;
-        default: /* Epsilon */ break;
+        default:
+            /* Epsilon */
+            return id;
+        break;
     }
 }
