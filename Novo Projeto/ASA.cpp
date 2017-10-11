@@ -17,6 +17,9 @@ NoPrograma::NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoD
 void NoId::aceita(Visitante *v){
     v->visita(this);
 }
+NoId::NoId(Atributo *entradaTabela){
+    this->entradaTabela = entradaTabela;
+}
 void NoPrograma::aceita(Visitante *v){
     v->visita(this);
 }

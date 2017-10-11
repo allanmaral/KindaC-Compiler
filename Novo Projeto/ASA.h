@@ -19,7 +19,11 @@ class NoPrograma{
         NoDeclTipo *listaTipo;
         NoDeclVariavel *listaVariavel;
 };
-class NoExpr{
+class NoSentenca{
+    public:
+        virtual void aceita(Visitante *v) =0;
+};
+class NoExpr:public NoSentenca{
     public:
         virtual void aceita(Visitante *v) = 0;
 };
@@ -28,9 +32,10 @@ class NoPrimario:public NoExpr{
        virtual void aceita(Visitante *v) = 0;
 };
 class NoId:public NoPrimario{
-public:
-    char* literal;
-    void aceita(Visitante *v);
+    public:
+        NoId(Atributo *entradaTabela);
+        void aceita(Visitante *v);
+        Atributo *entradaTabela;
 };
 class NoLiteral:public NoPrimario{
     public:
@@ -109,10 +114,6 @@ class NoListaFormal{
         NoArranjo *arranjo;
         NoListaFormal *lista;
 };
-class NoSentenca{
-    public:
-        virtual void aceita(Visitante *v) =0;
-};
 class NoListaSentenca{
     public:
         NoListaSentenca(NoSentenca *sentenca, NoListaSentenca *lista);
@@ -185,7 +186,7 @@ class NoEscopo:public NoSentenca{
         void aceita(Visitante *v);
         NoListaSentenca *lista;
 };
-class NoChamadaFuncao:public NoSentenca{
+class NoChamadaFuncao:public NoPrimario{
     public:
         NoChamadaFuncao(NoId *id, NoListaExpr *parametros);
         void aceita(Visitante *v);
