@@ -4,314 +4,314 @@
 
 class Visitante;
 
-class DeclFuncao;
-class DeclTipo;
-class DeclVariavel;
-class DeclClasse;
+class NoDeclFuncao;
+class NoDeclTipo;
+class NoDeclVariavel;
+class NoDeclClasse;
 
 
 class NoPrograma{
     public:
-        NoPrograma(DeclClasse *listaClasse, DeclFuncao *listaFuncao, DeclTipo *listaTipo, DeclVariavel *listaVariavel);
+        NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo, NoDeclVariavel *listaVariavel);
         void aceita(Visitante *v);
-        DeclClasse *listaClasse;
-        DeclFuncao *listaFuncao;
-        DeclTipo *listaTipo;
-        DeclVariavel *listaVariavel;
+        NoDeclClasse *listaClasse;
+        NoDeclFuncao *listaFuncao;
+        NoDeclTipo *listaTipo;
+        NoDeclVariavel *listaVariavel;
 };
-class Expr{
+class NoExpr{
 public:
     virtual void aceita(Visitante *v) = 0;
 };
-class Primario:public Expr{
+class NoPrimario:public NoExpr{
 public:
    virtual void aceita(Visitante *v) = 0;
 };
-class Id:public Primario{
+class NoId:public NoPrimario{
 public:
     char* literal;
     void aceita(Visitante *v);
 };
-class Literal:public Primario{
+class NoLiteral:public NoPrimario{
     public:
-        Literal(char *literal);
+        NoLiteral(char *literal);
         void aceita(Visitante *v);
-        ~Literal();
+        ~NoLiteral();
         char* literal;
 };
-class Ascii:public Primario{
+class NoAscii:public NoPrimario{
     public:
-        Ascii(char caractere);
+        NoAscii(char caractere);
         void aceita(Visitante *v);
         char caractere;
 };
-class Parenteses:public Primario{
+class NoParenteses:public NoPrimario{
     public:
-        Parenteses(Expr *expressao);
+        NoParenteses(NoExpr *expressao);
         void aceita(Visitante *v);
-        Expr *expressao;
+        NoExpr *expressao;
 };
-class Conteudo:public Primario{
+class NoConteudo:public NoPrimario{
     public:
-        Conteudo(Primario *primario);
+        NoConteudo(Primario *primario);
         void aceita(Visitante *v);
-        Primario *primario;
+        NoPrimario *primario;
 };
-class Endereco:public Primario{
+class NoEndereco:public NoPrimario{
     public:
-        Endereco(Primario *primario);
+        NoEndereco(NoPrimario *primario);
         void aceita(Visitante *v);
-        Primario *primario;
+        NoPrimario *primario;
 };
-class Num:public Primario{
+class NoNum:public NoPrimario{
 public:
     virtual void aceita(Visitante *v) = 0;
 };
-class NumInteiro:public Num{
+class NoNumInteiro:public NoNum{
     public:
-        NumInteiro(int num);
+        NoNumInteiro(int num);
         void aceita(Visitante *v);
         int num;
 };
-class NumReal:public Num{
+class NoNumReal:public NoNum{
     public:
-        NumReal(float num);
+        NoNumReal(float num);
         void aceita(Visitante *v);
         float num;
 };
-class Arranjo{
+class NoArranjo{
     public:
-        Arranjo(NumInteiro num);
+        NoArranjo(NoNumInteiro num);
         void aceita(Visitante *v);
         NumInteiro num;
 };
-class ListaExpr{
+class NoListaExpr{
     public:
-        ListaExpr(Expr *expressao, ListaExpr *lista);
+        NoListaExpr(NoExpr *expressao, NoListaExpr *lista);
         void aceita(Visitante *v);
-        Expr *expressao;
-        ListaExpr *lista;
+        NoExpr *expressao;
+        NoListaExpr *lista;
 };
-class ListaFormal{
+class NoListaFormal{
     public:
-        ListaFormal(int tipo, bool ponteiro, Id id, Arranjo *arranjo, ListaFormal *lista);
+        NoListaFormal(int tipo, bool ponteiro, NoId id, NoArranjo *arranjo, NoListaFormal *lista);
         void aceita(Visitante *v);
         int tipo;
         bool ponteiro;
-        Id id;
-        Arranjo *arranjo;
-        ListaFormal *lista;
+        NoId id;
+        NoArranjo *arranjo;
+        NoListaFormal *lista;
 };
-class Sentenca{
+class NoSentenca{
 public:
     virtual void aceita(Visitante *v) =0;
 };
-class ListaSentenca{
+class NoListaSentenca{
     public:
-        ListaSentenca(Sentenca *sentenca, ListaSentenca *lista);
+        NoListaSentenca(NoSentenca *sentenca, NoListaSentenca *lista);
         void aceita(Visitante *v);
-        Sentenca *sentenca;
-        ListaSentenca *lista;
+        NoSentenca *sentenca;
+        NoListaSentenca *lista;
 };
-class If:public Sentenca{
+class NoIf:public NoSentenca{
     public:
-        If(Expr *expressao, Sentenca *sentenca);
+        NoIf(NoExpr *expressao, NoSentenca *sentenca);
         void aceita(Visitante *v);
-        Expr *expressao;
-        Sentenca *sentenca;
+        NoExpr *expressao;
+        NoSentenca *sentenca;
 };
-class Else:public Sentenca{
+class NoElse:public NoSentenca{
     public:
-        Else(Sentenca *sentenca);
+        NoElse(NoSentenca *sentenca);
         void aceita(Visitante *v);
-        Sentenca *sentenca;
+        NoSentenca *sentenca;
 };
-class While:public Sentenca{
+class NoWhile:public NoSentenca{
     public:
-        While(Expr *expressao, Sentenca *sentenca);
+        NoWhile(NoExpr *expressao, NoSentenca *sentenca);
         void aceita(Visitante *v);
-        Expr *expressao;
-        Sentenca *sentenca;
+        NoExpr *expressao;
+        NoSentenca *sentenca;
 };
-class BlocoCaso{
+class NoBlocoCaso{
     public:
-        BlocoCaso(Num *num, ListaSentenca *listaSentenca, BlocoCaso *lista);
+        NoBlocoCaso(NoNum *num, NoListaSentenca *listaSentenca, NoBlocoCaso *lista);
         void aceita(Visitante *v);
-        Num *num;
-        ListaSentenca *listaSentenca;
-        BlocoCaso *lista;
+        NoNum *num;
+        NoListaSentenca *listaSentenca;
+        NoBlocoCaso *lista;
 };
-class Switch:public Sentenca{
+class NoSwitch:public NoSentenca{
     public:
-        Switch(Expr *expressao, BlocoCaso blocoCaso);
+        NoSwitch(NoExpr *expressao, NoBlocoCaso blocoCaso);
         void aceita(Visitante *v);
-        Expr *expressao;
-        BlocoCaso blocoCaso;
+        NoExpr *expressao;
+        NoBlocoCaso blocoCaso;
 };
-class Break:public Sentenca{
+class NoBreak:public NoSentenca{
     void aceita(Visitante *v);
 };
-class Print:public Sentenca{
+class NoPrint:public NoSentenca{
     public:
-        Print(ListaExpr *listaExpr);
+        NoPrint(NoListaExpr *listaExpr);
         void aceita(Visitante *v);
-        ListaExpr *listaExpr;
+        NoListaExpr *listaExpr;
 };
-class ReadLn:public Sentenca{
+class NoReadLn:public NoSentenca{
     public:
-        ReadLn(Expr *expressao);
+        NoReadLn(NoExpr *expressao);
         void aceita(Visitante *v);
-        Expr *expressao;
+        NoExpr *expressao;
 };
-class Return:public Sentenca{
+class NoReturn:public NoSentenca{
     public:
-        Return(Expr *expressao);
+        NoReturn(NoExpr *expressao);
         void aceita(Visitante *v);
-        Expr *expressao;
+        NoExpr *expressao;
 };
-class Throw:public Sentenca{
-    void aceita(Visitante *v);
+class NoThrow:public NoSentenca{
+    void aceita(NoVisitante *v);
 };
-class Escopo:public Sentenca{
+class NoEscopo:public NoSentenca{
     public:
-        Escopo(ListaSentenca *lista);
+        NoEscopo(NoListaSentenca *lista);
         void aceita(Visitante *v);
-        ListaSentenca *lista;
+        NoListaSentenca *lista;
 };
-class ChamadaFuncao:public Sentenca{
+class NoChamadaFuncao:public NoSentenca{
     public:
-        ChamadaFuncao(Id id, ListaExpr *parametros);
+        NoChamadaFuncao(NoId id, NoListaExpr *parametros);
         void aceita(Visitante *v);
-        Id id;
-        ListaExpr *parametros;
+        NoId id;
+        NoListaExpr *parametros;
 };
-class Try:public Sentenca{
+class NoTry:public NoSentenca{
     public:
-        Try(Sentenca *sentencaTry, Sentenca *sentencaCatch);
+        NoTry(NoSentenca *sentencaTry, NoSentenca *sentencaCatch);
         void aceita(Visitante *v);
-        Sentenca *sentencaTry;
-        Sentenca *sentencaCatch;
+        NoSentenca *sentencaTry;
+        NoSentenca *sentencaCatch;
 };
-class SentencaExpr:public Sentenca{
+class NoSentencaExpr:public NoSentenca{
     public:
-        SentencaExpr(Expr *expressao);
+        NoSentencaExpr(NoExpr *expressao);
         void aceita(Visitante *v);
-        Expr *expressao;
+        NoExpr *expressao;
 };
-class DeclFuncao{
+class NoDeclFuncao{
     public:
-        DeclFuncao(int tipo, Id id, ListaFormal *parametros, DeclVariavel *variaveis, ListaSentenca sentenca, DeclFuncao *lista);
+        NoDeclFuncao(int tipo, NoId id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca sentenca, NoDeclFuncao *lista);
         void aceita(Visitante *v);
         int tipo;
-        Id id;
-        ListaFormal *parametros;
-        DeclVariavel *variaveis;
-        ListaSentenca sentenca;
-        DeclFuncao *lista;
+        NoId id;
+        NoListaFormal *parametros;
+        NoDeclVariavel *variaveis;
+        NoListaSentenca sentenca;
+        NoDeclFuncao *lista;
 };
-class ListaId{
+class NoListaId{
     public:
-        ListaId(ListaId *lista, bool ponteiro, Arranjo *arranjo);
+        NoListaId(NoListaId *lista, bool ponteiro, NoArranjo *arranjo);
         void aceita(Visitante *v);
-        ListaId *lista;
+        NoListaId *lista;
         bool ponteiro;
-        Arranjo *arranjo;
+        NoArranjo *arranjo;
 };
-class DeclVariavel{
+class NoDeclVariavel{
     public:
-        DeclVariavel(int tipo, ListaId variaveis, DeclVariavel *lista);
+        NoDeclVariavel(int tipo, NoListaId variaveis, NoDeclVariavel *lista);
         void aceita(Visitante *v);
         int tipo;
-        ListaId variaveis;
-        DeclVariavel *lista;
+        NoListaId variaveis;
+        NoDeclVariavel *lista;
 };
-class DeclTipo{
+class NoDeclTipo{
     public:
-        DeclTipo(DeclVariavel *campo);
+        NoDeclTipo(NoDeclVariavel *campo);
         void aceita(Visitante *v);
-        DeclVariavel *campo;
+        NoDeclVariavel *campo;
 };
-class DeclLocal{
-public:
-    virtual void aceita(Visitante *v)=0;
-};
-class DeclLocalFuncao:public DeclLocal{
+class NoDeclLocal{
     public:
-        DeclLocalFuncao(DeclFuncao funcao, DeclLocal *lista);
+        virtual void aceita(Visitante *v)=0;
+};
+class NoDeclLocalFuncao:public NoDeclLocal{
+    public:
+        NoDeclLocalFuncao(NoDeclFuncao funcao, NoDeclLocal *lista);
         void aceita(Visitante *v);
-        DeclFuncao funcao;
-        DeclLocal *lista;
+        NoDeclFuncao funcao;
+        NoDeclLocal *lista;
 };
-class DeclLocalVariavel:public DeclLocal{
+class NoDeclLocalVariavel:public NoDeclLocal{
     public:
-        DeclLocalVariavel(DeclVariavel variavel, DeclLocal *lista);
+        NoDeclLocalVariavel(NoDeclVariavel variavel, NoDeclLocal *lista);
         void aceita(Visitante *v);
-        DeclVariavel variavel;
-        DeclLocal *lista;
+        NoDeclVariavel variavel;
+        NoDeclLocal *lista;
 };
-class DeclLocalPublic:public DeclLocal{
+class NoDeclLocalPublic:public NoDeclLocal{
     public:
-        DeclLocalPublic(DeclLocal *lista);
+        NoDeclLocalPublic(NoDeclLocal *lista);
         void aceita(Visitante *v);
-        DeclLocal *lista;
+        NoDeclLocal *lista;
 };
-class DeclLocalPrivate:public DeclLocal{
+class NoDeclLocalPrivate:public NoDeclLocal{
     public:
-        DeclLocalPrivate(DeclLocal *lista);
+        NoDeclLocalPrivate(NoDeclLocal *lista);
         void aceita(Visitante *v);
-        DeclLocal *lista;
+        NoDeclLocal *lista;
 };
-class DeclClasse{
+class NoDeclClasse{
     public:
-        DeclClasse(Id id, Id *heranca, DeclLocal *lista);
+        NoDeclClasse(NoId id, NoId *heranca, NoDeclLocal *lista);
         void aceita(Visitante *v);
-        Id id;
-        Id *heranca;
-        DeclLocal *lista;
+        NoId id;
+        NoId *heranca;
+        NoDeclLocal *lista;
 };
-class ExprUnaria:public Expr{
+class NoExprUnaria:public NoExpr{
     public:
-        ExprUnaria(int operador, Expr *expressao);
-        void aceita(Visitante *v);
-        int operador;
-        Expr *expressao;
-};
-class ExprBinaria:public Expr{
-    public:
-        ExprBinaria(int operador, Expr *exprEsquerda, Expr *exprDireita);
+        NoExprUnaria(int operador, NoExpr *expressao);
         void aceita(Visitante *v);
         int operador;
-        Expr *exprEsquerda;
-        Expr *exprDireita;
+        NoExpr *expressao;
 };
-class ExprAtrib:public Expr{
+class NoExprBinaria:public NoExpr{
     public:
-        ExprAtrib(Expr* exprEsquerda, Expr *exprDireita);
+        NoExprBinaria(int operador, NoExpr *exprEsquerda, NoExpr *exprDireita);
         void aceita(Visitante *v);
-        Expr *exprEsquerda;
-        Expr *exprDireita;
+        int operador;
+        NoExpr *exprEsquerda;
+        NoExpr *exprDireita;
 };
-class ExprAceCamp:public Expr{
+class NoExprAtrib:public NoExpr{
     public:
-        ExprAceCamp(Expr *exprEsquerda, Expr *exprDireita);
+        NoExprAtrib(NoExpr* exprEsquerda, NoExpr *exprDireita);
         void aceita(Visitante *v);
-        Expr *exprEsquerda;
-        Expr *exprDireita;
+        NoExpr *exprEsquerda;
+        NoExpr *exprDireita;
 };
-class True:public Primario{
+class NoExprAceCamp:public EExpr{
+    public:
+        NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita);
+        void aceita(Visitante *v);
+        NoExpr *exprEsquerda;
+        NoExpr *exprDireita;
+};
+class NoTrue:public NoPrimario{
     void aceita(Visitante *v);
 };
-class False:public Primario{
+class NoFalse:public NoPrimario{
     void aceita(Visitante *v);
 };
-class This:public Primario{
+class NoThis:public NoPrimario{
     void aceita(Visitante *v);
 };
-class New:public Primario{
+class NoNew:public NoPrimario{
     public:
-        New(ListaExpr *listaExpr);
+        New(NoListaExpr *listaExpr);
         void aceita(Visitante *v);
-        ListaExpr *listaExpr;
+        NoListaExpr *listaExpr;
 };
 
 TabelaIdentificador* obtemTabelaIdentificador();
