@@ -94,9 +94,9 @@ void casarOuPular(int token, int* sinc){
 
 void ProgramaL();
 void ProgramaA();       void ProgramaB();       void DeclClasse();      void DeclClasseL();
-void DeclLocal();       void DeclLocalL();      void DeclLocalLL();     void DeclVar();
-void ListaId();         void ListaIdCont();     void Ponteiro();        void Arranjo();
-void ListaForma();      void ListaFormaCont();  NoTipo *Tipo();            NoTipo *TipoL();
+void DeclLocal();       void DeclLocalL();      void DeclLocalLL();     NoDeclVariavel *DeclVar();
+NoListaId *ListaId();         NoListaId *ListaIdCont();     int Ponteiro();        NoArranjo *Arranjo();
+NoListaFormal *ListaForma();      NoListaFormal *ListaFormaCont();  NoTipo *Tipo();            NoTipo *TipoL();
 NoListaSentenca *ListaSentenca();   NoSentenca *Sentenca();        NoSentenca *SentencaL();       NoSe *Se();
 NoSenao *Senao();           NoBlocoCaso *BlocoCaso();       NoListaExpr *ListaExpr();       NoListaExpr *ListaExprCont();
 
@@ -356,118 +356,148 @@ void DeclLocalLL(){
 
 static int followDeclVar [] = {CHAVE_DIR, TOKEN_EOF};
 static int sincDeclVar [] = {CHAVE_DIR, INTEIRO, REAL, BOLEANO, CARACTERE, ID, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
-void DeclVar(){
+NoDeclVariavel *DeclVar(){
     fprintf(stdout, "DeclVar\n");
     switch(tokenAtual){
         case INTEIRO:       case REAL:          case BOLEANO:
-        case CARACTERE:     case ID:
-            Tipo();
-            Ponteiro();
+        case CARACTERE:     case ID: {
+            NoTipo *tipo = Tipo();
+            int ponteiro = Ponteiro();
             casarOuPular(ID, sincDeclVar);
-            Arranjo();
-            ListaIdCont();
+            NoId *id = new NoId(pegarUltimoAtributo());
+            NoArranjo *arranjo = Arranjo();
+            NoListaId *listaId = new NoListaId(ponteiro, id, arranjo, ListaIdCont());
             casarOuPular(PONTO_VIRGULA, sincDeclVar);
-            DeclVar();
+            return new NoDeclVariavel(tipo, listaId, DeclVar());
+        } break;
+        default:
+            /* Epsilon */
+            return NULL;
         break;
-        default: /* Epsilon */ break;
     }
 }
 
 //static int followListaId [] = {PONTO_VIRGULA, TOKEN_EOF};
 static int sincListaId [] = {PONTO_VIRGULA, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
-void ListaId(){
+NoListaId *ListaId(){
     fprintf(stdout, "ListaId\n");
     switch(tokenAtual){
         case ID:
-        case ASTERISCO:
-            Ponteiro();
+        case ASTERISCO: {
+            int ponteriro = Ponteiro();
             casarOuPular(ID, sincListaId);
-            Arranjo();
-            ListaIdCont();
+            NoId *id = new NoId(pegarUltimoAtributo());
+            NoArranjo *arranjo = Arranjo();
+            return new NoListaId(ponteriro, id, arranjo, ListaIdCont());
+        }
         break;
         default:
             /* ERRO */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosIdentificador]);
             pular(sincListaId);
+            return NULL;
         break;
     }
 }
 
 static int followListaIdCont [] = {PONTO_VIRGULA, VIRGULA, COLCHETE_ESQ, TOKEN_EOF};
-void ListaIdCont(){
+NoListaId *ListaIdCont(){
     fprintf(stdout, "ListaIdCont\n");
     switch(tokenAtual){
-        case VIRGULA:
+        case VIRGULA: {
             casar(VIRGULA);
-            Ponteiro();
+            int ponteiro = Ponteiro();
             casarOuPular(ID, followListaIdCont);
-            Arranjo();
-            ListaIdCont();
+            NoId *id = new NoId(pegarUltimoAtributo());
+            NoArranjo *arranjo = Arranjo();
+            return new NoListaId(ponteiro, id, arranjo, ListaIdCont());
+        } break;
+        default:
+            /* Epsilon */
+            return NULL;
         break;
-        default: /* Epsilon */ break;
     }
 }
 
 static int followPonteiro [] = {ID, TOKEN_EOF};
-void Ponteiro(){
+int Ponteiro(){
     fprintf(stdout, "Ponteiro\n");
     switch(tokenAtual){
         case ASTERISCO:
             casar(ASTERISCO);
+            return 1;
         break;
-        default: /* Epsilon */ break;
+        default:
+            /* Epsilon */
+            return 0;
+        break;
     }
 }
 
 //static int followArranjo [] = {VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
 static int sincArranjo [] = {VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, COLCHETE_DIR, TOKEN_EOF};
-void Arranjo(){
+NoArranjo *Arranjo(){
     fprintf(stdout, "Arranjo\n");
     switch(tokenAtual){
-        case COLCHETE_ESQ:
+        case COLCHETE_ESQ: {
             casar(COLCHETE_ESQ);
+            NoNum *num;
             if(tokenAtual == NUM_INTEIRO){
                 casarOuPular(NUM_INTEIRO, sincArranjo);
+                num = new NoNumInteiro(pegarUltimoAtributo());
             } else if (tokenAtual == NUM_REAL) { // NUM REAL AQUI É ERRO (SEMANTICO)
                   casarOuPular(NUM_REAL, sincArranjo);
+                  num = new NoNumReal(pegarUltimoAtributo());
               }
             casarOuPular(COLCHETE_DIR, sincArranjo);
+            return new NoArranjo(num);
+        } break;
+        default:
+            /* Epsilon */
+            return NULL;
         break;
-        default: /* Epsilon */ break;
     }
 }
 
 //static int followListaForma [] = {PARENTESE_DIR, TOKEN_EOF};
 static int sincListaForma [] = {PARENTESE_DIR, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
-void ListaForma(){
+NoListaFormal* ListaForma(){
     fprintf(stdout, "ListaForma\n");
     switch(tokenAtual){
         case INTEIRO:       case REAL:          case BOLEANO:
-        case CARACTERE:     case ID:
-            Tipo();
-            Ponteiro();
+        case CARACTERE:     case ID: {
+            NoTipo *tipo = Tipo();
+            int ponteiro = Ponteiro();
             casarOuPular(ID, sincListaForma);
-            Arranjo();
-            ListaFormaCont();
+            NoId *id = new NoId(pegarUltimoAtributo());
+            NoArranjo *arranjo = Arranjo();
+            return new NoListaFormal(tipo, ponteiro, id, arranjo, ListaFormaCont());
+        } break;
+        default:
+            /* Epsilon */
+            return NULL;
         break;
-        default: /* Epsilon */ break;
     }
 }
 
 //static int followListaFormaCont [] = {PARENTESE_DIR, TOKEN_EOF};
 static int sincListaFormaCont [] = {PARENTESE_DIR, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
-void ListaFormaCont(){
+NoListaFormal *ListaFormaCont(){
     fprintf(stdout, "ListaFormaCont\n");
     switch(tokenAtual){
-        case VIRGULA:
+        case VIRGULA: {
             casar(VIRGULA);
-            Tipo();
-            Ponteiro();
+            NoTipo *tipo = Tipo();
+            int ponteiro = Ponteiro();
             casarOuPular(ID, sincListaFormaCont);
-            Arranjo();
-            ListaFormaCont();
+            NoId *id = new NoId(pegarUltimoAtributo());
+            NoArranjo *arranjo = Arranjo();
+            return new NoListaFormal(tipo, ponteiro, id, arranjo, ListaFormaCont());
+        } break;
+        default:
+            /* Epsilon */
+            return NULL;
         break;
-        default: /* Epsilon */ break;
     }
 }
 

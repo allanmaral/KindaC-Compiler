@@ -203,6 +203,7 @@ void VisitanteImpressao::visita(NoListaId       *lid ){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-ID_LIST\n");
+    lid->id->aceita(this);
     if(lid->arranjo) lid->arranjo->aceita(this);
     if(lid->lista) lid->lista->aceita(this);
     nivel--;
@@ -211,6 +212,7 @@ void VisitanteImpressao::visita(NoDeclVariavel  *decV){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-VAR_DEC\n");
+    decV->tipo->aceita(this);
     decV->variaveis->aceita(this);
     if(decV->lista) decV->lista->aceita(this);
     nivel--;

@@ -65,7 +65,7 @@ NoNumReal::NoNumReal(Atributo *entradaTabela){
 void NoNumReal::aceita(Visitante *v){
     v->visita(this);
 }
-NoArranjo::NoArranjo(NoNumInteiro *num){
+NoArranjo::NoArranjo(NoNum *num){
     this->num = num;
 }
 void NoArranjo::aceita(Visitante *v){
@@ -192,15 +192,16 @@ NoDeclFuncao::NoDeclFuncao(int tipo, NoId *id, NoListaFormal *parametros, NoDecl
 void NoDeclFuncao::aceita(Visitante *v){
     v->visita(this);
 }
-NoListaId::NoListaId(NoListaId *lista, bool ponteiro, NoArranjo *arranjo){
-    this->lista = lista;
+NoListaId::NoListaId(bool ponteiro, NoId* id, NoArranjo *arranjo, NoListaId *lista){
     this->ponteiro = ponteiro;
+    this->id = id;
     this->arranjo = arranjo;
+    this->lista = lista;
 }
 void NoListaId::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclVariavel::NoDeclVariavel(int tipo, NoListaId *variaveis, NoDeclVariavel *lista){
+NoDeclVariavel::NoDeclVariavel(NoTipo *tipo, NoListaId *variaveis, NoDeclVariavel *lista){
     this->tipo = tipo;
     this->variaveis = variaveis;
     this->lista = lista;

@@ -92,9 +92,9 @@ class NoNumReal:public NoNum{
 };
 class NoArranjo{
     public:
-        NoArranjo(NoNumInteiro *num);
+        NoArranjo(NoNum *num);
         void aceita(Visitante *v);
-        NoNumInteiro *num;
+        NoNum *num;
 };
 class NoListaExpr{
     public:
@@ -226,17 +226,18 @@ class NoDeclFuncao{
 };
 class NoListaId{
     public:
-        NoListaId(NoListaId *lista, bool ponteiro, NoArranjo *arranjo);
+        NoListaId(bool ponteiro, NoId* id, NoArranjo *arranjo, NoListaId *lista);
         void aceita(Visitante *v);
-        NoListaId *lista;
+        NoId *id;
         bool ponteiro;
         NoArranjo *arranjo;
+        NoListaId *lista;
 };
 class NoDeclVariavel{
     public:
-        NoDeclVariavel(int tipo, NoListaId *variaveis, NoDeclVariavel *lista);
+        NoDeclVariavel(NoTipo* tipo, NoListaId *variaveis, NoDeclVariavel *lista);
         void aceita(Visitante *v);
-        int tipo;
+        NoTipo *tipo;
         NoListaId *variaveis;
         NoDeclVariavel *lista;
 };
