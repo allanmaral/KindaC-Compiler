@@ -105,7 +105,7 @@ class NoListaExpr{
 };
 class NoTipo{
     public:
-        NoTipo(int primitivo, Atributo *entradaTabela);
+        NoTipo(int primitivo, Atributo *entradaTabela = NULL);
         void aceita(Visitante *v);
         int primitivo;
         Atributo *entradaTabela;

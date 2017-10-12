@@ -26,6 +26,7 @@ class Visitante{
 		virtual void visita(NoImprime           *imp    ) = 0;
 		virtual void visita(NoLeLinha           *leL    ) = 0;
 		virtual void visita(NoRetorna           *ret    ) = 0;
+		virtual void visita(NoLanca             *lan    ) = 0;
 		virtual void visita(NoEscopo            *esc    ) = 0;
 		virtual void visita(NoChamadaFuncao     *cha    ) = 0;
 		virtual void visita(NoTenta             *te     ) = 0;

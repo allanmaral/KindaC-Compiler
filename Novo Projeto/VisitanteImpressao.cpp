@@ -154,6 +154,12 @@ void VisitanteImpressao::visita(NoRetorna        *ret){
 	if(ret->expressao) ret->expressao->aceita(this);
 	nivel--;
 }
+void VisitanteImpressao::visita(NoLanca          *lan){
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-LANCA\n");
+    nivel--;
+}
 void VisitanteImpressao::visita(NoEscopo        *esc){
     if(esc->lista) esc->lista->aceita(this);
 }

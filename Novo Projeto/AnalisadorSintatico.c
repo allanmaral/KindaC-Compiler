@@ -96,8 +96,8 @@ void ProgramaL();
 void ProgramaA();       void ProgramaB();       void DeclClasse();      void DeclClasseL();
 void DeclLocal();       void DeclLocalL();      void DeclLocalLL();     void DeclVar();
 void ListaId();         void ListaIdCont();     void Ponteiro();        void Arranjo();
-void ListaForma();      void ListaFormaCont();  void Tipo();            void TipoL();
-NoListaSentenca *ListaSentenca();   NoSentenca *Sentenca();        void SentencaL();       NoSe *Se();
+void ListaForma();      void ListaFormaCont();  NoTipo *Tipo();            NoTipo *TipoL();
+NoListaSentenca *ListaSentenca();   NoSentenca *Sentenca();        NoSentenca *SentencaL();       NoSe *Se();
 NoSenao *Senao();           NoBlocoCaso *BlocoCaso();       NoListaExpr *ListaExpr();       NoListaExpr *ListaExprCont();
 
 NoExpr *Expr();            NoExpr *ExprAtrib(NoExpr *exprEsquerda);       NoExpr *ExprOuBool();      NoExpr *ExprOuBoolL(NoExpr *exprEsquerda);
@@ -472,44 +472,51 @@ void ListaFormaCont(){
 }
 
 static int followTipo [] = {ID, ASTERISCO, TOKEN_EOF};
-void Tipo(){
+NoTipo *Tipo(){
     fprintf(stdout, "Tipo\n");
     switch(tokenAtual){
         case INTEIRO:       case REAL:          case BOLEANO:
-        case CARACTERE:
-            TipoL();
-        break;
-        case ID:
+        case CARACTERE: {
+            return TipoL();
+        } break;
+        case ID: {
             casar(ID);
-        break;
+            return new NoTipo(ID, pegarUltimoAtributo());
+        } break;
         default:
             /*ERRO*/
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosTipo]);
             pular(followTipo);
+            return NULL;
         break;
     }
 }
 
 static int followTipoL [] = {ID, ASTERISCO, TOKEN_EOF};
-void TipoL(){
+NoTipo *TipoL(){
     fprintf(stdout, "TipoL\n");
     switch(tokenAtual){
-        case INTEIRO:
+        case INTEIRO: {
             casar(INTEIRO);
-        break;
-        case REAL:
+            return new NoTipo(INTEIRO);
+        } break;
+        case REAL: {
             casar(REAL);
-        break;
-        case BOLEANO:
+            return new NoTipo(REAL);
+        } break;
+        case BOLEANO: {
             casar(BOLEANO);
-        break;
-        case CARACTERE:
+            return new NoTipo(BOLEANO);
+        } break;
+        case CARACTERE: {
             casar(CARACTERE);
-        break;
+            return new NoTipo(CARACTERE);
+        } break;
         default:
             /*ERRO*/
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosTipo]);
             pular(followTipoL);
+            return NULL;
         break;
     }
 }
@@ -526,11 +533,14 @@ NoListaSentenca *ListaSentenca(){
         case ENQUANTO:      case ESCOLHA:       case DESVIA:
         case RETORNA:       case LANCA:         case TENTA:
         case NEGACAO:       case NOVO:          case LE_LINHA:
-        case ESSE:          case IMPRIME:       case ASCII:
-            Sentenca();
-            ListaSentenca();
+        case ESSE:          case IMPRIME:       case ASCII: {
+            NoSentenca *sentenca = Sentenca();
+            return new NoListaSentenca(sentenca, ListaSentenca());
+        } break;
+        default:
+            /* Epsilon */
+            return NULL;
         break;
-        default: /* Epsilon */ break;
     }
 }
 
@@ -545,20 +555,22 @@ NoSentenca *Sentenca(){
         case NUM_REAL:      case PARENTESE_ESQ: case ASCII:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ADICAO:        case SUBTRACAO:
-        case ESSE:          case NOVO:          case NEGACAO:
-            Expr();
+        case ESSE:          case NOVO:          case NEGACAO: {
+            NoExpr * expr = Expr();
             casarOuPular(PONTO_VIRGULA, followSentenca);
-        break;
+            return expr;
+        } break;
         case CHAVE_ESQ:     case SE:            case ENQUANTO:
         case ESCOLHA:       case DESVIA:        case RETORNA:
         case LANCA:         case TENTA:         case IMPRIME:
-        case LE_LINHA:
-            SentencaL();
-        break;
+        case LE_LINHA: {
+            return SentencaL();
+        } break;
         default:
             /* ERRO */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosSenteca]);
             pular(followSentenca);
+            return NULL;
         break;
     }
 }
@@ -570,73 +582,81 @@ static int sincSentencaL []   = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL
                                  ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO,
                                  ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, PONTO_VIRGULA,
                                  PARENTESE_DIR, TRES_PONTOS, TOKEN_EOF};
-void SentencaL(){
+NoSentenca *SentencaL(){
     fprintf(stdout, "SentencaL\n");
     switch(tokenAtual){
-        case SE:
-            Se();
-        break;
-        case ENQUANTO:
+        case SE: {
+            return Se();
+        } break;
+        case ENQUANTO: {
             casar(ENQUANTO);
             casarOuPular(PARENTESE_ESQ, sincSentencaL);
-            Expr();
+            NoExpr* expr = Expr();
             casarOuPular(PARENTESE_DIR, sincSentencaL);
-            Sentenca();
-        break;
-        case ESCOLHA:
+            return new NoEnquanto(expr, Sentenca());
+        } break;
+        case ESCOLHA: {
             casar(ESCOLHA);
             casarOuPular(PARENTESE_ESQ, sincSentencaL);
-            Expr();
+            NoExpr* expr = Expr();
             casarOuPular(PARENTESE_DIR, sincSentencaL);
             casarOuPular(CHAVE_ESQ, sincSentencaL);
-            BlocoCaso();
+            NoBlocoCaso *bloco = BlocoCaso();
             casarOuPular(CHAVE_DIR, sincSentencaL);
-        break;
-        case DESVIA:
+            return new NoEscolha(expr, bloco);
+        } break;
+        case DESVIA: {
             casar(DESVIA);
             casarOuPular(PONTO_VIRGULA, sincSentencaL);
-        break;
-        case IMPRIME:
+            return new NoDesvia();
+        } break;
+        case IMPRIME: {
             casar(IMPRIME);
             casarOuPular(PARENTESE_ESQ, sincSentencaL);
-            ListaExpr();
+            NoListaExpr *lista = ListaExpr();
             casarOuPular(PARENTESE_DIR, sincSentencaL);
             casarOuPular(PONTO_VIRGULA, sincSentencaL);
-        break;
-        case LE_LINHA:
+            return new NoImprime(lista);
+        } break;
+        case LE_LINHA: {
             casar(LE_LINHA);
             casarOuPular(PARENTESE_ESQ, sincSentencaL);
-            Expr();
+            NoExpr* expr = Expr();
             casarOuPular(PARENTESE_DIR, sincSentencaL);
             casarOuPular(PONTO_VIRGULA, sincSentencaL);
-        break;
-        case RETORNA:
+            return new NoLeLinha(expr);
+        } break;
+        case RETORNA: {
             casar(RETORNA);
-            Expr();
+            NoExpr* expr = Expr();
             casarOuPular(PONTO_VIRGULA, sincSentencaL);
-        break;
-        case LANCA:
+            return new NoRetorna(expr);
+        } break;
+        case LANCA: {
              casar(LANCA);
              casarOuPular(PONTO_VIRGULA, sincSentencaL);
-        break;
-        case CHAVE_ESQ:
+             return new NoLanca();
+        } break;
+        case CHAVE_ESQ: {
             casar(CHAVE_ESQ);
-            ListaSentenca();
+            NoListaSentenca *lista = ListaSentenca();
             casarOuPular(CHAVE_DIR, sincSentencaL);
-        break;
-        case TENTA:
+            return new NoEscopo(lista);
+        } break;
+        case TENTA: {
             casar(TENTA);
-            Sentenca();
+            NoSentenca *sentencaTry = Sentenca();
             casarOuPular(PEGA, sincSentencaL);
             casarOuPular(PARENTESE_ESQ, sincSentencaL);
             casarOuPular(TRES_PONTOS, sincSentencaL);
             casarOuPular(PARENTESE_DIR, sincSentencaL);
-            Sentenca();
-        break;
+            return new NoTenta(sentencaTry, Sentenca());
+        } break;
         default:
             /*ERRO*/
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosSenteca]);
             pular(sincSentencaL);
+            return NULL;
         break;
     }
 }

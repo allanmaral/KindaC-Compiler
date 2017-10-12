@@ -33,6 +33,7 @@ class VisitanteImpressao: public Visitante{
 		void visita(NoImprime           *imp    );
 		void visita(NoLeLinha           *leL    );
 		void visita(NoRetorna           *ret    );
+		void visita(NoLanca             *lan    );
 		void visita(NoEscopo            *esc    );
 		void visita(NoChamadaFuncao     *cha    );
 		void visita(NoTenta             *te     );

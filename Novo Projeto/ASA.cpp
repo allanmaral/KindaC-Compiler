@@ -131,6 +131,9 @@ NoEscolha::NoEscolha(NoExpr *expressao, NoBlocoCaso *blocoCaso):blocoCaso(blocoC
 void NoEscolha::aceita(Visitante *v){
     v->visita(this);
 }
+void NoDesvia::aceita(Visitante *v){
+    v->visita(this);
+}
 NoImprime::NoImprime(NoListaExpr *listaExpr){
     this->listaExpr = listaExpr;
 }
@@ -147,6 +150,9 @@ NoRetorna::NoRetorna(NoExpr *expressao){
     this->expressao = expressao;
 }
 void NoRetorna::aceita(Visitante *v){
+    v->visita(this);
+}
+void NoLanca::aceita(Visitante *v){
     v->visita(this);
 }
 NoEscopo::NoEscopo(NoListaSentenca *lista){
