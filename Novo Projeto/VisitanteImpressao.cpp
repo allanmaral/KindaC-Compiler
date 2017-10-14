@@ -256,10 +256,10 @@ void VisitanteImpressao::visita(NoDeclLocalPrivate  *decLPri){
     nivel--;
 }
 void VisitanteImpressao::visita(NoDeclClasse        *decC ){
-     nivel++;
+    nivel++;
     calculaNivel();
     fprintf(stdout, "-CLASSE_DEC\n");
-    decC->id->aceita(this);
+    if(decC->id)  decC->id->aceita(this);
     if(decC->heranca){
          nivel++;
          calculaNivel();
@@ -267,7 +267,7 @@ void VisitanteImpressao::visita(NoDeclClasse        *decC ){
          decC->heranca->aceita(this);
          nivel--;
     }
-    if(decC->lista) decC->aceita(this);
+    if(decC->lista) decC->lista->aceita(this);
     nivel--;
 }
 void VisitanteImpressao::visita(NoExprUnaria    	  *expU ){
@@ -343,6 +343,50 @@ void VisitanteImpressao::visita(NoTipo               *tp  ){
     else { fprintf(stdout, "-%s", pegarTokenLiteral(tp->primitivo)); }
     nivel--;
     nivel--;
+}
+void VisitanteImpressao::visita(NoDeclLocalLL1 *dl){
+    nivel++;
+    if(dl->expressao) dl->expressao->aceita(this);
+    if(dl->listaId) dl->listaId->aceita(this);
+    if(dl->listaSentenca) dl->listaSentenca->aceita(this);
+    nivel--;
+}
+void VisitanteImpressao::visita(NoDeclLocalLL2 *dl){
+    nivel++;
+    if(dl->listaSentenca) dl->listaSentenca->aceita(this);
+    nivel--;
+}
+void VisitanteImpressao::visita(NoDeclLocalLL3 *dl){
+    nivel++;
+    if(dl->tipoL)   dl->tipoL->aceita(this);
+    if(dl->listaId) dl->aceita(this);
+    nivel--;
+    if(dl->lista)   dl->aceita(this);
+
+}
+void VisitanteImpressao::visita(NoDeclLocalL1 *dl){
+    nivel++;
+    if(dl->listaFormal) dl->listaFormal->aceita(this);
+    if(dl->declLocalLL) dl->declLocalLL->aceita(this);
+    nivel--;
+    if(dl->declLocal)   dl->declLocal->aceita(this);
+}
+void VisitanteImpressao::visita(NoDeclLocalL2 *dl){
+    nivel++;
+    if(dl->arranjo)     dl->arranjo->aceita(this);
+    if(dl->listaIdCont) dl->listaIdCont->aceita(this);
+    nivel--;
+    if(dl->declLocal)   dl->declLocal->aceita(this);
+
+}
+void VisitanteImpressao::visita(NoDeclLocalComun *dl){
+    nivel++;
+    if(dl->tipo)      dl->tipo->aceita(this);
+    if(dl->ponteiro) {fprintf(stdout, " *");};
+    if(dl->id)      {fprintf(stdout, " -ID.%s\n",dl->id->entradaTabela->pegarLexema());};
+    nivel--;
+    if(dl->declLocalL) dl->declLocalL->aceita(this);
+
 }
 void VisitanteImpressao::visita(NoColchetes *nc){
     //TUDO

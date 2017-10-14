@@ -277,6 +277,53 @@ class NoDeclLocalPrivate:public NoDeclLocal{
         void aceita(Visitante *v);
         NoDeclLocal *lista;
 };
+class NoDeclLocalLL1:public NoDeclLocal{
+    public:
+        NoDeclLocalLL1(NoExpr *expressao, NoListaId* listaId,NoListaSentenca *listaSentenca);
+        void aceita(Visitante *v);
+        NoExpr *expressao;
+        NoListaId *listaId;
+        NoListaSentenca *listaSentenca;
+};
+class NoDeclLocalLL2:public NoDeclLocal{
+    public:
+        NoDeclLocalLL2(NoListaSentenca *listaSentenca);
+        void aceita(Visitante *v);
+        NoListaSentenca *listaSentenca;
+};
+class NoDeclLocalLL3:public NoDeclLocal{
+    public:
+        NoDeclLocalLL3(NoTipo* tipoL,NoListaId* listaId, NoDeclLocal* lista);
+        void aceita(Visitante *v);
+        NoTipo* tipoL;
+        NoListaId *listaId;
+        NoDeclLocal* lista;
+};
+class NoDeclLocalL1:public NoDeclLocal{
+    public:
+        NoDeclLocalL1(NoListaFormal *listaFormal,NoDeclLocal *declLocalLL, NoDeclLocal *declLocal);
+        void aceita(Visitante *v);
+        NoListaFormal *listaFormal;
+        NoDeclLocal *declLocalLL;
+        NoDeclLocal *declLocal;
+};
+class NoDeclLocalL2:public NoDeclLocal{
+    public:
+        NoDeclLocalL2(NoArranjo *arranjo,NoListaId *listaIdCont, NoDeclLocal *declLocal);
+        void aceita(Visitante *v);
+        NoArranjo *arranjo;
+        NoListaId *listaIdCont;
+        NoDeclLocal *declLocal;
+};
+class NoDeclLocalComun:public NoDeclLocal{
+    public:
+        NoDeclLocalComun(NoTipo *tipo,bool ponteiro,NoId* id,NoDeclLocal *declLocalL);
+        void aceita(Visitante *v);
+        NoTipo *tipo;
+        bool ponteiro;
+        NoId *id;
+        NoDeclLocal *declLocalL;
+};
 class NoDeclClasse{
     public:
         NoDeclClasse(NoId *id, NoId *heranca, NoDeclLocal *lista);

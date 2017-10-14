@@ -68,9 +68,10 @@ int main(int argc, char** args){
         }
     }*/
 
-    ///teste ASA expr
+
     VisitanteImpressao vp;
-    vp.visita(testeExpr());
+    vp.visita(testeClasse());
+
 
     imprimeListaErros();
     obtemTabelaLiteral()->imprime();

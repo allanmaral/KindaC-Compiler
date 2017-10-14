@@ -1,15 +1,10 @@
-class No{
+class d:c{
+	int *teste [51],*b[20];
+ 	private:
+	int a(){ a+b; return c*h ;}
 	public:
-		no* prox;
-		int info;
+	int *b(){ }
 };
-int main(){
-	No *primeiro = new No();
-	No *segundo = new No();
-	primeiro->info = 0;
-	primeiro->prox = segundo;
-	segundo->info = 1;
-	/*delete primeiro;
-	delete segundo;*/
-	return 0;
-}
+	
+	 
+

@@ -93,8 +93,8 @@ void casarOuPular(int token, int* sinc){
 
 
 void ProgramaL();
-void ProgramaA();       void ProgramaB();       void DeclClasse();      void DeclClasseL();
-void DeclLocal();       void DeclLocalL();      void DeclLocalLL();     NoDeclVariavel *DeclVar();
+void ProgramaA();       void ProgramaB();       NoDeclClasse* DeclClasse();      NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada);
+NoDeclLocal* DeclLocal();       NoDeclLocal* DeclLocalL();      NoDeclLocal* DeclLocalLL();     NoDeclVariavel *DeclVar();
 NoListaId *ListaId();         NoListaId *ListaIdCont();     int Ponteiro();        NoArranjo *Arranjo();
 NoListaFormal *ListaForma();      NoListaFormal *ListaFormaCont();  NoTipo *Tipo();            NoTipo *TipoL();
 NoListaSentenca *ListaSentenca();   NoSentenca *Sentenca();        NoSentenca *SentencaL();       NoSe *Se();
@@ -214,67 +214,73 @@ void ProgramaB(){
 
 //static int followDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
 static int sincDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ, DOIS_PONTOS, TOKEN_EOF};
-void DeclClasse(){
+NoDeclClasse* DeclClasse(){
     fprintf(stdout, "DeclClasse\n");
     switch(tokenAtual){
-        case CLASSE:
+        case CLASSE:{
             casar(CLASSE);
             casarOuPular(ID, sincDeclClasse);
-            DeclClasseL();
-        break;
+            NoId *idClasse = new NoId(pegarUltimoAtributo());
+            return DeclClasseL(idClasse);
+        } break;
     }
 }
 
 //static int followDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
 static int sincDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ, CHAVE_DIR, PONTO_VIRGULA, TOKEN_EOF};
-void DeclClasseL(){
+NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada){
     fprintf(stdout, "DeclClasseL\n");
     switch(tokenAtual){
-        case CHAVE_ESQ:
+        case CHAVE_ESQ:{
             casar(CHAVE_ESQ);
-            DeclLocal();
+            NoDeclLocal *declLocal = DeclLocal();
             casarOuPular(CHAVE_DIR, sincDeclClasseL);
             casarOuPular(PONTO_VIRGULA, sincDeclClasseL);
-        break;
-        case DOIS_PONTOS:
+            return new NoDeclClasse(idClasseDeclarada,NULL,declLocal);
+        } break;
+        case DOIS_PONTOS:{
             casar(DOIS_PONTOS);
             casarOuPular(ID, sincDeclClasseL);
+            NoId* idHeranca = new NoId(pegarUltimoAtributo());
             casarOuPular(CHAVE_ESQ, sincDeclClasseL);
-            DeclLocal();
+            NoDeclLocal *declLocal = DeclLocal();
             casarOuPular(CHAVE_DIR, sincDeclClasseL);
             casarOuPular(PONTO_VIRGULA, sincDeclClasseL);
-        break;
+            return new NoDeclClasse (idClasseDeclarada,idHeranca,declLocal);
+        } break;
         default:
             /* ERRO */
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosChaveOuDoisPontos]);
             pular(sincDeclClasseL);
+            return NULL;
         break;
     }
 }
 
 static int followDeclLocal [] = {CHAVE_DIR, TOKEN_EOF};
 static int sincDeclLocal [] = {CHAVE_DIR, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, PARENTESE_ESQ, COLCHETE_ESQ, VIRGULA, PONTO_VIRGULA, TOKEN_EOF};
-void DeclLocal(){
+NoDeclLocal* DeclLocal(){
     fprintf(stdout, "DeclLocal\n");
     switch(tokenAtual){
         case INTEIRO:       case REAL:          case BOLEANO:
-        case CARACTERE:     case ID:
-            Tipo();
-            Ponteiro();
+        case CARACTERE:     case ID:{
+            NoTipo *tipo =  Tipo();
+            int ponteiro = Ponteiro();
             casarOuPular(ID, sincDeclLocal);
-            DeclLocalL();
-        break;
-        case PUBLICO:
+            NoId *id = new NoId(pegarUltimoAtributo());
+            return new NoDeclLocalComun(tipo,ponteiro,id, DeclLocalL());
+        } break;
+        case PUBLICO:{
             casar(PUBLICO);
             casarOuPular(DOIS_PONTOS, sincDeclLocal);
-            DeclLocal();
-        break;
-        case PRIVADO:
+            return new NoDeclLocalPublic(DeclLocal());
+        } break;
+        case PRIVADO:{
             casar(PRIVADO);
             casarOuPular(DOIS_PONTOS, sincDeclLocal);
-            DeclLocal();
-        break;
-        default: /* epsilon */ break;
+            return new NoDeclLocalPrivate(DeclLocal());
+        } break;
+        default: return NULL; break;
     }
 }
 
@@ -284,32 +290,33 @@ static int firstDeclLocalLL [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTES
                                   VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, ASCII, CHAVE_ESQ, SE, ENQUANTO,
                                   ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, INTEIRO, REAL, BOLEANO,
                                   CARACTERE, TOKEN_EOF };
-void DeclLocalL(){
+NoDeclLocal* DeclLocalL(){
     fprintf(stdout, "DeclLocalL\n");
     switch(tokenAtual){
-        case PARENTESE_ESQ:
+        case PARENTESE_ESQ:{
             casar(PARENTESE_ESQ);
-            ListaForma();
+            NoListaFormal *listaFormal = ListaForma();
             casarOuPular(PARENTESE_DIR, sincDeclLocalL);
             casarOuPular(CHAVE_ESQ, firstDeclLocalLL);
-            DeclLocalLL();
+            NoDeclLocal *declLocalLL = DeclLocalLL();
             casarOuPular(CHAVE_DIR, sincDeclLocalL);
-            DeclLocal();
-        break;
-        case COLCHETE_ESQ:  case VIRGULA:
-            Arranjo();
-            ListaIdCont();
+            return new NoDeclLocalL1(listaFormal,declLocalLL,DeclLocal());
+        } break;
+        case COLCHETE_ESQ:  case VIRGULA:{
+            NoArranjo *arranjo = Arranjo();
+            NoListaId *listaIdCont = ListaIdCont();
             casarOuPular(PONTO_VIRGULA, sincDeclLocalL);
-            DeclLocal();
-        break;
+            return new NoDeclLocalL2(arranjo,listaIdCont,DeclLocal());
+        } break;
         case PONTO_VIRGULA:
             casar(PONTO_VIRGULA);
-            DeclLocal();
+            return DeclLocal();
         break;
         default:
             /* ERRO */
             saidaErro(ErroSIntaticoDepois, pegarLinha(), pegarColuna(), esperadosLiteral[EsperadosDeclaracaoMembro], tokenLiteral[PONTO_VIRGULA]);
             pular(followDeclLocalL);
+            return NULL;
         break;
     }
 }
@@ -320,37 +327,40 @@ static int sincDeclLocalLL [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REA
                                   NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, LE_LINHA,
                                   RETORNA, IMPRIME, LANCA, TENTA, INTEIRO, REAL, BOLEANO, CARACTERE,
                                   COLCHETE_ESQ, VIRGULA, CHAVE_DIR, TOKEN_EOF};
-void DeclLocalLL(){
+NoDeclLocal* DeclLocalLL(){
     fprintf(stdout, "DeclLocalLL\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:
-            Expr();
-            ListaIdCont();
-            casarOuPular(PONTO_VIRGULA, sincDeclLocalLL);
-            ListaSentenca();
-        break;
+        case ADICAO:        case SUBTRACAO:     case ASCII:{
+           NoExpr *expr = Expr();
+           NoListaId *listaId = ListaIdCont();
+           casarOuPular(PONTO_VIRGULA, sincDeclLocalLL);
+           NoListaSentenca *listaSentenca = ListaSentenca();
+           return new NoDeclLocalLL1(expr,listaId,listaSentenca);
+        } break;
         case CHAVE_ESQ:     case SE:            case ENQUANTO:
         case ESCOLHA:       case DESVIA:        case IMPRIME:
-        case LE_LINHA:      case RETORNA:       case LANCA:
+        case LE_LINHA:      case RETORNA:       case LANCA:{
         case TENTA:
-            SentencaL();
-            ListaSentenca();
-        break;
+            NoSentenca *sentenca = SentencaL();
+            NoListaSentenca *listaSentenca = new NoListaSentenca(sentenca,ListaSentenca());
+            return new NoDeclLocalLL2(listaSentenca);
+        } break;
         case INTEIRO:       case REAL:          case BOLEANO:
-        case CARACTERE:
-            TipoL();
-            Ponteiro();
+        case CARACTERE:{
+            NoTipo *tipo = TipoL();
+            int ponteiro = Ponteiro();
             casarOuPular(ID, sincDeclLocalLL);
-            Arranjo();
-            ListaIdCont();
+            NoId *id = new NoId(pegarUltimoAtributo());
+            NoArranjo *arranjo = Arranjo();
+            NoListaId *listaId = new NoListaId(ponteiro,id,arranjo,ListaIdCont());
             casarOuPular(PONTO_VIRGULA, sincDeclLocalLL);
-            DeclLocalLL();
-        break;
-        default: /* Epsilon */ break;
+            return new NoDeclLocalLL3(tipo,listaId,DeclLocalLL());
+        } break;
+        default: return NULL; break;
     }
 }
 
@@ -1326,6 +1336,8 @@ NoPrimario* PrimarioIDL(NoId *id){
         break;
     }
 }
-NoRetorna *testeExpr(){
-    return new NoRetorna(Expr());
+
+NoDeclClasse *testeClasse(){
+    //NoDeclLocal *l=DeclLocal();
+    return  DeclClasse();
 };

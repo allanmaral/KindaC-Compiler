@@ -242,7 +242,53 @@ NoDeclLocalPrivate::NoDeclLocalPrivate(NoDeclLocal *lista){
 void NoDeclLocalPrivate::aceita(Visitante *v){
     v->visita(this);
 }
-
+NoDeclLocalLL1::NoDeclLocalLL1(NoExpr* expressao,NoListaId* listaId, NoListaSentenca* listaSentenca){
+    this->expressao=expressao;
+    this->listaId=listaId;
+    this->listaSentenca=listaSentenca;
+}
+void NoDeclLocalLL1::aceita(Visitante *v){
+    v->visita(this);
+}
+NoDeclLocalLL2::NoDeclLocalLL2(NoListaSentenca* listaSentenca){
+    this->listaSentenca=listaSentenca;
+}
+void NoDeclLocalLL2::aceita(Visitante *v){
+    v->visita(this);
+}
+NoDeclLocalLL3::NoDeclLocalLL3(NoTipo* tipoL,NoListaId *listaId,NoDeclLocal *lista){
+    this->tipoL=tipoL;
+    this->listaId=listaId;
+    this->lista=lista;
+}
+void NoDeclLocalLL3::aceita(Visitante *v){
+    v->visita(this);
+}
+NoDeclLocalL1::NoDeclLocalL1(NoListaFormal *listaFormal,NoDeclLocal* declLocalLL,NoDeclLocal* declLocal){
+    this->listaFormal=listaFormal;
+    this->declLocalLL=declLocalLL;
+    this->declLocal=declLocal;
+}
+void NoDeclLocalL1::aceita(Visitante *v){
+    v->visita(this);
+}
+NoDeclLocalL2::NoDeclLocalL2(NoArranjo *arranjo,NoListaId *listaIdCont,NoDeclLocal *declLocal){
+    this->arranjo=arranjo;
+    this->listaIdCont=listaIdCont;
+    this->declLocal=declLocal;
+}
+void NoDeclLocalL2::aceita(Visitante *v){
+    v->visita(this);
+}
+NoDeclLocalComun::NoDeclLocalComun(NoTipo *tipo,bool ponteiro,NoId* id, NoDeclLocal *declLocalL){
+    this->tipo=tipo;
+    this->ponteiro=ponteiro;
+    this->id=id;
+    this->declLocalL=declLocalL;
+}
+void NoDeclLocalComun::aceita(Visitante *v){
+    v->visita(this);
+}
 NoDeclClasse::NoDeclClasse(NoId *id, NoId *heranca, NoDeclLocal *lista){
     this->id = id;
     this->heranca = heranca;

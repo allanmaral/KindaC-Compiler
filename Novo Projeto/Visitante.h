@@ -50,6 +50,13 @@ class Visitante{
 		virtual void visita(NoNovo              *n      ) = 0;
 		virtual void visita(NoTipo              *tp     ) = 0;
 		virtual void visita(NoColchetes         *nc     ) = 0;
+		virtual void visita(NoDeclLocalLL1      *dl     ) = 0;
+		virtual void visita(NoDeclLocalLL2      *dl     ) = 0;
+		virtual void visita(NoDeclLocalLL3      *dl     ) = 0;
+		virtual void visita(NoDeclLocalL1       *dl     ) = 0;
+		virtual void visita(NoDeclLocalL2       *dl     ) = 0;
+        virtual void visita(NoDeclLocalComun    *dl     ) = 0;
+
 
 };
 #endif // VISITANTE_H
