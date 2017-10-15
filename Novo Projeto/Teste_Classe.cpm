@@ -1,9 +1,29 @@
 class d:c{
 	int *teste [51],*b[20];
  	private:
-	int a(){ a+b; return c*h ;}
+	int A(){ if(d) a+b; return c*h ;}
 	public:
-	int *b(){ }
+	int *B(){
+		int a[10];
+		a[0]=0;
+		try{ 
+			a[0]=b(c+t)+(2*(a[0]+n));
+        }
+		catch(...){
+			print("Erro\n");
+		}
+		return a;
+    }
+	float C(float a, float b){
+		int k;
+		k=0;
+		while(k<50){
+			a=a+b;
+			k=k+1;
+		}
+		return a;
+	}
+		
 };
 	
 	 

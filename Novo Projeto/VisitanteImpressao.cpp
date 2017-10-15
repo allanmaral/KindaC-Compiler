@@ -177,11 +177,9 @@ void VisitanteImpressao::visita(NoTenta           *te ){
 	fprintf(stdout, "-TENTA\n");
 	if(te->sentencaTry) te->sentencaTry->aceita(this);
 	if(te->sentencaCatch) {
-        nivel++;
         calculaNivel();
         fprintf(stdout, "-PEGA\n");
         te->sentencaCatch->aceita(this);
-        nivel--;
 	}
 	nivel--;
 }
@@ -245,15 +243,17 @@ void VisitanteImpressao::visita(NoDeclLocalPublic   *decLPub){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-PUB_LOC_DEC\n");
-    if(decLPub->lista) decLPub->lista->aceita(this);
     nivel--;
+    if(decLPub->lista) decLPub->lista->aceita(this);
+
 }
 void VisitanteImpressao::visita(NoDeclLocalPrivate  *decLPri){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-PRI_LOC_DEC\n");
-    if(decLPri->lista) decLPri->lista->aceita(this);
     nivel--;
+    if(decLPri->lista) decLPri->lista->aceita(this);
+
 }
 void VisitanteImpressao::visita(NoDeclClasse        *decC ){
     nivel++;
@@ -267,7 +267,11 @@ void VisitanteImpressao::visita(NoDeclClasse        *decC ){
          decC->heranca->aceita(this);
          nivel--;
     }
-    if(decC->lista) decC->lista->aceita(this);
+    if(decC->lista){
+        nivel ++;
+        decC->lista->aceita(this);
+        nivel--;
+    }
     nivel--;
 }
 void VisitanteImpressao::visita(NoExprUnaria    	  *expU ){
@@ -358,10 +362,10 @@ void VisitanteImpressao::visita(NoDeclLocalLL2 *dl){
 }
 void VisitanteImpressao::visita(NoDeclLocalLL3 *dl){
     nivel++;
-    if(dl->tipoL)   dl->tipoL->aceita(this);
-    if(dl->listaId) dl->aceita(this);
+    if(dl->tipoL)   {dl->tipoL->aceita(this); fprintf(stdout,"\n");}
+    if(dl->listaId) dl->listaId->aceita(this);
     nivel--;
-    if(dl->lista)   dl->aceita(this);
+    if(dl->lista)   dl->lista->aceita(this);
 
 }
 void VisitanteImpressao::visita(NoDeclLocalL1 *dl){
@@ -382,12 +386,15 @@ void VisitanteImpressao::visita(NoDeclLocalL2 *dl){
 void VisitanteImpressao::visita(NoDeclLocalComun *dl){
     nivel++;
     if(dl->tipo)      dl->tipo->aceita(this);
-    if(dl->ponteiro) {fprintf(stdout, " *");};
-    if(dl->id)      {fprintf(stdout, " -ID.%s\n",dl->id->entradaTabela->pegarLexema());};
+    if(dl->ponteiro) {fprintf(stdout, " *\n");}
+    else fprintf(stdout, "\n");
+    if(dl->id) dl->id->aceita(this);
     nivel--;
     if(dl->declLocalL) dl->declLocalL->aceita(this);
 
 }
 void VisitanteImpressao::visita(NoColchetes *nc){
     //TUDO
+    if(nc->primario) nc->primario->aceita(this);
+    if(nc->expressao) nc->expressao->aceita(this);
 }
