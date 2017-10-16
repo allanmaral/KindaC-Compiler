@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="Teste_Classe.cpm" />
+				<Option parameters="Teste_Programa.cpm" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>

@@ -58,12 +58,6 @@ class VisitanteImpressao: public Visitante{
 		void visita(NoNovo              *n      );
 		void visita(NoTipo              *tp     );
 		void visita(NoColchetes         *nc     );
-		void visita(NoDeclLocalLL1      *dl     );
-		void visita(NoDeclLocalLL2      *dl     );
-		void visita(NoDeclLocalLL3      *dl     );
-		void visita(NoDeclLocalL1       *dl     );
-		void visita(NoDeclLocalL2       *dl     );
-		void visita(NoDeclLocalComun    *dl     );
 };
 
 #endif // VISITANTEIMPRESSAO_H

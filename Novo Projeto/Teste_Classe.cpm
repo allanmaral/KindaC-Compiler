@@ -1,3 +1,6 @@
+int main(){
+a+b;
+};
 class d:c{
 	int *teste [51],*b[20];
  	private:
