@@ -16,7 +16,7 @@ void VisitanteImpressao::calculaNivel(){
 }
 void VisitanteImpressao::visita(NoPrograma *prog){
 	fprintf(stdout,"\n\n-PROGRAMA\n");
-	if(prog->listaClasse) { fprintf(stdout, "Teste\n"); prog->listaClasse->aceita(this);}
+	if(prog->listaClasse) prog->listaClasse->aceita(this);
 	if(prog->listaFuncao) prog->listaFuncao->aceita(this);
 	if(prog->listaTipo)   prog->listaTipo->aceita(this);
 	if(prog->listaVariavel) prog->listaVariavel->aceita(this);
@@ -80,7 +80,14 @@ void VisitanteImpressao::visita(NoListaExpr *le ){
     if(le->lista)le->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoListaFormal *lf){
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-LISTA_FORMAL\n");
+    if(lf->tipo) lf->tipo->aceita(this);
+    if(lf->ponteiro) {nivel++; calculaNivel(); fprintf(stdout, "-PONTEIRO\n"); nivel--;}
+    if(lf->id) lf->id->aceita(this);
     if(lf->arranjo) lf->arranjo->aceita(this);
+    nivel--;
     if(lf->lista) lf->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoListaSentenca *ls ){
@@ -192,19 +199,31 @@ void VisitanteImpressao::visita(NoDeclFuncao    *decF){
     fprintf(stdout, "-FUNC_DEC\n");
     decF->id->aceita(this);
     if(decF->parametros) decF->parametros->aceita(this);
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-CORPO_FUNCAO\n");
     if(decF->variaveis) decF->variaveis->aceita(this);
-    decF->sentenca->aceita(this);
-    if(decF->lista) decF->lista->aceita(this);
+    /// AQUI
+    //if(decF->corpoFunc) decF->corpoFunc-aceita(this);
+    if(decF->sentenca) decF->sentenca->aceita(this);
     nivel--;
+    nivel--;
+    if(decF->lista) decF->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoListaId       *lid ){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-ID_LIST\n");
+    if(lid->ponteiro){
+        nivel++;
+        calculaNivel();
+        fprintf(stdout, "-PONTEIRO\n");
+        nivel--;
+    }
     lid->id->aceita(this);
     if(lid->arranjo) lid->arranjo->aceita(this);
-    if(lid->lista) lid->lista->aceita(this);
     nivel--;
+    if(lid->lista) lid->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoDeclVariavel  *decV){
     nivel++;
@@ -225,7 +244,7 @@ void VisitanteImpressao::visita(NoDeclTipo           *decT){
 void VisitanteImpressao::visita(NoDeclLocalFuncao  *decLF   ){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-FUC_LOC_DEC\n");
+    fprintf(stdout, "-DEC_LOC_FUNCAO\n");
     decLF->funcao->aceita(this);
     if(decLF->lista) decLF->lista->aceita(this);
     nivel--;
@@ -233,7 +252,7 @@ void VisitanteImpressao::visita(NoDeclLocalFuncao  *decLF   ){
 void VisitanteImpressao::visita(NoDeclLocalVariavel *decLV  ){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-VAR_LOC_DEC\n");
+    fprintf(stdout, "-DEC_LOC_VARIAVEL\n");
     decLV->variavel->aceita(this);
     if(decLV->lista) decLV->lista->aceita(this);
     nivel--;
@@ -242,7 +261,7 @@ void VisitanteImpressao::visita(NoDeclLocalVariavel *decLV  ){
 void VisitanteImpressao::visita(NoDeclLocalPublic   *decLPub){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-PUB_LOC_DEC\n");
+    fprintf(stdout, "-DEC_LOC_PUBLIC\n");
     nivel--;
     if(decLPub->lista) decLPub->lista->aceita(this);
 
@@ -250,7 +269,7 @@ void VisitanteImpressao::visita(NoDeclLocalPublic   *decLPub){
 void VisitanteImpressao::visita(NoDeclLocalPrivate  *decLPri){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-PRI_LOC_DEC\n");
+    fprintf(stdout, "-DEC_LOC_PRIVATE\n");
     nivel--;
     if(decLPri->lista) decLPri->lista->aceita(this);
 
@@ -275,12 +294,10 @@ void VisitanteImpressao::visita(NoDeclClasse        *decC ){
          decC->heranca->aceita(this);
          nivel--;
     }
-    if(decC->lista){
-        nivel ++;
-        decC->lista->aceita(this);
-        nivel--;
-    }
+    if(decC->local) decC->local->aceita(this);
+
     nivel--;
+    if(decC->lista) decC->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoExprUnaria    	  *expU ){
     nivel++;
@@ -351,8 +368,8 @@ void VisitanteImpressao::visita(NoTipo               *tp  ){
     fprintf(stdout, "-TIPO\n");
     nivel++;
     calculaNivel();
-    if(tp->primitivo == ID) { fprintf(stdout, "-ID.%s", tp->entradaTabela->pegarLexema()); }
-    else { fprintf(stdout, "-%s", pegarTokenLiteral(tp->primitivo)); }
+    if(tp->primitivo == ID) { fprintf(stdout, "-ID.%s\n", tp->entradaTabela->pegarLexema()); }
+    else { fprintf(stdout, "-%s\n", pegarTokenLiteral(tp->primitivo)); }
     nivel--;
     nivel--;
 }
@@ -403,6 +420,10 @@ void VisitanteImpressao::visita(NoDeclLocalComun *dl){
 }
 void VisitanteImpressao::visita(NoColchetes *nc){
     //TUDO
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-INDICE\n");
     if(nc->primario) nc->primario->aceita(this);
     if(nc->expressao) nc->expressao->aceita(this);
+    nivel--;
 }
