@@ -94,7 +94,7 @@ void casarOuPular(int token, int* sinc){
 
 void ProgramaL();
 void ProgramaA();       void ProgramaB();       NoDeclClasse* DeclClasse();      NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada);
-NoDeclLocal* DeclLocal();       NoDeclLocal* DeclLocalL();      NoDeclLocal* DeclLocalLL();     NoDeclVariavel *DeclVar();
+NoDeclLocal* DeclLocal();       NoDeclLocal* DeclLocalL();      NoDeclLocal* CorpoFunc();     NoDeclVariavel *DeclVar();
 NoListaId *ListaId();         NoListaId *ListaIdCont();     int Ponteiro();        NoArranjo *Arranjo();
 NoListaFormal *ListaForma();      NoListaFormal *ListaFormaCont();  NoTipo *Tipo();            NoTipo *TipoL();
 NoListaSentenca *ListaSentenca();   NoSentenca *Sentenca();        NoSentenca *SentencaL();       NoSe *Se();
@@ -173,7 +173,7 @@ void ProgramaA(){
             ListaForma();
             casarOuPular(PARENTESE_DIR, sincProgramaA);
             casarOuPular(CHAVE_ESQ, sincProgramaA);
-            DeclLocalLL();
+            CorpoFunc();
             casarOuPular(CHAVE_DIR, sincProgramaA);
             ProgramaL();
         break;
@@ -286,7 +286,7 @@ NoDeclLocal* DeclLocal(){
 
 static int followDeclLocalL [] = {CHAVE_DIR, TOKEN_EOF};
 static int sincDeclLocalL   [] = {CHAVE_DIR, CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, TOKEN_EOF};
-static int firstDeclLocalLL [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL,
+static int firstCorpoFunc [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL,
                                   VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, ASCII, CHAVE_ESQ, SE, ENQUANTO,
                                   ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, INTEIRO, REAL, BOLEANO,
                                   CARACTERE, TOKEN_EOF };
@@ -297,10 +297,10 @@ NoDeclLocal* DeclLocalL(){
             casar(PARENTESE_ESQ);
             NoListaFormal *listaFormal = ListaForma();
             casarOuPular(PARENTESE_DIR, sincDeclLocalL);
-            casarOuPular(CHAVE_ESQ, firstDeclLocalLL);
-            NoDeclLocal *declLocalLL = DeclLocalLL();
+            casarOuPular(CHAVE_ESQ, firstCorpoFunc);
+            NoDeclLocal *corpoFunc = CorpoFunc();
             casarOuPular(CHAVE_DIR, sincDeclLocalL);
-            return new NoDeclLocalL1(listaFormal,declLocalLL,DeclLocal());
+            return new NoDeclLocalL1(listaFormal,corpoFunc,DeclLocal());
         } break;
         case COLCHETE_ESQ:  case VIRGULA:{
             NoArranjo *arranjo = Arranjo();
@@ -321,14 +321,14 @@ NoDeclLocal* DeclLocalL(){
     }
 }
 
-static int followDeclLocalLL [] = {CHAVE_DIR, TOKEN_EOF};
-static int sincDeclLocalLL [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ,
+static int followCorpoFunc [] = {CHAVE_DIR, TOKEN_EOF};
+static int sincCorpoFunc [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ,
                                   NEGACAO, LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE,
                                   NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, LE_LINHA,
                                   RETORNA, IMPRIME, LANCA, TENTA, INTEIRO, REAL, BOLEANO, CARACTERE,
                                   COLCHETE_ESQ, VIRGULA, CHAVE_DIR, TOKEN_EOF};
-NoDeclLocal* DeclLocalLL(){
-    fprintf(stdout, "DeclLocalLL\n");
+NoDeclLocal* CorpoFunc(){
+    fprintf(stdout, "CorpoFunc\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
@@ -337,7 +337,7 @@ NoDeclLocal* DeclLocalLL(){
         case ADICAO:        case SUBTRACAO:     case ASCII:{
            NoExpr *expr = Expr();
            NoListaId *listaId = ListaIdCont();
-           casarOuPular(PONTO_VIRGULA, sincDeclLocalLL);
+           casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
            NoListaSentenca *listaSentenca = ListaSentenca();
            return new NoDeclLocalLL1(expr,listaId,listaSentenca);
         } break;
@@ -353,12 +353,12 @@ NoDeclLocal* DeclLocalLL(){
         case CARACTERE:{
             NoTipo *tipo = TipoL();
             int ponteiro = Ponteiro();
-            casarOuPular(ID, sincDeclLocalLL);
+            casarOuPular(ID, sincCorpoFunc);
             NoId *id = new NoId(pegarUltimoAtributo());
             NoArranjo *arranjo = Arranjo();
             NoListaId *listaId = new NoListaId(ponteiro,id,arranjo,ListaIdCont());
-            casarOuPular(PONTO_VIRGULA, sincDeclLocalLL);
-            return new NoDeclLocalLL3(tipo,listaId,DeclLocalLL());
+            casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
+            return new NoDeclLocalLL3(tipo,listaId,CorpoFunc());
         } break;
         default: return NULL; break;
     }

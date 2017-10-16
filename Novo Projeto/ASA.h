@@ -8,6 +8,7 @@ class NoDeclFuncao;
 class NoDeclTipo;
 class NoDeclVariavel;
 class NoDeclClasse;
+class NoCorpoFunc;
 
 
 class NoPrograma{
@@ -220,8 +221,8 @@ class NoDeclFuncao{
         int tipo;
         NoId *id;
         NoListaFormal *parametros;
-        NoDeclVariavel *variaveis;
-        NoListaSentenca *sentenca;
+        NoDeclVariavel *variaveis; // Será preenchida no semantico
+        NoListaSentenca *sentenca; // Será preenchida no semantico
         NoDeclFuncao *lista;
 };
 class NoListaId{
@@ -276,6 +277,11 @@ class NoDeclLocalPrivate:public NoDeclLocal{
         NoDeclLocalPrivate(NoDeclLocal *lista);
         void aceita(Visitante *v);
         NoDeclLocal *lista;
+};
+class NoCorpoFunc{
+    public:
+        NoExpr* expr;
+        void aceita(Visitante* v);
 };
 class NoDeclLocalLL1:public NoDeclLocal{
     public:
