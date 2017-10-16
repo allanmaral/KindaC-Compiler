@@ -39,8 +39,9 @@ class Visitante{
 		virtual void visita(NoDeclLocalVariavel *decLV  ) = 0;
 		virtual void visita(NoDeclLocalPublic   *decLPub) = 0;
 		virtual void visita(NoDeclLocalPrivate  *decLpri) = 0;
+		virtual void visita(NoCorpoFuncao       *cF     ) = 0;
 		virtual void visita(NoDeclClasse        *decC   ) = 0;
-		virtual void visita(NoExprUnaria    	 *expU   ) = 0;
+		virtual void visita(NoExprUnaria    	*expU   ) = 0;
 		virtual void visita(NoExprBinaria       *expB   ) = 0;
 		virtual void visita(NoExprAtrib         *atr    ) = 0;
 		virtual void visita(NoExprAceCamp       *expAC  ) = 0;

@@ -53,6 +53,7 @@ int main(int argc, char** args){
     iniciaAnalisadorLexico(arquivo);
     InicializarAnalizadorSintatico();
     ///ASA Croncreta
+
     //ProgramaL();
     /*int token = 0;
     while(token != TOKEN_EOF){
@@ -68,9 +69,9 @@ int main(int argc, char** args){
         }
     }*/
 
-
+    NoPrograma* programa = Programa();
     VisitanteImpressao vp;
-    vp.visita(testeClasse());
+    vp.visita(programa);
 
 
     imprimeListaErros();

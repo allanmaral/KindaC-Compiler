@@ -16,7 +16,7 @@ void VisitanteImpressao::calculaNivel(){
 }
 void VisitanteImpressao::visita(NoPrograma *prog){
 	fprintf(stdout,"\n\n-PROGRAMA\n");
-	if(prog->listaClasse) prog->listaClasse->aceita(this);
+	if(prog->listaClasse) { fprintf(stdout, "Teste\n"); prog->listaClasse->aceita(this);}
 	if(prog->listaFuncao) prog->listaFuncao->aceita(this);
 	if(prog->listaTipo)   prog->listaTipo->aceita(this);
 	if(prog->listaVariavel) prog->listaVariavel->aceita(this);
@@ -254,6 +254,14 @@ void VisitanteImpressao::visita(NoDeclLocalPrivate  *decLPri){
     nivel--;
     if(decLPri->lista) decLPri->lista->aceita(this);
 
+}
+void VisitanteImpressao::visita(NoCorpoFuncao *cF){
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-CORPO_FUNC\n");
+    if(cF->listaExpr) cF->listaExpr->aceita(this);
+    nivel--;
+    if(cF->lista) cF->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoDeclClasse        *decC ){
     nivel++;

@@ -93,8 +93,8 @@ void casarOuPular(int token, int* sinc){
 
 
 void ProgramaL();
-void ProgramaA();       void ProgramaB();       NoDeclClasse* DeclClasse();      NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada);
-NoDeclLocal* DeclLocal();       NoDeclLocal* DeclLocalL();      NoDeclLocal* CorpoFunc();     NoDeclVariavel *DeclVar();
+void ProgramaA(NoTipo *tipo, int ponteiro, NoId* id);       void ProgramaB();       NoDeclClasse* DeclClasse();      NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada);
+NoDeclLocal* DeclLocal();       NoDeclLocal* DeclLocalL(NoTipo* tipo, int ponteiro, NoId* id);      void CorpoFunc(NoDeclFuncao* funcao);     NoDeclVariavel *DeclVar();
 NoListaId *ListaId();         NoListaId *ListaIdCont();     int Ponteiro();        NoArranjo *Arranjo();
 NoListaFormal *ListaForma();      NoListaFormal *ListaFormaCont();  NoTipo *Tipo();            NoTipo *TipoL();
 NoListaSentenca *ListaSentenca();   NoSentenca *Sentenca();        NoSentenca *SentencaL();       NoSe *Se();
@@ -113,7 +113,7 @@ void InicializarAnalizadorSintatico(){
 }
 
 NoPrograma *Programa(){
-    ProgramaL();
+    while(tokenAtual != TOKEN_EOF) ProgramaL();
     return new NoPrograma(listaClasse, listaFuncao, listaTipo, listaVariavel);
 }
 
@@ -124,30 +124,47 @@ static int firstPrograma [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE
 void ProgramaL(){
     fprintf(stdout, "ProgramaL\n");
     switch(tokenAtual){
-        case DEFINICAO_TIPO:
+        case DEFINICAO_TIPO: {
             casar(DEFINICAO_TIPO);
             casarOuPular(ESTRUTURA, sincPrograma);
             casarOuPular(CHAVE_ESQ, sincPrograma);
-            Tipo();
-            ListaId();
+            NoTipo *tipo = Tipo();
+            NoListaId *listaId = ListaId();
             casarOuPular(PONTO_VIRGULA, sincPrograma);
-            DeclVar();
+            NoDeclVariavel *variavel = new NoDeclVariavel(tipo, listaId, DeclVar());
             casarOuPular(CHAVE_DIR, sincPrograma);
             casarOuPular(ID, sincPrograma);
+            NoId *id = new NoId(pegarUltimoAtributo());
             casarOuPular(PONTO_VIRGULA, sincPrograma);
+            NoDeclTipo *declTipo = new NoDeclTipo(variavel, id);
+            if(listaTipo){
+                NoDeclTipo *ultimo = listaTipo;
+                while(ultimo->lista) ultimo = ultimo->lista;
+                ultimo->lista = declTipo;
+            }else{
+                 listaTipo = declTipo;
+             }
             ProgramaL();
-        break;
+        } break;
         case INTEIRO:       case REAL:          case BOLEANO:
-        case CARACTERE:     case ID:
-            Tipo();
-            Ponteiro();
+        case CARACTERE:     case ID: {
+            NoTipo *tipo = Tipo();
+            int ponteiro = Ponteiro();
             casarOuPular(ID, sincPrograma);
-            ProgramaA();
-        break;
-        case CLASSE:
-            DeclClasse();
+            NoId *id = new NoId(pegarUltimoAtributo());
+            ProgramaA(tipo, ponteiro, id);
+        } break;
+        case CLASSE: {
+            NoDeclClasse *classe = DeclClasse();
+            if(listaClasse){
+                NoDeclClasse* ultimo = listaClasse;
+                while(ultimo->lista) ultimo = ultimo->lista;
+                ultimo->lista = classe;
+            } else {
+                listaClasse = classe;
+              }
             ProgramaL();
-        break;
+        } break;
         case TOKEN_EOF:
             return; // NULL
         break;
@@ -165,50 +182,44 @@ static int followProgramaA [] = {TOKEN_EOF};
 static int sincProgramaA [] = {CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO,
                                LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA,
                                IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, DEFINICAO_TIPO, CLASSE, TOKEN_EOF};
-void ProgramaA(){
+void ProgramaA(NoTipo *tipo, int ponteiro, NoId* id){
     fprintf(stdout, "ProgramaA\n");
     switch(tokenAtual){
-        case PARENTESE_ESQ:
+        case PARENTESE_ESQ: {
             casar(PARENTESE_ESQ);
-            ListaForma();
+            NoListaFormal *listaFormal = ListaForma();
             casarOuPular(PARENTESE_DIR, sincProgramaA);
             casarOuPular(CHAVE_ESQ, sincProgramaA);
-            CorpoFunc();
+            NoDeclFuncao *funcao = new NoDeclFuncao(tipo, ponteiro, id, listaFormal, NULL, NULL, NULL);
+            CorpoFunc(funcao);
             casarOuPular(CHAVE_DIR, sincProgramaA);
+            if(listaFuncao){
+                NoDeclFuncao *ultimo = listaFuncao;
+                while(ultimo->lista) ultimo = ultimo->lista;
+                ultimo->lista = funcao;
+            }else{
+                 listaFuncao = funcao;
+             }
             ProgramaL();
-        break;
-        case COLCHETE_ESQ:
-            Arranjo();
-            ListaIdCont();
+        } break;
+        case COLCHETE_ESQ:  case VIRGULA:       case PONTO_VIRGULA: {
+            NoArranjo *arranjo = Arranjo();
+            NoListaId *listaId = new NoListaId(ponteiro, id, arranjo, ListaIdCont());
             casarOuPular(PONTO_VIRGULA, followProgramaA);
-            ProgramaB();
-        break;
-        case VIRGULA:
-            ListaIdCont();
-            casarOuPular(PONTO_VIRGULA, followProgramaA);
-            ProgramaB();
-        break;
-        case PONTO_VIRGULA:
-            casar(PONTO_VIRGULA);
-            ProgramaB();
-        break;
+            NoDeclVariavel *variavel = new NoDeclVariavel(tipo, listaId, NULL);
+            if(listaVariavel){
+                NoDeclVariavel* ultimo = listaVariavel;
+                while(listaVariavel->lista) ultimo = ultimo->lista;
+                ultimo->lista = variavel;
+            } else {
+                  listaVariavel = variavel;
+              }
+            ProgramaL();
+        } break;
         default:
             saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosInicializador]);
             pular(sincProgramaA);
         break;
-    }
-}
-
-static int followProgramaB [] = {TOKEN_EOF};
-void ProgramaB(){
-    fprintf(stdout, "ProgramaB\n");
-    switch(tokenAtual){
-        case DEFINICAO_TIPO:    case INTEIRO:        case REAL:
-        case BOLEANO:           case CARACTERE:       case ID:
-        case CLASSE:
-            ProgramaL();
-        break;
-        default: /* Epsilon */ break;
     }
 }
 
@@ -224,6 +235,7 @@ NoDeclClasse* DeclClasse(){
             return DeclClasseL(idClasse);
         } break;
     }
+    return NULL;
 }
 
 //static int followDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
@@ -268,7 +280,7 @@ NoDeclLocal* DeclLocal(){
             int ponteiro = Ponteiro();
             casarOuPular(ID, sincDeclLocal);
             NoId *id = new NoId(pegarUltimoAtributo());
-            return new NoDeclLocalComun(tipo,ponteiro,id, DeclLocalL());
+            return DeclLocalL(tipo, ponteiro, id);
         } break;
         case PUBLICO:{
             casar(PUBLICO);
@@ -280,7 +292,10 @@ NoDeclLocal* DeclLocal(){
             casarOuPular(DOIS_PONTOS, sincDeclLocal);
             return new NoDeclLocalPrivate(DeclLocal());
         } break;
-        default: return NULL; break;
+        default:
+            /* Epsilon */
+            return NULL;
+        break;
     }
 }
 
@@ -290,7 +305,7 @@ static int firstCorpoFunc [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_
                                   VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, ASCII, CHAVE_ESQ, SE, ENQUANTO,
                                   ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, INTEIRO, REAL, BOLEANO,
                                   CARACTERE, TOKEN_EOF };
-NoDeclLocal* DeclLocalL(){
+NoDeclLocal* DeclLocalL(NoTipo *tipo, int ponteiro, NoId* id){
     fprintf(stdout, "DeclLocalL\n");
     switch(tokenAtual){
         case PARENTESE_ESQ:{
@@ -298,20 +313,18 @@ NoDeclLocal* DeclLocalL(){
             NoListaFormal *listaFormal = ListaForma();
             casarOuPular(PARENTESE_DIR, sincDeclLocalL);
             casarOuPular(CHAVE_ESQ, firstCorpoFunc);
-            NoDeclLocal *corpoFunc = CorpoFunc();
+            NoDeclFuncao *funcao = new NoDeclFuncao(tipo, ponteiro, id, listaFormal, NULL, NULL, NULL);
+            CorpoFunc(funcao);
             casarOuPular(CHAVE_DIR, sincDeclLocalL);
-            return new NoDeclLocalL1(listaFormal,corpoFunc,DeclLocal());
+            return new NoDeclLocalFuncao(funcao, DeclLocal());
         } break;
-        case COLCHETE_ESQ:  case VIRGULA:{
+        case COLCHETE_ESQ:  case VIRGULA:       case PONTO_VIRGULA:{
             NoArranjo *arranjo = Arranjo();
-            NoListaId *listaIdCont = ListaIdCont();
+            NoListaId *listaIdCont = new NoListaId(ponteiro, id, arranjo, ListaIdCont());
             casarOuPular(PONTO_VIRGULA, sincDeclLocalL);
-            return new NoDeclLocalL2(arranjo,listaIdCont,DeclLocal());
+            NoDeclVariavel *variavel = new NoDeclVariavel(tipo, listaIdCont, NULL);
+            return new NoDeclLocalVariavel(variavel, DeclLocal());
         } break;
-        case PONTO_VIRGULA:
-            casar(PONTO_VIRGULA);
-            return DeclLocal();
-        break;
         default:
             /* ERRO */
             saidaErro(ErroSIntaticoDepois, pegarLinha(), pegarColuna(), esperadosLiteral[EsperadosDeclaracaoMembro], tokenLiteral[PONTO_VIRGULA]);
@@ -327,7 +340,7 @@ static int sincCorpoFunc [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL,
                                   NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, LE_LINHA,
                                   RETORNA, IMPRIME, LANCA, TENTA, INTEIRO, REAL, BOLEANO, CARACTERE,
                                   COLCHETE_ESQ, VIRGULA, CHAVE_DIR, TOKEN_EOF};
-NoDeclLocal* CorpoFunc(){
+void CorpoFunc(NoDeclFuncao *funcao){
     fprintf(stdout, "CorpoFunc\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -335,19 +348,24 @@ NoDeclLocal* CorpoFunc(){
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
         case ADICAO:        case SUBTRACAO:     case ASCII:{
-           NoExpr *expr = Expr();
-           NoListaId *listaId = ListaIdCont();
-           casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
-           NoListaSentenca *listaSentenca = ListaSentenca();
-           return new NoDeclLocalLL1(expr,listaId,listaSentenca);
+            NoListaExpr *listaExpr = ListaExpr();
+            casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
+            NoCorpoFuncao *corpo = new NoCorpoFuncao(listaExpr);
+            if(funcao->corpoFunc){ // Insere no final da lista
+                NoCorpoFuncao *ultimo = funcao->corpoFunc;
+                while(ultimo->lista) ultimo = ultimo->lista;
+                ultimo->lista = corpo;
+            } else {
+                funcao->corpoFunc = corpo;
+              }
+            CorpoFunc(funcao);
         } break;
         case CHAVE_ESQ:     case SE:            case ENQUANTO:
         case ESCOLHA:       case DESVIA:        case IMPRIME:
         case LE_LINHA:      case RETORNA:       case LANCA:{
         case TENTA:
             NoSentenca *sentenca = SentencaL();
-            NoListaSentenca *listaSentenca = new NoListaSentenca(sentenca,ListaSentenca());
-            return new NoDeclLocalLL2(listaSentenca);
+            funcao->sentenca = new NoListaSentenca(sentenca, ListaSentenca());
         } break;
         case INTEIRO:       case REAL:          case BOLEANO:
         case CARACTERE:{
@@ -358,9 +376,17 @@ NoDeclLocal* CorpoFunc(){
             NoArranjo *arranjo = Arranjo();
             NoListaId *listaId = new NoListaId(ponteiro,id,arranjo,ListaIdCont());
             casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
-            return new NoDeclLocalLL3(tipo,listaId,CorpoFunc());
+            NoDeclVariavel *variavel = new NoDeclVariavel(tipo, listaId, NULL);
+            if(funcao->variaveis) { // Insere no final da lista
+                NoDeclVariavel *ultimo = funcao->variaveis;
+                while(ultimo->lista) ultimo = ultimo->lista;
+                ultimo->lista = variavel;
+            } else {
+                  funcao->variaveis = variavel;
+              }
+            CorpoFunc(funcao);
         } break;
-        default: return NULL; break;
+        default: /* epsilon */ break;
     }
 }
 

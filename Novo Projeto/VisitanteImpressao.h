@@ -46,6 +46,7 @@ class VisitanteImpressao: public Visitante{
 		void visita(NoDeclLocalVariavel *decLV  );
 		void visita(NoDeclLocalPublic   *decLPub);
 		void visita(NoDeclLocalPrivate  *decLpri);
+		void visita(NoCorpoFuncao       *cF     );
 		void visita(NoDeclClasse        *decC   );
 		void visita(NoExprUnaria    	*expU   );
 		void visita(NoExprBinaria       *expB   );

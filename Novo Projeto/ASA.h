@@ -8,7 +8,7 @@ class NoDeclFuncao;
 class NoDeclTipo;
 class NoDeclVariavel;
 class NoDeclClasse;
-class NoCorpoFunc;
+class NoCorpoFuncao;
 
 
 class NoPrograma{
@@ -216,13 +216,15 @@ class NoSentencaExpr:public NoSentenca{
 };
 class NoDeclFuncao{
     public:
-        NoDeclFuncao(int tipo, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca *sentenca, NoDeclFuncao *lista);
+        NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca *sentenca, NoDeclFuncao *lista);
         void aceita(Visitante *v);
-        int tipo;
+        NoTipo* tipo;
+        int ponteiro;
         NoId *id;
         NoListaFormal *parametros;
-        NoDeclVariavel *variaveis; // Será preenchida no semantico
-        NoListaSentenca *sentenca; // Será preenchida no semantico
+        NoDeclVariavel *variaveis;
+        NoListaSentenca *sentenca;
+        NoCorpoFuncao   *corpoFunc;
         NoDeclFuncao *lista;
 };
 class NoListaId{
@@ -244,9 +246,11 @@ class NoDeclVariavel{
 };
 class NoDeclTipo{
     public:
-        NoDeclTipo(NoDeclVariavel *campo);
+        NoDeclTipo(NoDeclVariavel *campo, NoId* id, NoDeclTipo* lista = NULL);
         void aceita(Visitante *v);
         NoDeclVariavel *campo;
+        NoId* id;
+        NoDeclTipo *lista;
 };
 class NoDeclLocal{
     public:
@@ -278,9 +282,11 @@ class NoDeclLocalPrivate:public NoDeclLocal{
         void aceita(Visitante *v);
         NoDeclLocal *lista;
 };
-class NoCorpoFunc{
+class NoCorpoFuncao{
     public:
-        NoExpr* expr;
+        NoCorpoFuncao(NoListaExpr *listaExpr, NoCorpoFuncao *lista = NULL);
+        NoListaExpr *listaExpr;
+        NoCorpoFuncao *lista;
         void aceita(Visitante* v);
 };
 class NoDeclLocalLL1:public NoDeclLocal{
@@ -332,11 +338,12 @@ class NoDeclLocalComun:public NoDeclLocal{
 };
 class NoDeclClasse{
     public:
-        NoDeclClasse(NoId *id, NoId *heranca, NoDeclLocal *lista);
+        NoDeclClasse(NoId *id, NoId *heranca, NoDeclLocal *local, NoDeclClasse *lista = NULL);
         void aceita(Visitante *v);
         NoId *id;
         NoId *heranca;
-        NoDeclLocal *lista;
+        NoDeclLocal *local;
+        NoDeclClasse *lista;
 };
 class NoExprUnaria:public NoExpr{
     public:
