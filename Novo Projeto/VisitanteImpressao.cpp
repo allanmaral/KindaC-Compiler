@@ -6,14 +6,13 @@
 #include "AnalisadorLexico.h"
 #include "AnalisadorSintatico.h"
 
-VisitanteImpressao::VisitanteImpressao(){
-	nivel = 0;
-}
-void VisitanteImpressao::calculaNivel(){
+static int nivel = 0;
+void calculaNivel(){
 	for(int i=0; i<nivel; i++){
         fprintf(stdout, "   ");
     }
 }
+VisitanteImpressao::VisitanteImpressao(){}
 void VisitanteImpressao::visita(NoPrograma *prog){
 	fprintf(stdout, "\n\n-PROGRAMA\n");
 	if(prog->listaClasse)      prog->listaClasse->aceita(this);
@@ -26,14 +25,12 @@ void VisitanteImpressao::visita(NoId *id ){
 	calculaNivel();
 	fprintf(stdout, "-ID.%s\n", id->entradaTabela->pegarLexema());
 	nivel--;
-
 }
 void VisitanteImpressao::visita(NoLiteral *lit){
 	nivel++;
 	calculaNivel();
 	fprintf(stdout, "-LITERAL.%s\n", lit->entradaTabela->pegarLexema());
 	nivel--;
-
 }
 void VisitanteImpressao::visita(NoAscii *asc){
 	nivel++;
@@ -101,9 +98,7 @@ void VisitanteImpressao::visita(NoSe *se){
 	if(se->expressao) se->expressao->aceita(this);
 	if(se->sentenca) se->sentenca->aceita(this);
 	nivel--;
-	if(se->senao)  se->senao->aceita(this);
-
-
+	if(se->senao) se->senao->aceita(this);
 }
 void VisitanteImpressao::visita(NoSenao *sen){
     nivel++;
@@ -264,7 +259,6 @@ void VisitanteImpressao::visita(NoDeclLocalPublic *decLPub){
     fprintf(stdout, "-PUBLIC\n");
     nivel--;
     if(decLPub->lista) decLPub->lista->aceita(this);
-
 }
 void VisitanteImpressao::visita(NoDeclLocalPrivate *decLPri){
     nivel++;
@@ -272,7 +266,6 @@ void VisitanteImpressao::visita(NoDeclLocalPrivate *decLPri){
     fprintf(stdout, "-PRIVATE\n");
     nivel--;
     if(decLPri->lista) decLPri->lista->aceita(this);
-
 }
 void VisitanteImpressao::visita(NoCorpoFuncao *cF){
     nivel++;

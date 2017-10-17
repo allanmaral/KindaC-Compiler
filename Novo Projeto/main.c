@@ -3,23 +3,8 @@
 #include "ASA.h"
 #include "AnalisadorLexico.h"
 #include "AnalisadorSintatico.h"
-#include "TabelaSimbolos.h"
 #include "GerenciadorErro.h"
 #include "VisitanteImpressao.h"
-/** Lista de Literais dos Tokens
- */
-char tokenLiteral[59][16] = {
-        "DEFINICAO_TIPO", "ESTRUTURA", "CLASSE", "PUBLICO", "PRIVADO",
-        "INTEIRO", "REAL", "BOLEANO", "CARACTERE", "SE", "SENAO",
-        "ENQUANTO", "ESCOLHA", "DESVIA", "IMPRIME", "LE_LINHA", "RETORNA",
-        "LANCA", "TENTA", "PEGA", "CASO", "NOVO", "VERDADEIRO", "FALSO",
-        "ESSE", "ID", "COLCHETE_ESQ", "COLCHETE_DIR", "CHAVE_ESQ",
-        "CHAVE_DIR", "PARENTESE_ESQ", "PARENTESE_DIR", "", "MAIOR", "MENOR",
-        "MAIOR_IGUAL", "MENOR_IGUAL", "COMPARACAO", "ATRIBUICAO", "ADICAO",
-        "SUBTRACAO", "DIVISAO", "ASTERISCO", "OU", "PONTO", "DOIS_PONTOS",
-        "PONTO_VIRGULA", "PONTEIRO", "E_COMERCIAL", "E", "DIFERENTE", "PORCENTO",
-        "OU_CC", "NUM_INTEIRO", "LITERAL", "NEGACAO", "VIRGULA", "NUM_REAL", "EOF"
-};
 
 /** \brief Destrói objetos alocados durante a execução do programa
  *  Função chamada na saida do programa
@@ -51,21 +36,12 @@ int main(int argc, char** args){
     atexit(finalizaPrograma);
     inicializaGerenciadorErro();
     iniciaAnalisadorLexico(arquivo);
-    InicializarAnalizadorSintatico();
-    ///ASA Croncreta
-
     NoPrograma* programa = Programa();
+    // Imprime a ASA
     VisitanteImpressao vp;
     vp.visita(programa);
-    delete programa;
-
-
     imprimeListaErros();
-    obtemTabelaLiteral()->imprime();
-    obtemTabelaIdentificador()->imprime();
-    obtemTabelaInteiro()->imprime();
-    obtemTabelaReal()->imprime();
-    imprimeTabelaPalavrasReservadas();
+    delete programa; // Destroi a ASA
     return 0;
 }
 

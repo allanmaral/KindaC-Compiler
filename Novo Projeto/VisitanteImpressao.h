@@ -4,13 +4,9 @@
 
 
 class VisitanteImpressao: public Visitante{
-	private:
-	int nivel;
-
 	public:
 		VisitanteImpressao();
 		~VisitanteImpressao(){};
-		void calculaNivel();
         void visita(NoPrograma          *prog   );
 		void visita(NoId                *id     );
 		void visita(NoLiteral           *lit    );
