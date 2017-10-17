@@ -95,6 +95,8 @@ void saidaErro(int codigo, int linha, int coluna, char* tokenEncontrado, char* t
 /** \brief Imprime o próximo erro da lista no stderr
  */
 void proximoErro(){
+    fflush(stdout);
+    fflush(stderr);
     //Pega o próximo erro da lista
     Erro* erro = raiz;
     if(erro) { raiz = erro->proximo; } else { return; }

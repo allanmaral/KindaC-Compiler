@@ -1,9 +1,11 @@
 #include "ASA.h"
 
-const char* pegarTokenLiteral(int token);
-
-void InicializarAnalizadorSintatico();
-
+/** \brief Ponto de entrada do Analisador Sintatico
+ *  Imprime a arvore de sintaxe concreta.
+ *  \return No raiz da Arvore de Sintaxe Abstrata (ASA)
+ */
 NoPrograma *Programa();
 
-NoDeclClasse *testeClasse();
+/** \brief Retorna o literal do token
+ */
+const char* pegarTokenLiteral(int token);

@@ -1,6 +1,5 @@
 #include "ASA.h"
 #include "Visitante.h"
-#include "AnalisadorLexico.h"
 #include <string.h>
 
 static TabelaIdentificador tabelaID;

@@ -41,10 +41,10 @@ typedef enum {
     EsperadosTamanhoEnumerador
 } Esperados;
 
-static char esperadosLiteral[EsperadosTamanhoEnumerador][32] = {
-        "'{' ou ':'",               "'typedef', 'class' ou Tipo",       "Inicializador",
-        "declaracao de membros",    "Identificador",                    "Tipo",
-        "Sentenca",                 "Expressao Primaria"
+static char esperadosLiteral[EsperadosTamanhoEnumerador][48] = {
+    "CHAVE_ESQ\" ou \"DOIS_PONTOS", "DEFINICAO_TIPO\", \"CLASSE\" ou \"Tipo",   "Inicializador",
+    "Declaracao de Membros",        "Identificador",                            "Tipo",
+    "Sentenca",                     "Expressao Primaria"
 };
 
 void casar(int tokenEsperado){
@@ -106,10 +106,9 @@ NoExpr       *ExprUnaria();                     NoExpr        *ExprAceCamp();   
 NoPrimario   *ExprNovo();                       NoPrimario    *ExprNovoL(NoPrimario *primario);                    NoPrimario      *Primario();
 NoPrimario   *PrimarioID();                     NoPrimario    *PrimarioIDL(NoId *id);                              NoPrimario      *PrimarioL();
 
-void InicializarAnalizadorSintatico() { tokenAtual = proximoToken(); }
-
 NoPrograma *Programa(){
-    while(tokenAtual != TOKEN_EOF) ProgramaL();
+    tokenAtual = proximoToken();
+    ProgramaL();
     return new NoPrograma(listaClasse, listaFuncao, listaTipo, listaVariavel);
 }
 
@@ -1325,7 +1324,3 @@ NoPrimario *PrimarioIDL(NoId *id){
         break;
     }
 }
-
-NoDeclClasse *testeClasse(){
-    return  DeclClasse();
-};
