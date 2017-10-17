@@ -101,6 +101,8 @@ void VisitanteImpressao::visita(NoSe *se){
 	if(se->expressao) se->expressao->aceita(this);
 	if(se->sentenca) se->sentenca->aceita(this);
 	nivel--;
+	if(se->senao)  se->senao->aceita(this);
+
 
 }
 void VisitanteImpressao::visita(NoSenao *sen){
@@ -122,6 +124,7 @@ void VisitanteImpressao::visita(NoBlocoCaso *bc){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-CASO\n");
+	if(bc->num) bc->num->aceita(this);
 	if(bc->listaSentenca) bc->listaSentenca->aceita(this);
 	if(bc->lista) bc->lista->aceita(this);
 	nivel--;

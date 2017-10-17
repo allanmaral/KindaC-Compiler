@@ -1,3 +1,4 @@
+class Teste{};
 class Vertice:Teste{
 	private:
 		float x,y;
@@ -8,11 +9,8 @@ class Vertice:Teste{
 		}
 		float CalculaDistancia(Vertice *v){
 			int d;
-			d= srqt((x-v->x)*(x-v->x)+(y-v->y)*(y-v->y));
+			d= srqt((x-v->pegaX())*(x-v->pegaX())+(y-v->pegaY())*(y-v->pegaY()));
 			return d;	
-		}
-		int expr(){
-			a=a+b;
 		}
 
 };
@@ -21,21 +19,3 @@ typedef struct {
 	No* proximo;
 }No;
 
-int main(){	
-	int i,j;
-	Vertice *v;
-	No *n;
-	No* primeiro=NULL;
-	i=0;
-	j=0;
-	while(i<50){
-		v= new Vertice(i,j);
-		n = new No();
-		n->vertice=v;
-		n->proximo = primeiro;
-		primeiro = n;
-	}
-	try{ 
-		 (primeiro->vertice->CalculaDistancia(primeiro->proximo->vertice)+10)/2+i;
-	}catch(...){ print("ERRO\n");}
-}
