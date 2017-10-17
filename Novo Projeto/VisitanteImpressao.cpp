@@ -197,15 +197,14 @@ void VisitanteImpressao::visita(NoDeclFuncao *decF){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-FUNC_DEC\n");
-    decF->id->aceita(this);
+    if(decF->tipo) decF->tipo->aceita(this);
+    if(decF->ponteiro){ nivel++; calculaNivel(); fprintf(stdout, "-PONTEIRO\n"); nivel--; }
+    if(decF->id) decF->id->aceita(this);
     if(decF->parametros) decF->parametros->aceita(this);
-    nivel++;
-    calculaNivel();
-    fprintf(stdout, "-CORPO_FUNCAO\n");
     if(decF->variaveis) decF->variaveis->aceita(this);
     if(decF->corpoFunc) decF->corpoFunc->aceita(this);
     if(decF->sentenca) decF->sentenca->aceita(this);
-    nivel-=2;
+    nivel--;
     if(decF->lista) decF->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoListaId *lid ){
@@ -236,6 +235,7 @@ void VisitanteImpressao::visita(NoDeclTipo *decT){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-TIPO_DEC\n");
+    if(decT->id) decT->id->aceita(this);
     if(decT->campo) decT->campo->aceita(this);
     nivel--;
 }
@@ -354,7 +354,6 @@ void VisitanteImpressao::visita(NoNovo *n){
     nivel--;
 }
 void VisitanteImpressao::visita(NoTipo *tp){
-fprintf(stdout, "-TIPO\n");
     nivel++;
     calculaNivel();
     fprintf(stdout, "-TIPO\n");

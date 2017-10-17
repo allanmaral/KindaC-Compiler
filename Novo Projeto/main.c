@@ -81,7 +81,6 @@ int main(int argc, char** args){
     obtemTabelaInteiro()->imprime();
     obtemTabelaReal()->imprime();
     imprimeTabelaPalavrasReservadas();
-    system("PAUSE");
     return 0;
 }
 
