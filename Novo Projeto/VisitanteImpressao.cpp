@@ -121,7 +121,7 @@ void VisitanteImpressao::visita(NoEnquanto *enq){
 void VisitanteImpressao::visita(NoBlocoCaso *bc){
     nivel++;
 	calculaNivel();
-	fprintf(stdout, "-CASE\n");
+	fprintf(stdout, "-CASO\n");
 	if(bc->listaSentenca) bc->listaSentenca->aceita(this);
 	if(bc->lista) bc->lista->aceita(this);
 	nivel--;
@@ -196,7 +196,7 @@ void VisitanteImpressao::visita(NoSentencaExpr *senE){
 void VisitanteImpressao::visita(NoDeclFuncao *decF){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-FUNC_DEC\n");
+    fprintf(stdout, "-DEC_FUNCAO\n");
     if(decF->tipo) decF->tipo->aceita(this);
     if(decF->ponteiro){ nivel++; calculaNivel(); fprintf(stdout, "-PONTEIRO\n"); nivel--; }
     if(decF->id) decF->id->aceita(this);
@@ -225,7 +225,7 @@ void VisitanteImpressao::visita(NoListaId *lid ){
 void VisitanteImpressao::visita(NoDeclVariavel *decV){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-VAR_DEC\n");
+    fprintf(stdout, "-DEC_VARIAVEL\n");
     decV->tipo->aceita(this);
     decV->variaveis->aceita(this);
     if(decV->lista) decV->lista->aceita(this);
@@ -234,7 +234,7 @@ void VisitanteImpressao::visita(NoDeclVariavel *decV){
 void VisitanteImpressao::visita(NoDeclTipo *decT){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-TIPO_DEC\n");
+    fprintf(stdout, "-DEC_TIPO\n");
     if(decT->id) decT->id->aceita(this);
     if(decT->campo) decT->campo->aceita(this);
     nivel--;
@@ -242,7 +242,7 @@ void VisitanteImpressao::visita(NoDeclTipo *decT){
 void VisitanteImpressao::visita(NoDeclLocalFuncao *decLF){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-DEC_LOC_FUNCAO\n");
+    fprintf(stdout, "-DEC_FUNCAO_LOC\n");
     decLF->funcao->aceita(this);
     nivel--;
     if(decLF->lista) decLF->lista->aceita(this);
@@ -250,7 +250,7 @@ void VisitanteImpressao::visita(NoDeclLocalFuncao *decLF){
 void VisitanteImpressao::visita(NoDeclLocalVariavel *decLV){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-DEC_LOC_VARIAVEL\n");
+    fprintf(stdout, "-DEC_VARIAVEL_LOC\n");
     decLV->variavel->aceita(this);
     nivel--;
     if(decLV->lista) decLV->lista->aceita(this);
@@ -258,7 +258,7 @@ void VisitanteImpressao::visita(NoDeclLocalVariavel *decLV){
 void VisitanteImpressao::visita(NoDeclLocalPublic *decLPub){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-DEC_LOC_PUBLIC\n");
+    fprintf(stdout, "-PUBLIC\n");
     nivel--;
     if(decLPub->lista) decLPub->lista->aceita(this);
 
@@ -266,7 +266,7 @@ void VisitanteImpressao::visita(NoDeclLocalPublic *decLPub){
 void VisitanteImpressao::visita(NoDeclLocalPrivate *decLPri){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-DEC_LOC_PRIVATE\n");
+    fprintf(stdout, "-PRIVATE\n");
     nivel--;
     if(decLPri->lista) decLPri->lista->aceita(this);
 
@@ -274,7 +274,7 @@ void VisitanteImpressao::visita(NoDeclLocalPrivate *decLPri){
 void VisitanteImpressao::visita(NoCorpoFuncao *cF){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-CORPO_FUNC\n");
+    fprintf(stdout, "-CORPO_FUNCAO\n");
     if(cF->listaExpr) cF->listaExpr->aceita(this);
     nivel--;
     if(cF->lista) cF->lista->aceita(this);
@@ -282,7 +282,7 @@ void VisitanteImpressao::visita(NoCorpoFuncao *cF){
 void VisitanteImpressao::visita(NoDeclClasse *decC ){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-CLASSE_DEC\n");
+    fprintf(stdout, "-DEC_CLASSE\n");
     if(decC->id)  decC->id->aceita(this);
     if(decC->heranca){
          nivel++;
@@ -313,7 +313,7 @@ void VisitanteImpressao::visita(NoExprBinaria *expB){
 void VisitanteImpressao::visita(NoExprAtrib *atr){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-ATRIB\n");
+    fprintf(stdout, "-ATRIBUICAO\n");
     if(atr->exprEsquerda) atr->exprEsquerda->aceita(this);
     if(atr->exprDireita) atr->exprDireita->aceita(this);
     nivel--;
@@ -321,7 +321,7 @@ void VisitanteImpressao::visita(NoExprAtrib *atr){
 void VisitanteImpressao::visita(NoExprAceCamp *expAC){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-EXPR_ACC\n");
+    fprintf(stdout, "-EXPR_ACE_CAMPO\n");
     if(expAC->exprEsquerda) expAC->exprEsquerda->aceita(this);
     if(expAC->exprDireita) expAC->exprDireita->aceita(this);
     nivel--;

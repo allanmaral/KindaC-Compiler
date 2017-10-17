@@ -166,6 +166,7 @@ void ProgramaL(){
             ProgramaL();
         } break;
         case TOKEN_EOF:
+            casar(TOKEN_EOF);
             return; // NULL
         break;
         default:
