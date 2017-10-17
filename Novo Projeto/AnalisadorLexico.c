@@ -195,7 +195,7 @@ int proximoToken(){
 					 	 Atributo *auxiliar = tabelaReservado.busca(lexema);
 					 	 if(auxiliar != NULL) { return auxiliar->pegarToken(); }
 					 	 else{
-					 	     auxiliar = (Atributo*)malloc(sizeof(Atributo));
+					 	     auxiliar = new Atributo();
 					 	 	 auxiliar->atribuirToken(ID);
 					 	 	 auxiliar->atribuirLexema(lexema);
 					 	 	 obtemTabelaIdentificador()->insere(lexema,auxiliar);
@@ -212,7 +212,7 @@ int proximoToken(){
 					 	 	  incrementaLexema();
 					 	  } else{
 					 	 	    Atributo *auxiliar;
-					 	 	    auxiliar = (Atributo*)malloc(sizeof(Atributo));
+					 	 	    auxiliar = new Atributo();
 					 	 	    auxiliar->atribuirToken(NUM_INTEIRO);
 					 	 	    auxiliar->atribuirLexema(lexema);
 					 	 	    obtemTabelaInteiro()->insere(lexema,auxiliar);
@@ -244,7 +244,7 @@ int proximoToken(){
                          incrementaLexema();
                      } else{
                            Atributo *auxiliar;
-                           auxiliar = (Atributo*)malloc(sizeof(Atributo));
+                           auxiliar = new Atributo();
                            auxiliar->atribuirToken(NUM_REAL);
                            auxiliar->atribuirLexema(lexema);
                            obtemTabelaReal()->insere(lexema,auxiliar);
@@ -266,7 +266,7 @@ int proximoToken(){
                 if(isdigit(caractereAtual)) { incrementaLexema(); }
                 else{
                     Atributo *auxiliar;
-                    auxiliar = (Atributo*)malloc(sizeof(Atributo));
+                    auxiliar = new Atributo();
                     auxiliar->atribuirToken(NUM_REAL);
                     auxiliar->atribuirLexema(lexema);
                     obtemTabelaReal()->insere(lexema,auxiliar);
@@ -303,7 +303,7 @@ int proximoToken(){
                 if(caractereAtual == '\''){
                     incrementaLexema();
                     Atributo *auxiliar;
-                    auxiliar = (Atributo*)malloc(sizeof(Atributo));
+                    auxiliar = new Atributo();
                     auxiliar->atribuirToken(LITERAL);
                     auxiliar->atribuirLexema(lexema);
                     obtemTabelaLiteral()->insere(lexema,auxiliar);
@@ -325,7 +325,7 @@ int proximoToken(){
                 } else if(caractereAtual == '"'){
                            incrementaLexema();
                            Atributo *auxiliar;
-                           auxiliar = (Atributo*)malloc(sizeof(Atributo));
+                           auxiliar = new Atributo();
                            auxiliar->atribuirToken(LITERAL);
                            auxiliar->atribuirLexema(lexema);
                            obtemTabelaLiteral()->insere(lexema,auxiliar);

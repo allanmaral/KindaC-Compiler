@@ -274,8 +274,11 @@ Atributo::Atributo() { lexema=NULL; }
 int Atributo::pegarToken(){ return token; }
 char* Atributo::pegarLexema(){ return lexema; }
 void Atributo::atribuirToken(int t) { token = t; }
-void Atributo::atribuirLexema(char* l) { lexema=new char(strlen(l)+ 1);strcpy(lexema,l);}
-Atributo::~Atributo() { /*Destrutor*/ }
+void Atributo::atribuirLexema(const char* l) {
+    lexema=(char*)malloc(sizeof(char) * (strlen(l) + 1));
+    strcpy(lexema,l);
+}
+Atributo::~Atributo() { free(lexema); }
 
 No_Trie::No_Trie(){
     for(int i = 0; i < TAMANHO_ALFABETO; i++) { caracteres[i] = NULL; }

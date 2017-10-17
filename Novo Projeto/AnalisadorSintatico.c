@@ -1310,10 +1310,11 @@ NoPrimario* PrimarioL(){
         case NOVO: {
             casar(NOVO);
             casarOuPular(ID, followPrimarioL);
+            NoId* id = new NoId(pegarUltimoAtributo());
             casarOuPular(PARENTESE_ESQ, followPrimarioL);
             NoListaExpr *listaExpr = ListaExpr();
             casarOuPular(PARENTESE_DIR, followPrimarioL);
-            return new NoNovo(listaExpr);
+            return new NoNovo(id, listaExpr);
         } break;
         default:
             /* Erro */

@@ -244,17 +244,16 @@ void VisitanteImpressao::visita(NoDeclLocalFuncao *decLF){
     calculaNivel();
     fprintf(stdout, "-DEC_LOC_FUNCAO\n");
     decLF->funcao->aceita(this);
-    if(decLF->lista) decLF->lista->aceita(this);
     nivel--;
+    if(decLF->lista) decLF->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoDeclLocalVariavel *decLV){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-DEC_LOC_VARIAVEL\n");
     decLV->variavel->aceita(this);
-    if(decLV->lista) decLV->lista->aceita(this);
     nivel--;
-
+    if(decLV->lista) decLV->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoDeclLocalPublic *decLPub){
     nivel++;
@@ -350,10 +349,12 @@ void VisitanteImpressao::visita(NoNovo *n){
      nivel++;
     calculaNivel();
     fprintf(stdout, "-NOVO\n");
+    if(n->id) n->id->aceita(this);
     if(n->listaExpr) n->listaExpr->aceita(this);
     nivel--;
 }
 void VisitanteImpressao::visita(NoTipo *tp){
+fprintf(stdout, "-TIPO\n");
     nivel++;
     calculaNivel();
     fprintf(stdout, "-TIPO\n");

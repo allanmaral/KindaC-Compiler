@@ -72,6 +72,7 @@ int main(int argc, char** args){
     NoPrograma* programa = Programa();
     VisitanteImpressao vp;
     vp.visita(programa);
+    delete programa;
 
 
     imprimeListaErros();
@@ -80,6 +81,7 @@ int main(int argc, char** args){
     obtemTabelaInteiro()->imprime();
     obtemTabelaReal()->imprime();
     imprimeTabelaPalavrasReservadas();
+    system("PAUSE");
     return 0;
 }
 

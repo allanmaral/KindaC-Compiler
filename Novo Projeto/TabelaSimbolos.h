@@ -10,7 +10,7 @@ class Atributo{
         int pegarToken();
         char* pegarLexema();
         void atribuirToken(int t);
-        void atribuirLexema(char* l);
+        void atribuirLexema(const char* l);
         ~Atributo();
     private:
         int token;

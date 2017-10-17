@@ -339,8 +339,9 @@ class NoEsse:public NoPrimario{
 };
 class NoNovo:public NoPrimario{
     public:
-        NoNovo(NoListaExpr *listaExpr);
+        NoNovo(NoId *id, NoListaExpr *listaExpr);
         void aceita(Visitante *v);
+        NoId* id;
         NoListaExpr *listaExpr;
 };
 TabelaIdentificador* obtemTabelaIdentificador();

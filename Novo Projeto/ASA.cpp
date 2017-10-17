@@ -124,7 +124,7 @@ NoBlocoCaso::NoBlocoCaso(NoNum *num, NoListaSentenca *listaSentenca, NoBlocoCaso
 void NoBlocoCaso::aceita(Visitante *v){
     v->visita(this);
 }
-NoEscolha::NoEscolha(NoExpr *expressao, NoBlocoCaso *blocoCaso):blocoCaso(blocoCaso){
+NoEscolha::NoEscolha(NoExpr *expressao, NoBlocoCaso *blocoCaso){
     this->expressao = expressao;
     this->blocoCaso = blocoCaso;
 }
@@ -188,6 +188,7 @@ NoDeclFuncao::NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *
     this->parametros = parametros;
     this->variaveis = variaveis;
     this->sentenca = sentenca;
+    this->corpoFunc = NULL;
     this->lista = lista;
 }
 void NoDeclFuncao::aceita(Visitante *v){
@@ -247,7 +248,7 @@ void NoDeclLocalPrivate::aceita(Visitante *v){
 }
 NoCorpoFuncao::NoCorpoFuncao(NoListaExpr *listaExpr, NoCorpoFuncao *lista){
     this->listaExpr = listaExpr;
-    this->lista = NULL;
+    this->lista = lista;
 }
 void NoCorpoFuncao::aceita(Visitante* v){
     v->visita(this);
@@ -291,7 +292,8 @@ NoExprAceCamp::NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita, int term
 void NoExprAceCamp::aceita(Visitante *v){
     v->visita(this);
 }
-NoNovo::NoNovo(NoListaExpr *listaExpr){
+NoNovo::NoNovo(NoId* id, NoListaExpr *listaExpr){
+    this->id = id;
     this->listaExpr = listaExpr;
 }
 void NoNovo::aceita(Visitante *v){
