@@ -40,7 +40,7 @@ void inicializarLeitor(){
         elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, arquivo);
         if(elementosLidos < TAMANHO_BUFFER){ buffer[elementosLidos] = (char)0; }
 
-    } else{ // Arquivo invalido
+    } else { // Arquivo invalido
           saidaErro(ErroArquivoInvalido, 0, 0);
           exit(1);
       }
@@ -52,7 +52,7 @@ void inicializarLeitor(){
  *
  */
 void destruirLeitor(){
-    if(arquivo && arquivo != stdin){ fclose(arquivo); }
+    if(arquivo && arquivo != stdin) { fclose(arquivo); }
     arquivo = NULL;
     caractereAtualBuffer = TAMANHO_BUFFER;
 }
@@ -70,7 +70,7 @@ void destruirLeitor(){
         // Le o arquivo
         elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, arquivo);
         // Se não ler o mesmo numero de elementos, pode ser erro ou fim de arquivo
-        if(elementosLidos < TAMANHO_BUFFER){ buffer[elementosLidos] = (char)0; }
+        if(elementosLidos < TAMANHO_BUFFER) { buffer[elementosLidos] = (char)0; }
         caractereAtualBuffer = 0;
     }
     caractereAtual = buffer[caractereAtualBuffer++];
@@ -80,9 +80,9 @@ void destruirLeitor(){
 /** \brief Função que reinicializa o "automato"
   *
   */
-static void reinicializaAutomato(){ pegarProximoCaractere(); posicaoLexema = 0; estado = 1; }
+static void reinicializaAutomato() { pegarProximoCaractere(); posicaoLexema = 0; estado = 1; }
 
-char* pegarLexema(){ return lexema; }
+char* pegarLexema() { return lexema; }
 
 /** \brief Função que obtem a linha do arquivo lido pelo automato
  *
@@ -109,7 +109,7 @@ void iniciaAnalisadorLexico(FILE* fluxo){
     arquivo       = fluxo;
     int elementosLidos;
     elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, arquivo);
-    if(elementosLidos < TAMANHO_BUFFER){ buffer[elementosLidos] = (char)0; }
+    if(elementosLidos < TAMANHO_BUFFER) { buffer[elementosLidos] = (char)0; }
     pegarProximoCaractere();
 }
 
@@ -120,7 +120,7 @@ static void incrementaLexema(){
     //Verifica se não existe posição disponível realocando caso necessário
     if(posicaoLexema >= tamLexema -1){
         tamLexema += TAMANHO_LEXEMA;
-        lexema=(char *)realloc(lexema, tamLexema*(sizeof(char)));
+        lexema = (char *)realloc(lexema, tamLexema*(sizeof(char)));
     }
     //Adiciona o caractere
     lexema[posicaoLexema] = caractereAtual;
@@ -187,7 +187,7 @@ int proximoToken(){
 										  reinicializaAutomato();
 								  }
 						      }
-							  break;
+			break;
             case 2 :
                 if(isalnum(caractereAtual)) { incrementaLexema(); }
                 else if(caractereAtual == '_') { incrementaLexema(); }
@@ -198,12 +198,12 @@ int proximoToken(){
 					 	     auxiliar = new Atributo();
 					 	 	 auxiliar->atribuirToken(ID);
 					 	 	 auxiliar->atribuirLexema(lexema);
-					 	 	 obtemTabelaIdentificador()->insere(lexema,auxiliar);
-					 	 	 ultimoInserido=auxiliar;
+					 	 	 obtemTabelaIdentificador()->insere(lexema, auxiliar);
+					 	 	 ultimoInserido = auxiliar;
 					 	 	 return ID;
 					 	 }
 					 }
-					 break;
+	        break;
             case 3 :
                 if(isdigit(caractereAtual)) { incrementaLexema(); }
                 else if(caractereAtual == '.') { estado = 5; incrementaLexema(); }
@@ -215,11 +215,11 @@ int proximoToken(){
 					 	 	    auxiliar = new Atributo();
 					 	 	    auxiliar->atribuirToken(NUM_INTEIRO);
 					 	 	    auxiliar->atribuirLexema(lexema);
-					 	 	    obtemTabelaInteiro()->insere(lexema,auxiliar);
-                                ultimoInserido=auxiliar;
+					 	 	    obtemTabelaInteiro()->insere(lexema, auxiliar);
+                                ultimoInserido = auxiliar;
 					 	 	    return NUM_INTEIRO;
 					 	    }
-						    break;
+			break;
             case 4 :
                 if(isdigit(caractereAtual)) { estado = 5; incrementaLexema(); }
                 else if(caractereAtual == 'e' || caractereAtual == 'E'){
@@ -229,14 +229,14 @@ int proximoToken(){
                                 estado = 25;
                                 incrementaLexema();
                             } else { return PONTO; }
-					   break;
+			break;
             case 25:
                 if(caractereAtual == '.') { pegarProximoCaractere(); return TRES_PONTOS; }
                 else {
                     saidaErro(ErroNumeroMalFormado, linha, coluna);
                     reinicializaAutomato();
                 }
-                break;
+            break;
             case 5 :
                 if(isdigit(caractereAtual)) { incrementaLexema(); }
                 else if(caractereAtual == 'e' || caractereAtual == 'E'){
@@ -247,11 +247,11 @@ int proximoToken(){
                            auxiliar = new Atributo();
                            auxiliar->atribuirToken(NUM_REAL);
                            auxiliar->atribuirLexema(lexema);
-                           obtemTabelaReal()->insere(lexema,auxiliar);
-                           ultimoInserido=auxiliar;
+                           obtemTabelaReal()->insere(lexema, auxiliar);
+                           ultimoInserido = auxiliar;
                            return NUM_REAL;
                        }
-					   break;
+			break;
             case 6 :
                 if(isdigit(caractereAtual)) { estado = 7; incrementaLexema(); }
                 else if(caractereAtual == '+' || caractereAtual == '-'){
@@ -261,7 +261,7 @@ int proximoToken(){
                            saidaErro(ErroNumeroMalFormado, linha, coluna);
                            reinicializaAutomato();
                        }
-					   break;
+			break;
             case 7 :
                 if(isdigit(caractereAtual)) { incrementaLexema(); }
                 else{
@@ -269,18 +269,18 @@ int proximoToken(){
                     auxiliar = new Atributo();
                     auxiliar->atribuirToken(NUM_REAL);
                     auxiliar->atribuirLexema(lexema);
-                    obtemTabelaReal()->insere(lexema,auxiliar);
-                    ultimoInserido=auxiliar;
+                    obtemTabelaReal()->insere(lexema, auxiliar);
+                    ultimoInserido = auxiliar;
                     return NUM_REAL;
                 }
-				break;
+			break;
             case 8 :
                 if(isdigit(caractereAtual)) { estado = 7; incrementaLexema(); }
                 else{
                     saidaErro(ErroNumeroMalFormado, linha, coluna);
                     reinicializaAutomato();
                 }
-				break;
+			break;
             case 9 :
                 if(caractereAtual == '\''){
                     saidaErro(ErroCaractereVazio, linha, coluna);
@@ -291,14 +291,14 @@ int proximoToken(){
                            return TOKEN_EOF;
                        } else if(caractereAtual == '\\') { estado = 10; incrementaLexema(); }
                               else { estado = 11; incrementaLexema(); }
-                break;
+            break;
             case 10 :
                 if(caractereAtual == '\0' || caractereAtual == EOF){
                     saidaErro(ErroCaractereMalFormado, linha, coluna);
                     return TOKEN_EOF;
                 }
                 else { estado = 11; incrementaLexema(); }
-				break;
+			break;
             case 11 :
                 if(caractereAtual == '\''){
                     incrementaLexema();
@@ -306,8 +306,8 @@ int proximoToken(){
                     auxiliar = new Atributo();
                     auxiliar->atribuirToken(LITERAL);
                     auxiliar->atribuirLexema(lexema);
-                    obtemTabelaLiteral()->insere(lexema,auxiliar);
-                    ultimoInserido=auxiliar;
+                    obtemTabelaLiteral()->insere(lexema, auxiliar);
+                    ultimoInserido = auxiliar;
                     return ASCII;
                 } else if(caractereAtual == '\0' || caractereAtual == EOF){
                            saidaErro(ErroCaractereMalFormado, linha, coluna);
@@ -316,28 +316,28 @@ int proximoToken(){
                              saidaErro(ErroFaltaAspaSimples, linha, coluna);
                              reinicializaAutomato();
                          }
-					     break;
+			break;
             case 12 :
                 if(caractereAtual == '\\') { estado = 13; incrementaLexema(); }
                 else if(caractereAtual == '\0' || caractereAtual == EOF){
-                    saidaErro(ErroFaltaAspasDupla, linha, coluna);
-                    return TOKEN_EOF;
-                } else if(caractereAtual == '"'){
-                           incrementaLexema();
-                           Atributo *auxiliar;
-                           auxiliar = new Atributo();
-                           auxiliar->atribuirToken(LITERAL);
-                           auxiliar->atribuirLexema(lexema);
-                           obtemTabelaLiteral()->insere(lexema,auxiliar);
-                           ultimoInserido=auxiliar;
-                           return LITERAL;
-                       } else if(caractereAtual == '\n'){
-                                  coluna=0;
-                                  linha++;
-                                  saidaErro(ErroFaltaAspasDupla, linha, coluna);
-                                  reinicializaAutomato();
-                              } else { incrementaLexema(); }
-				       		    break;
+                         saidaErro(ErroFaltaAspasDupla, linha, coluna);
+                         return TOKEN_EOF;
+                     } else if(caractereAtual == '"'){
+                                incrementaLexema();
+                                Atributo *auxiliar;
+                                auxiliar = new Atributo();
+                                auxiliar->atribuirToken(LITERAL);
+                                auxiliar->atribuirLexema(lexema);
+                                obtemTabelaLiteral()->insere(lexema, auxiliar);
+                                ultimoInserido = auxiliar;
+                                return LITERAL;
+                            } else if(caractereAtual == '\n'){
+                                       coluna=0;
+                                       linha++;
+                                       saidaErro(ErroFaltaAspasDupla, linha, coluna);
+                                       reinicializaAutomato();
+                                   } else { incrementaLexema(); }
+    		break;
             case 13 :
                 if(caractereAtual == '\0' || caractereAtual == EOF){
                     saidaErro(ErroFaltaAspasDupla, linha, coluna);
@@ -354,7 +354,7 @@ int proximoToken(){
                            posicaoLexema = 0;
                            pegarProximoCaractere();
                        } else { return DIVISAO; }
-                         break;
+            break;
             case 15 :
                 if(caractereAtual == '\0' || caractereAtual == EOF) { return TOKEN_EOF; }
                 else if(caractereAtual == '\n'){
@@ -366,7 +366,7 @@ int proximoToken(){
                                 coluna += 3;
                                 pegarProximoCaractere();
                             } else { pegarProximoCaractere(); }
-                              break;
+            break;
             case 16 :
                 if(caractereAtual == '*'){
                     estado = 17;
@@ -382,7 +382,7 @@ int proximoToken(){
                                          saidaErro(ErroComentarioNaoTerminado, linha, coluna);
                                          return TOKEN_EOF;
                                      } else { pegarProximoCaractere(); }
-                                       break;
+            break;
             case 17 :
                 if(caractereAtual == '*'){ pegarProximoCaractere(); }
                 else if(caractereAtual == '\0' || caractereAtual == EOF){
@@ -401,46 +401,49 @@ int proximoToken(){
                                               coluna += 3;
                                               pegarProximoCaractere();
                                           } else { estado = 16; pegarProximoCaractere(); }
-                                            break;
+            break;
             case 18 :
                 if(caractereAtual == '|') { pegarProximoCaractere(); return OU_CC; }
                 else { return OU; }
-				break;
+			break;
             case 19 :
                 if(caractereAtual == '&') { pegarProximoCaractere(); return E; }
                 else { return E_COMERCIAL; }
-				break;
+			break;
             case 20 :
                 if(caractereAtual == '>') { pegarProximoCaractere(); return PONTEIRO; }
                 else { return SUBTRACAO; }
-				break;
+			break;
             case 21 :
                 if(caractereAtual == '=') { pegarProximoCaractere(); return COMPARACAO; }
                 else { return ATRIBUICAO; }
-				break;
+			break;
             case 22 :
                 if(caractereAtual == '=') { pegarProximoCaractere(); return MENOR_IGUAL; }
                 else { return MENOR; }
-				break;
+			break;
             case 23 :
                 if(caractereAtual == '=') { pegarProximoCaractere(); return MAIOR_IGUAL; }
                 else { return MAIOR; }
-				break;
+			break;
             case 24 :
                 if(caractereAtual == '=') { pegarProximoCaractere(); return DIFERENTE; }
                 else { return NEGACAO; }
-                break;
+            break;
         }
     }
     return 0;
 }
+
 Atributo* pegarUltimoAtributo(){
     return ultimoInserido;
 };
+
 void imprimeTabelaPalavrasReservadas(){
     tabelaReservado.imprime();
 }
+
 /** \brief Destrutor do Analisador Léxico
   *
   */
-void destruirAnalizadorLexico() {destruirLeitor(); free(lexema); }
+void destruirAnalizadorLexico() { destruirLeitor(); free(lexema); }

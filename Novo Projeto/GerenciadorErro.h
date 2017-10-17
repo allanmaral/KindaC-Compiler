@@ -1,7 +1,7 @@
 /** \brief Enumeração dos tipos de erros
  */
 typedef enum {
-    ErroCaractereInvalido   = 0,
+    ErroCaractereInvalido = 0,
     ErroCaractereVazio,
     ErroFaltaAspaSimples,
     ErroFaltaAspasDupla,

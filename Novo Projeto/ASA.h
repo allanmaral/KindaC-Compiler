@@ -10,7 +10,6 @@ class NoDeclVariavel;
 class NoDeclClasse;
 class NoCorpoFuncao;
 
-
 class NoPrograma{
     public:
         NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo, NoDeclVariavel *listaVariavel);

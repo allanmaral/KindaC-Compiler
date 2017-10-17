@@ -27,9 +27,7 @@ static char tokenLiteral[62][16] = {
         "TRES_PONTOS",      "ASCII"
 };
 
-const char* pegarTokenLiteral(int token){
-    return tokenLiteral[token];
-}
+const char *pegarTokenLiteral(int token) { return tokenLiteral[token]; }
 
 typedef enum {
     EsperadosChaveOuDoisPontos = 0,
@@ -50,18 +48,17 @@ static char esperadosLiteral[EsperadosTamanhoEnumerador][32] = {
 };
 
 void casar(int tokenEsperado){
-    // Faz alguma coisa aqui
     if(tokenAtual == tokenEsperado){
         if(tokenAtual == NUM_INTEIRO || tokenAtual == NUM_REAL || tokenEsperado == LITERAL ||
-           tokenAtual == ASCII || tokenAtual == ID){
+            tokenAtual == ASCII || tokenAtual == ID){
             fprintf(stdout, "CASOU: %s.%s\n", tokenLiteral[tokenEsperado], pegarLexema());
         } else{
               fprintf(stdout, "CASOU: %s\n", tokenLiteral[tokenEsperado]);
           }
     } else {
-        fprintf(stdout, "NAO CASOU: LIDO: \"%s\" ESPERADO: \"%s\"\n", tokenLiteral[tokenAtual], tokenLiteral[tokenEsperado]);
+          fprintf(stdout, "NAO CASOU: LIDO: \"%s\" ESPERADO: \"%s\"\n", tokenLiteral[tokenAtual], tokenLiteral[tokenEsperado]);
       }
-      tokenAtual = proximoToken();
+    tokenAtual = proximoToken();
 }
 
 void pular(int sinc[]){
@@ -82,7 +79,7 @@ void pular(int sinc[]){
     }
 }
 
-void casarOuPular(int token, int* sinc){
+void casarOuPular(int token, int *sinc){
     if(tokenAtual == token) {
         casar(token);
     } else {
@@ -92,32 +89,30 @@ void casarOuPular(int token, int* sinc){
 }
 
 
-void ProgramaL();
-void ProgramaA(NoTipo *tipo, int ponteiro, NoId* id);       void ProgramaB();       NoDeclClasse* DeclClasse();      NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada);
-NoDeclLocal* DeclLocal();       NoDeclLocal* DeclLocalL(NoTipo* tipo, int ponteiro, NoId* id);      void CorpoFunc(NoDeclFuncao* funcao);     NoDeclVariavel *DeclVar();
-NoListaId *ListaId();         NoListaId *ListaIdCont();     int Ponteiro();        NoArranjo *Arranjo();
-NoListaFormal *ListaForma();      NoListaFormal *ListaFormaCont();  NoTipo *Tipo();            NoTipo *TipoL();
-NoListaSentenca *ListaSentenca();   NoSentenca *Sentenca();        NoSentenca *SentencaL();       NoSe *Se();
-NoSenao *Senao();           NoBlocoCaso *BlocoCaso();       NoListaExpr *ListaExpr();       NoListaExpr *ListaExprCont();
+void          ProgramaL();    	                void           ProgramaA(NoTipo *tipo, int ponteiro, NoId *id);    void             ProgramaB();
+NoDeclClasse *DeclClasse();                     NoDeclLocal   *DeclLocal();	                                       NoDeclClasse    *DeclClasseL(NoId *idClasseDeclarada);
+void          CorpoFunc(NoDeclFuncao *funcao);  NoDeclLocal   *DeclLocalL(NoTipo *tipo, int ponteiro, NoId *id);   NoDeclVariavel  *DeclVar();
+NoListaId    *ListaId();                        NoListaId     *ListaIdCont();                                      int              Ponteiro();
+NoArranjo    *Arranjo();                        NoListaFormal *ListaForma();                                       NoListaFormal   *ListaFormaCont();
+NoTipo       *Tipo();                           NoTipo        *TipoL();                                            NoListaSentenca *ListaSentenca();
+NoSentenca   *Sentenca();                       NoSentenca    *SentencaL();                                        NoSe            *Se();
+NoSenao      *Senao();                          NoBlocoCaso   *BlocoCaso();                                        NoListaExpr     *ListaExpr();
+NoListaExpr  *ListaExprCont();                  NoExpr        *Expr();                                             NoExpr          *ExprAtrib(NoExpr *exprEsquerda);
+NoExpr       *ExprOuBool();                     NoExpr        *ExprOuBoolL(NoExpr *exprEsquerda);                  NoExpr          *ExprEBool();
+NoExpr       *ExprEBoolL(NoExpr *exprEsquerda); NoExpr        *ExprIgualdade();                                    NoExpr          *ExprIgualdadeL(NoExpr *exprEsquerda);
+NoExpr       *ExprRelacional();                 NoExpr        *ExprRelacionalL(NoExpr *exprEsquerda);              NoExpr          *ExprSoma();
+NoExpr       *ExprSomaL(NoExpr *exprEsquerda);  NoExpr        *ExprMultDivE();                                     NoExpr          *ExprMultDivEL(NoExpr *exprEsquerda);
+NoExpr       *ExprUnaria();                     NoExpr        *ExprAceCamp();                                      NoExpr          *ExprAceCampL(NoExpr *exprEsquerda);
+NoPrimario   *ExprNovo();                       NoPrimario    *ExprNovoL(NoPrimario *primario);                    NoPrimario      *Primario();
+NoPrimario   *PrimarioID();                     NoPrimario    *PrimarioIDL(NoId *id);                              NoPrimario      *PrimarioL();
 
-NoExpr *Expr();            NoExpr *ExprAtrib(NoExpr *exprEsquerda);       NoExpr *ExprOuBool();      NoExpr *ExprOuBoolL(NoExpr *exprEsquerda);
-NoExpr *ExprEBool();       NoExpr *ExprEBoolL(NoExpr *exprEsquerda);      NoExpr * ExprIgualdade();  NoExpr *ExprIgualdadeL(NoExpr *exprEsquerda);
-NoExpr * ExprRelacional(); NoExpr * ExprRelacionalL(NoExpr *exprEsquerda);NoExpr *ExprSoma();        NoExpr *ExprSomaL(NoExpr *exprEsquerda);
-NoExpr *ExprMultDivE();    NoExpr *ExprMultDivEL(NoExpr *exprEsquerda);   NoExpr *ExprUnaria();
-NoExpr *ExprAceCamp();     NoExpr *ExprAceCampL(NoExpr *exprEsquerda);    NoPrimario *ExprNovo();    NoPrimario *ExprNovoL(NoPrimario* primario);
-NoPrimario* Primario();    NoPrimario *PrimarioID();                      NoPrimario *PrimarioIDL(NoId* id);
-NoPrimario *PrimarioL();
-
-void InicializarAnalizadorSintatico(){
-    tokenAtual = proximoToken();
-}
+void InicializarAnalizadorSintatico() { tokenAtual = proximoToken(); }
 
 NoPrograma *Programa(){
     while(tokenAtual != TOKEN_EOF) ProgramaL();
     return new NoPrograma(listaClasse, listaFuncao, listaTipo, listaVariavel);
 }
 
-//static int followPrograma [] = {TOKEN_EOF};
 static int sincPrograma [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, ESTRUTURA, CHAVE_ESQ,
                               PONTO_VIRGULA, PARENTESE_ESQ, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 static int firstPrograma [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
@@ -141,9 +136,9 @@ void ProgramaL(){
                 NoDeclTipo *ultimo = listaTipo;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = declTipo;
-            }else{
-                 listaTipo = declTipo;
-             }
+            } else{
+                  listaTipo = declTipo;
+              }
             ProgramaL();
         } break;
         case INTEIRO:       case REAL:          case BOLEANO:
@@ -157,11 +152,11 @@ void ProgramaL(){
         case CLASSE: {
             NoDeclClasse *classe = DeclClasse();
             if(listaClasse){
-                NoDeclClasse* ultimo = listaClasse;
+                NoDeclClasse *ultimo = listaClasse;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = classe;
-            } else {
-                listaClasse = classe;
+            } else{
+                  listaClasse = classe;
               }
             ProgramaL();
         } break;
@@ -175,7 +170,6 @@ void ProgramaL(){
             pular(firstPrograma);
             return ProgramaL();
         break;
-
     }
 }
 
@@ -183,7 +177,7 @@ static int followProgramaA [] = {TOKEN_EOF};
 static int sincProgramaA [] = {CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO,
                                LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA,
                                IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, DEFINICAO_TIPO, CLASSE, TOKEN_EOF};
-void ProgramaA(NoTipo *tipo, int ponteiro, NoId* id){
+void ProgramaA(NoTipo *tipo, int ponteiro, NoId *id){
     fprintf(stdout, "ProgramaA\n");
     switch(tokenAtual){
         case PARENTESE_ESQ: {
@@ -198,9 +192,9 @@ void ProgramaA(NoTipo *tipo, int ponteiro, NoId* id){
                 NoDeclFuncao *ultimo = listaFuncao;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = funcao;
-            }else{
-                 listaFuncao = funcao;
-             }
+            } else{
+                  listaFuncao = funcao;
+              }
             ProgramaL();
         } break;
         case COLCHETE_ESQ:  case VIRGULA:       case PONTO_VIRGULA: {
@@ -209,10 +203,10 @@ void ProgramaA(NoTipo *tipo, int ponteiro, NoId* id){
             casarOuPular(PONTO_VIRGULA, followProgramaA);
             NoDeclVariavel *variavel = new NoDeclVariavel(tipo, listaId, NULL);
             if(listaVariavel){
-                NoDeclVariavel* ultimo = listaVariavel;
+                NoDeclVariavel *ultimo = listaVariavel;
                 while(listaVariavel->lista) ultimo = ultimo->lista;
                 ultimo->lista = variavel;
-            } else {
+            } else{
                   listaVariavel = variavel;
               }
             ProgramaL();
@@ -224,9 +218,8 @@ void ProgramaA(NoTipo *tipo, int ponteiro, NoId* id){
     }
 }
 
-//static int followDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
 static int sincDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ, DOIS_PONTOS, TOKEN_EOF};
-NoDeclClasse* DeclClasse(){
+NoDeclClasse *DeclClasse(){
     fprintf(stdout, "DeclClasse\n");
     switch(tokenAtual){
         case CLASSE:{
@@ -239,9 +232,8 @@ NoDeclClasse* DeclClasse(){
     return NULL;
 }
 
-//static int followDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, TOKEN_EOF};
 static int sincDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ, CHAVE_DIR, PONTO_VIRGULA, TOKEN_EOF};
-NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada){
+NoDeclClasse *DeclClasseL(NoId *idClasseDeclarada){
     fprintf(stdout, "DeclClasseL\n");
     switch(tokenAtual){
         case CHAVE_ESQ:{
@@ -254,7 +246,7 @@ NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada){
         case DOIS_PONTOS:{
             casar(DOIS_PONTOS);
             casarOuPular(ID, sincDeclClasseL);
-            NoId* idHeranca = new NoId(pegarUltimoAtributo());
+            NoId *idHeranca = new NoId(pegarUltimoAtributo());
             casarOuPular(CHAVE_ESQ, sincDeclClasseL);
             NoDeclLocal *declLocal = DeclLocal();
             casarOuPular(CHAVE_DIR, sincDeclClasseL);
@@ -270,9 +262,8 @@ NoDeclClasse* DeclClasseL(NoId *idClasseDeclarada){
     }
 }
 
-static int followDeclLocal [] = {CHAVE_DIR, TOKEN_EOF};
 static int sincDeclLocal [] = {CHAVE_DIR, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, PARENTESE_ESQ, COLCHETE_ESQ, VIRGULA, PONTO_VIRGULA, TOKEN_EOF};
-NoDeclLocal* DeclLocal(){
+NoDeclLocal *DeclLocal(){
     fprintf(stdout, "DeclLocal\n");
     switch(tokenAtual){
         case INTEIRO:       case REAL:          case BOLEANO:
@@ -302,11 +293,11 @@ NoDeclLocal* DeclLocal(){
 
 static int followDeclLocalL [] = {CHAVE_DIR, TOKEN_EOF};
 static int sincDeclLocalL   [] = {CHAVE_DIR, CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, TOKEN_EOF};
-static int firstCorpoFunc [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL,
+static int firstCorpoFunc   [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL,
                                   VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, ASCII, CHAVE_ESQ, SE, ENQUANTO,
                                   ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, INTEIRO, REAL, BOLEANO,
                                   CARACTERE, TOKEN_EOF };
-NoDeclLocal* DeclLocalL(NoTipo *tipo, int ponteiro, NoId* id){
+NoDeclLocal *DeclLocalL(NoTipo *tipo, int ponteiro, NoId *id){
     fprintf(stdout, "DeclLocalL\n");
     switch(tokenAtual){
         case PARENTESE_ESQ:{
@@ -335,8 +326,7 @@ NoDeclLocal* DeclLocalL(NoTipo *tipo, int ponteiro, NoId* id){
     }
 }
 
-static int followCorpoFunc [] = {CHAVE_DIR, TOKEN_EOF};
-static int sincCorpoFunc [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ,
+static int sincCorpoFunc   [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ,
                                   NEGACAO, LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE,
                                   NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, LE_LINHA,
                                   RETORNA, IMPRIME, LANCA, TENTA, INTEIRO, REAL, BOLEANO, CARACTERE,
@@ -356,8 +346,8 @@ void CorpoFunc(NoDeclFuncao *funcao){
                 NoCorpoFuncao *ultimo = funcao->corpoFunc;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = corpo;
-            } else {
-                funcao->corpoFunc = corpo;
+            } else{
+                  funcao->corpoFunc = corpo;
               }
             CorpoFunc(funcao);
         } break;
@@ -382,16 +372,15 @@ void CorpoFunc(NoDeclFuncao *funcao){
                 NoDeclVariavel *ultimo = funcao->variaveis;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = variavel;
-            } else {
+            } else{
                   funcao->variaveis = variavel;
               }
             CorpoFunc(funcao);
         } break;
-        default: /* epsilon */ break;
+        default: /* Epsilon */ break;
     }
 }
 
-static int followDeclVar [] = {CHAVE_DIR, TOKEN_EOF};
 static int sincDeclVar [] = {CHAVE_DIR, INTEIRO, REAL, BOLEANO, CARACTERE, ID, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 NoDeclVariavel *DeclVar(){
     fprintf(stdout, "DeclVar\n");
@@ -414,7 +403,6 @@ NoDeclVariavel *DeclVar(){
     }
 }
 
-//static int followListaId [] = {PONTO_VIRGULA, TOKEN_EOF};
 static int sincListaId [] = {PONTO_VIRGULA, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 NoListaId *ListaId(){
     fprintf(stdout, "ListaId\n");
@@ -456,7 +444,6 @@ NoListaId *ListaIdCont(){
     }
 }
 
-static int followPonteiro [] = {ID, TOKEN_EOF};
 int Ponteiro(){
     fprintf(stdout, "Ponteiro\n");
     switch(tokenAtual){
@@ -471,7 +458,6 @@ int Ponteiro(){
     }
 }
 
-//static int followArranjo [] = {VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
 static int sincArranjo [] = {VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, COLCHETE_DIR, TOKEN_EOF};
 NoArranjo *Arranjo(){
     fprintf(stdout, "Arranjo\n");
@@ -482,10 +468,10 @@ NoArranjo *Arranjo(){
             if(tokenAtual == NUM_INTEIRO){
                 casarOuPular(NUM_INTEIRO, sincArranjo);
                 num = new NoNumInteiro(pegarUltimoAtributo());
-            } else if (tokenAtual == NUM_REAL) { // NUM REAL AQUI É ERRO (SEMANTICO)
-                  casarOuPular(NUM_REAL, sincArranjo);
-                  num = new NoNumReal(pegarUltimoAtributo());
-              }
+            } else if(tokenAtual == NUM_REAL) { // NUM REAL AQUI É ERRO (SEMANTICO)
+                       casarOuPular(NUM_REAL, sincArranjo);
+                       num = new NoNumReal(pegarUltimoAtributo());
+                   }
             casarOuPular(COLCHETE_DIR, sincArranjo);
             return new NoArranjo(num);
         } break;
@@ -496,9 +482,8 @@ NoArranjo *Arranjo(){
     }
 }
 
-//static int followListaForma [] = {PARENTESE_DIR, TOKEN_EOF};
 static int sincListaForma [] = {PARENTESE_DIR, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
-NoListaFormal* ListaForma(){
+NoListaFormal *ListaForma(){
     fprintf(stdout, "ListaForma\n");
     switch(tokenAtual){
         case INTEIRO:       case REAL:          case BOLEANO:
@@ -517,7 +502,6 @@ NoListaFormal* ListaForma(){
     }
 }
 
-//static int followListaFormaCont [] = {PARENTESE_DIR, TOKEN_EOF};
 static int sincListaFormaCont [] = {PARENTESE_DIR, COLCHETE_ESQ, VIRGULA, TOKEN_EOF};
 NoListaFormal *ListaFormaCont(){
     fprintf(stdout, "ListaFormaCont\n");
@@ -588,7 +572,6 @@ NoTipo *TipoL(){
     }
 }
 
-static int followListaSentenca [] = {CHAVE_DIR, CASO, TOKEN_EOF};
 NoListaSentenca *ListaSentenca(){
     fprintf(stdout, "ListaSentenca\n");
     switch(tokenAtual){
@@ -623,7 +606,7 @@ NoSentenca *Sentenca(){
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ADICAO:        case SUBTRACAO:
         case ESSE:          case NOVO:          case NEGACAO: {
-            NoExpr * expr = Expr();
+            NoExpr  *expr = Expr();
             casarOuPular(PONTO_VIRGULA, followSentenca);
             return expr;
         } break;
@@ -642,9 +625,6 @@ NoSentenca *Sentenca(){
     }
 }
 
-/*static int followSentencaL [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
-                                 ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO,
-                                 ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};*/
 static int sincSentencaL []   = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
                                  ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO,
                                  ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, PONTO_VIRGULA,
@@ -658,14 +638,14 @@ NoSentenca *SentencaL(){
         case ENQUANTO: {
             casar(ENQUANTO);
             casarOuPular(PARENTESE_ESQ, sincSentencaL);
-            NoExpr* expr = Expr();
+            NoExpr *expr = Expr();
             casarOuPular(PARENTESE_DIR, sincSentencaL);
             return new NoEnquanto(expr, Sentenca());
         } break;
         case ESCOLHA: {
             casar(ESCOLHA);
             casarOuPular(PARENTESE_ESQ, sincSentencaL);
-            NoExpr* expr = Expr();
+            NoExpr *expr = Expr();
             casarOuPular(PARENTESE_DIR, sincSentencaL);
             casarOuPular(CHAVE_ESQ, sincSentencaL);
             NoBlocoCaso *bloco = BlocoCaso();
@@ -688,14 +668,14 @@ NoSentenca *SentencaL(){
         case LE_LINHA: {
             casar(LE_LINHA);
             casarOuPular(PARENTESE_ESQ, sincSentencaL);
-            NoExpr* expr = Expr();
+            NoExpr *expr = Expr();
             casarOuPular(PARENTESE_DIR, sincSentencaL);
             casarOuPular(PONTO_VIRGULA, sincSentencaL);
             return new NoLeLinha(expr);
         } break;
         case RETORNA: {
             casar(RETORNA);
-            NoExpr* expr = Expr();
+            NoExpr *expr = Expr();
             casarOuPular(PONTO_VIRGULA, sincSentencaL);
             return new NoRetorna(expr);
         } break;
@@ -737,7 +717,7 @@ NoSe *Se(){
         case SE: {
             casar(SE);
             casarOuPular(PARENTESE_ESQ, followSe);
-            NoExpr * expr = Expr();
+            NoExpr  *expr = Expr();
             casarOuPular(PARENTESE_DIR, followSe);
             NoSentenca *sentenca = Sentenca();
             return new NoSe(expr, sentenca, Senao());
@@ -749,9 +729,6 @@ NoSe *Se(){
     }
 }
 
-static int followSenao [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
-                             E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA,
-                             DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
 NoSenao *Senao(){
     fprintf(stdout, "Senao\n");
     switch(tokenAtual){
@@ -766,7 +743,6 @@ NoSenao *Senao(){
     }
 }
 
-static int followBlocoCaso [] = {CHAVE_DIR, TOKEN_EOF};
 static int sincBlocoCaso [] = {CHAVE_DIR, DOIS_PONTOS, CASO,  CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL,
                                PARENTESE_ESQ, CARACTERE, LITERAL, E_COMERCIAL, E, VERDADEIRO, FALSO, ADICAO,
                                SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, RETORNA, LANCA, TENTA, NEGACAO, NOVO,
@@ -780,7 +756,7 @@ NoBlocoCaso *BlocoCaso(){
             if(tokenAtual == NUM_INTEIRO) {
                 casarOuPular(NUM_INTEIRO, sincBlocoCaso);
                 num = new NoNumInteiro(pegarUltimoAtributo());
-            } else if (tokenAtual == NUM_REAL) {
+            } else if(tokenAtual == NUM_REAL) {
                        casarOuPular(NUM_INTEIRO, sincBlocoCaso);
                        num = new NoNumReal(pegarUltimoAtributo());
                    }
@@ -795,7 +771,6 @@ NoBlocoCaso *BlocoCaso(){
     }
 }
 
-static int followListaExpr [] = {PARENTESE_DIR, TOKEN_EOF};
 NoListaExpr *ListaExpr(){
     fprintf(stdout, "ListaExpr\n");
     switch(tokenAtual){
@@ -812,13 +787,12 @@ NoListaExpr *ListaExpr(){
 }
 
 
-static int followListaExprCont [] = {PARENTESE_DIR, TOKEN_EOF};
 NoListaExpr *ListaExprCont(){
     fprintf(stdout, "ListaExprCont\n");
     switch(tokenAtual){
         case VIRGULA: {
             casar(VIRGULA);
-            NoExpr* expr = Expr();
+            NoExpr *expr = Expr();
             return new NoListaExpr(expr, ListaExprCont());
         } break;
         default: return NULL; break;
@@ -826,7 +800,7 @@ NoListaExpr *ListaExprCont(){
 }
 
 static int followExpr [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
-NoExpr* Expr() {
+NoExpr *Expr() {
     fprintf(stdout, "Expr\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -846,13 +820,12 @@ NoExpr* Expr() {
     }
 }
 
-static int followExprAtrib [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, TOKEN_EOF};
-NoExpr * ExprAtrib(NoExpr *exprEsquerda) {
+NoExpr  *ExprAtrib(NoExpr *exprEsquerda) {
     fprintf(stdout, "ExprAtrib\n");
     switch(tokenAtual){
         case ATRIBUICAO: {
             casar(ATRIBUICAO);
-            NoExpr* exprDireita =  ExprOuBool();
+            NoExpr *exprDireita =  ExprOuBool();
             return ExprAtrib(new NoExprAtrib(exprEsquerda,exprDireita));
         } break;
         default: return exprEsquerda; break;
@@ -860,7 +833,7 @@ NoExpr * ExprAtrib(NoExpr *exprEsquerda) {
 }
 
 static int followExprOuBool [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, TOKEN_EOF};
-NoExpr * ExprOuBool(){
+NoExpr  *ExprOuBool(){
     fprintf(stdout, "ExprOuBool\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -880,13 +853,12 @@ NoExpr * ExprOuBool(){
     }
 }
 
-static int followExprOuBoolL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, TOKEN_EOF};
-NoExpr * ExprOuBoolL(NoExpr *exprEsquerda){
+NoExpr  *ExprOuBoolL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprOuBoolL\n");
     switch(tokenAtual){
         case OU_CC: {
             casar(OU_CC);
-            NoExpr* exprDireita =  ExprEBool();
+            NoExpr *exprDireita =  ExprEBool();
             return ExprOuBoolL(new NoExprBinaria(OU_CC, exprEsquerda, exprDireita));
         } break;
         default: return exprEsquerda; break;
@@ -894,7 +866,7 @@ NoExpr * ExprOuBoolL(NoExpr *exprEsquerda){
 }
 
 static int followExprEBool [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, TOKEN_EOF};
-NoExpr * ExprEBool(){
+NoExpr  *ExprEBool(){
     fprintf(stdout, "ExprEBool\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -914,13 +886,12 @@ NoExpr * ExprEBool(){
     }
 }
 
-static int followExprEBoolL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, TOKEN_EOF};
-NoExpr * ExprEBoolL(NoExpr *exprEsquerda){
+NoExpr  *ExprEBoolL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprEBoolL\n");
     switch(tokenAtual){
         case E: {
             casar(E);
-            NoExpr* exprDireita =  ExprIgualdade();
+            NoExpr *exprDireita =  ExprIgualdade();
             return ExprEBoolL(new NoExprBinaria(E, exprEsquerda, exprDireita));
         } break;
         default: return exprEsquerda; break;
@@ -928,7 +899,7 @@ NoExpr * ExprEBoolL(NoExpr *exprEsquerda){
 }
 
 static int followExprIgualdade [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, TOKEN_EOF};
-NoExpr * ExprIgualdade(){
+NoExpr  *ExprIgualdade(){
     fprintf(stdout, "ExprIgualdade\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -948,18 +919,17 @@ NoExpr * ExprIgualdade(){
     }
 }
 
-static int followExprIgualdadeL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, TOKEN_EOF};
-NoExpr * ExprIgualdadeL(NoExpr *exprEsquerda){
+NoExpr  *ExprIgualdadeL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprIgualdadeL\n");
     switch(tokenAtual){
         case COMPARACAO: {
             casar(COMPARACAO);
-            NoExpr* exprDireita = ExprRelacional();
+            NoExpr *exprDireita = ExprRelacional();
             return ExprIgualdadeL(new NoExprBinaria(COMPARACAO, exprEsquerda, exprDireita));
         } break;
         case DIFERENTE: {
             casar(DIFERENTE);
-            NoExpr* exprDireita = ExprRelacional();
+            NoExpr *exprDireita = ExprRelacional();
             return ExprIgualdadeL(new NoExprBinaria(DIFERENTE, exprEsquerda, exprDireita));
         } break;
         default: return exprEsquerda; break;
@@ -968,7 +938,7 @@ NoExpr * ExprIgualdadeL(NoExpr *exprEsquerda){
 
 static int followExprRelacional [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                       DIFERENTE, TOKEN_EOF};
-NoExpr * ExprRelacional(){
+NoExpr  *ExprRelacional(){
     fprintf(stdout, "ExprRelacional\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -988,29 +958,27 @@ NoExpr * ExprRelacional(){
     }
 }
 
-static int followExprRelacionalL []    = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                       DIFERENTE, TOKEN_EOF};
-NoExpr * ExprRelacionalL(NoExpr *exprEsquerda){
+NoExpr  *ExprRelacionalL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprRelacionalL\n");
     switch(tokenAtual){
         case MENOR: {
             casar(MENOR);
-            NoExpr* exprDireita = ExprSoma();
+            NoExpr *exprDireita = ExprSoma();
             return ExprRelacionalL(new NoExprBinaria(MENOR, exprEsquerda, exprDireita));
         } break;
         case MENOR_IGUAL: {
             casar(MENOR_IGUAL);
-            NoExpr* exprDireita = ExprSoma();
+            NoExpr *exprDireita = ExprSoma();
             return ExprRelacionalL(new NoExprBinaria(MENOR_IGUAL, exprEsquerda, exprDireita));
         } break;
         case MAIOR_IGUAL: {
             casar(MAIOR_IGUAL);
-            NoExpr* exprDireita = ExprSoma();
+            NoExpr *exprDireita = ExprSoma();
             return ExprRelacionalL(new NoExprBinaria(MAIOR_IGUAL, exprEsquerda, exprDireita));
         } break;
         case MAIOR: {
             casar(MAIOR);
-            NoExpr* exprDireita = ExprSoma();
+            NoExpr *exprDireita = ExprSoma();
             return ExprRelacionalL(new NoExprBinaria(MAIOR, exprEsquerda, exprDireita));
         } break;
         default: return exprEsquerda; break;
@@ -1019,7 +987,7 @@ NoExpr * ExprRelacionalL(NoExpr *exprEsquerda){
 
 static int followExprSoma [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                 DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, TOKEN_EOF};
-NoExpr * ExprSoma(){
+NoExpr  *ExprSoma(){
     fprintf(stdout, "ExprSoma\n");
     switch(tokenAtual){
         case ID:            case ASTERISCO:     case NUM_INTEIRO:
@@ -1039,24 +1007,22 @@ NoExpr * ExprSoma(){
     }
 }
 
-static int followExprSomaL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                 DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, TOKEN_EOF};
-NoExpr * ExprSomaL(NoExpr *exprEsquerda){
+NoExpr  *ExprSomaL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprSomaL\n");
     switch(tokenAtual){
         case ADICAO: {
             casar(ADICAO);
-            NoExpr* exprDireita = ExprMultDivE();
+            NoExpr *exprDireita = ExprMultDivE();
             return ExprSomaL(new NoExprBinaria(ADICAO, exprEsquerda, exprDireita));
         } break;
         case SUBTRACAO: {
             casar(SUBTRACAO);
-            NoExpr* exprDireita = ExprMultDivE();
+            NoExpr *exprDireita = ExprMultDivE();
             return ExprSomaL(new NoExprBinaria(SUBTRACAO, exprEsquerda, exprDireita));
         } break;
         case OU: {
             casar(OU);
-            NoExpr* exprDireita = ExprMultDivE();
+            NoExpr *exprDireita = ExprMultDivE();
             return ExprSomaL(new NoExprBinaria(OU, exprEsquerda, exprDireita));
         } break;
         default: return exprEsquerda; break;
@@ -1085,29 +1051,27 @@ NoExpr *ExprMultDivE(){
     }
 }
 
-static int followExprMultDivEL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                     DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, TOKEN_EOF};
 NoExpr *ExprMultDivEL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprMultDivEL\n");
     switch(tokenAtual){
         case ASTERISCO: {
             casar(ASTERISCO);
-            NoExpr* exprDireita = ExprUnaria();
+            NoExpr *exprDireita = ExprUnaria();
             return ExprMultDivEL(new NoExprBinaria(ASTERISCO, exprEsquerda, exprDireita));
         } break;
         case DIVISAO: {
             casar(DIVISAO);
-            NoExpr* exprDireita = ExprUnaria();
+            NoExpr *exprDireita = ExprUnaria();
             return ExprMultDivEL(new NoExprBinaria(DIVISAO, exprEsquerda, exprDireita));
         } break;
         case PORCENTO: {
             casar(PORCENTO);
-            NoExpr* exprDireita = ExprUnaria();
+            NoExpr *exprDireita = ExprUnaria();
             return ExprMultDivEL(new NoExprBinaria(PORCENTO, exprEsquerda, exprDireita));
         } break;
         case E_COMERCIAL: {
             casar(E_COMERCIAL);
-            NoExpr* exprDireita = ExprUnaria();
+            NoExpr *exprDireita = ExprUnaria();
             return ExprMultDivEL(new NoExprBinaria(E_COMERCIAL, exprEsquerda, exprDireita));
         } break;
         default:
@@ -1160,7 +1124,7 @@ NoExpr *ExprAceCamp(){
         case NUM_REAL:      case PARENTESE_ESQ: case LITERAL:
         case E_COMERCIAL:   case VERDADEIRO:    case FALSO:
         case ESSE:          case NOVO:          case ASCII: {
-            NoPrimario* exprNovo = ExprNovo();
+            NoPrimario *exprNovo = ExprNovo();
             return ExprAceCampL(exprNovo);
         } break;
         default:
@@ -1172,20 +1136,17 @@ NoExpr *ExprAceCamp(){
     }
 }
 
-static int followExprAceCampL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                    DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                    E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
 NoExpr *ExprAceCampL(NoExpr *exprEsquerda){
     fprintf(stdout, "ExprAceCampL\n");
     switch(tokenAtual){
         case PONTEIRO: {
             casar(PONTEIRO);
-            NoPrimario* exprDireita = ExprNovo();
+            NoPrimario *exprDireita = ExprNovo();
             return ExprAceCampL(new NoExprAceCamp(exprEsquerda, exprDireita, PONTEIRO));
         } break;
         case PONTO: {
             casar(PONTO);
-            NoPrimario* exprDireita = ExprNovo();
+            NoPrimario *exprDireita = ExprNovo();
             return ExprAceCampL(new NoExprAceCamp(exprEsquerda, exprDireita, PONTO));
         } break;
         default:
@@ -1205,7 +1166,7 @@ NoPrimario *ExprNovo(){
         case NUM_REAL:      case PARENTESE_ESQ: case LITERAL:
         case E_COMERCIAL:   case VERDADEIRO:    case FALSO:
         case ESSE:          case NOVO:          case ASCII: {
-            NoPrimario* primario = Primario();
+            NoPrimario *primario = Primario();
             return ExprNovoL(primario);
         } break;
         default:
@@ -1220,12 +1181,12 @@ NoPrimario *ExprNovo(){
 static int followExprNovoL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                  DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                  E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-NoPrimario *ExprNovoL(NoPrimario* primario){
+NoPrimario *ExprNovoL(NoPrimario *primario){
     fprintf(stdout, "ExprNovoL\n");
     switch(tokenAtual){
         case COLCHETE_ESQ: {
             casar(COLCHETE_ESQ);
-            NoExpr* expr = Expr();
+            NoExpr *expr = Expr();
             casarOuPular(COLCHETE_DIR, followExprNovoL);
             return ExprNovoL(new NoColchetes(primario, expr));
         } break;
@@ -1239,7 +1200,7 @@ NoPrimario *ExprNovoL(NoPrimario* primario){
 static int followPrimario [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                 DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                 E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-NoPrimario* Primario() {
+NoPrimario *Primario() {
     fprintf(stdout, "Primario\n");
     switch(tokenAtual){
         case ID:
@@ -1263,7 +1224,7 @@ NoPrimario* Primario() {
 static int followPrimarioL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                  DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                  E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, PARENTESE_ESQ, TOKEN_EOF};
-NoPrimario* PrimarioL(){
+NoPrimario *PrimarioL(){
     fprintf(stdout, "PrimarioL\n");
     switch(tokenAtual){
         case NUM_INTEIRO: {
@@ -1284,7 +1245,7 @@ NoPrimario* PrimarioL(){
         } break;
         case PARENTESE_ESQ: {
             casar(PARENTESE_ESQ);
-            NoExpr* expr = Expr();
+            NoExpr *expr = Expr();
             casarOuPular(PARENTESE_DIR, followPrimarioL);
             return new NoParenteses(expr);
         } break;
@@ -1311,7 +1272,7 @@ NoPrimario* PrimarioL(){
         case NOVO: {
             casar(NOVO);
             casarOuPular(ID, followPrimarioL);
-            NoId* id = new NoId(pegarUltimoAtributo());
+            NoId *id = new NoId(pegarUltimoAtributo());
             casarOuPular(PARENTESE_ESQ, followPrimarioL);
             NoListaExpr *listaExpr = ListaExpr();
             casarOuPular(PARENTESE_DIR, followPrimarioL);
@@ -1329,7 +1290,7 @@ NoPrimario* PrimarioL(){
 static int followPrimarioID [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                   DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                   E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-NoPrimario* PrimarioID(){
+NoPrimario *PrimarioID(){
     fprintf(stdout, "PrimarioID\n");
     switch(tokenAtual){
         case ID: {
@@ -1349,12 +1310,12 @@ NoPrimario* PrimarioID(){
 static int followPrimarioIDL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
                                    DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
                                    E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
-NoPrimario* PrimarioIDL(NoId *id){
+NoPrimario *PrimarioIDL(NoId *id){
     fprintf(stdout, "PrimarioIDL\n");
     switch(tokenAtual){
         case PARENTESE_ESQ: {
             casar(PARENTESE_ESQ);
-            NoListaExpr* listaExpr = ListaExpr();
+            NoListaExpr *listaExpr = ListaExpr();
             casarOuPular(PARENTESE_DIR, followPrimarioIDL);
             return new NoChamadaFuncao(id, listaExpr);
         } break;
@@ -1366,6 +1327,5 @@ NoPrimario* PrimarioIDL(NoId *id){
 }
 
 NoDeclClasse *testeClasse(){
-    //NoDeclLocal *l=DeclLocal();
     return  DeclClasse();
 };

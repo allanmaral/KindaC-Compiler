@@ -54,21 +54,6 @@ int main(int argc, char** args){
     InicializarAnalizadorSintatico();
     ///ASA Croncreta
 
-    //ProgramaL();
-    /*int token = 0;
-    while(token != TOKEN_EOF){
-        token = proximoToken();
-        if((token >= DEFINICAO_TIPO && token <= TOKEN_EOF)) {
-            if(token == ID || token == NUM_INTEIRO || token == NUM_REAL || token == LITERAL) {
-                fprintf(stdout, "%s.%s\n", tokenLiteral[token-1], pegarLexema());
-            } else{
-                  fprintf(stdout, "%s\n", tokenLiteral[token-1]);
-              }
-        } else{
-            fprintf(stdout, "Valor invalido! Token:%d\n", token);
-        }
-    }*/
-
     NoPrograma* programa = Programa();
     VisitanteImpressao vp;
     vp.visita(programa);
@@ -86,8 +71,7 @@ int main(int argc, char** args){
 
 /** \brief Destrói objetos alocados durante a execução do programa
  */
-void finalizaPrograma()
-{
+void finalizaPrograma(){
     imprimeListaErros();
     destruirAnalizadorLexico();
     destruirGerenciadorErro();

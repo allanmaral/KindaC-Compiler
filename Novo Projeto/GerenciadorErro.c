@@ -76,15 +76,15 @@ void saidaErro(int codigo, int linha, int coluna, char* tokenEncontrado, char* t
             if(antecessor->proximo){
                 if(antecessor->proximo->linha < linha){
                     antecessor = antecessor->proximo;
-                } else if ((antecessor->proximo->linha == linha)) {
-                           while(true) {
-                               if(antecessor->proximo) {
+                } else if(antecessor->proximo->linha == linha){
+                           while(true){
+                               if(antecessor->proximo){
                                    if(antecessor->proximo->coluna <= coluna) {
                                        antecessor = antecessor->proximo;
                                    } else { break; }
                                } else { break; }
                            } break;
-                       } else {break;}
+                       } else { break; }
             } else { break; }
         }
         novoErro->proximo = antecessor->proximo;
@@ -104,9 +104,9 @@ void proximoErro(){
         fprintf(stderr, "[l:%d, c:%d] - Erro: \"%s\" esperado %s de \"%s\"\n", linha, coluna, erro->tokenEsperado, ErroLiteral[erro->codigo], erro->tokenEncontrado);
     } else if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {
                fprintf(stderr, "[l:%d, c:%d] - %s\n", linha, coluna, ErroLiteral[erro->codigo]);
-           } else {
+           } else{
                  fprintf(stderr, "[l:%d, c:%d] - Erro não definido (%d)\n", linha, coluna, erro->codigo);
-           }
+             }
     free(erro);
 }
 

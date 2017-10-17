@@ -8,7 +8,7 @@ class Atributo{
     public:
         Atributo();
         int pegarToken();
-        char* pegarLexema();
+        char *pegarLexema();
         void atribuirToken(int t);
         void atribuirLexema(const char* l);
         ~Atributo();

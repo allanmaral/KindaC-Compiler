@@ -7,4 +7,3 @@ void InicializarAnalizadorSintatico();
 NoPrograma *Programa();
 
 NoDeclClasse *testeClasse();
-void ProgramaL();

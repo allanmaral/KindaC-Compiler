@@ -7,44 +7,44 @@
 #include "AnalisadorSintatico.h"
 
 VisitanteImpressao::VisitanteImpressao(){
-	nivel=0;
+	nivel = 0;
 }
 void VisitanteImpressao::calculaNivel(){
-	for(int i=0;i<nivel;i++){
+	for(int i=0; i<nivel; i++){
         fprintf(stdout, "   ");
     }
 }
 void VisitanteImpressao::visita(NoPrograma *prog){
-	fprintf(stdout,"\n\n-PROGRAMA\n");
-	if(prog->listaClasse) prog->listaClasse->aceita(this);
-	if(prog->listaTipo)   prog->listaTipo->aceita(this);
-	if(prog->listaVariavel) prog->listaVariavel->aceita(this);
-	if(prog->listaFuncao) prog->listaFuncao->aceita(this);
+	fprintf(stdout, "\n\n-PROGRAMA\n");
+	if(prog->listaClasse)      prog->listaClasse->aceita(this);
+	if(prog->listaTipo)        prog->listaTipo->aceita(this);
+	if(prog->listaVariavel)    prog->listaVariavel->aceita(this);
+	if(prog->listaFuncao)      prog->listaFuncao->aceita(this);
 }
 void VisitanteImpressao::visita(NoId *id ){
 	nivel++;
 	calculaNivel();
-	fprintf(stdout, "-ID.%s\n",id->entradaTabela->pegarLexema());
+	fprintf(stdout, "-ID.%s\n", id->entradaTabela->pegarLexema());
 	nivel--;
 
 }
 void VisitanteImpressao::visita(NoLiteral *lit){
 	nivel++;
 	calculaNivel();
-	fprintf(stdout, "-LITERAL.%s\n",lit->entradaTabela->pegarLexema());
+	fprintf(stdout, "-LITERAL.%s\n", lit->entradaTabela->pegarLexema());
 	nivel--;
 
 }
 void VisitanteImpressao::visita(NoAscii *asc){
 	nivel++;
 	calculaNivel();
-	fprintf(stdout, "-ASCII.%s\n",asc->entradaTabela->pegarLexema());
+	fprintf(stdout, "-ASCII.%s\n", asc->entradaTabela->pegarLexema());
 	nivel--;
 }
 void VisitanteImpressao::visita(NoParenteses *pa){
-	if(pa->expressao)pa->expressao->aceita(this);
+	if(pa->expressao) pa->expressao->aceita(this);
 }
-void VisitanteImpressao::visita(NoConteudo  *con){
+void VisitanteImpressao::visita(NoConteudo *con){
 	nivel++;
 	calculaNivel();
 	if(con->primario)con->primario->aceita(this);
@@ -59,13 +59,13 @@ void VisitanteImpressao::visita(NoEndereco *ende){
 void VisitanteImpressao::visita(NoNumInteiro *ni){
     nivel++;
 	calculaNivel();
-	fprintf(stdout, "-NUM_INTEIRO.%s\n",ni->entradaTabela->pegarLexema());
+	fprintf(stdout, "-NUM_INTEIRO.%s\n", ni->entradaTabela->pegarLexema());
 	nivel--;
 }
 void VisitanteImpressao::visita(NoNumReal *nr){
     nivel++;
 	calculaNivel();
-	fprintf(stdout, "-NUM_REAL.%s\n",nr->entradaTabela->pegarLexema());
+	fprintf(stdout, "-NUM_REAL.%s\n", nr->entradaTabela->pegarLexema());
 	nivel--;
 }
 void VisitanteImpressao::visita(NoArranjo *arr){
@@ -84,7 +84,7 @@ void VisitanteImpressao::visita(NoListaFormal *lf){
     calculaNivel();
     fprintf(stdout, "-LISTA_FORMAL\n");
     if(lf->tipo) lf->tipo->aceita(this);
-    if(lf->ponteiro) {nivel++; calculaNivel(); fprintf(stdout, "-PONTEIRO\n"); nivel--;}
+    if(lf->ponteiro) { nivel++; calculaNivel(); fprintf(stdout, "-PONTEIRO\n"); nivel--; }
     if(lf->id) lf->id->aceita(this);
     if(lf->arranjo) lf->arranjo->aceita(this);
     nivel--;
@@ -94,12 +94,12 @@ void VisitanteImpressao::visita(NoListaSentenca *ls){
     if(ls->sentenca) ls->sentenca->aceita(this);
     if(ls->lista) ls->lista->aceita(this);
 }
-void VisitanteImpressao::visita(NoSe *se ){
+void VisitanteImpressao::visita(NoSe *se){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-SE\n");
-	if(se->expressao)se->expressao->aceita(this);
-	if(se->sentenca)se->sentenca->aceita(this);
+	if(se->expressao) se->expressao->aceita(this);
+	if(se->sentenca) se->sentenca->aceita(this);
 	nivel--;
 
 }
@@ -107,7 +107,7 @@ void VisitanteImpressao::visita(NoSenao *sen){
     nivel++;
 	calculaNivel();
 	fprintf(stdout, "-SENAO\n");
-	if(sen->sentenca)sen->sentenca->aceita(this);
+	if(sen->sentenca) sen->sentenca->aceita(this);
 	nivel--;
 }
 void VisitanteImpressao::visita(NoEnquanto *enq){
@@ -183,7 +183,7 @@ void VisitanteImpressao::visita(NoTenta *te ){
 	calculaNivel();
 	fprintf(stdout, "-TENTA\n");
 	if(te->sentencaTry) te->sentencaTry->aceita(this);
-	if(te->sentencaCatch) {
+	if(te->sentencaCatch){
         calculaNivel();
         fprintf(stdout, "-PEGA\n");
         te->sentencaCatch->aceita(this);
@@ -198,7 +198,7 @@ void VisitanteImpressao::visita(NoDeclFuncao *decF){
     calculaNivel();
     fprintf(stdout, "-DEC_FUNCAO\n");
     if(decF->tipo) decF->tipo->aceita(this);
-    if(decF->ponteiro){ nivel++; calculaNivel(); fprintf(stdout, "-PONTEIRO\n"); nivel--; }
+    if(decF->ponteiro) { nivel++; calculaNivel(); fprintf(stdout, "-PONTEIRO\n"); nivel--; }
     if(decF->id) decF->id->aceita(this);
     if(decF->parametros) decF->parametros->aceita(this);
     if(decF->variaveis) decF->variaveis->aceita(this);
@@ -298,14 +298,14 @@ void VisitanteImpressao::visita(NoDeclClasse *decC ){
 void VisitanteImpressao::visita(NoExprUnaria *expU){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-EXPR_UNARIA.%s\n",pegarTokenLiteral(expU->operador));
+    fprintf(stdout, "-EXPR_UNARIA.%s\n", pegarTokenLiteral(expU->operador));
     if(expU->expressao) expU->expressao->aceita(this);
     nivel--;
 }
 void VisitanteImpressao::visita(NoExprBinaria *expB){
     nivel++;
     calculaNivel();
-    fprintf(stdout, "-EXPR_BINARIA.%s\n",pegarTokenLiteral(expB->operador));
+    fprintf(stdout, "-EXPR_BINARIA.%s\n", pegarTokenLiteral(expB->operador));
     if(expB->exprEsquerda) expB->exprEsquerda->aceita(this);
     if(expB->exprDireita) expB->exprDireita->aceita(this);
     nivel--;
@@ -332,14 +332,14 @@ void VisitanteImpressao::visita(NoExprAceCamp *expAC){
     fprintf(stdout, "-VERDADEIRO\n");
     nivel--;
  }
- void VisitanteImpressao::visita(NoFalso *fa) {
+ void VisitanteImpressao::visita(NoFalso *fa){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-FALSO\n");
     nivel--;
  }
 
- void VisitanteImpressao::visita(NoEsse *th) {
+ void VisitanteImpressao::visita(NoEsse *th){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-ESSE\n");
