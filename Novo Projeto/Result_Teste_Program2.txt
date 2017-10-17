@@ -1,0 +1,380 @@
+ProgramaL
+Tipo
+TipoL
+CASOU: INTEIRO
+Ponteiro
+CASOU: ID.funcao
+ProgramaA
+CASOU: PARENTESE_ESQ
+ListaForma
+Tipo
+TipoL
+CASOU: INTEIRO
+Ponteiro
+CASOU: ID.a
+Arranjo
+ListaFormaCont
+CASOU: VIRGULA
+Tipo
+TipoL
+CASOU: INTEIRO
+Ponteiro
+CASOU: ID.b
+Arranjo
+ListaFormaCont
+CorpoFunc
+TipoL
+CASOU: INTEIRO
+Ponteiro
+CASOU: ID.c
+Arranjo
+ListaIdCont
+CorpoFunc
+SentencaL
+CASOU: CHAVE_ESQ
+ListaSentenca
+ListaSentenca
+Sentenca
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.x
+PrimarioIDL
+ExprNovoL
+CASOU: COLCHETE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: NUM_INTEIRO.2
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: COLCHETE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PONTO_VIRGULA
+ListaSentenca
+Sentenca
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.x
+PrimarioIDL
+ExprNovoL
+CASOU: COLCHETE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: NUM_INTEIRO.0
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: COLCHETE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: ATRIBUICAO
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: PARENTESE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+CASOU: SUBTRACAO
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: NUM_INTEIRO.1
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+CASOU: ASTERISCO
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.b
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+CASOU: ADICAO
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.sqrt
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.delta
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+ListaExprCont
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+CASOU: DIVISAO
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: PARENTESE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: NUM_INTEIRO.2
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+CASOU: ASTERISCO
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.a
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PONTO_VIRGULA
+ListaSentenca
+CASOU: CHAVE_DIR
+ProgramaL
+CASOU: EOF
+
+
+-PROGRAMA
+   -DEC_FUNCAO
+      -TIPO
+         -INTEIRO
+      -ID.funcao
+      -LISTA_FORMAL
+         -TIPO
+            -INTEIRO
+         -ID.a
+      -LISTA_FORMAL
+         -TIPO
+            -INTEIRO
+         -ID.b
+      -DEC_VARIAVEL
+         -TIPO
+            -INTEIRO
+         -ID_LIST
+            -ID.c
+      -INDICE
+         -ID.x
+         -NUM_INTEIRO.2
+      -ATRIBUICAO
+         -INDICE
+            -ID.x
+            -NUM_INTEIRO.0
+         -EXPR_BINARIA.DIVISAO
+            -EXPR_BINARIA.ADICAO
+               -EXPR_BINARIA.ASTERISCO
+                  -EXPR_UNARIA.SUBTRACAO
+                     -NUM_INTEIRO.1
+                  -ID.b
+               -CHAMADA
+                  -ID.sqrt
+                  -CHAMADA
+                     -ID.delta
+            -EXPR_BINARIA.ASTERISCO
+               -NUM_INTEIRO.2
+               -ID.a
+[l:1, c:27] - Erro: "PARENTESE_DIR" esperado antes de "INTEIRO"
+[l:1, c:27] - Erro: "CHAVE_ESQ" esperado antes de "INTEIRO"
+[l:1, c:30] - Erro: "PONTO_VIRGULA" esperado antes de "PARENTESE_DIR"
+[l:2, c:8] - Erro: "CHAVE_DIR" esperado antes de "INTEIRO"
+---------------------------------------
+          TABELA DE LITERAIS           
+---------------------------------------
+---------------------------------------
+       TABELA DE IDENTIFICADORES       
+---------------------------------------
+a
+b
+c
+delta
+funcao
+sqrt
+x
+---------------------------------------
+           TABELA DE INTEIROS          
+---------------------------------------
+0
+1
+2
+---------------------------------------
+           TABELA DE REAIS             
+---------------------------------------
+---------------------------------------
+     TABELA DE PALAVRAS RESERVADAS     
+---------------------------------------
+LEXEMA                   Token numerico
+bool                      8
+break                     14
+case                      21
+catch                     20
+char                      9
+class                     3
+else                      11
+false                     24
+float                     7
+if                        10
+int                       6
+new                       22
+print                     15
+private                   5
+public                    4
+readln                    16
+return                    17
+struct                    2
+switch                    13
+this                      25
+throw                     18
+true                      23
+try                       19
+typedef                   1
+while                     12

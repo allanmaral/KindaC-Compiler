@@ -1,0 +1,11 @@
+int main(){	
+	int i=0;
+	try{ 
+		 primeiro->vertice->CalculaDistancia(primeiro->proximo->vertice);
+	catch(...){ print("ERRO\n");}
+		switch(primeiro->vertice->pegarX()){
+		case 0:	print("X origem"); break;
+		case 49: print("X esta no 49"); break;
+
+	}
+}

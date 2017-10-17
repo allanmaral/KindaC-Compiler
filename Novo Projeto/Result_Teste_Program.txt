@@ -1,0 +1,517 @@
+ProgramaL
+DeclClasse
+CASOU: CLASSE
+CASOU: ID.Teste
+DeclClasseL
+CASOU: CHAVE_ESQ
+DeclLocal
+CASOU: CHAVE_DIR
+CASOU: PONTO_VIRGULA
+ProgramaL
+DeclClasse
+CASOU: CLASSE
+CASOU: ID.Vertice
+DeclClasseL
+CASOU: DOIS_PONTOS
+CASOU: ID.Teste
+CASOU: CHAVE_ESQ
+DeclLocal
+CASOU: PRIVADO
+CASOU: DOIS_PONTOS
+DeclLocal
+Tipo
+TipoL
+CASOU: REAL
+Ponteiro
+CASOU: ID.x
+DeclLocalL
+Arranjo
+ListaIdCont
+CASOU: VIRGULA
+Ponteiro
+CASOU: ID.y
+Arranjo
+ListaIdCont
+CASOU: PONTO_VIRGULA
+DeclLocal
+CASOU: PUBLICO
+CASOU: DOIS_PONTOS
+DeclLocal
+Tipo
+TipoL
+CASOU: REAL
+Ponteiro
+CASOU: ID.CalculaDistancia
+DeclLocalL
+CASOU: PARENTESE_ESQ
+ListaForma
+Tipo
+CASOU: ID.Vertice
+Ponteiro
+CASOU: ASTERISCO
+CASOU: ID.v
+Arranjo
+ListaFormaCont
+CASOU: PARENTESE_DIR
+CASOU: CHAVE_ESQ
+CorpoFunc
+TipoL
+CASOU: INTEIRO
+Ponteiro
+CASOU: ID.d
+Arranjo
+ListaIdCont
+CASOU: PONTO_VIRGULA
+CorpoFunc
+ListaExpr
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.d
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: ATRIBUICAO
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.srqt
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: PARENTESE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.x
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+CASOU: SUBTRACAO
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.v
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.pegaX
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+CASOU: ASTERISCO
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: PARENTESE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.x
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+CASOU: SUBTRACAO
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.v
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.pegaX
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+CASOU: ADICAO
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: PARENTESE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.y
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+CASOU: SUBTRACAO
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.v
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.pegaY
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+CASOU: ASTERISCO
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: PARENTESE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.y
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+CASOU: SUBTRACAO
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.v
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.pegaY
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+ListaExprCont
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+ListaExprCont
+CASOU: PONTO_VIRGULA
+CorpoFunc
+SentencaL
+CASOU: RETORNA
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.d
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PONTO_VIRGULA
+ListaSentenca
+CASOU: CHAVE_DIR
+DeclLocal
+CASOU: CHAVE_DIR
+CASOU: PONTO_VIRGULA
+ProgramaL
+CASOU: EOF
+
+
+-PROGRAMA
+   -DEC_CLASSE
+      -ID.Teste
+   -DEC_CLASSE
+      -ID.Vertice
+      -HERANCA
+         -ID.Teste
+      -PRIVATE
+      -DEC_VARIAVEL_LOC
+         -DEC_VARIAVEL
+            -TIPO
+               -REAL
+            -ID_LIST
+               -ID.x
+            -ID_LIST
+               -ID.y
+      -PUBLIC
+      -DEC_FUNCAO_LOC
+         -DEC_FUNCAO
+            -TIPO
+               -REAL
+            -ID.CalculaDistancia
+            -LISTA_FORMAL
+               -TIPO
+                  -ID.Vertice
+               -PONTEIRO
+               -ID.v
+            -DEC_VARIAVEL
+               -TIPO
+                  -INTEIRO
+               -ID_LIST
+                  -ID.d
+            -CORPO_FUNCAO
+               -ATRIBUICAO
+                  -ID.d
+                  -CHAMADA
+                     -ID.srqt
+                     -EXPR_BINARIA.ADICAO
+                        -EXPR_BINARIA.ASTERISCO
+                           -EXPR_BINARIA.SUBTRACAO
+                              -ID.x
+                              -EXPR_ACE_CAMPO
+                                 -ID.v
+                                 -CHAMADA
+                                    -ID.pegaX
+                           -EXPR_BINARIA.SUBTRACAO
+                              -ID.x
+                              -EXPR_ACE_CAMPO
+                                 -ID.v
+                                 -CHAMADA
+                                    -ID.pegaX
+                        -EXPR_BINARIA.ASTERISCO
+                           -EXPR_BINARIA.SUBTRACAO
+                              -ID.y
+                              -EXPR_ACE_CAMPO
+                                 -ID.v
+                                 -CHAMADA
+                                    -ID.pegaY
+                           -EXPR_BINARIA.SUBTRACAO
+                              -ID.y
+                              -EXPR_ACE_CAMPO
+                                 -ID.v
+                                 -CHAMADA
+                                    -ID.pegaY
+            -RETORNA
+               -ID.d
+---------------------------------------
+          TABELA DE LITERAIS           
+---------------------------------------
+---------------------------------------
+       TABELA DE IDENTIFICADORES       
+---------------------------------------
+CalculaDistancia
+Teste
+Vertice
+d
+pegaX
+pegaY
+srqt
+v
+x
+y
+---------------------------------------
+           TABELA DE INTEIROS          
+---------------------------------------
+---------------------------------------
+           TABELA DE REAIS             
+---------------------------------------
+---------------------------------------
+     TABELA DE PALAVRAS RESERVADAS     
+---------------------------------------
+LEXEMA                   Token numerico
+bool                      8
+break                     14
+case                      21
+catch                     20
+char                      9
+class                     3
+else                      11
+false                     24
+float                     7
+if                        10
+int                       6
+new                       22
+print                     15
+private                   5
+public                    4
+readln                    16
+return                    17
+struct                    2
+switch                    13
+this                      25
+throw                     18
+true                      23
+try                       19
+typedef                   1
+while                     12

@@ -1,0 +1,5 @@
+int funcao(int a,int b int c){	
+	int x[2];
+	x[0]=(-1*b+sqrt (delta()))/(2*a);
+}
+

@@ -1,0 +1,414 @@
+ProgramaL
+Tipo
+TipoL
+CASOU: INTEIRO
+Ponteiro
+CASOU: ID.main
+ProgramaA
+CASOU: PARENTESE_ESQ
+ListaForma
+CASOU: PARENTESE_DIR
+CASOU: CHAVE_ESQ
+CorpoFunc
+TipoL
+CASOU: INTEIRO
+Ponteiro
+CASOU: ID.i
+Arranjo
+ListaIdCont
+CorpoFunc
+ListaExpr
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: NUM_INTEIRO.0
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+ListaExprCont
+CASOU: PONTO_VIRGULA
+CorpoFunc
+SentencaL
+CASOU: TENTA
+Sentenca
+SentencaL
+CASOU: CHAVE_ESQ
+ListaSentenca
+Sentenca
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.primeiro
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.vertice
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.CalculaDistancia
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.primeiro
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.proximo
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.vertice
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+ListaExprCont
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PONTO_VIRGULA
+ListaSentenca
+CASOU: PEGA
+CASOU: PARENTESE_ESQ
+CASOU: TRES_PONTOS
+CASOU: PARENTESE_DIR
+Sentenca
+SentencaL
+CASOU: CHAVE_ESQ
+ListaSentenca
+Sentenca
+SentencaL
+CASOU: IMPRIME
+CASOU: PARENTESE_ESQ
+ListaExpr
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: LITERAL."ERRO\n"
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+ListaExprCont
+CASOU: PARENTESE_DIR
+CASOU: PONTO_VIRGULA
+ListaSentenca
+CASOU: CHAVE_DIR
+ListaSentenca
+Sentenca
+SentencaL
+CASOU: ESCOLHA
+CASOU: PARENTESE_ESQ
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.primeiro
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.vertice
+PrimarioIDL
+ExprNovoL
+ExprAceCampL
+CASOU: PONTEIRO
+ExprNovo
+Primario
+PrimarioID
+CASOU: ID.pegarX
+PrimarioIDL
+CASOU: PARENTESE_ESQ
+ListaExpr
+CASOU: PARENTESE_DIR
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+CASOU: PARENTESE_DIR
+CASOU: CHAVE_ESQ
+BlocoCaso
+CASOU: CASO
+CASOU: NUM_INTEIRO.0
+CASOU: DOIS_PONTOS
+ListaSentenca
+Sentenca
+SentencaL
+CASOU: IMPRIME
+CASOU: PARENTESE_ESQ
+ListaExpr
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: LITERAL."X origem"
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+ListaExprCont
+CASOU: PARENTESE_DIR
+CASOU: PONTO_VIRGULA
+ListaSentenca
+Sentenca
+SentencaL
+CASOU: DESVIA
+CASOU: PONTO_VIRGULA
+ListaSentenca
+BlocoCaso
+CASOU: CASO
+CASOU: NUM_INTEIRO.49
+CASOU: DOIS_PONTOS
+ListaSentenca
+Sentenca
+SentencaL
+CASOU: IMPRIME
+CASOU: PARENTESE_ESQ
+ListaExpr
+Expr
+ExprOuBool
+ExprEBool
+ExprIgualdade
+ExprRelacional
+ExprSoma
+ExprMultDivE
+ExprUnaria
+ExprAceCamp
+ExprNovo
+Primario
+PrimarioL
+CASOU: LITERAL."X esta no 49"
+ExprNovoL
+ExprAceCampL
+ExprMultDivEL
+ExprSomaL
+ExprRelacionalL
+ExprIgualdadeL
+ExprEBoolL
+ExprOuBoolL
+ExprAtrib
+ListaExprCont
+CASOU: PARENTESE_DIR
+CASOU: PONTO_VIRGULA
+ListaSentenca
+Sentenca
+SentencaL
+CASOU: DESVIA
+CASOU: PONTO_VIRGULA
+ListaSentenca
+BlocoCaso
+CASOU: CHAVE_DIR
+ListaSentenca
+CASOU: CHAVE_DIR
+ProgramaL
+CASOU: EOF
+
+
+-PROGRAMA
+   -DEC_FUNCAO
+      -TIPO
+         -INTEIRO
+      -ID.main
+      -DEC_VARIAVEL
+         -TIPO
+            -INTEIRO
+         -ID_LIST
+            -ID.i
+      -CORPO_FUNCAO
+         -NUM_INTEIRO.0
+      -TENTA
+         -EXPR_ACE_CAMPO
+            -EXPR_ACE_CAMPO
+               -ID.primeiro
+               -ID.vertice
+            -CHAMADA
+               -ID.CalculaDistancia
+               -EXPR_ACE_CAMPO
+                  -EXPR_ACE_CAMPO
+                     -ID.primeiro
+                     -ID.proximo
+                  -ID.vertice
+      -PEGA
+         -IMPRIME
+            -LITERAL."ERRO\n"
+      -ESCOLHA
+         -EXPR_ACE_CAMPO
+            -EXPR_ACE_CAMPO
+               -ID.primeiro
+               -ID.vertice
+            -CHAMADA
+               -ID.pegarX
+         -CASO
+            -NUM_INTEIRO.0
+            -IMPRIME
+               -LITERAL."X origem"
+            -DESVIA
+            -CASO
+               -NUM_INTEIRO.49
+               -IMPRIME
+                  -LITERAL."X esta no 49"
+               -DESVIA
+[l:2, c:11] - Erro: "PONTO_VIRGULA" esperado antes de "ATRIBUICAO"
+[l:5, c:10] - Erro: "CHAVE_DIR" esperado antes de "PEGA"
+---------------------------------------
+          TABELA DE LITERAIS           
+---------------------------------------
+"ERRO\n"
+"X esta no 49"
+"X origem"
+---------------------------------------
+       TABELA DE IDENTIFICADORES       
+---------------------------------------
+CalculaDistancia
+i
+main
+pegarX
+primeiro
+proximo
+vertice
+---------------------------------------
+           TABELA DE INTEIROS          
+---------------------------------------
+0
+49
+---------------------------------------
+           TABELA DE REAIS             
+---------------------------------------
+---------------------------------------
+     TABELA DE PALAVRAS RESERVADAS     
+---------------------------------------
+LEXEMA                   Token numerico
+bool                      8
+break                     14
+case                      21
+catch                     20
+char                      9
+class                     3
+else                      11
+false                     24
+float                     7
+if                        10
+int                       6
+new                       22
+print                     15
+private                   5
+public                    4
+readln                    16
+return                    17
+struct                    2
+switch                    13
+this                      25
+throw                     18
+true                      23
+try                       19
+typedef                   1
+while                     12

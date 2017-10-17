@@ -3,10 +3,6 @@ class Vertice:Teste{
 	private:
 		float x,y;
 	public:
-		int Vertice(float xAux, float yAux){
-			x=xAux;
-			y=yAux;
-		}
 		float CalculaDistancia(Vertice *v){
 			int d;
 			d= srqt((x-v->pegaX())*(x-v->pegaX())+(y-v->pegaY())*(y-v->pegaY()));
@@ -14,8 +10,4 @@ class Vertice:Teste{
 		}
 
 };
-typedef struct {
-	Vertice* vertice;
-	No* proximo;
-}No;
 
