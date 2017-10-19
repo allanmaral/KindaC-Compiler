@@ -422,3 +422,10 @@
 	"Visitante.h"
 	"AnalisadorSintatico.h"
 
+1508382385 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Visitante.cpp
+	<stdio.h>
+	<stdlib.h>
+	"ASA.h"
+	"Visitante.h"
+	"AnalisadorSintatico.h"
+

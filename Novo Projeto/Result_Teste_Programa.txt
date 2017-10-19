@@ -395,6 +395,16 @@ DeclLocal
 CASOU: CHAVE_DIR
 CASOU: PONTO_VIRGULA
 ProgramaL
+Tipo
+CASOU: ID.Vertice
+Ponteiro
+CASOU: ASTERISCO
+CASOU: ID.vertice
+ProgramaA
+Arranjo
+ListaIdCont
+CASOU: PONTO_VIRGULA
+ProgramaL
 CASOU: EOF
 
 
@@ -464,54 +474,9 @@ CASOU: EOF
                                     -ID.pegaY
             -RETORNA
                -ID.d
----------------------------------------
-          TABELA DE LITERAIS           
----------------------------------------
----------------------------------------
-       TABELA DE IDENTIFICADORES       
----------------------------------------
-CalculaDistancia
-Teste
-Vertice
-d
-pegaX
-pegaY
-srqt
-v
-x
-y
----------------------------------------
-           TABELA DE INTEIROS          
----------------------------------------
----------------------------------------
-           TABELA DE REAIS             
----------------------------------------
----------------------------------------
-     TABELA DE PALAVRAS RESERVADAS     
----------------------------------------
-LEXEMA                   Token numerico
-bool                      8
-break                     14
-case                      21
-catch                     20
-char                      9
-class                     3
-else                      11
-false                     24
-float                     7
-if                        10
-int                       6
-new                       22
-print                     15
-private                   5
-public                    4
-readln                    16
-return                    17
-struct                    2
-switch                    13
-this                      25
-throw                     18
-true                      23
-try                       19
-typedef                   1
-while                     12
+   -DEC_VARIAVEL
+      -TIPO
+         -ID.Vertice
+      -ID_LIST
+         -PONTEIRO
+         -ID.vertice
