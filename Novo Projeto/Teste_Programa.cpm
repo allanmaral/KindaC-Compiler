@@ -1,4 +1,5 @@
 class Teste{};
+Teste *teste;
 class Vertice:Teste{
 	private:
 		float x,y;

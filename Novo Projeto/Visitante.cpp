@@ -2,17 +2,15 @@
 #include <stdlib.h>
 #include "ASA.h"
 #include "Visitante.h"
-#include "VisitanteImpressao.h"
-#include "AnalisadorLexico.h"
 #include "AnalisadorSintatico.h"
-
-static int nivel = 0;
-void calculaNivel(){
+void VisitanteImpressao::calculaNivel(){
 	for(int i=0; i<nivel; i++){
         fprintf(stdout, "   ");
     }
 }
-VisitanteImpressao::VisitanteImpressao(){}
+VisitanteImpressao::VisitanteImpressao(){
+    nivel=0;
+}
 void VisitanteImpressao::visita(NoPrograma *prog){
 	fprintf(stdout, "\n\n-PROGRAMA\n");
 	if(prog->listaClasse)      prog->listaClasse->aceita(this);
@@ -355,7 +353,7 @@ void VisitanteImpressao::visita(NoTipo *tp){
     fprintf(stdout, "-TIPO\n");
     nivel++;
     calculaNivel();
-    if(tp->primitivo == ID) { fprintf(stdout, "-ID.%s\n", tp->entradaTabela->pegarLexema()); }
+    if(tp->entradaTabela) { fprintf(stdout, "-ID.%s\n", tp->entradaTabela->pegarLexema()); }
     else { fprintf(stdout, "-%s\n", pegarTokenLiteral(tp->primitivo)); }
     nivel-=2;
 }

@@ -4,7 +4,7 @@
 #include "AnalisadorLexico.h"
 #include "AnalisadorSintatico.h"
 #include "GerenciadorErro.h"
-#include "VisitanteImpressao.h"
+#include "Visitante.h"
 
 /** \brief Destrói objetos alocados durante a execução do programa
  *  Função chamada na saida do programa
