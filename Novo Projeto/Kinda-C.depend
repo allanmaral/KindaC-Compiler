@@ -63,7 +63,7 @@
 	<stdlib.h>
 	<stdio.h>
 
-1508267128 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
+1509202447 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
 	"GerenciadorErro.h"
 	<stdio.h>
 	<stdlib.h>
@@ -85,7 +85,7 @@
 	"GerenciadorErro.h"
 	"VisitanteImpressao.h"
 
-1508267258 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+1509203758 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
@@ -216,10 +216,10 @@
 	"Visitante.h"
 	<string.h>
 
-1508260356 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
+1509203861 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
 	"TabelaSimbolos.h"
 
-1508264842 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.cpp
+1509203889 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.cpp
 	"ASA.h"
 	"Visitante.h"
 	<string.h>
@@ -322,7 +322,7 @@
 1507699314 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\visitanteimpressao.h
 	"Visitante.h"
 
-1508260357 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.h
+1508439276 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.h
 	"ASA.h"
 
 1508265170 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitanteimpressao.h
