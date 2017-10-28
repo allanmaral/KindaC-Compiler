@@ -28,7 +28,8 @@ int main(int argc, char** args){
             exit(1);
         }
     } else if( argc > 2){
-               fprintf(stderr, "Argumento invalido!\nExemplo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
+               fprintf(stderr, "Argumento invalido!\n");
+               fpritnf(stderr, "Exemplo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
                exit(1);
            }
 

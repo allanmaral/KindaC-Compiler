@@ -7,7 +7,8 @@ static TabelaInteiro tabelaInteiro;
 static TabelaLiteral tabelaLiteral;
 static TabelaReal tabelaReal;
 
-NoPrograma::NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo, NoDeclVariavel *listaVariavel){
+NoPrograma::NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo,
+                       NoDeclVariavel *listaVariavel){
     this->listaClasse = listaClasse;
     this->listaFuncao = listaFuncao;
     this->listaTipo = listaTipo;
@@ -180,7 +181,8 @@ NoSentencaExpr::NoSentencaExpr(NoExpr *expressao){
 void NoSentencaExpr::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclFuncao::NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca *sentenca, NoDeclFuncao *lista){
+NoDeclFuncao::NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *parametros,
+                           NoDeclVariavel *variaveis, NoListaSentenca *sentenca, NoDeclFuncao *lista){
     this->tipo = tipo;
     this->ponteiro = ponteiro;
     this->id = id;

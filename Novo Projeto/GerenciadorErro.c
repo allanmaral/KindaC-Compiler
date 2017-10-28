@@ -103,7 +103,8 @@ void proximoErro(){
     //Imprime a mensagem do erro no stderr
     int linha = erro->linha, coluna = erro->coluna;
     if(erro->codigo == ErroSintatico || erro->codigo == ErroSIntaticoDepois) {
-        fprintf(stderr, "[l:%d, c:%d] - Erro: \"%s\" esperado %s de \"%s\"\n", linha, coluna, erro->tokenEsperado, ErroLiteral[erro->codigo], erro->tokenEncontrado);
+        fprintf(stderr, "[l:%d, c:%d] - Erro: \"%s\" esperado %s de \"%s\"\n", linha, coluna, erro->tokenEsperado,
+                ErroLiteral[erro->codigo], erro->tokenEncontrado);
     } else if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {
                fprintf(stderr, "[l:%d, c:%d] - %s\n", linha, coluna, ErroLiteral[erro->codigo]);
            } else{

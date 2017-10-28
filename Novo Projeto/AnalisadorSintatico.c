@@ -56,7 +56,8 @@ void casar(int tokenEsperado){
               fprintf(stdout, "CASOU: %s\n", tokenLiteral[tokenEsperado]);
           }
     } else {
-          fprintf(stdout, "NAO CASOU: LIDO: \"%s\" ESPERADO: \"%s\"\n", tokenLiteral[tokenAtual], tokenLiteral[tokenEsperado]);
+          fprintf(stdout, "NAO CASOU: LIDO: \"%s\" ESPERADO: \"%s\"\n", tokenLiteral[tokenAtual],
+                  tokenLiteral[tokenEsperado]);
       }
     tokenAtual = proximoToken();
 }
@@ -89,22 +90,31 @@ void casarOuPular(int token, int *sinc){
 }
 
 
-void          ProgramaL();    	                void           ProgramaA(NoTipo *tipo, int ponteiro, NoId *id);    void             ProgramaB();
-NoDeclClasse *DeclClasse();                     NoDeclLocal   *DeclLocal();	                                       NoDeclClasse    *DeclClasseL(NoId *idClasseDeclarada);
-void          CorpoFunc(NoDeclFuncao *funcao);  NoDeclLocal   *DeclLocalL(NoTipo *tipo, int ponteiro, NoId *id);   NoDeclVariavel  *DeclVar();
-NoListaId    *ListaId();                        NoListaId     *ListaIdCont();                                      int              Ponteiro();
-NoArranjo    *Arranjo();                        NoListaFormal *ListaForma();                                       NoListaFormal   *ListaFormaCont();
-NoTipo       *Tipo();                           NoTipo        *TipoL();                                            NoListaSentenca *ListaSentenca();
-NoSentenca   *Sentenca();                       NoSentenca    *SentencaL();                                        NoSe            *Se();
-NoSenao      *Senao();                          NoBlocoCaso   *BlocoCaso();                                        NoListaExpr     *ListaExpr();
-NoListaExpr  *ListaExprCont();                  NoExpr        *Expr();                                             NoExpr          *ExprAtrib(NoExpr *exprEsquerda);
-NoExpr       *ExprOuBool();                     NoExpr        *ExprOuBoolL(NoExpr *exprEsquerda);                  NoExpr          *ExprEBool();
-NoExpr       *ExprEBoolL(NoExpr *exprEsquerda); NoExpr        *ExprIgualdade();                                    NoExpr          *ExprIgualdadeL(NoExpr *exprEsquerda);
-NoExpr       *ExprRelacional();                 NoExpr        *ExprRelacionalL(NoExpr *exprEsquerda);              NoExpr          *ExprSoma();
-NoExpr       *ExprSomaL(NoExpr *exprEsquerda);  NoExpr        *ExprMultDivE();                                     NoExpr          *ExprMultDivEL(NoExpr *exprEsquerda);
-NoExpr       *ExprUnaria();                     NoExpr        *ExprAceCamp();                                      NoExpr          *ExprAceCampL(NoExpr *exprEsquerda);
-NoPrimario   *ExprNovo();                       NoPrimario    *ExprNovoL(NoPrimario *primario);                    NoPrimario      *Primario();
-NoPrimario   *PrimarioID();                     NoPrimario    *PrimarioIDL(NoId *id);                              NoPrimario      *PrimarioL();
+void            ProgramaL();    	             void             ProgramaA(NoTipo *tipo, int ponteiro, NoId *id);
+void            ProgramaB();                     NoDeclClasse    *DeclClasse();
+NoDeclLocal    *DeclLocal();	                 NoDeclClasse    *DeclClasseL(NoId *idClasseDeclarada);
+void            CorpoFunc(NoDeclFuncao *funcao); NoDeclLocal     *DeclLocalL(NoTipo *tipo, int ponteiro, NoId *id);
+NoDeclVariavel *DeclVar();                       NoListaId       *ListaId();
+NoListaId      *ListaIdCont();                   int              Ponteiro();
+NoArranjo      *Arranjo();                       NoListaFormal   *ListaForma();
+NoListaFormal  *ListaFormaCont();                NoTipo          *Tipo();
+NoTipo         *TipoL();                         NoListaSentenca *ListaSentenca();
+NoSentenca     *Sentenca();                      NoSentenca      *SentencaL();
+NoSe           *Se();                            NoSenao         *Senao();
+NoBlocoCaso    *BlocoCaso();                     NoListaExpr     *ListaExpr();
+NoListaExpr    *ListaExprCont();                 NoExpr          *Expr();
+NoExpr         *ExprAtrib(NoExpr *exprEsquerda); NoExpr          *ExprOuBool();
+NoExpr         *ExprEBool();                     NoExpr          *ExprEBoolL(NoExpr *exprEsquerda);
+NoExpr         *ExprIgualdade();                 NoExpr          *ExprIgualdadeL(NoExpr *exprEsquerda);
+NoExpr         *ExprRelacional();                NoExpr          *ExprRelacionalL(NoExpr *exprEsquerda);
+NoExpr         *ExprSoma();                      NoExpr          *ExprSomaL(NoExpr *exprEsquerda);
+NoExpr         *ExprMultDivE();                  NoExpr          *ExprMultDivEL(NoExpr *exprEsquerda);
+NoExpr         *ExprUnaria();                    NoExpr          *ExprAceCamp();
+NoPrimario     *ExprNovo();                      NoPrimario      *ExprNovoL(NoPrimario *primario);
+NoPrimario     *Primario();                      NoPrimario      *PrimarioID();
+NoPrimario     *PrimarioIDL(NoId *id);           NoPrimario      *PrimarioL();
+NoExpr         *ExprOuBoolL(NoExpr *exprEsquerda);
+NoExpr         *ExprAceCampL(NoExpr *exprEsquerda);
 
 NoPrograma *Programa(){
     tokenAtual = proximoToken();
@@ -165,7 +175,8 @@ void ProgramaL(){
         break;
         default:
             /* ERRO */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosDefinicaoClassTipo]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosDefinicaoClassTipo]);
             pular(firstPrograma);
             return ProgramaL();
         break;
@@ -173,9 +184,10 @@ void ProgramaL(){
 }
 
 static int followProgramaA [] = {TOKEN_EOF};
-static int sincProgramaA [] = {CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO,
-                               LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA,
-                               IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, DEFINICAO_TIPO, CLASSE, TOKEN_EOF};
+static int sincProgramaA [] = {CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL,
+                               PARENTESE_ESQ, NEGACAO, LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO,
+                               ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA,
+                               TENTA, DEFINICAO_TIPO, CLASSE, TOKEN_EOF};
 void ProgramaA(NoTipo *tipo, int ponteiro, NoId *id){
     fprintf(stdout, "ProgramaA\n");
     switch(tokenAtual){
@@ -211,13 +223,15 @@ void ProgramaA(NoTipo *tipo, int ponteiro, NoId *id){
             ProgramaL();
         } break;
         default:
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosInicializador]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosInicializador]);
             pular(sincProgramaA);
         break;
     }
 }
 
-static int sincDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ, DOIS_PONTOS, TOKEN_EOF};
+static int sincDeclClasse [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ,
+                                DOIS_PONTOS, TOKEN_EOF};
 NoDeclClasse *DeclClasse(){
     fprintf(stdout, "DeclClasse\n");
     switch(tokenAtual){
@@ -231,7 +245,8 @@ NoDeclClasse *DeclClasse(){
     return NULL;
 }
 
-static int sincDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ, CHAVE_DIR, PONTO_VIRGULA, TOKEN_EOF};
+static int sincDeclClasseL [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, CHAVE_ESQ,
+                                 CHAVE_DIR, PONTO_VIRGULA, TOKEN_EOF};
 NoDeclClasse *DeclClasseL(NoId *idClasseDeclarada){
     fprintf(stdout, "DeclClasseL\n");
     switch(tokenAtual){
@@ -254,14 +269,16 @@ NoDeclClasse *DeclClasseL(NoId *idClasseDeclarada){
         } break;
         default:
             /* ERRO */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosChaveOuDoisPontos]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosChaveOuDoisPontos]);
             pular(sincDeclClasseL);
             return NULL;
         break;
     }
 }
 
-static int sincDeclLocal [] = {CHAVE_DIR, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, PARENTESE_ESQ, COLCHETE_ESQ, VIRGULA, PONTO_VIRGULA, TOKEN_EOF};
+static int sincDeclLocal [] = {CHAVE_DIR, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, PARENTESE_ESQ,
+                               COLCHETE_ESQ, VIRGULA, PONTO_VIRGULA, TOKEN_EOF};
 NoDeclLocal *DeclLocal(){
     fprintf(stdout, "DeclLocal\n");
     switch(tokenAtual){
@@ -291,11 +308,12 @@ NoDeclLocal *DeclLocal(){
 }
 
 static int followDeclLocalL [] = {CHAVE_DIR, TOKEN_EOF};
-static int sincDeclLocalL   [] = {CHAVE_DIR, CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO, TOKEN_EOF};
-static int firstCorpoFunc   [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO, LITERAL, E_COMERCIAL,
-                                  VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, ASCII, CHAVE_ESQ, SE, ENQUANTO,
-                                  ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, INTEIRO, REAL, BOLEANO,
-                                  CARACTERE, TOKEN_EOF };
+static int sincDeclLocalL   [] = {CHAVE_DIR, CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, PUBLICO, PRIVADO,
+                                  TOKEN_EOF};
+static int firstCorpoFunc   [] = {ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO, LITERAL,
+                                  E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, ASCII, CHAVE_ESQ,
+                                  SE, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, INTEIRO,
+                                  REAL, BOLEANO, CARACTERE, TOKEN_EOF };
 NoDeclLocal *DeclLocalL(NoTipo *tipo, int ponteiro, NoId *id){
     fprintf(stdout, "DeclLocalL\n");
     switch(tokenAtual){
@@ -318,18 +336,18 @@ NoDeclLocal *DeclLocalL(NoTipo *tipo, int ponteiro, NoId *id){
         } break;
         default:
             /* ERRO */
-            saidaErro(ErroSIntaticoDepois, pegarLinha(), pegarColuna(), esperadosLiteral[EsperadosDeclaracaoMembro], tokenLiteral[PONTO_VIRGULA]);
+            saidaErro(ErroSIntaticoDepois, pegarLinha(), pegarColuna(),
+                      esperadosLiteral[EsperadosDeclaracaoMembro], tokenLiteral[PONTO_VIRGULA]);
             pular(followDeclLocalL);
             return NULL;
         break;
     }
 }
 
-static int sincCorpoFunc   [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ,
-                                  NEGACAO, LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE,
-                                  NOVO, ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, LE_LINHA,
-                                  RETORNA, IMPRIME, LANCA, TENTA, INTEIRO, REAL, BOLEANO, CARACTERE,
-                                  COLCHETE_ESQ, VIRGULA, CHAVE_DIR, TOKEN_EOF};
+static int sincCorpoFunc   [] = { CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, PARENTESE_ESQ, NEGACAO, LITERAL,
+                                  ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE,
+                                  ENQUANTO, ESCOLHA, DESVIA, LE_LINHA, RETORNA, IMPRIME, LANCA, TENTA, INTEIRO,
+                                  REAL, BOLEANO, CARACTERE, COLCHETE_ESQ, VIRGULA, CHAVE_DIR, TOKEN_EOF};
 void CorpoFunc(NoDeclFuncao *funcao){
     fprintf(stdout, "CorpoFunc\n");
     switch(tokenAtual){
@@ -417,7 +435,8 @@ NoListaId *ListaId(){
         break;
         default:
             /* ERRO */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosIdentificador]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosIdentificador]);
             pular(sincListaId);
             return NULL;
         break;
@@ -535,7 +554,8 @@ NoTipo *Tipo(){
         } break;
         default:
             /*ERRO*/
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosTipo]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosTipo]);
             pular(followTipo);
             return NULL;
         break;
@@ -564,7 +584,8 @@ NoTipo *TipoL(){
         } break;
         default:
             /*ERRO*/
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosTipo]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosTipo]);
             pular(followTipoL);
             return NULL;
         break;
@@ -594,9 +615,10 @@ NoListaSentenca *ListaSentenca(){
 }
 
 
-static int followSentenca [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
-                                ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO,
-                                ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
+static int followSentenca [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO,
+                                LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE,
+                                SENAO, ENQUANTO, ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA,
+                                PEGA, TOKEN_EOF};
 NoSentenca *Sentenca(){
     fprintf(stdout, "Sentenca\n");
     switch(tokenAtual){
@@ -617,17 +639,18 @@ NoSentenca *Sentenca(){
         } break;
         default:
             /* ERRO */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosSenteca]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosSenteca]);
             pular(followSentenca);
             return NULL;
         break;
     }
 }
 
-static int sincSentencaL []   = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
-                                 ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO,
-                                 ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, PONTO_VIRGULA,
-                                 PARENTESE_DIR, TRES_PONTOS, TOKEN_EOF};
+static int sincSentencaL []   = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ,
+                                 NEGACAO, LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO,
+                                 SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA, CASO, DESVIA, IMPRIME, LE_LINHA, RETORNA,
+                                 LANCA, TENTA, PEGA, PONTO_VIRGULA, PARENTESE_DIR, TRES_PONTOS, TOKEN_EOF};
 NoSentenca *SentencaL(){
     fprintf(stdout, "SentencaL\n");
     switch(tokenAtual){
@@ -700,16 +723,17 @@ NoSentenca *SentencaL(){
         } break;
         default:
             /*ERRO*/
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosSenteca]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosSenteca]);
             pular(sincSentencaL);
             return NULL;
         break;
     }
 }
 
-static int followSe [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO, LITERAL,
-                          E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO, ENQUANTO, ESCOLHA,
-                          DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
+static int followSe [] = {CHAVE_ESQ, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL, CHAVE_DIR, PARENTESE_ESQ, NEGACAO,
+                          LITERAL, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO, ADICAO, SUBTRACAO, SE, SENAO,
+                          ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA, TENTA, PEGA, TOKEN_EOF};
 NoSe *Se(){
     fprintf(stdout, "Se\n");
     switch(tokenAtual){
@@ -812,7 +836,8 @@ NoExpr *Expr() {
         } break;
         default:
             /* ERRO */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExpr);
             return NULL;
         break;
@@ -845,7 +870,8 @@ NoExpr  *ExprOuBool(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprOuBool);
             return NULL;
         break;
@@ -864,7 +890,8 @@ NoExpr  *ExprOuBoolL(NoExpr *exprEsquerda){
     }
 }
 
-static int followExprEBool [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, TOKEN_EOF};
+static int followExprEBool [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC,
+                                 TOKEN_EOF};
 NoExpr  *ExprEBool(){
     fprintf(stdout, "ExprEBool\n");
     switch(tokenAtual){
@@ -878,7 +905,8 @@ NoExpr  *ExprEBool(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprEBool);
             return NULL;
         break;
@@ -897,7 +925,8 @@ NoExpr  *ExprEBoolL(NoExpr *exprEsquerda){
     }
 }
 
-static int followExprIgualdade [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, TOKEN_EOF};
+static int followExprIgualdade [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                     TOKEN_EOF};
 NoExpr  *ExprIgualdade(){
     fprintf(stdout, "ExprIgualdade\n");
     switch(tokenAtual){
@@ -911,7 +940,8 @@ NoExpr  *ExprIgualdade(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprIgualdade);
             return NULL;
         break;
@@ -935,8 +965,8 @@ NoExpr  *ExprIgualdadeL(NoExpr *exprEsquerda){
     }
 }
 
-static int followExprRelacional [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                      DIFERENTE, TOKEN_EOF};
+static int followExprRelacional [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                      COMPARACAO, DIFERENTE, TOKEN_EOF};
 NoExpr  *ExprRelacional(){
     fprintf(stdout, "ExprRelacional\n");
     switch(tokenAtual){
@@ -950,7 +980,8 @@ NoExpr  *ExprRelacional(){
         }break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprRelacional);
             return NULL;
         break;
@@ -984,8 +1015,8 @@ NoExpr  *ExprRelacionalL(NoExpr *exprEsquerda){
     }
 }
 
-static int followExprSoma [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, TOKEN_EOF};
+static int followExprSoma [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, TOKEN_EOF};
 NoExpr  *ExprSoma(){
     fprintf(stdout, "ExprSoma\n");
     switch(tokenAtual){
@@ -999,7 +1030,8 @@ NoExpr  *ExprSoma(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprSoma);
             return NULL;
         break;
@@ -1028,8 +1060,9 @@ NoExpr  *ExprSomaL(NoExpr *exprEsquerda){
     }
 }
 
-static int followExprMultDivE [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                    DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, TOKEN_EOF};
+static int followExprMultDivE [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                    COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO,
+                                    SUBTRACAO, OU, TOKEN_EOF};
 NoExpr *ExprMultDivE(){
     fprintf(stdout, "ExprMultDivE\n");
     switch(tokenAtual){
@@ -1043,7 +1076,8 @@ NoExpr *ExprMultDivE(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprMultDivE);
             return NULL;
         break;
@@ -1080,9 +1114,9 @@ NoExpr *ExprMultDivEL(NoExpr *exprEsquerda){
     }
 }
 
-static int followExprUnaria [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                   DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                   E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
+static int followExprUnaria [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                  COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+                                  OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
 NoExpr *ExprUnaria(){
     fprintf(stdout, "ExprUnaria\n");
     switch(tokenAtual){
@@ -1106,16 +1140,17 @@ NoExpr *ExprUnaria(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprUnaria);
             return NULL;
         break;
     }
 }
 
-static int followExprAceCamp [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                   DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                   E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
+static int followExprAceCamp [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO,
+                                   SUBTRACAO, OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, TOKEN_EOF};
 NoExpr *ExprAceCamp(){
     fprintf(stdout, "ExprAceCamp\n");
     switch(tokenAtual){
@@ -1128,7 +1163,8 @@ NoExpr *ExprAceCamp(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprAceCamp);
             return NULL;
         break;
@@ -1155,9 +1191,9 @@ NoExpr *ExprAceCampL(NoExpr *exprEsquerda){
     }
 }
 
-static int followExprNovo [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
+static int followExprNovo [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+                                OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, TOKEN_EOF};
 NoPrimario *ExprNovo(){
     fprintf(stdout, "ExprNovo\n");
     switch(tokenAtual){
@@ -1170,16 +1206,18 @@ NoPrimario *ExprNovo(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followExprNovo);
             return NULL;
         break;
     }
 }
 
-static int followExprNovoL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                 DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                 E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
+static int followExprNovoL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                 COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+                                 OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ,
+                                 TOKEN_EOF};
 NoPrimario *ExprNovoL(NoPrimario *primario){
     fprintf(stdout, "ExprNovoL\n");
     switch(tokenAtual){
@@ -1196,9 +1234,10 @@ NoPrimario *ExprNovoL(NoPrimario *primario){
     }
 }
 
-static int followPrimario [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
+static int followPrimario [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+                                OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ,
+                                TOKEN_EOF};
 NoPrimario *Primario() {
     fprintf(stdout, "Primario\n");
     switch(tokenAtual){
@@ -1213,16 +1252,18 @@ NoPrimario *Primario() {
         break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followPrimario);
             return NULL;
         break;
     }
 }
 
-static int followPrimarioL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                 DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                 E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, PARENTESE_ESQ, TOKEN_EOF};
+static int followPrimarioL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                 COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+                                 OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ,
+                                 PARENTESE_ESQ, TOKEN_EOF};
 NoPrimario *PrimarioL(){
     fprintf(stdout, "PrimarioL\n");
     switch(tokenAtual){
@@ -1279,16 +1320,18 @@ NoPrimario *PrimarioL(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followPrimarioL);
             return NULL;
         break;
     }
 }
 
-static int followPrimarioID [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                  DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                  E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
+static int followPrimarioID [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                  COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO,
+                                  OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ,
+                                  TOKEN_EOF};
 NoPrimario *PrimarioID(){
     fprintf(stdout, "PrimarioID\n");
     switch(tokenAtual){
@@ -1299,16 +1342,18 @@ NoPrimario *PrimarioID(){
         } break;
         default:
             /* Erro */
-            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual], esperadosLiteral[EsperadosExpressaoPrimaria]);
+            saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                      esperadosLiteral[EsperadosExpressaoPrimaria]);
             pular(followPrimarioID);
             return NULL;
         break;
     }
 }
 
-static int followPrimarioIDL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E, COMPARACAO,
-                                   DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO, SUBTRACAO, OU, ASTERISCO,
-                                   E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO, COLCHETE_ESQ, TOKEN_EOF};
+static int followPrimarioIDL [] = {COLCHETE_DIR, VIRGULA, PONTO_VIRGULA, PARENTESE_DIR, ATRIBUICAO, OU_CC, E,
+                                   COMPARACAO, DIFERENTE, MENOR, MENOR_IGUAL, MAIOR_IGUAL, MAIOR, ADICAO,
+                                   SUBTRACAO, OU, ASTERISCO, E_COMERCIAL, DIVISAO, PORCENTO, PONTEIRO, PONTO,
+                                   COLCHETE_ESQ, TOKEN_EOF};
 NoPrimario *PrimarioIDL(NoId *id){
     fprintf(stdout, "PrimarioIDL\n");
     switch(tokenAtual){

@@ -82,7 +82,8 @@ Atributo* TabelaSimbolos::busca(char *entrada){
         }
         indice++;
     }
-    if(no->EChave()){///se não encontrou nenhum nó nulo pelo caminho e o nó que parou é uma chave, então encontrou a entrada
+    ///se não encontrou nenhum nó nulo pelo caminho e o nó que parou é uma chave, então encontrou a entrada
+    if(no->EChave()){
         return no->pegarAtributo();
     }
     return NULL;

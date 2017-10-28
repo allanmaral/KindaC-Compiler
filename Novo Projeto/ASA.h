@@ -12,7 +12,8 @@ class NoCorpoFuncao;
 
 class NoPrograma{
     public:
-        NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo, NoDeclVariavel *listaVariavel);
+        NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo,
+                   NoDeclVariavel *listaVariavel);
         void aceita(Visitante *v);
         NoDeclClasse *listaClasse;
         NoDeclFuncao *listaFuncao;
@@ -215,7 +216,8 @@ class NoSentencaExpr:public NoSentenca{
 };
 class NoDeclFuncao{
     public:
-        NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis, NoListaSentenca *sentenca, NoDeclFuncao *lista);
+        NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis,
+                     NoListaSentenca *sentenca, NoDeclFuncao *lista);
         void aceita(Visitante *v);
         NoTipo* tipo;
         int ponteiro;
