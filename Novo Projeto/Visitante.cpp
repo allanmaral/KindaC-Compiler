@@ -64,10 +64,11 @@ void VisitanteImpressao::visita(NoNumReal *nr){
 	nivel--;
 }
 void VisitanteImpressao::visita(NoArranjo *arr){
+    if(!arr) return;
     nivel++;
     calculaNivel();
     fprintf(stdout, "-ARRANJO\n");
-    arr->num->aceita(this);
+    if(arr->num) arr->num->aceita(this);
     nivel--;
 }
 void VisitanteImpressao::visita(NoListaExpr *le){
@@ -204,6 +205,7 @@ void VisitanteImpressao::visita(NoDeclFuncao *decF){
     if(decF->lista) decF->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoListaId *lid ){
+    if(!lid) return;
     nivel++;
     calculaNivel();
     fprintf(stdout, "-ID_LIST\n");
@@ -224,8 +226,8 @@ void VisitanteImpressao::visita(NoDeclVariavel *decV){
     fprintf(stdout, "-DEC_VARIAVEL\n");
     decV->tipo->aceita(this);
     decV->variaveis->aceita(this);
-    if(decV->lista) decV->lista->aceita(this);
     nivel--;
+    if(decV->lista) decV->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoDeclTipo *decT){
     nivel++;

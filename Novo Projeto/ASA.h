@@ -239,7 +239,7 @@ class NoListaId{
 };
 class NoDeclVariavel{
     public:
-        NoDeclVariavel(NoTipo* tipo, NoListaId *variaveis, NoDeclVariavel *lista);
+        NoDeclVariavel(NoTipo* tipo, NoListaId *variaveis, NoDeclVariavel *lista = NULL);
         void aceita(Visitante *v);
         NoTipo *tipo;
         NoListaId *variaveis;

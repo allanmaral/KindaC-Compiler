@@ -40,7 +40,7 @@
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 
-1508264977 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
+1509208718 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
 	<stdio.h>
 	<string.h>
 	"AnalisadorLexico.h"
@@ -76,21 +76,21 @@
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 
-1508266244 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
+1509204226 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
 	<stdio.h>
 	<string.h>
 	"ASA.h"
 	"AnalisadorLexico.h"
 	"AnalisadorSintatico.h"
 	"GerenciadorErro.h"
-	"VisitanteImpressao.h"
+	"Visitante.h"
 
-1509203758 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+1509213910 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
 
-1508267052 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
+1508267523 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
 	"ASA.h"
 
 1507685627 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
@@ -216,7 +216,7 @@
 	"Visitante.h"
 	<string.h>
 
-1509203861 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
+1509205628 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
 	"TabelaSimbolos.h"
 
 1509203889 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.cpp
@@ -224,7 +224,7 @@
 	"Visitante.h"
 	<string.h>
 
-1508260357 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
+1509202418 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 	<stdio.h>
@@ -423,6 +423,13 @@
 	"AnalisadorSintatico.h"
 
 1508382385 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Visitante.cpp
+	<stdio.h>
+	<stdlib.h>
+	"ASA.h"
+	"Visitante.h"
+	"AnalisadorSintatico.h"
+
+1509212050 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.cpp
 	<stdio.h>
 	<stdlib.h>
 	"ASA.h"

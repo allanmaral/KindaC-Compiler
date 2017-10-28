@@ -92,9 +92,9 @@ void casarOuPular(int token, int *sinc){
 }
 
 
-void            ProgramaL();    	             void             ProgramaA(NoTipo *tipo, int ponteiro, NoId *id);
+void            ProgramaL();                     void             ProgramaA(NoTipo *tipo, int ponteiro, NoId *id);
 void            ProgramaB();                     NoDeclClasse    *DeclClasse();
-NoDeclLocal    *DeclLocal();	                 NoDeclClasse    *DeclClasseL(NoId *idClasseDeclarada);
+NoDeclLocal    *DeclLocal();                     NoDeclClasse    *DeclClasseL(NoId *idClasseDeclarada);
 void            CorpoFunc(NoDeclFuncao *funcao); NoDeclLocal     *DeclLocalL(NoTipo *tipo, int ponteiro, NoId *id);
 NoDeclVariavel *DeclVar();                       NoListaId       *ListaId();
 NoListaId      *ListaIdCont();                   int              Ponteiro();
@@ -488,7 +488,7 @@ NoArranjo *Arranjo(){
             if(tokenAtual == NUM_INTEIRO){
                 casarOuPular(NUM_INTEIRO, sincArranjo);
                 num = new NoNumInteiro(pegarUltimoAtributo());
-            } else if(tokenAtual == NUM_REAL) { // NUM REAL AQUI É ERRO (SEMANTICO)
+            } else if(tokenAtual == NUM_REAL) { // NUM REAL AQUI Ã‰ ERRO (SEMANTICO)
                        casarOuPular(NUM_REAL, sincArranjo);
                        num = new NoNumReal(pegarUltimoAtributo());
                    }
@@ -750,7 +750,7 @@ NoSe *Se(){
         default:
             /*ERRO*/
             return NULL;
-        break; /// Inalcançável
+        break; /// InalcanÃ§Ã¡vel
     }
 }
 

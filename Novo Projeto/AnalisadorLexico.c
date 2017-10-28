@@ -70,7 +70,9 @@ void destruirLeitor(){
         // Le o arquivo
         elementosLidos = fread(buffer, 1, TAMANHO_BUFFER, arquivo);
         // Se não ler o mesmo numero de elementos, pode ser erro ou fim de arquivo
-        if(elementosLidos < TAMANHO_BUFFER) { buffer[elementosLidos] = (char)0; }
+        if(elementosLidos < TAMANHO_BUFFER) {
+            for(int i = elementosLidos; i < TAMANHO_BUFFER; i++) buffer[i] = (char)0;
+        }
         caractereAtualBuffer = 0;
     }
     caractereAtual = buffer[caractereAtualBuffer++];
