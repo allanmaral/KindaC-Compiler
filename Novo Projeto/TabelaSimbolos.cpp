@@ -342,3 +342,85 @@ No_Trie::~No_Trie(){
     }
     if(atributos != NULL){ delete atributos; }
 }
+AtributoClasse::AtributoClasse():Atributo(){
+    funcoes = new TabelaSimbolos();
+    variaveis = new TabelaSimbolos();
+}
+AtributoClasse::~AtributoClasse(){
+    delete funcoes;
+    delete variaveis;
+}
+void AtributoClasse::adicionarFuncao(char* id, AtributoFuncaoClasse* atributo){
+    funcoes->insere(id, atributo);
+}
+
+void AtributoClasse::adicionarVariavel(char* id, AtributoVariavelClasse* atributo){
+    variaveis->insere(id, atributo);
+}
+Atributo* AtributoClasse::buscaFuncao(char* id){
+    return funcoes->busca(id);
+}
+Atributo* AtributoClasse::buscaVariavel(char* id){
+    return variaveis->busca(id);
+}
+AtributoFuncao::AtributoFuncao():Atributo(){
+    parametros = new TabelaSimbolos();
+    variveisLocais = new TabelaSimbolos();
+}
+AtributoFuncao::~AtributoFuncao(){
+    delete parametros;
+    delete variveisLocais;
+}
+void AtributoFuncao::adicionarParametro(char* id, AtributoVariavel* atributo){
+    parametros->insere(id,atributo);
+}
+void AtributoFuncao::adicionarVariavel(char* id, AtributoVariavel* atributo){
+    variveisLocais->insere(id,atributo);
+}
+Atributo* AtributoFuncao::buscaParametro(char* id){
+    return parametros->busca(id);
+}
+Atributo* AtributoFuncao::buscaVariavel(char* id){
+    return variveisLocais->busca(id);
+}
+AtributoVariavel::AtributoVariavel():Atributo(){
+    tipo = 0;
+    ponteiro = false;
+}
+AtributoVariavel::~AtributoVariavel(){}
+void AtributoVariavel::atribuirTipo(int tipo){
+    this->tipo = tipo;
+}
+void AtributoVariavel::atribuiPonteiro(bool ponteiro){
+    this->ponteiro = ponteiro;
+}
+bool AtributoVariavel::pegarPonteiro(){
+    return ponteiro;
+}
+int AtributoVariavel::pegarTipo(){
+    return tipo;
+}
+AtributoFuncaoClasse::AtributoFuncaoClasse():AtributoFuncao(){
+    publico = true;
+}
+AtributoFuncaoClasse::~AtributoFuncaoClasse(){
+    delete parametros;
+    delete variveisLocais;
+}
+void AtributoFuncaoClasse::atribuiPublico(bool publico){
+    this->publico = publico;
+}
+bool AtributoFuncaoClasse::pegaPublico(){
+    return publico;
+}
+AtributoVariavelClasse::AtributoVariavelClasse():AtributoVariavel(){
+    publico = true;
+}
+AtributoVariavelClasse::~AtributoVariavelClasse(){}
+void AtributoVariavelClasse::atribuiPublico(bool publico){
+    this->publico = publico;
+}
+bool AtributoVariavelClasse::pegaPublico(){
+    return publico;
+}
+

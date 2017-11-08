@@ -6,6 +6,10 @@ static TabelaIdentificador tabelaID;
 static TabelaInteiro tabelaInteiro;
 static TabelaLiteral tabelaLiteral;
 static TabelaReal tabelaReal;
+static TabelaSimbolos tabelaClasses;
+static TabelaSimbolos tabelaFuncoes;
+static TabelaSimbolos tabelaVariaveis;
+static TabelaSimbolos tabelaTipos;
 
 NoPrograma::NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo,
                        NoDeclVariavel *listaVariavel){

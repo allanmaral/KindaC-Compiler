@@ -1,8 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef ATRIBUTO_H
-#define ATRIBUTO_H
+#define TAMANHO_ALFABETO 128
+
+#ifndef TABELASIMBOLOS_H
+#define TABELASIMBOLOS_H
 
 class Atributo{
     public:
@@ -16,13 +18,6 @@ class Atributo{
         int token;
         char* lexema;
 };
-
-#endif // PROPRIEDADE_H
-
-#ifndef NO_TRIE_H
-#define NO_TRIE_H
-#define TAMANHO_ALFABETO 128
-
 class No_Trie{
     public:
         No_Trie();
@@ -75,12 +70,6 @@ class No_Trie{
         bool chave;
         Atributo *atributos;
 };
-
-#endif // NO_TRIE_H
-
-#ifndef TRIE_H
-#define TRIE_H
-
 class TabelaSimbolos{
     public:
         TabelaSimbolos();
@@ -142,12 +131,6 @@ class TabelaSimbolos{
          */
         void imprimeRecursivo(char* saida, int indice, No_Trie *n);
 };
-
-#endif // TRIE_H
-
-#ifndef TABELAIDENTIFICADOR_H
-#define TABELAIDENTIFICADOR_H
-
 class TabelaIdentificador:public TabelaSimbolos{
     public:
         TabelaIdentificador();
@@ -165,12 +148,6 @@ class TabelaIdentificador:public TabelaSimbolos{
          */
         virtual void imprimeCabecalho();
 };
-
-#endif // TABELAIDENTIFICADOR_H
-
-#ifndef TABELAINTEIRO_H
-#define TABELAINTEIRO_H
-
 class TabelaInteiro:public TabelaSimbolos{
     public:
         TabelaInteiro();
@@ -188,12 +165,6 @@ class TabelaInteiro:public TabelaSimbolos{
          */
         virtual void imprimeCabecalho();
 };
-
-#endif // TABELAINTEIRO_H
-
-#ifndef TABELALITERAL_H
-#define TABELALITERAL_H
-
 class TabelaLiteral:public TabelaSimbolos{
     public:
         TabelaLiteral();
@@ -211,12 +182,6 @@ class TabelaLiteral:public TabelaSimbolos{
          */
         virtual void imprimeCabecalho();
 };
-
-#endif // TABELALITERAL_H
-
-#ifndef TABELAREAL_H
-#define TABELAREAL_H
-
 class TabelaReal:public TabelaSimbolos{
     public:
         TabelaReal();
@@ -234,12 +199,6 @@ class TabelaReal:public TabelaSimbolos{
          */
         virtual void imprimeCabecalho();
 };
-
-#endif // TABELAREAL_H
-
-#ifndef TABELARESERVADA_H
-#define TABELARESERVADA_H
-
 class TabelaReservada:public TabelaSimbolos{
     public:
         TabelaReservada();
@@ -258,20 +217,59 @@ class TabelaReservada:public TabelaSimbolos{
         virtual void imprimeCabecalho();
         void inicializarReservada();
 };
-
-#endif // TABELARESERVADA_H
-
-#ifndef ATRIBUTO_H
-#define ATRIBUTO_H
-
-class Atributo{
+class AtributoVariavel:public Atributo{
     public:
-        Atributo();
-        int pegarToken();
-        void atribuirToken(int t);
-        ~Atributo();
+        AtributoVariavel();
+        virtual ~AtributoVariavel();
+        void atribuirTipo(int tipo);
+        void atribuiPonteiro(bool ponteiro);
+        bool pegarPonteiro();
+        int pegarTipo();
+    protected:
+        int tipo;
+        bool ponteiro;
+};
+class AtributoFuncao:public Atributo{
+    public:
+        AtributoFuncao();
+        virtual ~AtributoFuncao();
+        void adicionarParametro(char *id, AtributoVariavel *atributo);
+        void adicionarVariavel(char *id, AtributoVariavel *atributo);
+        Atributo *buscaParametro(char *id);
+        Atributo *buscaVariavel(char *id);
+    protected:
+        TabelaSimbolos *parametros;
+        TabelaSimbolos *variveisLocais;
+};
+class AtributoFuncaoClasse:public AtributoFuncao{
+    public:
+        AtributoFuncaoClasse();
+        ~AtributoFuncaoClasse();
+        void atribuiPublico(bool publico);
+        bool pegaPublico();
     private:
-        int token;
+        bool publico;
+};
+class AtributoVariavelClasse:public AtributoVariavel{
+    public:
+        AtributoVariavelClasse();
+        ~AtributoVariavelClasse();
+        void atribuiPublico(bool publico);
+        bool pegaPublico();
+    private:
+        bool publico;
+};
+class AtributoClasse:public Atributo{
+    public:
+        AtributoClasse();
+        ~AtributoClasse();
+        void adicionarFuncao(char *id, AtributoFuncaoClasse *atributo);
+        void adicionarVariavel(char *id, AtributoVariavelClasse *atributo);
+        Atributo *buscaFuncao(char *id);
+        Atributo *buscaVariavel(char *id);
+    private:
+        TabelaSimbolos *funcoes;
+        TabelaSimbolos *variaveis;
 };
 
-#endif // PROPRIEDADE_H
+#endif

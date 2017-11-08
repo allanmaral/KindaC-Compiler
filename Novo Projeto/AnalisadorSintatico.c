@@ -184,8 +184,6 @@ void ProgramaL(){
         break;
     }
 }
-
-static int followProgramaA [] = {TOKEN_EOF};
 static int sincProgramaA [] = {CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL,
                                PARENTESE_ESQ, NEGACAO, LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO,
                                ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA,
