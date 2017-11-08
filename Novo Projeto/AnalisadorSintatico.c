@@ -185,7 +185,7 @@ void ProgramaL(){
     }
 }
 
-static int followProgramaA [] = {TOKEN_EOF};
+static int sincProgramaAL [] = {PARENTESE_DIR, CHAVE_ESQ, TOKEN_EOF};
 static int sincProgramaA [] = {CHAVE_ESQ, INTEIRO, REAL, BOLEANO, CARACTERE, ID, ASTERISCO, NUM_INTEIRO, NUM_REAL,
                                PARENTESE_ESQ, NEGACAO, LITERAL, ASCII, E_COMERCIAL, VERDADEIRO, FALSO, ESSE, NOVO,
                                ADICAO, SUBTRACAO, SE, ENQUANTO, ESCOLHA, DESVIA, IMPRIME, LE_LINHA, RETORNA, LANCA,
@@ -196,6 +196,12 @@ void ProgramaA(NoTipo *tipo, int ponteiro, NoId *id){
         case PARENTESE_ESQ: {
             casar(PARENTESE_ESQ);
             NoListaFormal *listaFormal = ListaForma();
+            if(tokenAtual == INTEIRO || tokenAtual == REAL || tokenAtual == CARACTERE || tokenAtual == ID ||
+               tokenAtual == BOLEANO ) {
+                saidaErro(ErroSintatico, pegarLinha(), pegarColuna(), tokenLiteral[tokenAtual],
+                          tokenLiteral[VIRGULA]);
+                pular(sincProgramaAL);
+            }
             casarOuPular(PARENTESE_DIR, sincProgramaA);
             casarOuPular(CHAVE_ESQ, sincProgramaA);
             NoDeclFuncao *funcao = new NoDeclFuncao(tipo, ponteiro, id, listaFormal, NULL, NULL, NULL);
