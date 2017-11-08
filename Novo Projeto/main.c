@@ -5,6 +5,7 @@
 #include "AnalisadorSintatico.h"
 #include "GerenciadorErro.h"
 #include "Visitante.h"
+#include "AnalisadorSemantico.h"
 
 /** \brief Destrói objetos alocados durante a execução do programa
  *  Função chamada na saida do programa
@@ -41,6 +42,8 @@ int main(int argc, char** args){
     // Imprime a ASA
     VisitanteImpressao vp;
     vp.visita(programa);
+    AnalisadorSemantico as;
+    as.visita(programa);
     imprimeListaErros();
     delete programa; // Destroi a ASA
     return 0;

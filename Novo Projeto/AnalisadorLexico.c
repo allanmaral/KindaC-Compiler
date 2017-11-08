@@ -182,8 +182,8 @@ int proximoToken(){
 									  case '+' : pegarProximoCaractere(); return ADICAO;        break;
 									  case '%' : pegarProximoCaractere(); return PORCENTO;      break;
 									  case '*' : pegarProximoCaractere(); return ASTERISCO;     break;
-									  case EOF : pegarProximoCaractere(); return TOKEN_EOF;     break;
-									  case '\0': pegarProximoCaractere(); return TOKEN_EOF;     break;
+									  case EOF : return TOKEN_EOF;     break;
+									  case '\0': return TOKEN_EOF;     break;
 									  default:
 										  saidaErro(ErroCaractereInvalido, linha, coluna);
 										  reinicializaAutomato();

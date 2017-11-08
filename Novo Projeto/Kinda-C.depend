@@ -1,444 +1,22 @@
 # depslib dependency file v1.0
-1504549036 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/GerenciadorErro.c
-	"GerenciadorErro.h"
-	<stdio.h>
-	<stdlib.h>
-
-1504549035 /home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/GerenciadorErro.h
-
-1504564756 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/AnalisadorLexico.c
-	<stdio.h>
-	<string.h>
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"TabelaSimbolos.h"
-
-1504564262 /home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/AnalisadorLexico.h
-	<stdio.h>
-	<stdlib.h>
-	<ctype.h>
-
-1504564085 /home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/TabelaSimbolos.h
-	"Trie.h"
-
-1504550695 /home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/Trie.h
-	<stdlib.h>
-	<stdio.h>
-
-1504564375 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/main.c
-	<stdio.h>
-	<string.h>
-	"AnalisadorLexico.h"
-	"TabelaSimbolos.h"
-	"GerenciadorErro.h"
-
-1504549036 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/TabelaSimbolos.c
-	"TabelaSimbolos.h"
-
-1504564412 source:/home/allan/Documentos/Compiladores/KindaC-Compiler/Novo Projeto/Trie.cpp
-	"Trie.h"
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-
-1509208718 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
-	<stdio.h>
-	<string.h>
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
+1510171039 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.cpp
+	"AnalisadorSemantico.h"
 	"ASA.h"
 
-1507658919 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
-	<stdio.h>
-	<stdlib.h>
-	<ctype.h>
-	"TabelaSimbolos.h"
-
-1508267018 c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
-
-1508260357 c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
-	<stdlib.h>
-	<stdio.h>
-
-1507053682 c:\users\allan\documents\github\kindac-compiler\novo projeto\trie.h
-	<stdlib.h>
-	<stdio.h>
-
-1509202447 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
-	"GerenciadorErro.h"
-	<stdio.h>
-	<stdlib.h>
-
-1507053682 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.c
-	"TabelaSimbolos.h"
-
-1507053682 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\trie.cpp
-	"Trie.h"
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-
-1509204226 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
-	<stdio.h>
-	<string.h>
-	"ASA.h"
-	"AnalisadorLexico.h"
-	"AnalisadorSintatico.h"
-	"GerenciadorErro.h"
+1510167255 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.h
 	"Visitante.h"
 
-1509213910 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
+1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\visitante.h
 	"ASA.h"
 
-1508267523 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
-	"ASA.h"
-
-1507685627 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
-	<stdio.h>
-	<string.h>
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1507647626 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
-	<stdio.h>
-	<stdlib.h>
-	<ctype.h>
+1510171136 c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.h
 	"TabelaSimbolos.h"
 
-1507580613 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
-
-1507647626 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
+1510170720 c:\users\okty\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
 	<stdlib.h>
 	<stdio.h>
 
-1507093112 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\trie.h
-	<stdlib.h>
-	<stdio.h>
-
-1507692207 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1507580613 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
-	"GerenciadorErro.h"
-	<stdio.h>
-	<stdlib.h>
-
-1507647626 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\main.c
-	<stdio.h>
-	<string.h>
-	"ASA.h"
-	"AnalisadorLexico.h"
-	"AnalisadorSintatico.h"
-	"TabelaSimbolos.h"
-	"GerenciadorErro.h"
-
-1507692207 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
-	"ASA.h"
-
-1507093112 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\tabelasimbolos.c
-	"TabelaSimbolos.h"
-
-1507093112 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\trie.cpp
-	"Trie.h"
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-
-1507700498 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.h
-	"TabelaSimbolos.h"
-
-1508244155 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.c
-	<stdio.h>
-	<string.h>
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1507644270 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.h
-	<stdio.h>
-	<stdlib.h>
-	<ctype.h>
-	"TabelaSimbolos.h"
-
-1508244155 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.h
-
-1508244155 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/TabelaSimbolos.h
-	<stdlib.h>
-	<stdio.h>
-
-1504571013 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Trie.h
-	<stdlib.h>
-	<stdio.h>
-
-1508264047 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.c
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1508244155 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.h
-	"TabelaSimbolos.h"
-
-1508264047 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.c
-	"GerenciadorErro.h"
-	<stdio.h>
-	<stdlib.h>
-
-1508382385 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/main.c
-	<stdio.h>
-	<string.h>
-	"ASA.h"
-	"AnalisadorLexico.h"
-	"AnalisadorSintatico.h"
-	"GerenciadorErro.h"
-	"Visitante.h"
-
-1508264047 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.h
-	"ASA.h"
-
-1504571013 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/TabelaSimbolos.c
-	"TabelaSimbolos.h"
-
-1504571013 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Trie.cpp
-	"Trie.h"
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-
-1508211068 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/TabelaSimbolos.cpp
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-	<stdio.h>
-	<string.h>
-
-1508382842 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.cpp
-	"ASA.h"
-	"Visitante.h"
-	<string.h>
-
-1509205628 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
-	"TabelaSimbolos.h"
-
-1509203889 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.cpp
-	"ASA.h"
-	"Visitante.h"
-	<string.h>
-
-1509202418 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-	<stdio.h>
-	<string.h>
-
-1507685627 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-	<stdio.h>
-	<string.h>
-
-1507694654 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\asa.cpp
-	"ASA.h"
-	"Visitante.h"
-	"AnalisadorLexico.h"
-	<string.h>
-
-1508246391 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteImpressao.cpp
-	<stdio.h>
-	<stdlib.h>
-	"ASA.h"
-	"Visitante.h"
-	"VisitanteImpressao.h"
-	"AnalisadorLexico.h"
-	"AnalisadorSintatico.h"
-
-1508382080 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Visitante.h
-	"ASA.h"
-
-1508196225 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteImpressao.h
-	"Visitante.h"
-
-1507684064 source:d:\documentos\github\kindac-compiler\novo projeto\analisadorlexico.c
-	<stdio.h>
-	<string.h>
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1507684064 d:\documentos\github\kindac-compiler\novo projeto\analisadorlexico.h
-	<stdio.h>
-	<stdlib.h>
-	<ctype.h>
-	"TabelaSimbolos.h"
-
-1507684064 d:\documentos\github\kindac-compiler\novo projeto\tabelasimbolos.h
-	<stdlib.h>
-	<stdio.h>
-
-1507433311 d:\documentos\github\kindac-compiler\novo projeto\gerenciadorerro.h
-
-1507691158 d:\documentos\github\kindac-compiler\novo projeto\asa.h
-	"TabelaSimbolos.h"
-
-1507691121 source:d:\documentos\github\kindac-compiler\novo projeto\analisadorsintatico.c
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1507433311 source:d:\documentos\github\kindac-compiler\novo projeto\gerenciadorerro.c
-	"GerenciadorErro.h"
-	<stdio.h>
-	<stdlib.h>
-
-1507684065 source:d:\documentos\github\kindac-compiler\novo projeto\main.c
-	<stdio.h>
-	<string.h>
-	"ASA.h"
-	"AnalisadorLexico.h"
-	"AnalisadorSintatico.h"
-	"TabelaSimbolos.h"
-	"GerenciadorErro.h"
-
-1507684064 d:\documentos\github\kindac-compiler\novo projeto\analisadorsintatico.h
-	"ASA.h"
-
-1507684064 source:d:\documentos\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-	<stdio.h>
-	<string.h>
-
-1507694688 source:c:\users\emanuel\documents\github\kindac-compiler\novo projeto\visitanteimpressao.cpp
-	<stdio.h>
-	<stdlib.h>
-	"ASA.h"
-	"Visitante.h"
-	"VisitanteImpressao.h"
-	"AnalisadorLexico.h"
-	"AnalisadorSintatico.h"
-
-1507699468 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\visitante.h
-	"ASA.h"
-
-1507699314 c:\users\emanuel\documents\github\kindac-compiler\novo projeto\visitanteimpressao.h
-	"Visitante.h"
-
-1508439276 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.h
-	"ASA.h"
-
-1508265170 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitanteimpressao.h
-	"Visitante.h"
-
-1508265276 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\visitanteimpressao.cpp
-	<stdio.h>
-	<stdlib.h>
-	"ASA.h"
-	"Visitante.h"
-	"VisitanteImpressao.h"
-	"AnalisadorLexico.h"
-	"AnalisadorSintatico.h"
-
-1508244155 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/AnalisadorLexico.c
-	<stdio.h>
-	<string.h>
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1507644270 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/AnalisadorLexico.h
-	<stdio.h>
-	<stdlib.h>
-	<ctype.h>
-	"TabelaSimbolos.h"
-
-1508244155 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/TabelaSimbolos.h
-	<stdlib.h>
-	<stdio.h>
-
-1508244155 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/GerenciadorErro.h
-
-1508244155 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/ASA.h
-	"TabelaSimbolos.h"
-
-1508264047 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/AnalisadorSintatico.c
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1508264047 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/ASA.cpp
-	"ASA.h"
-	"Visitante.h"
-	<string.h>
-
-1508382080 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/Visitante.h
-	"ASA.h"
-
-1508264047 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/GerenciadorErro.c
-	"GerenciadorErro.h"
-	<stdio.h>
-	<stdlib.h>
-
-1508382385 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/main.c
-	<stdio.h>
-	<string.h>
-	"ASA.h"
-	"AnalisadorLexico.h"
-	"AnalisadorSintatico.h"
-	"GerenciadorErro.h"
-	"Visitante.h"
-
-1508264047 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/AnalisadorSintatico.h
-	"ASA.h"
-
-1508264047 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/VisitanteImpressao.h
-	"Visitante.h"
-
-1508211068 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/TabelaSimbolos.cpp
-	"TabelaSimbolos.h"
-	"AnalisadorLexico.h"
-	<stdio.h>
-	<string.h>
-
-1508381090 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/VisitanteImpressao.cpp
-	<stdio.h>
-	<stdlib.h>
-	"ASA.h"
-	"VisitanteImpressao.h"
-	"AnalisadorSintatico.h"
-
-1508382080 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/Visitantes.h
-	"ASA.h"
-
-1508382256 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/Visitantes.cpp
-	<stdio.h>
-	<stdlib.h>
-	"ASA.h"
-	"Visitantes.h"
-	"AnalisadorSintatico.h"
-
-1508382385 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/KindaC/Visitante.cpp
-	<stdio.h>
-	<stdlib.h>
-	"ASA.h"
-	"Visitante.h"
-	"AnalisadorSintatico.h"
-
-1508382385 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Visitante.cpp
-	<stdio.h>
-	<stdlib.h>
-	"ASA.h"
-	"Visitante.h"
-	"AnalisadorSintatico.h"
-
-1509212050 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.cpp
-	<stdio.h>
-	<stdlib.h>
-	"ASA.h"
-	"Visitante.h"
-	"AnalisadorSintatico.h"
-
-1510166794 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
-	<stdio.h>
-	<string.h>
+1510167837 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
@@ -449,31 +27,9 @@
 	<ctype.h>
 	"TabelaSimbolos.h"
 
-1510170720 c:\users\okty\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
-	<stdlib.h>
-	<stdio.h>
-
 1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
 
-1510171136 c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.h
-	"TabelaSimbolos.h"
-
-1510167366 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.cpp
-	"AnalisadorSemantico.h"
-	"ASA.h"
-
-1510167255 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.h
-	"Visitante.h"
-
-1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\visitante.h
-	"ASA.h"
-
-1510167837 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
-	"AnalisadorLexico.h"
-	"GerenciadorErro.h"
-	"ASA.h"
-
-1510166793 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.cpp
+1510171092 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.cpp
 	"ASA.h"
 	"Visitante.h"
 	<string.h>
@@ -483,7 +39,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1510166794 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\main.c
+1510171652 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\main.c
 	<stdio.h>
 	<string.h>
 	"ASA.h"
@@ -491,6 +47,7 @@
 	"AnalisadorSintatico.h"
 	"GerenciadorErro.h"
 	"Visitante.h"
+	"AnalisadorSemantico.h"
 
 1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
 	"ASA.h"
@@ -507,4 +64,11 @@
 	"ASA.h"
 	"Visitante.h"
 	"AnalisadorSintatico.h"
+
+1510172308 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"ASA.h"
 
