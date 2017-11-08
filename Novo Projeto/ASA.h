@@ -227,6 +227,7 @@ class NoDeclFuncao{
         NoListaSentenca *sentenca;
         NoCorpoFuncao   *corpoFunc;
         NoDeclFuncao *lista;
+        TabelaSimbolos variaveisLocais;
 };
 class NoListaId{
     public:

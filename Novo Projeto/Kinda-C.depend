@@ -436,3 +436,75 @@
 	"Visitante.h"
 	"AnalisadorSintatico.h"
 
+1510166794 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"ASA.h"
+
+1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	"TabelaSimbolos.h"
+
+1510170720 c:\users\okty\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
+	<stdlib.h>
+	<stdio.h>
+
+1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
+
+1510171136 c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.h
+	"TabelaSimbolos.h"
+
+1510167366 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.cpp
+	"AnalisadorSemantico.h"
+	"ASA.h"
+
+1510167255 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.h
+	"Visitante.h"
+
+1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\visitante.h
+	"ASA.h"
+
+1510167837 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"ASA.h"
+
+1510166793 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.cpp
+	"ASA.h"
+	"Visitante.h"
+	<string.h>
+
+1510166794 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1510166794 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\main.c
+	<stdio.h>
+	<string.h>
+	"ASA.h"
+	"AnalisadorLexico.h"
+	"AnalisadorSintatico.h"
+	"GerenciadorErro.h"
+	"Visitante.h"
+
+1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
+	"ASA.h"
+
+1510170690 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
+	"TabelaSimbolos.h"
+	"AnalisadorLexico.h"
+	<stdio.h>
+	<string.h>
+
+1510166794 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\visitante.cpp
+	<stdio.h>
+	<stdlib.h>
+	"ASA.h"
+	"Visitante.h"
+	"AnalisadorSintatico.h"
+
