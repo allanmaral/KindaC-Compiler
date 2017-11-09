@@ -12,17 +12,13 @@ class NoCorpoFuncao;
 
 class NoPrograma{
     public:
-        NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo,
-                   NoDeclVariavel *listaVariavel);
-        void aceita(Visitante *v);
-        NoDeclClasse *listaClasse;
-        NoDeclFuncao *listaFuncao;
-        NoDeclTipo *listaTipo;
-        NoDeclVariavel *listaVariavel;
+        virtual void aceita(Visitante *v) = 0;
+        NoPrograma *lista;
+        virtual ~NoPrograma() = 0;
 };
 class NoSentenca{
     public:
-        virtual void aceita(Visitante *v) =0;
+        virtual void aceita(Visitante *v) = 0;
 };
 class NoExpr:public NoSentenca{
     public:
@@ -214,7 +210,7 @@ class NoSentencaExpr:public NoSentenca{
         void aceita(Visitante *v);
         NoExpr *expressao;
 };
-class NoDeclFuncao{
+class NoDeclFuncao:public NoPrograma{
     public:
         NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis,
                      NoListaSentenca *sentenca, NoDeclFuncao *lista);
@@ -226,7 +222,6 @@ class NoDeclFuncao{
         NoDeclVariavel *variaveis;
         NoListaSentenca *sentenca;
         NoCorpoFuncao   *corpoFunc;
-        NoDeclFuncao *lista;
         TabelaSimbolos variaveisLocais;
 };
 class NoListaId{
@@ -238,21 +233,19 @@ class NoListaId{
         NoArranjo *arranjo;
         NoListaId *lista;
 };
-class NoDeclVariavel{
+class NoDeclVariavel:public NoPrograma{
     public:
         NoDeclVariavel(NoTipo* tipo, NoListaId *variaveis, NoDeclVariavel *lista = NULL);
         void aceita(Visitante *v);
         NoTipo *tipo;
         NoListaId *variaveis;
-        NoDeclVariavel *lista;
 };
-class NoDeclTipo{
+class NoDeclTipo:public NoPrograma{
     public:
-        NoDeclTipo(NoDeclVariavel *campo, NoId* id, NoDeclTipo* lista = NULL);
+        NoDeclTipo(NoDeclVariavel *campo, NoId* id, NoPrograma* lista = NULL);
         void aceita(Visitante *v);
         NoDeclVariavel *campo;
         NoId* id;
-        NoDeclTipo *lista;
 };
 class NoDeclLocal{
     public:
@@ -272,33 +265,34 @@ class NoDeclLocalVariavel:public NoDeclLocal{
         NoDeclVariavel *variavel;
         NoDeclLocal *lista;
 };
-class NoDeclLocalPublic:public NoDeclLocal{
+class NoDeclLocalPublico:public NoDeclLocal{
     public:
-        NoDeclLocalPublic(NoDeclLocal *lista);
+        NoDeclLocalPublico(NoDeclLocal *lista);
         void aceita(Visitante *v);
         NoDeclLocal *lista;
 };
-class NoDeclLocalPrivate:public NoDeclLocal{
+class NoDeclLocalPrivado:public NoDeclLocal{
     public:
-        NoDeclLocalPrivate(NoDeclLocal *lista);
+        NoDeclLocalPrivado(NoDeclLocal *lista);
         void aceita(Visitante *v);
         NoDeclLocal *lista;
 };
 class NoCorpoFuncao{
     public:
-        NoCorpoFuncao(NoListaExpr *listaExpr, NoCorpoFuncao *lista = NULL);
+        NoCorpoFuncao(NoId *id, NoListaId *listaid, NoListaExpr *listaExpr, NoCorpoFuncao *lista = NULL);
+        NoId *id;
+        NoListaId *listaid;
         NoListaExpr *listaExpr;
         NoCorpoFuncao *lista;
         void aceita(Visitante* v);
 };
-class NoDeclClasse{
+class NoDeclClasse:public NoPrograma{
     public:
         NoDeclClasse(NoId *id, NoId *heranca, NoDeclLocal *local, NoDeclClasse *lista = NULL);
         void aceita(Visitante *v);
         NoId *id;
         NoId *heranca;
         NoDeclLocal *local;
-        NoDeclClasse *lista;
 };
 class NoExprUnaria:public NoExpr{
     public:

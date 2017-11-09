@@ -1,4 +1,4 @@
-class teste{
+class teste:B{
 	public:
 		void t(){
 			int i;
@@ -16,7 +16,8 @@ typedef struct{
 testeTipo tt;
 teste te;
 teste funcao(testeTipo t, teste t1){
-	int t2;
+	teste *t2, t3, *t4, *t5, *t6;
+	funcao(t2,&t3,*t4);
 	t2.k = tt.i + t.k + t1.i;
 	return t2;
 }

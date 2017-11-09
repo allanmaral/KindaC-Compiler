@@ -4,10 +4,7 @@
 
 static int tokenAtual;
 
-static NoDeclClasse   *listaClasse;
-static NoDeclFuncao   *listaFuncao;
-static NoDeclTipo     *listaTipo;
-static NoDeclVariavel *listaVariavel;
+static NoPrograma   *listaPrograma = NULL;
 
 /** Lista de Literais dos Tokens
  */
@@ -121,7 +118,7 @@ NoExpr         *ExprAceCampL(NoExpr *exprEsquerda);
 NoPrograma *Programa(){
     tokenAtual = proximoToken();
     while(tokenAtual != TOKEN_EOF) ProgramaL();
-    return new NoPrograma(listaClasse, listaFuncao, listaTipo, listaVariavel);
+    return listaPrograma;
 }
 
 static int sincPrograma [] = {DEFINICAO_TIPO, INTEIRO, REAL, BOLEANO, CARACTERE, ID, CLASSE, ESTRUTURA, CHAVE_ESQ,
@@ -143,12 +140,12 @@ void ProgramaL(){
             NoId *id = new NoId(pegarUltimoAtributo());
             casarOuPular(PONTO_VIRGULA, sincPrograma);
             NoDeclTipo *declTipo = new NoDeclTipo(variavel, id);
-            if(listaTipo){
-                NoDeclTipo *ultimo = listaTipo;
+            if(listaPrograma){
+                NoPrograma *ultimo = listaPrograma;
                 while(ultimo->lista) ultimo = ultimo->lista;
-                ultimo->lista = declTipo;
+                ultimo->lista = ((NoPrograma*)declTipo);
             } else{
-                  listaTipo = declTipo;
+                  listaPrograma = ((NoPrograma*)declTipo);
               }
             ProgramaL();
         } break;
@@ -162,12 +159,13 @@ void ProgramaL(){
         } break;
         case CLASSE: {
             NoDeclClasse *classe = DeclClasse();
-            if(listaClasse){
-                NoDeclClasse *ultimo = listaClasse;
+            classe->lista = NULL;
+            if(listaPrograma){
+                NoPrograma *ultimo = listaPrograma;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = classe;
             } else{
-                  listaClasse = classe;
+                  listaPrograma = classe;
               }
             ProgramaL();
         } break;
@@ -207,12 +205,12 @@ void ProgramaA(NoTipo *tipo, int ponteiro, NoId *id){
             NoDeclFuncao *funcao = new NoDeclFuncao(tipo, ponteiro, id, listaFormal, NULL, NULL, NULL);
             CorpoFunc(funcao);
             casarOuPular(CHAVE_DIR, sincProgramaA);
-            if(listaFuncao){
-                NoDeclFuncao *ultimo = listaFuncao;
+            if(listaPrograma){
+                NoPrograma *ultimo = listaPrograma;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = funcao;
             } else{
-                  listaFuncao = funcao;
+                  listaPrograma = funcao;
               }
             ProgramaL();
         } break;
@@ -221,12 +219,13 @@ void ProgramaA(NoTipo *tipo, int ponteiro, NoId *id){
             NoListaId *listaId = new NoListaId(ponteiro, id, arranjo, ListaIdCont());
             casarOuPular(PONTO_VIRGULA, sincProgramaA);
             NoDeclVariavel *variavel = new NoDeclVariavel(tipo, listaId, NULL);
-            if(listaVariavel){
-                NoDeclVariavel *ultimo = listaVariavel;
+            variavel->lista = NULL;
+            if(listaPrograma){
+                NoPrograma *ultimo = listaPrograma;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = variavel;
             } else{
-                  listaVariavel = variavel;
+                  listaPrograma = variavel;
               }
             ProgramaL();
         } break;
@@ -301,12 +300,12 @@ NoDeclLocal *DeclLocal(){
         case PUBLICO:{
             casar(PUBLICO);
             casarOuPular(DOIS_PONTOS, sincDeclLocal);
-            return new NoDeclLocalPublic(DeclLocal());
+            return new NoDeclLocalPublico(DeclLocal());
         } break;
         case PRIVADO:{
             casar(PRIVADO);
             casarOuPular(DOIS_PONTOS, sincDeclLocal);
-            return new NoDeclLocalPrivate(DeclLocal());
+            return new NoDeclLocalPrivado(DeclLocal());
         } break;
         default:
             /* Epsilon */
@@ -344,7 +343,7 @@ NoDeclLocal *DeclLocalL(NoTipo *tipo, int ponteiro, NoId *id){
         } break;
         default:
             /* ERRO */
-            saidaErro(ErroSIntaticoDepois, pegarLinha(), pegarColuna(),
+            saidaErro(ErroSintaticoDepois, pegarLinha(), pegarColuna(),
                       esperadosLiteral[EsperadosDeclaracaoMembro], tokenLiteral[PONTO_VIRGULA]);
             pular(followDeclLocalL);
             return NULL;
@@ -365,8 +364,14 @@ void CorpoFunc(NoDeclFuncao *funcao){
         case FALSO:         case ESSE:          case NOVO:
         case ADICAO:        case SUBTRACAO:     case ASCII:{
             NoListaExpr *listaExpr = ListaExpr();
+            NoId *id = NULL;
+            if(tokenAtual == ID){
+                casar(ID);
+                id = new NoId(pegarUltimoAtributo());
+            }
+            NoListaId *listaid = ListaIdCont();
             casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
-            NoCorpoFuncao *corpo = new NoCorpoFuncao(listaExpr);
+            NoCorpoFuncao *corpo = new NoCorpoFuncao(id, listaid, listaExpr);
             if(funcao->corpoFunc){ // Insere no final da lista
                 NoCorpoFuncao *ultimo = funcao->corpoFunc;
                 while(ultimo->lista) ultimo = ultimo->lista;
@@ -394,7 +399,7 @@ void CorpoFunc(NoDeclFuncao *funcao){
             casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
             NoDeclVariavel *variavel = new NoDeclVariavel(tipo, listaId, NULL);
             if(funcao->variaveis) { // Insere no final da lista
-                NoDeclVariavel *ultimo = funcao->variaveis;
+                NoPrograma *ultimo = funcao->variaveis;
                 while(ultimo->lista) ultimo = ultimo->lista;
                 ultimo->lista = variavel;
             } else{
@@ -557,8 +562,9 @@ NoTipo *Tipo(){
             return TipoL();
         } break;
         case ID: {
+            NoTipo *id = new NoTipo(ID, pegarUltimoAtributo());
             casar(ID);
-            return new NoTipo(ID, pegarUltimoAtributo());
+            return id;
         } break;
         default:
             /*ERRO*/
@@ -809,7 +815,8 @@ NoListaExpr *ListaExpr(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII: {
+        case ADICAO:        case SUBTRACAO:     case E_COMERCIAL:
+        case ASCII: {
             NoExpr *expr = Expr();
             return new NoListaExpr(expr, ListaExprCont());
         } break;
@@ -838,7 +845,8 @@ NoExpr *Expr() {
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII: {
+        case ADICAO:        case SUBTRACAO:     case ASCII:
+        case E_COMERCIAL:{
             NoExpr *exprOuBool = ExprOuBool();
             return ExprAtrib(exprOuBool);
         } break;
@@ -872,7 +880,8 @@ NoExpr  *ExprOuBool(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII: {
+        case ADICAO:        case SUBTRACAO:     case ASCII:
+        case E_COMERCIAL:{
             NoExpr *exprEBool = ExprEBool();
             return ExprOuBoolL(exprEBool);
         } break;
@@ -907,7 +916,8 @@ NoExpr  *ExprEBool(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E:             case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII: {
+        case ADICAO:        case SUBTRACAO:     case ASCII:
+        case E_COMERCIAL:{
             NoExpr *exprIgualdade = ExprIgualdade();
            return ExprEBoolL(exprIgualdade);
         } break;
@@ -982,7 +992,8 @@ NoExpr  *ExprRelacional(){
         case NUM_REAL:      case PARENTESE_ESQ: case NEGACAO:
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
-        case ADICAO:        case SUBTRACAO:     case ASCII:{
+        case ADICAO:        case SUBTRACAO:     case ASCII:
+        {
             NoExpr *exprSoma=ExprSoma();
             return ExprRelacionalL(exprSoma);
         }break;
