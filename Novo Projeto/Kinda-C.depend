@@ -94,7 +94,7 @@
 1510179656 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/ASA.h
 	"TabelaSimbolos.h"
 
-1510188146 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSintatico.c
+1510229246 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
@@ -112,7 +112,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1510184331 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/main.c
+1510228528 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/main.c
 	<stdio.h>
 	<string.h>
 	"ASA.h"
@@ -141,7 +141,8 @@
 	"Visitante.h"
 	"AnalisadorSintatico.h"
 
-1510189848 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSemantico.cpp
+1510229800 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSemantico.cpp
 	"AnalisadorSemantico.h"
 	"ASA.h"
+	"AnalisadorLexico.h"
 

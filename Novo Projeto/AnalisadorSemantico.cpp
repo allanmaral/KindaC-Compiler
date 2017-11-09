@@ -102,7 +102,7 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
     NoListaId *ids = NULL;
     bool ok = false;
     while(decV != NULL){
-        if(decV->tipo->entradaTabela->pegarToken() == ID){
+        if(decV->tipo->primitivo == ID){
             if(!classes->busca(decV->tipo->entradaTabela->pegarLexema())){
                 if(!tipos->busca(decV->tipo->entradaTabela->pegarLexema())){
                     ///Erro semantico,tipo "ID" não foi declarado
@@ -120,6 +120,7 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
             }
             ids = ids->lista;
         }
+        decV = decV->lista;
     }
     if(!ok){
         delete atual;
@@ -161,19 +162,22 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
     TabelaSimbolos *classes = obtemTabelaClasses();
     bool ok = true;
     while(decC != NULL){
-        if(classes->busca(atr->pegarLexema()) != NULL){
+        if(classes->busca(decC->id->entradaTabela->pegarLexema()) != NULL){
             ///erro semantico, redefinicao de classe
             ok = false;
         }
-        if(classes->busca(decC->heranca->entradaTabela->pegarLexema()) == NULL){
+        if(decC->heranca != NULL && classes->busca(decC->heranca->entradaTabela->pegarLexema()) == NULL){
             ///erro semantico, classe herdada nao encontrada
             ok = false;
         }
         //decC->local->aceita(this);
         if(ok){
             atr = new AtributoClasse();
-            her = new Atributo();
-            her->atribuirLexema(decC->heranca->entradaTabela->pegarLexema());
+            if(decC->heranca != NULL){
+                her = new Atributo();
+                her->atribuirLexema(decC->heranca->entradaTabela->pegarLexema());
+                atr->atribuirHeranca(her);
+            }
             atr->atribuirLexema(decC->id->entradaTabela->pegarLexema());
             classes->insere(decC->id->entradaTabela->pegarLexema(), atr);
         }
