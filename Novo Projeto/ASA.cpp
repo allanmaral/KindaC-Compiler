@@ -331,3 +331,15 @@ TabelaIdentificador* obtemTabelaIdentificador(){return &tabelaID;};
 TabelaLiteral* obtemTabelaLiteral(){return &tabelaLiteral;};
 TabelaInteiro* obtemTabelaInteiro(){return &tabelaInteiro;};
 TabelaReal*    obtemTabelaReal(){return &tabelaReal;};
+TabelaSimbolos* obtemTabelaClasses(){
+    return &tabelaClasses;
+}
+TabelaSimbolos* obtemTabelaFuncoes(){
+    return &tabelaFuncoes;
+}
+TabelaSimbolos* obtemTabelaVariaveis(){
+    return &tabelaVariaveis;
+}
+TabelaSimbolos* obtemTabelaTipos(){
+    return &tabelaTipos;
+}

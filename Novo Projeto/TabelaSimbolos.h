@@ -13,8 +13,9 @@ class Atributo{
         char *pegarLexema();
         void atribuirToken(int t);
         void atribuirLexema(const char* l);
-        ~Atributo();
-    private:
+        virtual void imprime();
+        virtual ~Atributo();
+    protected:
         int token;
         char* lexema;
 };
@@ -233,8 +234,8 @@ class AtributoFuncao:public Atributo{
     public:
         AtributoFuncao();
         virtual ~AtributoFuncao();
-        void adicionarParametro(char *id, AtributoVariavel *atributo);
-        void adicionarVariavel(char *id, AtributoVariavel *atributo);
+        void adicionarParametro(AtributoVariavel *atributo);
+        void adicionarVariavel(AtributoVariavel *atributo);
         Atributo *buscaParametro(char *id);
         Atributo *buscaVariavel(char *id);
     protected:
@@ -263,13 +264,24 @@ class AtributoClasse:public Atributo{
     public:
         AtributoClasse();
         ~AtributoClasse();
-        void adicionarFuncao(char *id, AtributoFuncaoClasse *atributo);
-        void adicionarVariavel(char *id, AtributoVariavelClasse *atributo);
+        void adicionarFuncao(AtributoFuncaoClasse *atributo);
+        void adicionarVariavel(AtributoVariavelClasse *atributo);
         Atributo *buscaFuncao(char *id);
         Atributo *buscaVariavel(char *id);
+        void atribuirHeranca(Atributo *heranca);
+        Atributo *pegarHeranca();
     private:
         TabelaSimbolos *funcoes;
         TabelaSimbolos *variaveis;
+        Atributo *heranca;
 };
-
+class AtributoTipo:public Atributo{
+    public:
+        AtributoTipo();
+        void adicionarVariavel(AtributoVariavel *var);
+        Atributo *buscaVariavel(char *id);
+        ~AtributoTipo();
+    private:
+        TabelaSimbolos *variaveis;
+};
 #endif

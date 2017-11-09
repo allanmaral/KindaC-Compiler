@@ -51,7 +51,7 @@ void TabelaSimbolos::imprime(){
 void TabelaSimbolos::imprimeRecursivo(char* saida, int indice, No_Trie *n){
     if(n->EChave()){///Para cada nó que for chave, imprime o caminho que foi percorrido pela recursão
         saida[indice] = '\0';
-        imprimeLexema(saida, n->pegarAtributo());
+        n->pegarAtributo()->imprime();
     }
     No_Trie *filho = NULL;
     ///Para cada filho não nulo do nó atual,
@@ -279,6 +279,9 @@ void Atributo::atribuirLexema(const char* l) {
     lexema=(char*)malloc(sizeof(char) * (strlen(l) + 1));
     strcpy(lexema,l);
 }
+void Atributo::imprime(){
+    fprintf(stdout,"[%s]\n", lexema);
+}
 Atributo::~Atributo() { free(lexema); }
 
 No_Trie::No_Trie(){
@@ -345,17 +348,18 @@ No_Trie::~No_Trie(){
 AtributoClasse::AtributoClasse():Atributo(){
     funcoes = new TabelaSimbolos();
     variaveis = new TabelaSimbolos();
+    heranca = NULL;
 }
 AtributoClasse::~AtributoClasse(){
     delete funcoes;
     delete variaveis;
 }
-void AtributoClasse::adicionarFuncao(char* id, AtributoFuncaoClasse* atributo){
-    funcoes->insere(id, atributo);
+void AtributoClasse::adicionarFuncao(AtributoFuncaoClasse* atributo){
+    funcoes->insere(atributo->pegarLexema(), atributo);
 }
 
-void AtributoClasse::adicionarVariavel(char* id, AtributoVariavelClasse* atributo){
-    variaveis->insere(id, atributo);
+void AtributoClasse::adicionarVariavel(AtributoVariavelClasse* atributo){
+    variaveis->insere(atributo->pegarLexema(), atributo);
 }
 Atributo* AtributoClasse::buscaFuncao(char* id){
     return funcoes->busca(id);
@@ -371,11 +375,11 @@ AtributoFuncao::~AtributoFuncao(){
     delete parametros;
     delete variveisLocais;
 }
-void AtributoFuncao::adicionarParametro(char* id, AtributoVariavel* atributo){
-    parametros->insere(id,atributo);
+void AtributoFuncao::adicionarParametro(AtributoVariavel* atributo){
+    parametros->insere(atributo->pegarLexema(),atributo);
 }
-void AtributoFuncao::adicionarVariavel(char* id, AtributoVariavel* atributo){
-    variveisLocais->insere(id,atributo);
+void AtributoFuncao::adicionarVariavel(AtributoVariavel* atributo){
+    variveisLocais->insere(atributo->pegarLexema(),atributo);
 }
 Atributo* AtributoFuncao::buscaParametro(char* id){
     return parametros->busca(id);
@@ -423,4 +427,22 @@ void AtributoVariavelClasse::atribuiPublico(bool publico){
 bool AtributoVariavelClasse::pegaPublico(){
     return publico;
 }
+AtributoTipo::AtributoTipo():Atributo(){
+    variaveis = new TabelaSimbolos();
+}
+void AtributoTipo::adicionarVariavel(AtributoVariavel* var){
+    variaveis->insere(var->pegarLexema(), var);
+}
+Atributo* AtributoTipo::buscaVariavel(char* id){
+    return variaveis->busca(id);
+}
+AtributoTipo::~AtributoTipo(){}
+void AtributoClasse::atribuirHeranca(Atributo* heranca){
+    this->heranca = heranca;
+}
+Atributo* AtributoClasse::pegarHeranca(){
+    return heranca;
+}
+
+
 

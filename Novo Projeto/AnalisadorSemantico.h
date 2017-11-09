@@ -56,5 +56,4 @@ class AnalisadorSemantico : public Visitante
 		void visita(NoColchetes         *nc     );
     private:
 };
-
 #endif // ANALISADORSEMANTICO_H

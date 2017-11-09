@@ -350,5 +350,9 @@ TabelaIdentificador* obtemTabelaIdentificador();
 TabelaInteiro    * obtemTabelaInteiro();
 TabelaLiteral  * obtemTabelaLiteral();
 TabelaReal   * obtemTabelaReal();
+TabelaSimbolos *obtemTabelaClasses();
+TabelaSimbolos *obtemTabelaFuncoes();
+TabelaSimbolos *obtemTabelaVariaveis();
+TabelaSimbolos *obtemTabelaTipos();
 
 #endif // ASA_H

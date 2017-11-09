@@ -1,10 +1,14 @@
 #include "AnalisadorSemantico.h"
 #include "ASA.h"
+#include "AnalisadorLexico.h"
+
+Atributo *atual = NULL;
 
 AnalisadorSemantico::AnalisadorSemantico(){}
 AnalisadorSemantico::~AnalisadorSemantico(){}
 void AnalisadorSemantico::visita(NoPrograma* prog){
     prog->listaClasse->aceita(this);
+    prog->listaTipo->aceita(this);
 }
 void AnalisadorSemantico::visita(NoId* id){
 
@@ -81,8 +85,7 @@ void AnalisadorSemantico::visita(NoChamadaFuncao* cha){
 void AnalisadorSemantico::visita(NoTenta* te){
 
 }
-void AnalisadorSemantico::visita(NoSentencaExpr* senE)
-{
+void AnalisadorSemantico::visita(NoSentencaExpr* senE){
 
 }
 void AnalisadorSemantico::visita(NoDeclFuncao* decF){
@@ -92,10 +95,50 @@ void AnalisadorSemantico::visita(NoListaId* lid){
 
 }
 void AnalisadorSemantico::visita(NoDeclVariavel* decV){
-
+    AtributoVariavel *atr = NULL;
+    atual = new AtributoTipo();
+    TabelaSimbolos *classes = obtemTabelaClasses();
+    TabelaSimbolos *tipos = obtemTabelaTipos();
+    NoListaId *ids = NULL;
+    bool ok = false;
+    while(decV != NULL){
+        if(decV->tipo->entradaTabela->pegarToken() == ID){
+            if(!classes->busca(decV->tipo->entradaTabela->pegarLexema())){
+                if(!tipos->busca(decV->tipo->entradaTabela->pegarLexema())){
+                    ///Erro semantico,tipo "ID" não foi declarado
+                    ok = false;
+                }
+            }
+        }
+        ids = decV->variaveis;
+        while(ids != NULL){
+            if(((AtributoTipo*)atual)->buscaVariavel(ids->id->entradaTabela->pegarLexema())){
+                ///Erro semantico, redefinicao da variavel "ID"
+                ok = false;
+            }else{
+                ///adiciona variavel na tabela de simbolos do atual
+            }
+            ids = ids->lista;
+        }
+    }
+    if(!ok){
+        delete atual;
+    }
 }
 void AnalisadorSemantico::visita(NoDeclTipo* decT){
-
+    while(decT != NULL){
+        if(obtemTabelaTipos()->busca(decT->id->entradaTabela->pegarLexema()) != NULL){
+            ///erro semantico, redefinicao de tipo
+        }
+        else{
+            decT->campo->aceita(this);
+            if(atual){
+                atual->atribuirLexema(decT->id->entradaTabela->pegarLexema());
+                obtemTabelaTipos()->insere(atual->pegarLexema(), atual);
+            }
+        }
+        decT = decT->lista;
+    }
 }
 void AnalisadorSemantico::visita(NoDeclLocalFuncao* decLF){
 
@@ -114,8 +157,28 @@ void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
 }
 void AnalisadorSemantico::visita(NoDeclClasse* decC){
     AtributoClasse *atr = NULL;
+    Atributo *her = NULL;
+    TabelaSimbolos *classes = obtemTabelaClasses();
+    bool ok = true;
     while(decC != NULL){
-        tabelaClasses.insere(decC->id->entradaTabela->pegarLexema(), atr);
+        if(classes->busca(atr->pegarLexema()) != NULL){
+            ///erro semantico, redefinicao de classe
+            ok = false;
+        }
+        if(classes->busca(decC->heranca->entradaTabela->pegarLexema()) == NULL){
+            ///erro semantico, classe herdada nao encontrada
+            ok = false;
+        }
+        //decC->local->aceita(this);
+        if(ok){
+            atr = new AtributoClasse();
+            her = new Atributo();
+            her->atribuirLexema(decC->heranca->entradaTabela->pegarLexema());
+            atr->atribuirLexema(decC->id->entradaTabela->pegarLexema());
+            classes->insere(decC->id->entradaTabela->pegarLexema(), atr);
+        }
+        ok = true;
+        decC = decC->lista;
     }
 }
 void AnalisadorSemantico::visita(NoExprUnaria* expU){

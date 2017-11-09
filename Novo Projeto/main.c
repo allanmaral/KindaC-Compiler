@@ -42,8 +42,18 @@ int main(int argc, char** args){
     // Imprime a ASA
     VisitanteImpressao vp;
     vp.visita(programa);
+    // Semantico
     AnalisadorSemantico as;
     as.visita(programa);
+    // imprime tabelas
+    fprintf(stdout, "\nTabela de Classes\n");
+    obtemTabelaClasses()->imprime();
+    fprintf(stdout, "\nTabela de Tipos\n");
+    obtemTabelaTipos()->imprime();
+    fprintf(stdout, "\nTabela de Variaveis\n");
+    obtemTabelaVariaveis()->imprime();
+    fprintf(stdout, "\nTabela de Funcoes\n");
+    obtemTabelaFuncoes()->imprime();
     imprimeListaErros();
     delete programa; // Destroi a ASA
     return 0;
