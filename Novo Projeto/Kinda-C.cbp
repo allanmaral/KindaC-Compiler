@@ -51,10 +51,13 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="GerenciadorErro.h" />
+		<Unit filename="RepresentacaoIntermadiaria.h" />
 		<Unit filename="TabelaSimbolos.cpp" />
 		<Unit filename="TabelaSimbolos.h" />
 		<Unit filename="Visitante.cpp" />
 		<Unit filename="Visitante.h" />
+		<Unit filename="VisitanteRI.cpp" />
+		<Unit filename="VisitanteRI.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
