@@ -37,8 +37,8 @@ class Visitante{
 		virtual void visita(NoDeclTipo          *decT   ) = 0;
 		virtual void visita(NoDeclLocalFuncao   *decLF  ) = 0;
 		virtual void visita(NoDeclLocalVariavel *decLV  ) = 0;
-		virtual void visita(NoDeclLocalPublic   *decLPub) = 0;
-		virtual void visita(NoDeclLocalPrivate  *decLpri) = 0;
+		virtual void visita(NoDeclLocalPublico   *decLPub) = 0;
+		virtual void visita(NoDeclLocalPrivado  *decLpri) = 0;
 		virtual void visita(NoCorpoFuncao       *cF     ) = 0;
 		virtual void visita(NoDeclClasse        *decC   ) = 0;
 		virtual void visita(NoExprUnaria    	*expU   ) = 0;
@@ -89,8 +89,8 @@ class VisitanteImpressao: public Visitante{
 		void visita(NoDeclTipo          *decT   );
 		void visita(NoDeclLocalFuncao   *decLF  );
 		void visita(NoDeclLocalVariavel *decLV  );
-		void visita(NoDeclLocalPublic   *decLPub);
-		void visita(NoDeclLocalPrivate  *decLpri);
+		void visita(NoDeclLocalPublico  *decLPub);
+		void visita(NoDeclLocalPrivado  *decLpri);
 		void visita(NoCorpoFuncao       *cF     );
 		void visita(NoDeclClasse        *decC   );
 		void visita(NoExprUnaria    	*expU   );

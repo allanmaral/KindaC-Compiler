@@ -11,21 +11,14 @@ static TabelaSimbolos tabelaFuncoes;
 static TabelaSimbolos tabelaVariaveis;
 static TabelaSimbolos tabelaTipos;
 
-NoPrograma::NoPrograma(NoDeclClasse *listaClasse, NoDeclFuncao *listaFuncao, NoDeclTipo *listaTipo,
-                       NoDeclVariavel *listaVariavel){
-    this->listaClasse = listaClasse;
-    this->listaFuncao = listaFuncao;
-    this->listaTipo = listaTipo;
-    this->listaVariavel = listaVariavel;
+NoPrograma::~NoPrograma(){
+
 }
 void NoId::aceita(Visitante *v){
     v->visita(this);
 }
 NoId::NoId(Atributo *entradaTabela){
     this->entradaTabela = entradaTabela;
-}
-void NoPrograma::aceita(Visitante *v){
-    v->visita(this);
 }
 NoLiteral::NoLiteral(Atributo *entradaTabela){
     this->entradaTabela = entradaTabela;
@@ -216,7 +209,7 @@ NoDeclVariavel::NoDeclVariavel(NoTipo *tipo, NoListaId *variaveis, NoDeclVariave
 void NoDeclVariavel::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclTipo::NoDeclTipo(NoDeclVariavel *campo, NoId *id, NoDeclTipo *lista){
+NoDeclTipo::NoDeclTipo(NoDeclVariavel *campo, NoId *id, NoPrograma *lista){
     this->campo = campo;
     this->id = id;
     this->lista = lista;
@@ -239,21 +232,23 @@ void NoDeclLocalVariavel::aceita(Visitante *v){
     v->visita(this);
 }
 
-NoDeclLocalPublic::NoDeclLocalPublic(NoDeclLocal *lista){
+NoDeclLocalPublico::NoDeclLocalPublico(NoDeclLocal *lista){
     this->lista = lista;
 }
-void NoDeclLocalPublic::aceita(Visitante *v){
+void NoDeclLocalPublico::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclLocalPrivate::NoDeclLocalPrivate(NoDeclLocal *lista){
+NoDeclLocalPrivado::NoDeclLocalPrivado(NoDeclLocal *lista){
     this->lista = lista;
 }
-void NoDeclLocalPrivate::aceita(Visitante *v){
+void NoDeclLocalPrivado::aceita(Visitante *v){
     v->visita(this);
 }
-NoCorpoFuncao::NoCorpoFuncao(NoListaExpr *listaExpr, NoCorpoFuncao *lista){
+NoCorpoFuncao::NoCorpoFuncao(NoId *id, NoListaId *listaid, NoListaExpr *listaExpr, NoCorpoFuncao *lista){
     this->listaExpr = listaExpr;
     this->lista = lista;
+    this->id = id;
+    this->listaid = listaid;
 }
 void NoCorpoFuncao::aceita(Visitante* v){
     v->visita(this);

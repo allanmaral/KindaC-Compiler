@@ -1,0 +1,11 @@
+class teste{
+	public:
+		int k;
+		luis x9;
+};
+class teste2:teste{
+	private:
+		kevin x9;
+	public:
+		int j;
+};

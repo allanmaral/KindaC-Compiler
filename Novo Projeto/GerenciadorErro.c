@@ -16,7 +16,10 @@ char ErroLiteral[ErroTamanhoEnumerador][256] = {
     "Erro: Expoente nao possui digitos",
     "Erro: Arquivo Invalido",
     "antes",
-    "depois"
+    "depois",
+    "Erro: Classe Herda ela Mesma",
+    "Erro: Classe Herdada nao Existe",
+    "Erro: Redefinicao da Classe "
 };
 
 /** \brief Armazena os dados do erro
@@ -102,14 +105,23 @@ void proximoErro(){
     if(erro) { raiz = erro->proximo; } else { return; }
     //Imprime a mensagem do erro no stderr
     int linha = erro->linha, coluna = erro->coluna;
-    if(erro->codigo == ErroSintatico || erro->codigo == ErroSIntaticoDepois) {
-        fprintf(stderr, "[l:%d, c:%d] - Erro: \"%s\" esperado %s de \"%s\"\n", linha, coluna, erro->tokenEsperado,
-                ErroLiteral[erro->codigo], erro->tokenEncontrado);
-    } else if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {
+    switch(erro->codigo){
+        case ErroSintatico:
+        case ErroSintaticoDepois:
+            fprintf(stderr, "[l:%d, c:%d] - Erro: \"%s\" esperado %s de \"%s\"\n", linha, coluna, erro->tokenEsperado,
+            ErroLiteral[erro->codigo], erro->tokenEncontrado);
+        break;
+        case ErroSemanticoRedefinicaoClasse:
+            fprintf(stderr,"[l:%d, c:%d] - %s\n",linha, coluna, ErroLiteral[erro->codigo]);
+        break;
+        default:{
+            if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {
                fprintf(stderr, "[l:%d, c:%d] - %s\n", linha, coluna, ErroLiteral[erro->codigo]);
-           } else{
+            } else{
                  fprintf(stderr, "[l:%d, c:%d] - Erro não definido (%d)\n", linha, coluna, erro->codigo);
-             }
+              }
+        }
+    }
     free(erro);
 }
 

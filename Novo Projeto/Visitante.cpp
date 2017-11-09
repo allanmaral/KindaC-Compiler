@@ -12,11 +12,11 @@ VisitanteImpressao::VisitanteImpressao(){
     nivel=0;
 }
 void VisitanteImpressao::visita(NoPrograma *prog){
-	fprintf(stdout, "\n\n-PROGRAMA\n");
-	if(prog->listaClasse)      prog->listaClasse->aceita(this);
-	if(prog->listaTipo)        prog->listaTipo->aceita(this);
-	if(prog->listaVariavel)    prog->listaVariavel->aceita(this);
-	if(prog->listaFuncao)      prog->listaFuncao->aceita(this);
+    fprintf(stdout, "\n\n-PROGRAMA\n");
+    if(NoDeclClasse* decC = dynamic_cast<NoDeclClasse*>(prog)) { decC->aceita(this); }
+    else if(NoDeclTipo* decT = dynamic_cast<NoDeclTipo*>(prog)) { decT->aceita(this); }
+    else if(NoDeclVariavel* decV = dynamic_cast<NoDeclVariavel*>(prog)) { decV->aceita(this); }
+    else if(NoDeclFuncao* decF = dynamic_cast<NoDeclFuncao*>(prog)) { decF->aceita(this); }
 }
 void VisitanteImpressao::visita(NoId *id ){
 	nivel++;
@@ -253,14 +253,14 @@ void VisitanteImpressao::visita(NoDeclLocalVariavel *decLV){
     nivel--;
     if(decLV->lista) decLV->lista->aceita(this);
 }
-void VisitanteImpressao::visita(NoDeclLocalPublic *decLPub){
+void VisitanteImpressao::visita(NoDeclLocalPublico *decLPub){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-PUBLIC\n");
     nivel--;
     if(decLPub->lista) decLPub->lista->aceita(this);
 }
-void VisitanteImpressao::visita(NoDeclLocalPrivate *decLPri){
+void VisitanteImpressao::visita(NoDeclLocalPrivado *decLPri){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-PRIVATE\n");
