@@ -4,6 +4,11 @@
 #include <string.h>
 
 TabelaSimbolos::TabelaSimbolos() { raiz = new No_Trie(); altura = 0; }
+void TabelaSimbolos::limpa(){
+    delete raiz;
+    raiz = NULL;
+}
+
 /** \brief insere
  *  Função para fazer a inserção de lexemas dentro da tabela de simbolos
  * \param
