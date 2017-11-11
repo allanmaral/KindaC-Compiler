@@ -1,6 +1,6 @@
 #include "VisitanteRI.h"
 #include "RepresentacaoIntermadiaria.h"
-ESEQ::ESEQ(Stm *sentenca, Exp *exp){
+/*ESEQ::ESEQ(Stm *sentenca, Exp *exp){
     this->s=sentenca;
     this->e=exp;
 };
@@ -87,4 +87,4 @@ LABEL::~LABEL(){
 };
 void LABEL::aceita(VisitanteRI *vri){
     vri->visita(this);
-};
+};*/
