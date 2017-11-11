@@ -1,4 +1,4 @@
-class teste{
+class teste:teste{
 	public:
 		int k;
 		luis x9;
@@ -9,3 +9,10 @@ class teste2:teste{
 	public:
 		int j;
 };
+int funcao(int a, Ja a, int c){
+	int d;
+	d = a+c;
+	return c;
+}
+int funcao(){
+}

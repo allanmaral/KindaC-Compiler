@@ -46,7 +46,22 @@ void AnalisadorSemantico::visita(NoListaExpr* le){
 
 }
 void AnalisadorSemantico::visita(NoListaFormal* lf){
-
+    TabelaSimbolos *aux = new TabelaSimbolos();
+    while(lf){
+        if(lf->tipo->primitivo == ID){
+            lf->tipo->aceita(this);
+        }
+        if(!aux->busca(lf->id->entradaTabela->pegarLexema())){
+            Atributo *atr = new Atributo();
+            atr->atribuirLexema(lf->id->entradaTabela->pegarLexema());
+            aux->insere(lf->id->entradaTabela->pegarLexema(), atr);
+        }
+        else{
+            saidaErro(ErroSemanticoConflitoDeDeclaracoes, lf->id->linha, lf->id->coluna);
+        }
+        lf = lf->lista;
+    }
+    delete aux;
 }
 void AnalisadorSemantico::visita(NoListaSentenca* ls){
 
@@ -94,7 +109,18 @@ void AnalisadorSemantico::visita(NoSentencaExpr* senE){
 
 }
 void AnalisadorSemantico::visita(NoDeclFuncao* decF){
-
+    if(decF->tipo->primitivo == ID){
+        if(!obtemTabelaTipos()->busca(decF->tipo->entradaTabela->pegarLexema())){
+            saidaErro(ErroSemanticoTipoNaoDeclarado, decF->tipo->linha, decF->tipo->coluna);
+        }
+    }
+    if(obtemTabelaFuncoes()->busca(decF->id->entradaTabela->pegarLexema())){
+        /// Verificar os parametros
+        saidaErro(ErroSemanticoRedefinicaoFuncao, decF->id->linha, decF->id->coluna);
+    }
+    decF->parametros->aceita(this);
+    decF->variaveis->aceita(this);
+    //decF->corpoFunc->aceita(this);
 }
 void AnalisadorSemantico::visita(NoListaId* lid){
 
@@ -158,14 +184,14 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
         if(decC->heranca != NULL && classes->busca(decC->heranca->entradaTabela->pegarLexema()) == NULL){
             if(!strcmp(decC->heranca->entradaTabela->pegarLexema(),
                                                decC->id->entradaTabela->pegarLexema())){
-                saidaErro(ErroSemanticoClasseHerdadaMesma, 0, 0);
+                saidaErro(ErroSemanticoClasseHerdadaMesma, decC->heranca->linha, decC->heranca->coluna);
             }else{
-                saidaErro(ErroSemanticoClasseHerdadaNaoExiste, 0, 0);
+                saidaErro(ErroSemanticoClasseHerdadaNaoExiste, decC->heranca->linha, decC->heranca->linha);
             }
             erro = true;
         }
     }else{
-         saidaErro(ErroSemanticoRedefinicaoClasse, 0, 0, decC->id->entradaTabela->pegarLexema());
+         saidaErro(ErroSemanticoRedefinicaoClasse, decC->id->linha, decC->id->coluna, decC->id->entradaTabela->pegarLexema());
          erro = true;
     }
     decC->local->aceita(this);
@@ -208,7 +234,11 @@ void AnalisadorSemantico::visita(NoNovo* n){
 
 }
 void AnalisadorSemantico::visita(NoTipo* tp){
-
+    if(tp->primitivo == ID){ /// Por enquanto nao e necessario
+        if(!obtemTabelaTipos()->busca(tp->entradaTabela->pegarLexema())){
+            saidaErro(ErroSemanticoTipoNaoDeclarado, tp->linha, tp->coluna);
+        }
+    }
 }
 void AnalisadorSemantico::visita(NoColchetes* nc){
 

@@ -19,7 +19,10 @@ char ErroLiteral[ErroTamanhoEnumerador][256] = {
     "depois",
     "Erro: Classe Herda ela Mesma",
     "Erro: Classe Herdada nao Existe",
-    "Erro: Redefinicao da Classe "
+    "Erro: Redefinicao da Classe ",
+    "Erro: Redefinicao da Funcao ",
+    "Erro: Tipo Nao Declarado ",
+    "Erro: Conflito de Declaracoes "
 };
 
 /** \brief Armazena os dados do erro
@@ -112,6 +115,9 @@ void proximoErro(){
             ErroLiteral[erro->codigo], erro->tokenEncontrado);
         break;
         case ErroSemanticoRedefinicaoClasse:
+        case ErroSemanticoRedefinicaoFuncao:
+        case ErroSemanticoTipoNaoDeclarado:
+        case ErroSemanticoConflitoDeDeclaracoes:
             fprintf(stderr,"[l:%d, c:%d] - %s\n",linha, coluna, ErroLiteral[erro->codigo]);
         break;
         default:{
