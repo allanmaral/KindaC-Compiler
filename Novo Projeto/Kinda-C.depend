@@ -90,25 +90,25 @@
 	<stdlib.h>
 	<stdio.h>
 
-1510179163 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/GerenciadorErro.h
+1510271154 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/GerenciadorErro.h
 
-1510179656 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/ASA.h
+1510271154 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/ASA.h
 	"TabelaSimbolos.h"
 
-1510229246 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSintatico.c
+1510271154 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
 
-1510180253 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/ASA.cpp
+1510271154 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/ASA.cpp
 	"ASA.h"
 	"Visitante.h"
 	<string.h>
 
-1510179163 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/Visitante.h
+1510271154 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/Visitante.h
 	"ASA.h"
 
-1510179163 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/GerenciadorErro.c
+1510271154 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/GerenciadorErro.c
 	"GerenciadorErro.h"
 	<stdio.h>
 	<stdlib.h>
@@ -126,7 +126,7 @@
 1510179163 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSintatico.h
 	"ASA.h"
 
-1510189179 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSemantico.h
+1510271154 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSemantico.h
 	"Visitante.h"
 
 1510190844 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/TabelaSimbolos.cpp
@@ -135,17 +135,19 @@
 	<stdio.h>
 	<string.h>
 
-1510179163 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/Visitante.cpp
+1510271154 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/Visitante.cpp
 	<stdio.h>
 	<stdlib.h>
 	"ASA.h"
 	"Visitante.h"
 	"AnalisadorSintatico.h"
 
-1510229800 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSemantico.cpp
+1510274260 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/AnalisadorSemantico.cpp
 	"AnalisadorSemantico.h"
 	"ASA.h"
 	"AnalisadorLexico.h"
+	"string.h"
+	"GerenciadorErro.h"
 
 1510225795 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorLexico.c
 	<stdio.h>

@@ -97,6 +97,7 @@ class TabelaSimbolos{
          *  Função para imprimir todos os lexemas guardados dentro da tabela
          */
         void imprime();
+        void limpa();
         virtual ~TabelaSimbolos();
 
     protected:

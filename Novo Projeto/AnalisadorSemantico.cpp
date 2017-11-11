@@ -1,10 +1,11 @@
 #include "AnalisadorSemantico.h"
 #include "ASA.h"
 #include "AnalisadorLexico.h"
-#include "String.h"
+#include "string.h"
 #include "GerenciadorErro.h"
 
 TabelaSimbolos *tabelavariaveisAtual = NULL;
+bool publico = true;
 
 AnalisadorSemantico::AnalisadorSemantico(){}
 AnalisadorSemantico::~AnalisadorSemantico(){}
@@ -99,7 +100,28 @@ void AnalisadorSemantico::visita(NoListaId* lid){
 
 }
 void AnalisadorSemantico::visita(NoDeclVariavel* decV){
+    bool erro = false;
+    if(!tabelavariaveisAtual){
+        tabelavariaveisAtual = new TabelaSimbolos();
+    }
+    if(!obtemTabelaClasses()->busca(decV->tipo->entradaTabela->pegarLexema())){
+        if(!obtemTabelaTipos()->busca(decV->tipo->entradaTabela->pegarLexema())){
+            ///erro semantico, tipo tal n foi declarado nesse escopo.
+            erro = true;
+        }
+    }
+    NoListaId *aux = decV->variaveis;
+    while(!aux){
+        if(tabelavariaveisAtual->busca(aux->id->entradaTabela->pegarLexema())){
+            ///erro semantico, redefinicao de variavel;
+        }else{
 
+        }
+        aux = aux->lista;
+    }
+    if(decV->lista){
+        decV->lista->aceita(this);
+    }
 }
 void AnalisadorSemantico::visita(NoDeclTipo* decT){
 
@@ -113,13 +135,13 @@ void AnalisadorSemantico::visita(NoDeclLocalVariavel* decLV){
     }
 }
 void AnalisadorSemantico::visita(NoDeclLocalPublico* decLPub){
-    fprintf(stdout, "entrou nessa bosta public\n");
+    publico = true;
     if(decLPub->lista){
         decLPub->lista->aceita(this);
     }
 }
 void AnalisadorSemantico::visita(NoDeclLocalPrivado* decLpri){
-    fprintf(stdout, "entrou nessa bosta private\n");
+    publico = false;
     if(decLpri->lista){
         decLpri->lista->aceita(this);
     }
