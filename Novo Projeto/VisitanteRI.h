@@ -1,6 +1,7 @@
 #ifndef VISITANTERI_H
 #define VISITANTERI_H
 #include "RepresentacaoIntermadiaria.h"
+#include "ASA.h"
 class VisitanteRI{
       public:
           virtual ~VisitanteRI() { };
@@ -71,5 +72,63 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(CJUMP *cjp);
           void visita(SEQ *se);
           void visita(LABEL *l);
+};
+
+class VisitanteTradutorASA{///incompleto
+    public:
+        Temp *sp;
+        Temp *fp;
+        Fragmento *fInicial;
+        //Frame *frameAtual;
+
+    public:
+		virtual ~VisitanteTradutorASA(){};
+		virtual void visita(NoPrograma          *prog   ) = 0;
+		virtual Exp* visita(NoId                *id     ) = 0;
+		virtual Exp* visita(NoLiteral           *lit    ) = 0;
+		virtual Exp* visita(NoAscii             *asc    ) = 0;
+		virtual Exp* visita(NoParenteses        *pa     ) = 0;
+		virtual Exp* visita(NoConteudo          *con    ) = 0;
+		virtual Exp* visita(NoEndereco          *ende   ) = 0;
+		virtual Exp* visita(NoNumInteiro        *ni     ) = 0;
+		virtual Exp* visita(NoNumReal           *nr     ) = 0;
+		virtual Exp* visita(NoArranjo           *arr    ) = 0;
+		virtual ListaExp* visita(NoListaExpr         *le     ) = 0;
+		virtual ListaExp* visita(NoListaFormal       *lf     ) = 0;
+		virtual ListaStm* visita(NoListaSentenca     *ls     ) = 0;
+		virtual Stm* visita(NoSe                *se     ) = 0;
+		virtual Stm* visita(NoSenao             *sen    ) = 0;
+		virtual Stm* visita(NoEnquanto          *enq    ) = 0;
+		virtual Stm* visita(NoBlocoCaso         *bc     ) = 0;
+		virtual Stm* visita(NoDesvia            *des    ) = 0;
+		virtual Stm* visita(NoEscolha           *sw     ) = 0;
+		virtual Stm* visita(NoImprime           *imp    ) = 0;
+		virtual Stm* visita(NoLeLinha           *leL    ) = 0;
+		virtual Stm* visita(NoRetorna           *ret    ) = 0;
+		virtual Stm* visita(NoLanca             *lan    ) = 0;
+		virtual ListaStm* visita(NoEscopo            *esc    ) = 0;
+		virtual Exp* visita(NoChamadaFuncao     *cha    ) = 0;
+		virtual Stm* visita(NoTenta             *te     ) = 0;
+		virtual Exp* visita(NoSentencaExpr      *senE   ) = 0;
+		virtual void visita(NoDeclFuncao        *decF   ) = 0;
+		virtual ListaExp* visita(NoListaId           *lid    ) = 0;
+		virtual ListaAcesso* visita(NoDeclVariavel      *decV   ) = 0;
+		virtual void visita(NoDeclTipo          *decT   ) = 0;
+		virtual void visita(NoDeclLocalFuncao   *decLF  ) = 0;
+		virtual ListaAcesso* visita(NoDeclLocalVariavel *decLV  ) = 0;
+		virtual void visita(NoDeclLocalPublico   *decLPub) = 0;
+		virtual void visita(NoDeclLocalPrivado  *decLpri) = 0;
+		virtual ListaExp* visita(NoCorpoFuncao       *cF     ) = 0;
+		virtual void visita(NoDeclClasse        *decC   ) = 0;
+		virtual Exp* visita(NoExprUnaria    	*expU   ) = 0;
+		virtual Exp* visita(NoExprBinaria       *expB   ) = 0;
+		virtual Exp* visita(NoExprAtrib         *atr    ) = 0;
+		virtual Exp* visita(NoExprAceCamp       *expAC  ) = 0;
+        virtual Exp* visita(NoVerdadeiro        *tr     ) = 0;
+        virtual Exp* visita(NoFalso             *fa     ) = 0;
+        virtual Exp* visita(NoEsse              *th     ) = 0;
+		virtual Exp* visita(NoNovo              *n      ) = 0;
+		virtual void visita(NoTipo              *tp     ) = 0;
+		virtual Exp* visita(NoColchetes         *nc     ) = 0;
 };
 #endif // VISITANTERI_H

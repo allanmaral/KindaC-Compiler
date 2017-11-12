@@ -166,12 +166,12 @@
 	<stdlib.h>
 	<stdio.h>
 
-1510261428 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.h
+1510490021 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.h
 
-1510261428 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.h
+1510490021 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.h
 	"TabelaSimbolos.h"
 
-1510368548 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSemantico.cpp
+1510490021 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSemantico.cpp
 	"AnalisadorSemantico.h"
 	"ASA.h"
 	"AnalisadorLexico.h"
@@ -184,17 +184,17 @@
 1510261428 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Visitante.h
 	"ASA.h"
 
-1510261428 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.c
+1510490021 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/AnalisadorSintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
 
-1510261428 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.cpp
+1510490021 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/ASA.cpp
 	"ASA.h"
 	"Visitante.h"
 	<string.h>
 
-1510261428 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.c
+1510490021 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/GerenciadorErro.c
 	"GerenciadorErro.h"
 	<stdio.h>
 	<stdlib.h>
@@ -218,19 +218,20 @@
 	<stdio.h>
 	<string.h>
 
-1510261428 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Visitante.cpp
+1510495175 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/Visitante.cpp
 	<stdio.h>
 	<stdlib.h>
 	"ASA.h"
 	"Visitante.h"
 	"AnalisadorSintatico.h"
 
-1510261156 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteRI.cpp
+1510368789 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteRI.cpp
 	"VisitanteRI.h"
 	"RepresentacaoIntermadiaria.h"
 
-1510235905 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteRI.h
+1510495328 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteRI.h
 	"RepresentacaoIntermadiaria.h"
+	"ASA.h"
 
 1510260109 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/RepresentacaoIntermadiaria.h
 
