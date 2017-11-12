@@ -51,6 +51,7 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="GerenciadorErro.h" />
+		<Unit filename="RepresentacaoIntermadiaria.cpp" />
 		<Unit filename="RepresentacaoIntermadiaria.h" />
 		<Unit filename="TabelaSimbolos.cpp" />
 		<Unit filename="TabelaSimbolos.h" />

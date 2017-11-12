@@ -14,8 +14,8 @@ class VisitanteRI{
           virtual void visita(Rotulo *r)                = 0;
           virtual void visita(ListaRotulo *listaRotulo) = 0;
           virtual void visita(ListaAcesso *listaAcesso) = 0;
-          virtual void visita(QuadroMIPS *quadroMIPS)   = 0;
-          virtual void visita(NoQuadro *nq)            = 0;
+          virtual void visita(FrameMIPS *quadroMIPS)   = 0;
+          virtual void visita(NoFrame *nq)            = 0;
           virtual void visita(NoRegistrador *nr)        = 0;
 
           ///Métodos visita para MAQUINA ABSTRATA
@@ -50,8 +50,8 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(Rotulo *r);
           void visita(ListaRotulo *listaRotulo);
           void visita(ListaAcesso *listaAcesso);
-          void visita(QuadroMIPS *quadroMIPS);
-          void visita(NoQuadro *nq);
+          void visita(FrameMIPS *quadroMIPS);
+          void visita(NoFrame *nq);
           void visita(NoRegistrador *nr);
 
           ///Métodos visita para MAQUINA ABSTRATA
