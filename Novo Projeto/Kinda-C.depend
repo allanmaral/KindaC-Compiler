@@ -335,3 +335,94 @@
 
 1510251206 c:\users\okty\desktop\novo projeto\representacaointermadiaria.h
 
+1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.c
+	<stdio.h>
+	<string.h>
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"ASA.h"
+
+1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorlexico.h
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	"TabelaSimbolos.h"
+
+1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
+	<stdlib.h>
+	<stdio.h>
+
+1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
+
+1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.h
+	"TabelaSimbolos.h"
+
+1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsemantico.cpp
+	"AnalisadorSemantico.h"
+	"ASA.h"
+	"AnalisadorLexico.h"
+	"string.h"
+	"GerenciadorErro.h"
+
+1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsemantico.h
+	"Visitante.h"
+
+1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.h
+	"ASA.h"
+
+1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+	"AnalisadorLexico.h"
+	"GerenciadorErro.h"
+	"ASA.h"
+
+1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\asa.cpp
+	"ASA.h"
+	"Visitante.h"
+	<string.h>
+
+1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
+	"GerenciadorErro.h"
+	<stdio.h>
+	<stdlib.h>
+
+1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\main.c
+	<stdio.h>
+	<string.h>
+	"ASA.h"
+	"AnalisadorLexico.h"
+	"AnalisadorSintatico.h"
+	"GerenciadorErro.h"
+	"Visitante.h"
+	"AnalisadorSemantico.h"
+
+1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
+	"ASA.h"
+
+1510508508 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.cpp
+	"RepresentacaoIntermadiaria.h"
+	"VisitanteRI.h"
+	<stdio.h>
+	<string.h>
+
+1510508545 c:\users\allan\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.h
+
+1510508219 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitanteri.h
+	"RepresentacaoIntermadiaria.h"
+
+1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
+	"TabelaSimbolos.h"
+	"AnalisadorLexico.h"
+	<stdio.h>
+	<string.h>
+
+1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.cpp
+	<stdio.h>
+	<stdlib.h>
+	"ASA.h"
+	"Visitante.h"
+	"AnalisadorSintatico.h"
+
+1510508422 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\visitanteri.cpp
+	"VisitanteRI.h"
+	"RepresentacaoIntermadiaria.h"
+

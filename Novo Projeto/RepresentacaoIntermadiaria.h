@@ -1,6 +1,8 @@
 #ifndef REP_INTERMEDIARIA_H
 #define REP_INTERMEDIARIA_H
 
+class Atributo;
+
 class VisitanteRI;
 
 class Fragmento;
@@ -18,10 +20,10 @@ class ListaRotulo;
 class AcessoLocal;
 class ListaAcesso;
 
-class Quadro;
-class QuadroMIPS;
+class Frame;
+class FrameMIPS;
 
-class NoQuadro;
+class NoFrame;
 class NoRegistrador;
 
 
@@ -51,22 +53,34 @@ class CJUMP;
 class SEQ;
 class LABEL;
 
-class Atributo;///apenas para compilar classe aoida nao foi implementada
+typedef enum {
+    OP_ADD,
+    OP_SUB,
+    OP_MUL,
+    OP_DIV,
+    OP_E,
+    OP_OU,
+    OP_DLE,  // DESLOCAMENTO ESQUERDA
+    OP_DLD,  // DESLOCAMENTO DIREITA
+    OP_DLDA, // DESLOCAMENTO DIREITA ARTITIMETICO
+} Operadores;
+
+//class Atributo;///apenas para compilar classe aoida nao foi implementada
 class Fragmento {
     public:
         Fragmento* proximoFragmento;
     public:
         Fragmento();
         virtual ~Fragmento();
-        virtual void aceita(VisitanteRI *vri);
+        virtual void aceita(VisitanteRI *vri)=0;
 };
 
 class Procedimento : public Fragmento {
     public:
-        Quadro *quadro;
-        Stm   *corpo;
+        Frame  *frame;
+        Stm    *corpo;
     public:
-        Procedimento(Quadro* quadro, Stm* corpo);
+        Procedimento(Frame* frame, Stm* corpo);
         ~Procedimento();
         void aceita(VisitanteRI *vri);
 };
@@ -88,17 +102,20 @@ class Variavel : public Fragmento {
     public:
         Variavel(Atributo *tipo, int tamanho);
         ~Variavel();
-        void aceita();
+        void aceita(VisitanteRI *vri);
 };
+
 ///## Frame
 ///######################
 class Temp{
     public:
         char *temp;
+        static int contador;
     public:
         Temp();
         Temp(char *temp);
         ~Temp();
+        const char* obterString();
         void aceita(VisitanteRI *vri);
 };
 class ListaTemp{
@@ -106,18 +123,19 @@ class ListaTemp{
         Temp *temp;
         ListaTemp *proximoTemp;
     public:
-        ListaTemp(Temp *temp,ListaTemp *proximoTemp);
+        ListaTemp(Temp *temp, ListaTemp *proximoTemp);
         ~ListaTemp();
         void aceita(VisitanteRI *vri);
 };
 class Rotulo{
     public:
         char *rotulo;
+        static int contador;
     public:
         Rotulo();
         Rotulo(char *rotulo);
         ~Rotulo();
-        char* obterString();
+        const char* obterString();
         void aceita(VisitanteRI *vri);
 };
 class ListaRotulo{
@@ -147,15 +165,16 @@ class ListaAcesso{
         void aceita(VisitanteRI *vri);
 
 };
-class Quadro{
+class Frame{
     public:
-        Quadro();
-        virtual ~Quadro();
+        Frame();
+        virtual ~Frame();
         virtual AcessoLocal *insereParametro(bool escapa, int deslocamento) = 0;
         virtual AcessoLocal *insereLocal(bool escapa, int deslocamento) = 0;
         virtual void aceita(VisitanteRI *vri) = 0;
 };
-class QuadroMIPS{
+
+class FrameMIPS{
      public:
         Rotulo *rotulo;
         Temp *tempRetorno;
@@ -164,19 +183,21 @@ class QuadroMIPS{
         int deslocamentoVariaveisLocais;
         int deslocamentoParametros;
      public:
-        QuadroMIPS(Rotulo *rotulo,ListaAcesso *variaveisLocais,int deslocamentoVariaveisLocais,int deslocamentoParametros);
-        ~QuadroMIPS();
+        FrameMIPS(Rotulo *rotulo,ListaAcesso *variaveisLocais, int deslocamentoVariaveisLocais,
+                  int deslocamentoParametros);
+        ~FrameMIPS();
         AcessoLocal *insereParametro(bool escapa, int deslocamento);
         AcessoLocal *insereLocal(bool escapa, int deslocamento);
         void aceita(VisitanteRI *vri);
 };
-class NoQuadro: public AcessoLocal{
+class NoFrame: public AcessoLocal{
     public:
         int deslocamento;
         Exp *exp;
     public:
-        NoQuadro(int deslocamento);
-        ~NoQuadro();
+        NoFrame(int deslocamento);
+        ~NoFrame();
+        Exp *codigoAcesso();
         void aceita(VisitanteRI *vri);
 };
 class NoRegistrador: public AcessoLocal{
@@ -186,6 +207,7 @@ class NoRegistrador: public AcessoLocal{
     public:
         NoRegistrador(Temp *temp);
         ~NoRegistrador();
+        Exp *codigoAcesso();
         void aceita(VisitanteRI *vri);
 };
 ///## MAQUINA ABSTRATA
@@ -194,7 +216,6 @@ class NoRegistrador: public AcessoLocal{
 /// Classes abstratas
 class Exp {
     public:
-        Exp();
         virtual ~Exp() = 0;
         virtual void aceita(VisitanteRI *vri) = 0;
 };
@@ -211,7 +232,7 @@ class ListaExp: public Exp{
     public:
         ListaExp(Exp *exo, ListaExp *proximoExp);
         ~ListaExp();
-        void aceita(VisitanteRI *v);
+        void aceita(VisitanteRI *vri);
 };
 class CONST : public Exp {
     public:
@@ -231,12 +252,11 @@ class CONSTF : public Exp {
 };
 class NAME : public Exp {
     public:
-        Rotulo  *n;
+        Rotulo *n;
     public:
         NAME(Rotulo *n);
         ~NAME();
         void aceita(VisitanteRI *vri);
-
 };
 class TEMP : public Exp {
     public:
@@ -254,7 +274,7 @@ class BINOP : public Exp {
     public:
         BINOP(int op, Exp *e1, Exp *e2);
         ~BINOP();
-        void aceita(VisitanteRI *v);
+        void aceita(VisitanteRI *vri);
 };
 class MEM : public Exp {
     public:
@@ -347,6 +367,4 @@ class LABEL{
         ~LABEL();
         void aceita(VisitanteRI *vri);
 };
-
-
 #endif // REP_INTERMEDIARIA_H
