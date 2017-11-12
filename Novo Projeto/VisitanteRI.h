@@ -20,6 +20,7 @@ class VisitanteRI{
 
           ///Métodos visita para MAQUINA ABSTRATA
           //Visita especializações de Exp
+          virtual void visita(ListaExp *lex)   = 0;
           virtual void visita(CONST *c)        = 0;
           virtual void visita(CONSTF *cf)      = 0;
           virtual void visita(NAME *n)         = 0;
@@ -29,6 +30,7 @@ class VisitanteRI{
           virtual void visita(CALL *ca)        = 0;
           virtual void visita(ESEQ *es)        = 0;
           //Visita especializações de Stm
+          virtual void visita(ListaStm *lstm)  = 0;
           virtual void visita(MOVE *mo)        = 0;
           virtual void visita(EXP *ex)         = 0;
           virtual void visita(JUMP *jp)        = 0;
@@ -56,6 +58,7 @@ class VisitanteImpressaoRI: public VisitanteRI{
 
           ///Métodos visita para MAQUINA ABSTRATA
           //Visita especializações de Exp
+          void visita(ListaExp* lex);
           void visita(CONST *c);
           void visita(CONSTF *cf);
           void visita(NAME *n);
@@ -65,6 +68,7 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(CALL *ca);
           void visita(ESEQ *es);
           //Visita especializações de Stm
+          void visita(ListaStm *lstm);
           void visita(MOVE *mo);
           void visita(EXP *ex);
           void visita(JUMP *jp);

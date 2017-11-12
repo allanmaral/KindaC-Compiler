@@ -53,7 +53,7 @@ class CJUMP;
 class SEQ;
 class LABEL;
 
-enum {
+typedef enum {
     OP_ADD,
     OP_SUB,
     OP_MUL,
@@ -195,8 +195,9 @@ class NoFrame: public AcessoLocal{
         int deslocamento;
         Exp *exp;
     public:
-        NoFrame(int deslocamento, Exp *exp);
+        NoFrame(int deslocamento);
         ~NoFrame();
+        Exp *codigoAcesso();
         void aceita(VisitanteRI *vri);
 };
 class NoRegistrador: public AcessoLocal{
@@ -204,8 +205,9 @@ class NoRegistrador: public AcessoLocal{
         Temp *temp;
         Exp *exp;
     public:
-        NoRegistrador(Temp *temp, Exp *exp);
+        NoRegistrador(Temp *temp);
         ~NoRegistrador();
+        Exp *codigoAcesso();
         void aceita(VisitanteRI *vri);
 };
 ///## MAQUINA ABSTRATA
@@ -214,7 +216,6 @@ class NoRegistrador: public AcessoLocal{
 /// Classes abstratas
 class Exp {
     public:
-        Exp();
         virtual ~Exp() = 0;
         virtual void aceita(VisitanteRI *vri) = 0;
 };
@@ -231,7 +232,7 @@ class ListaExp: public Exp{
     public:
         ListaExp(Exp *exo, ListaExp *proximoExp);
         ~ListaExp();
-        void aceita(VisitanteRI *v);
+        void aceita(VisitanteRI *vri);
 };
 class CONST : public Exp {
     public:
@@ -273,7 +274,7 @@ class BINOP : public Exp {
     public:
         BINOP(int op, Exp *e1, Exp *e2);
         ~BINOP();
-        void aceita(VisitanteRI *v);
+        void aceita(VisitanteRI *vri);
 };
 class MEM : public Exp {
     public:
