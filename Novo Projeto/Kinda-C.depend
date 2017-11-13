@@ -225,15 +225,15 @@
 	"Visitante.h"
 	"AnalisadorSintatico.h"
 
-1510368789 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteRI.cpp
+1510536197 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteRI.cpp
 	"VisitanteRI.h"
 	"RepresentacaoIntermadiaria.h"
 
-1510495328 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteRI.h
+1510535400 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/VisitanteRI.h
 	"RepresentacaoIntermadiaria.h"
 	"ASA.h"
 
-1510260109 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/RepresentacaoIntermadiaria.h
+1510522603 /home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/RepresentacaoIntermadiaria.h
 
 1510239396 source:/home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/VisitanteRI.cpp
 	"VisitanteRI.h"
@@ -425,4 +425,10 @@
 1510508422 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\visitanteri.cpp
 	"VisitanteRI.h"
 	"RepresentacaoIntermadiaria.h"
+
+1510522603 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/RepresentacaoIntermadiaria.cpp
+	"RepresentacaoIntermadiaria.h"
+	"VisitanteRI.h"
+	<stdio.h>
+	<string.h>
 
