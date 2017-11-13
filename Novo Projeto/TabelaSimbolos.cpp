@@ -392,12 +392,21 @@ Atributo* AtributoFuncao::buscaParametro(char* id){
 Atributo* AtributoFuncao::buscaVariavel(char* id){
     return variveisLocais->busca(id);
 }
+void AtributoVariavel::atribuiArranjo(int arranjo){
+    this->arranjo = arranjo;
+}
+int AtributoVariavel::pegarArranjo(){
+    return arranjo;
+}
 AtributoVariavel::AtributoVariavel():Atributo(){
     tipo = 0;
     ponteiro = false;
+    arranjo = 0;
 }
-AtributoVariavel::~AtributoVariavel(){}
-void AtributoVariavel::atribuirTipo(int tipo){
+AtributoVariavel::~AtributoVariavel(){
+    delete tipo;
+}
+void AtributoVariavel::atribuirTipo(Tipo *tipo){
     this->tipo = tipo;
 }
 void AtributoVariavel::atribuiPonteiro(bool ponteiro){
@@ -406,7 +415,7 @@ void AtributoVariavel::atribuiPonteiro(bool ponteiro){
 bool AtributoVariavel::pegarPonteiro(){
     return ponteiro;
 }
-int AtributoVariavel::pegarTipo(){
+Tipo* AtributoVariavel::pegarTipo(){
     return tipo;
 }
 AtributoFuncaoClasse::AtributoFuncaoClasse():AtributoFuncao(){
@@ -448,6 +457,39 @@ void AtributoClasse::atribuirHeranca(Atributo* heranca){
 Atributo* AtributoClasse::pegarHeranca(){
     return heranca;
 }
-
-
-
+Tipo::Tipo(int tipo){
+    this->tipo = tipo;
+}
+Tipo::~Tipo(){}
+int Tipo::pegaTipo(){
+    return tipo;
+}
+void Tipo::atribuirTipo(int tipo){
+    this->tipo = tipo;
+}
+TipoId::TipoId(char* lexema, int primitivo):Tipo(primitivo){
+    lexema=(char*)malloc(sizeof(char) * (strlen(lexema) + 1));
+    strcpy(this->lexema,lexema);
+}
+char* TipoId::pegarLexema(){
+    return lexema;
+}
+void TipoId::atribuirLexema(char* lexema){
+    if(lexema != NULL){
+        delete []lexema;
+    }
+    lexema=(char*)malloc(sizeof(char) * (strlen(lexema) + 1));
+    strcpy(this->lexema,lexema);
+}
+TipoId::~TipoId(){
+    delete []lexema;
+}
+TabelaSimbolos* AtributoClasse::pegarVariaveis(){
+    return variaveis;
+}
+TabelaSimbolos* AtributoClasse::pegarFuncoes(){
+    return funcoes;
+}
+TabelaSimbolos* AtributoTipo::pegaVariaveis(){
+    return variaveis;
+}

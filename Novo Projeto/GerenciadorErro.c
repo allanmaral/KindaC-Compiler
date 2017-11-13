@@ -21,8 +21,10 @@ char ErroLiteral[ErroTamanhoEnumerador][256] = {
     "Erro: Classe Herdada nao Existe",
     "Erro: Redefinicao da Classe ",
     "Erro: Redefinicao da Funcao ",
-    "Erro: Tipo Nao Declarado ",
-    "Erro: Conflito de Declaracoes "
+    "Erro: Paramentros com o Mesmo Nome ",
+    " nao e o Nome de um Tipo ",
+    "Erro: Redefinicao da variavel ",
+    "Erro Redefinicao do tipo "
 };
 
 /** \brief Armazena os dados do erro
@@ -116,9 +118,13 @@ void proximoErro(){
         break;
         case ErroSemanticoRedefinicaoClasse:
         case ErroSemanticoRedefinicaoFuncao:
-        case ErroSemanticoTipoNaoDeclarado:
+        case ErroSemanticoRedefinicaoVariavel:
         case ErroSemanticoConflitoDeDeclaracoes:
-            fprintf(stderr,"[l:%d, c:%d] - %s\n",linha, coluna, ErroLiteral[erro->codigo]);
+        case ErroSemanticoRedefinicaoTipo:
+            fprintf(stderr,"[l:%d, c:%d] - %s\"%s\"\n",linha, coluna, ErroLiteral[erro->codigo], erro->tokenEncontrado);
+        break;
+        case ErroSemanticoTipoVariavel:
+            fprintf(stderr,"[l:%d, c:%d] - Erro: \"%s\"%s\n",linha, coluna, erro->tokenEncontrado, ErroLiteral[erro->codigo]);
         break;
         default:{
             if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {

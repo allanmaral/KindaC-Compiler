@@ -5,6 +5,7 @@
 #include "GerenciadorErro.h"
 
 TabelaSimbolos *tabelavariaveisAtual = NULL;
+TabelaSimbolos *tabelafuncoesAtual = NULL;
 bool publico = true;
 
 AnalisadorSemantico::AnalisadorSemantico(){}
@@ -12,8 +13,8 @@ AnalisadorSemantico::~AnalisadorSemantico(){}
 void AnalisadorSemantico::visita(NoPrograma* prog){
     if(NoDeclClasse* decC = dynamic_cast<NoDeclClasse*>(prog)) { decC->aceita(this); }
     else if(NoDeclTipo* decT = dynamic_cast<NoDeclTipo*>(prog)) { decT->aceita(this); }
-    else if(NoDeclVariavel* decV = dynamic_cast<NoDeclVariavel*>(prog)) { decV->aceita(this); }
-    else if(NoDeclFuncao* decF = dynamic_cast<NoDeclFuncao*>(prog)) { decF->aceita(this); }
+    //else if(NoDeclVariavel* decV = dynamic_cast<NoDeclVariavel*>(prog)) { decV->aceita(this); }
+    //else if(NoDeclFuncao* decF = dynamic_cast<NoDeclFuncao*>(prog)) { decF->aceita(this); }
 }
 void AnalisadorSemantico::visita(NoId* id){
 
@@ -49,7 +50,12 @@ void AnalisadorSemantico::visita(NoListaFormal* lf){
     TabelaSimbolos *aux = new TabelaSimbolos();
     while(lf){
         if(lf->tipo->primitivo == ID){
-            lf->tipo->aceita(this);
+            if(!obtemTabelaTipos()->busca(lf->tipo->entradaTabela->pegarLexema())){
+                if(!obtemTabelaClasses()->busca(lf->tipo->entradaTabela->pegarLexema())){
+                    saidaErro(ErroSemanticoTipoVariavel, lf->tipo->linha, lf->tipo->coluna,
+                               lf->tipo->entradaTabela->pegarLexema());
+                }
+            }
         }
         if(!aux->busca(lf->id->entradaTabela->pegarLexema())){
             Atributo *atr = new Atributo();
@@ -57,7 +63,8 @@ void AnalisadorSemantico::visita(NoListaFormal* lf){
             aux->insere(lf->id->entradaTabela->pegarLexema(), atr);
         }
         else{
-            saidaErro(ErroSemanticoConflitoDeDeclaracoes, lf->id->linha, lf->id->coluna);
+            saidaErro(ErroSemanticoConflitoDeDeclaracoes, lf->id->linha, lf->id->coluna,
+                       lf->id->entradaTabela->pegarLexema());
         }
         lf = lf->lista;
     }
@@ -111,7 +118,7 @@ void AnalisadorSemantico::visita(NoSentencaExpr* senE){
 void AnalisadorSemantico::visita(NoDeclFuncao* decF){
     if(decF->tipo->primitivo == ID){
         if(!obtemTabelaTipos()->busca(decF->tipo->entradaTabela->pegarLexema())){
-            saidaErro(ErroSemanticoTipoNaoDeclarado, decF->tipo->linha, decF->tipo->coluna);
+            saidaErro(ErroSemanticoTipoVariavel, decF->tipo->linha, decF->tipo->coluna, decF->tipo->entradaTabela->pegarLexema());
         }
     }
     if(obtemTabelaFuncoes()->busca(decF->id->entradaTabela->pegarLexema())){
@@ -127,21 +134,36 @@ void AnalisadorSemantico::visita(NoListaId* lid){
 }
 void AnalisadorSemantico::visita(NoDeclVariavel* decV){
     bool erro = false;
+    TabelaSimbolos *tabela;
     if(!tabelavariaveisAtual){
-        tabelavariaveisAtual = new TabelaSimbolos();
+        tabela = obtemTabelaVariaveis();
+    }else{
+        tabela = tabelavariaveisAtual;
     }
-    if(!obtemTabelaClasses()->busca(decV->tipo->entradaTabela->pegarLexema())){
-        if(!obtemTabelaTipos()->busca(decV->tipo->entradaTabela->pegarLexema())){
-            ///erro semantico, tipo tal n foi declarado nesse escopo.
-            erro = true;
+    if(decV->tipo->primitivo == ID){
+        if(!obtemTabelaClasses()->busca(decV->tipo->entradaTabela->pegarLexema())){
+            if(!obtemTabelaTipos()->busca(decV->tipo->entradaTabela->pegarLexema())){
+                saidaErro(ErroSemanticoTipoVariavel, decV->linha, decV->coluna, decV->tipo->entradaTabela->pegarLexema());
+                erro = true;
+            }
         }
     }
     NoListaId *aux = decV->variaveis;
     while(!aux){
-        if(tabelavariaveisAtual->busca(aux->id->entradaTabela->pegarLexema())){
-            ///erro semantico, redefinicao de variavel;
+        if(tabela->busca(aux->id->entradaTabela->pegarLexema())){
+            saidaErro(ErroSemanticoRedefinicaoVariavel, decV->linha, decV->coluna, aux->id->entradaTabela->pegarLexema());
         }else{
-
+            if(!erro){
+                AtributoVariavel *atr = new AtributoVariavel();
+                Tipo *tp;
+                if(decV->tipo->primitivo == ID){
+                    tp = new TipoId(decV->tipo->entradaTabela->pegarLexema(), ID);
+                }else{
+                    tp = new Tipo(decV->tipo->primitivo);
+                }
+                atr->atribuirLexema(aux->id->entradaTabela->pegarLexema());
+                atr->atribuirTipo(tp);
+            }
         }
         aux = aux->lista;
     }
@@ -150,12 +172,25 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
     }
 }
 void AnalisadorSemantico::visita(NoDeclTipo* decT){
-
+    if(obtemTabelaClasses()->busca(decT->id->entradaTabela->pegarLexema()) ||
+        obtemTabelaTipos()->busca(decT->id->entradaTabela->pegarLexema())){
+        saidaErro(ErroSemanticoRedefinicaoTipo, decT->linha, decT->coluna, decT->id->entradaTabela->pegarLexema());
+    }else{
+        AtributoTipo *atr = new AtributoTipo();
+        tabelavariaveisAtual = atr->pegaVariaveis();
+        decT->campo->aceita(this);
+        tabelavariaveisAtual = NULL;
+        obtemTabelaTipos()->insere(decT->id->entradaTabela->pegarLexema(), atr);
+    }
+    if(decT->lista){
+        decT->lista->aceita(this);
+    }
 }
 void AnalisadorSemantico::visita(NoDeclLocalFuncao* decLF){
 
 }
 void AnalisadorSemantico::visita(NoDeclLocalVariavel* decLV){
+    decLV->variavel->aceita(this);
     if(decLV->lista){
         decLV->lista->aceita(this);
     }
@@ -194,9 +229,11 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
          saidaErro(ErroSemanticoRedefinicaoClasse, decC->id->linha, decC->id->coluna, decC->id->entradaTabela->pegarLexema());
          erro = true;
     }
+    atr = new AtributoClasse();
+    tabelavariaveisAtual = atr->pegarVariaveis();
     decC->local->aceita(this);
+    tabelavariaveisAtual = NULL;
     if(!erro){
-        atr = new AtributoClasse();
         if(decC->heranca != NULL){
             her = new Atributo();
             her->atribuirLexema(decC->heranca->entradaTabela->pegarLexema());
@@ -204,6 +241,8 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
         }
         atr->atribuirLexema(decC->id->entradaTabela->pegarLexema());
         classes->insere(decC->id->entradaTabela->pegarLexema(), atr);
+    }else{
+        delete atr;
     }
     if(decC->lista != NULL){
         decC->lista->aceita(this);
@@ -234,13 +273,8 @@ void AnalisadorSemantico::visita(NoNovo* n){
 
 }
 void AnalisadorSemantico::visita(NoTipo* tp){
-    if(tp->primitivo == ID){ /// Por enquanto nao e necessario
-        if(!obtemTabelaTipos()->busca(tp->entradaTabela->pegarLexema())){
-            saidaErro(ErroSemanticoTipoNaoDeclarado, tp->linha, tp->coluna);
-        }
-    }
+
 }
 void AnalisadorSemantico::visita(NoColchetes* nc){
 
 }
-

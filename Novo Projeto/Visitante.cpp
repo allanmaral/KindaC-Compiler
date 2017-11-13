@@ -3,6 +3,7 @@
 #include "ASA.h"
 #include "Visitante.h"
 #include "AnalisadorSintatico.h"
+
 void VisitanteImpressao::calculaNivel(){
 	for(int i=0; i<nivel; i++){
         fprintf(stdout, "   ");
@@ -224,8 +225,8 @@ void VisitanteImpressao::visita(NoDeclVariavel *decV){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-DEC_VARIAVEL\n");
-    decV->tipo->aceita(this);
-    decV->variaveis->aceita(this);
+    if(decV->tipo)decV->tipo->aceita(this);
+    if(decV->variaveis)decV->variaveis->aceita(this);
     nivel--;
     if(decV->lista) decV->lista->aceita(this);
 }
@@ -236,6 +237,7 @@ void VisitanteImpressao::visita(NoDeclTipo *decT){
     if(decT->id) decT->id->aceita(this);
     if(decT->campo) decT->campo->aceita(this);
     nivel--;
+    if(decT->lista) decT->lista->aceita(this);
 }
 void VisitanteImpressao::visita(NoDeclLocalFuncao *decLF){
     nivel++;

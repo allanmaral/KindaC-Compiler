@@ -219,17 +219,38 @@ class TabelaReservada:public TabelaSimbolos{
         virtual void imprimeCabecalho();
         void inicializarReservada();
 };
+class Tipo{
+    public:
+        Tipo(int tipo);
+        ~Tipo();
+        int pegaTipo();
+        void atribuirTipo(int tipo);
+    private:
+        int tipo;
+};
+class TipoId:public Tipo{
+    public:
+        TipoId(char* lexema, int tipo);
+        char* pegarLexema();
+        void atribuirLexema(char* lexema);
+        ~TipoId();
+    private:
+        char* lexema;
+};
 class AtributoVariavel:public Atributo{
     public:
         AtributoVariavel();
         virtual ~AtributoVariavel();
-        void atribuirTipo(int tipo);
+        void atribuirTipo(Tipo *tipo);
         void atribuiPonteiro(bool ponteiro);
+        void atribuiArranjo(int arranjo);
+        int pegarArranjo();
         bool pegarPonteiro();
-        int pegarTipo();
+        Tipo* pegarTipo();
     protected:
-        int tipo;
+        Tipo* tipo;
         bool ponteiro;
+        int arranjo;
 };
 class AtributoFuncao:public Atributo{
     public:
@@ -271,6 +292,8 @@ class AtributoClasse:public Atributo{
         Atributo *buscaVariavel(char *id);
         void atribuirHeranca(Atributo *heranca);
         Atributo *pegarHeranca();
+        TabelaSimbolos *pegarVariaveis();
+        TabelaSimbolos *pegarFuncoes();
     private:
         TabelaSimbolos *funcoes;
         TabelaSimbolos *variaveis;
@@ -281,6 +304,7 @@ class AtributoTipo:public Atributo{
         AtributoTipo();
         void adicionarVariavel(AtributoVariavel *var);
         Atributo *buscaVariavel(char *id);
+        TabelaSimbolos *pegaVariaveis();
         ~AtributoTipo();
     private:
         TabelaSimbolos *variaveis;

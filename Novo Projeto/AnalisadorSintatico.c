@@ -143,9 +143,9 @@ void ProgramaL(){
             if(listaPrograma){
                 NoPrograma *ultimo = listaPrograma;
                 while(ultimo->lista) ultimo = ultimo->lista;
-                ultimo->lista = ((NoPrograma*)declTipo);
+                ultimo->lista = declTipo;
             } else{
-                  listaPrograma = ((NoPrograma*)declTipo);
+                  listaPrograma = declTipo;
               }
             ProgramaL();
         } break;

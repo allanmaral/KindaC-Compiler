@@ -1,23 +1,25 @@
 # depslib dependency file v1.0
-1510252532 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.cpp
+1510595047 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.cpp
 	"AnalisadorSemantico.h"
 	"ASA.h"
 	"AnalisadorLexico.h"
+	"string.h"
+	"GerenciadorErro.h"
 
-1510251206 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.h
+1510574076 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsemantico.h
 	"Visitante.h"
 
-1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\visitante.h
+1510262824 c:\users\okty\documents\github\kindac-compiler\novo projeto\visitante.h
 	"ASA.h"
 
-1510253214 c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.h
+1510587368 c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.h
 	"TabelaSimbolos.h"
 
-1510251206 c:\users\okty\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
+1510594644 c:\users\okty\documents\github\kindac-compiler\novo projeto\tabelasimbolos.h
 	<stdlib.h>
 	<stdio.h>
 
-1510255066 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
+1510595709 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
 	"AnalisadorLexico.h"
 	"GerenciadorErro.h"
 	"ASA.h"
@@ -28,19 +30,19 @@
 	<ctype.h>
 	"TabelaSimbolos.h"
 
-1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
+1510593454 c:\users\okty\documents\github\kindac-compiler\novo projeto\gerenciadorerro.h
 
-1510253233 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.cpp
+1510595435 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\asa.cpp
 	"ASA.h"
 	"Visitante.h"
 	<string.h>
 
-1510253962 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
+1510594783 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\gerenciadorerro.c
 	"GerenciadorErro.h"
 	<stdio.h>
 	<stdlib.h>
 
-1510251206 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\main.c
+1510258475 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\main.c
 	<stdio.h>
 	<string.h>
 	"ASA.h"
@@ -53,13 +55,13 @@
 1510166794 c:\users\okty\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
 	"ASA.h"
 
-1510251206 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
+1510594660 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
 	"TabelaSimbolos.h"
 	"AnalisadorLexico.h"
 	<stdio.h>
 	<string.h>
 
-1510166794 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\visitante.cpp
+1510595916 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\visitante.cpp
 	<stdio.h>
 	<stdlib.h>
 	"ASA.h"
@@ -243,13 +245,15 @@
 
 1510239396 /home/emanuel/Documents/Github/KindaC/KindaC-Compiler/Novo Projeto/RepresentacaoIntermadiaria.h
 
-1510251206 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\visitanteri.cpp
+1510587368 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\visitanteri.cpp
 	"VisitanteRI.h"
-
-1510251206 c:\users\okty\documents\github\kindac-compiler\novo projeto\visitanteri.h
 	"RepresentacaoIntermadiaria.h"
 
-1510251206 c:\users\okty\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.h
+1510587368 c:\users\okty\documents\github\kindac-compiler\novo projeto\visitanteri.h
+	"RepresentacaoIntermadiaria.h"
+	"Visitante.h"
+
+1510587368 c:\users\okty\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.h
 
 1510174345 source:c:\users\okty\desktop\novo projeto\analisadorlexico.c
 	<stdio.h>
@@ -428,6 +432,12 @@
 	"RepresentacaoIntermadiaria.h"
 
 1510522603 source:/home/luisfelipe/Documents/Desenvolvimento/Github/KindaC_Compiler/Novo Projeto/RepresentacaoIntermadiaria.cpp
+	"RepresentacaoIntermadiaria.h"
+	"VisitanteRI.h"
+	<stdio.h>
+	<string.h>
+
+1510587368 source:c:\users\okty\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.cpp
 	"RepresentacaoIntermadiaria.h"
 	"VisitanteRI.h"
 	<stdio.h>

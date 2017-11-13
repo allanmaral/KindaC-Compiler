@@ -16,8 +16,10 @@ typedef enum {
     ErroSemanticoClasseHerdadaNaoExiste,
     ErroSemanticoRedefinicaoClasse,
     ErroSemanticoRedefinicaoFuncao,
-    ErroSemanticoTipoNaoDeclarado,
     ErroSemanticoConflitoDeDeclaracoes,
+    ErroSemanticoTipoVariavel,
+    ErroSemanticoRedefinicaoVariavel,
+    ErroSemanticoRedefinicaoTipo,
     ErroTamanhoEnumerador
 } Erros;
 

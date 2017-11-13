@@ -1,3 +1,12 @@
+typedef struct{
+	int k;
+	int j;
+	float kk;
+	teste p;
+	jkljk klk;
+}tteste;
+typedef struct{
+}tteste;
 class teste:teste{
 	public:
 		int k;
@@ -9,10 +18,10 @@ class teste2:teste{
 	public:
 		int j;
 };
-int funcao(int a, Ja a, int c){
+/*int funcao(int a, Ja a, int c){
 	int d;
 	d = a+c;
 	return c;
 }
 int funcao(){
-}
+}*/
