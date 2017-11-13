@@ -1,67 +1,79 @@
 #include "VisitanteRI.h"
 #include "RepresentacaoIntermadiaria.h"
 
-VisitanteTradutorASA::VisitanteTradutorASA(){
-    this->fp = new Temp("$fp");
-    this->sp = new Temp("$sp");
-    this->primeiroFragmento=NULL;
-    this->frameAtual=NULL;
+VisitanteTradutor::VisitanteTradutor() : ultimaStm(NULL), ultimaExp(NULL), classeAtual(NULL), funcaoAtual(NULL) {}
+VisitanteTradutor::~VisitanteTradutor() {}
+
+// Agora é abstrato, não deve entrar aqui
+void VisitanteTradutor::visita(NoPrograma          *prog   ) {
+    if(prog->lista) prog->lista->aceita(this);
 }
-VisitanteTradutorASA::~VisitanteTradutorASA(){
-    delete fp;
-    delete sp;
-    delete primeiroFragmento;
-    delete frameAtual;
-}
-void VisitanteTradutorASA::visita(NoPrograma  *prog){
+void VisitanteTradutor::visita(NoId                *id     ) { // REVER
 
 }
-Exp* VisitanteTradutorASA::visita(NoId                *id     ){}
-Exp* VisitanteTradutorASA::visita(NoLiteral           *lit    ){}
-Exp* VisitanteTradutorASA::visita(NoAscii             *asc    ){}
-Exp* VisitanteTradutorASA::visita(NoParenteses        *pa     ){}
-Exp* VisitanteTradutorASA::visita(NoConteudo          *con    ){}
-Exp* VisitanteTradutorASA::visita(NoEndereco          *ende   ){}
-Exp* VisitanteTradutorASA::visita(NoNumInteiro        *ni     ){}
-Exp* VisitanteTradutorASA::visita(NoNumReal           *nr     ){}
-Exp* VisitanteTradutorASA::visita(NoArranjo           *arr    ){}
-ListaExp* VisitanteTradutorASA::visita(NoListaExpr         *le){}
-ListaExp* VisitanteTradutorASA::visita(NoListaFormal       *lf){}
-ListaStm* VisitanteTradutorASA::visita(NoListaSentenca     *ls){}
-Stm* VisitanteTradutorASA::visita(NoSe                *se     ){}
-Stm* VisitanteTradutorASA::visita(NoSenao             *sen    ){}
-Stm* VisitanteTradutorASA::visita(NoEnquanto          *enq    ){}
-Stm* VisitanteTradutorASA::visita(NoBlocoCaso         *bc     ){}
-Stm* VisitanteTradutorASA::visita(NoDesvia            *des    ){}
-Stm* VisitanteTradutorASA::visita(NoEscolha           *sw     ){}
-Stm* VisitanteTradutorASA::visita(NoImprime           *imp    ){}
-Stm* VisitanteTradutorASA::visita(NoLeLinha           *leL    ){}
-Stm* VisitanteTradutorASA::visita(NoRetorna           *ret    ){}
-Stm* VisitanteTradutorASA::visita(NoLanca             *lan    ){}
-ListaStm* VisitanteTradutorASA::visita(NoEscopo       *esc    ){}
-Exp* VisitanteTradutorASA::visita(NoChamadaFuncao     *cha    ){}
-Stm* VisitanteTradutorASA::visita(NoTenta             *te     ){}
-Exp* VisitanteTradutorASA::visita(NoSentencaExpr      *senE   ){}
-void VisitanteTradutorASA::visita(NoDeclFuncao        *decF   ){}
-ListaExp* VisitanteTradutorASA::visita(NoListaId      *lid    ){}
-ListaAcesso* VisitanteTradutorASA::visita(NoDeclVariavel *decV ){}
-void VisitanteTradutorASA::visita(NoDeclTipo          *decT   ){}
-void VisitanteTradutorASA::visita(NoDeclLocalFuncao   *decLF  ){}
-ListaAcesso* VisitanteTradutorASA::visita(NoDeclLocalVariavel *decLV  ){}
-void VisitanteTradutorASA::visita(NoDeclLocalPublico   *decLPub){}
-void VisitanteTradutorASA::visita(NoDeclLocalPrivado  *decLpri){}
-ListaExp* VisitanteTradutorASA::visita(NoCorpoFuncao       *cF     ){}
-void VisitanteTradutorASA::visita(NoDeclClasse        *decC   ){}
-Exp* VisitanteTradutorASA::visita(NoExprUnaria    	*expU   ){}
-Exp* VisitanteTradutorASA::visita(NoExprBinaria       *expB   ){}
-Exp* VisitanteTradutorASA::visita(NoExprAtrib         *atr    ){}
-Exp* VisitanteTradutorASA::visita(NoExprAceCamp       *expAC  ){}
-Exp* VisitanteTradutorASA::visita(NoVerdadeiro        *tr     ){}
-Exp* VisitanteTradutorASA::visita(NoFalso             *fa     ){}
-Exp* VisitanteTradutorASA::visita(NoEsse              *th     ){}
-Exp* VisitanteTradutorASA::visita(NoNovo              *n      ){}
-void VisitanteTradutorASA::visita(NoTipo             *tp     ){}
-Exp* VisitanteTradutorASA::visita(NoColchetes         *nc     ){}
+void VisitanteTradutor::visita(NoLiteral           *lit    ) {
+
+}
+void VisitanteTradutor::visita(NoAscii             *asc    ) {
+    ultimaExp = new CONST((int)asc->entradaTabela->pegarLexema()[0]);
+}
+void VisitanteTradutor::visita(NoParenteses        *pa     ) {
+    if(pa->expressao) pa->expressao->aceita(this);
+}
+void VisitanteTradutor::visita(NoConteudo          *con    ) {
+    if(con->primario) con->primario->aceita(this);
+    ultimaExp = new MEM(ultimaExp);
+}
+void VisitanteTradutor::visita(NoEndereco          *ende   ) {
+    /// REVER COMO CONSEGUIR O DESLOCAMENTO DE UMA EXPRESSAO QUALQUER
+    if(ende->primario) ende->primario->aceita(this);
+    //ultimaExp = new CONST(ultimaExp);
+}
+void VisitanteTradutor::visita(NoNumInteiro        *ni     ) {
+    ultimaExp = new CONST(atoi(ni->entradaTabela->pegarLexema()));
+}
+void VisitanteTradutor::visita(NoNumReal           *nr     ) {
+    ultimaExp = new CONSTF(atof(nr->entradaTabela->pegarLexema()));
+}
+void VisitanteTradutor::visita(NoArranjo           *arr    ) {}
+void VisitanteTradutor::visita(NoListaExpr         *le     ) {}
+void VisitanteTradutor::visita(NoListaFormal       *lf     ) {}
+void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {}
+void VisitanteTradutor::visita(NoSe                *se     ) {}
+void VisitanteTradutor::visita(NoSenao             *sen    ) {}
+void VisitanteTradutor::visita(NoEnquanto          *enq    ) {}
+void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {}
+void VisitanteTradutor::visita(NoDesvia            *des    ) {}
+void VisitanteTradutor::visita(NoEscolha           *sw     ) {}
+void VisitanteTradutor::visita(NoImprime           *imp    ) {}
+void VisitanteTradutor::visita(NoLeLinha           *leL    ) {}
+void VisitanteTradutor::visita(NoRetorna           *ret    ) {}
+void VisitanteTradutor::visita(NoLanca             *lan    ) {}
+void VisitanteTradutor::visita(NoEscopo            *esc    ) {}
+void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {}
+void VisitanteTradutor::visita(NoTenta             *te     ) {}
+void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {}
+void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {}
+void VisitanteTradutor::visita(NoListaId           *lid    ) {}
+void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {}
+void VisitanteTradutor::visita(NoDeclTipo          *decT   ) {}
+void VisitanteTradutor::visita(NoDeclLocalFuncao   *decLF  ) {}
+void VisitanteTradutor::visita(NoDeclLocalVariavel *decLV  ) {}
+void VisitanteTradutor::visita(NoDeclLocalPublico  *decLPub) {}
+void VisitanteTradutor::visita(NoDeclLocalPrivado  *decLpri) {}
+void VisitanteTradutor::visita(NoCorpoFuncao       *cF     ) {}
+void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {}
+void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {}
+void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {}
+void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {}
+void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {}
+void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {}
+void VisitanteTradutor::visita(NoFalso             *fa     ) {}
+void VisitanteTradutor::visita(NoEsse              *th     ) {}
+void VisitanteTradutor::visita(NoNovo              *n      ) {}
+void VisitanteTradutor::visita(NoTipo              *tp     ) {}
+void VisitanteTradutor::visita(NoColchetes         *nc     ) {}
+
 
 
 

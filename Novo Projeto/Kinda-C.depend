@@ -367,7 +367,7 @@
 1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsemantico.h
 	"Visitante.h"
 
-1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.h
+1510516715 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitante.h
 	"ASA.h"
 
 1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.c
@@ -398,16 +398,17 @@
 1510500099 c:\users\allan\documents\github\kindac-compiler\novo projeto\analisadorsintatico.h
 	"ASA.h"
 
-1510508508 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.cpp
+1510542523 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.cpp
 	"RepresentacaoIntermadiaria.h"
 	"VisitanteRI.h"
 	<stdio.h>
 	<string.h>
 
-1510508545 c:\users\allan\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.h
+1510542550 c:\users\allan\documents\github\kindac-compiler\novo projeto\representacaointermadiaria.h
 
-1510508219 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitanteri.h
+1510542565 c:\users\allan\documents\github\kindac-compiler\novo projeto\visitanteri.h
 	"RepresentacaoIntermadiaria.h"
+	"Visitante.h"
 
 1510500099 source:c:\users\allan\documents\github\kindac-compiler\novo projeto\tabelasimbolos.cpp
 	"TabelaSimbolos.h"

@@ -24,6 +24,9 @@ void Fragmento::aceita(VisitanteRI *vri){
 Literal::Literal(char* literal) : literal(literal) {
     rotulo = new Rotulo();
 }
+
+Literal::Literal(char *literal, Rotulo *rotulo) : literal(literal), rotulo(rotulo) { }
+
 Literal::~Literal(){
     delete literal;
     delete proximoFragmento;

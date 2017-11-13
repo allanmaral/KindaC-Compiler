@@ -1,7 +1,8 @@
 #ifndef VISITANTERI_H
 #define VISITANTERI_H
 #include "RepresentacaoIntermadiaria.h"
-#include "ASA.h"
+#include "Visitante.h"
+
 class VisitanteRI{
       public:
           virtual ~VisitanteRI(){}
@@ -79,63 +80,61 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(SEQ *se);
           void visita(LABEL *l);
 };
-
-class VisitanteTradutorASA{///incompleto
+class VisitanteTradutor : Visitante {
     public:
-        Temp *sp;
-        Temp *fp;
-        Fragmento *primeiroFragmento;
-        FrameMIPS *frameAtual;
-
-    public:
-         VisitanteTradutorASA();
-		~VisitanteTradutorASA();
-		 void visita(NoPrograma          *prog   );
-		 Exp* visita(NoId                *id     );
-		 Exp* visita(NoLiteral           *lit    );
-		 Exp* visita(NoAscii             *asc    );
-		 Exp* visita(NoParenteses        *pa     );
-		 Exp* visita(NoConteudo          *con    );
-		 Exp* visita(NoEndereco          *ende   );
-		 Exp* visita(NoNumInteiro        *ni     );
-		 Exp* visita(NoNumReal           *nr     );
-		 Exp* visita(NoArranjo           *arr    );
-		 ListaExp* visita(NoListaExpr         *le);
-		 ListaExp* visita(NoListaFormal       *lf);
-		 ListaStm* visita(NoListaSentenca     *ls);
-		 Stm* visita(NoSe                *se     );
-		 Stm* visita(NoSenao             *sen    );
-		 Stm* visita(NoEnquanto          *enq    );
-		 Stm* visita(NoBlocoCaso         *bc     );
-		 Stm* visita(NoDesvia            *des    );
-		 Stm* visita(NoEscolha           *sw     );
-		 Stm* visita(NoImprime           *imp    );
-		 Stm* visita(NoLeLinha           *leL    );
-		 Stm* visita(NoRetorna           *ret    );
-		 Stm* visita(NoLanca             *lan    );
-		 ListaStm* visita(NoEscopo       *esc    );
-		 Exp* visita(NoChamadaFuncao     *cha    );
-		 Stm* visita(NoTenta             *te     );
-		 Exp* visita(NoSentencaExpr      *senE   );
-		 void visita(NoDeclFuncao        *decF   );
-		 ListaExp* visita(NoListaId      *lid    );
-		 ListaAcesso* visita(NoDeclVariavel *decV );
-		 void visita(NoDeclTipo          *decT   );
-		 void visita(NoDeclLocalFuncao   *decLF  );
-		 ListaAcesso* visita(NoDeclLocalVariavel *decLV  );
-		 void visita(NoDeclLocalPublico   *decLPub);
-		 void visita(NoDeclLocalPrivado  *decLpri);
-		 ListaExp* visita(NoCorpoFuncao       *cF     );
-		 void visita(NoDeclClasse        *decC   );
-		 Exp* visita(NoExprUnaria    	*expU   );
-		 Exp* visita(NoExprBinaria       *expB   );
-		 Exp* visita(NoExprAtrib         *atr    );
-		 Exp* visita(NoExprAceCamp       *expAC  );
-         Exp* visita(NoVerdadeiro        *tr     );
-         Exp* visita(NoFalso             *fa     );
-         Exp* visita(NoEsse              *th     );
-		 Exp* visita(NoNovo              *n      );
-		 void visita(NoTipo             *tp     );
-		 Exp* visita(NoColchetes         *nc     );
+		VisitanteTradutor();
+		~VisitanteTradutor();
+        void visita(NoPrograma          *prog   );
+		void visita(NoId                *id     );
+		void visita(NoLiteral           *lit    );
+		void visita(NoAscii             *asc    );
+		void visita(NoParenteses        *pa     );
+		void visita(NoConteudo          *con    );
+		void visita(NoEndereco          *ende   );
+		void visita(NoNumInteiro        *ni     );
+		void visita(NoNumReal           *nr     );
+		void visita(NoArranjo           *arr    );
+		void visita(NoListaExpr         *le     );
+		void visita(NoListaFormal       *lf     );
+		void visita(NoListaSentenca     *ls     );
+		void visita(NoSe                *se     );
+		void visita(NoSenao             *sen    );
+		void visita(NoEnquanto          *enq    );
+		void visita(NoBlocoCaso         *bc     );
+		void visita(NoDesvia            *des    );
+		void visita(NoEscolha           *sw     );
+		void visita(NoImprime           *imp    );
+		void visita(NoLeLinha           *leL    );
+		void visita(NoRetorna           *ret    );
+		void visita(NoLanca             *lan    );
+		void visita(NoEscopo            *esc    );
+		void visita(NoChamadaFuncao     *cha    );
+		void visita(NoTenta             *te     );
+		void visita(NoSentencaExpr      *senE   );
+		void visita(NoDeclFuncao        *decF   );
+		void visita(NoListaId           *lid    );
+		void visita(NoDeclVariavel      *decV   );
+		void visita(NoDeclTipo          *decT   );
+		void visita(NoDeclLocalFuncao   *decLF  );
+		void visita(NoDeclLocalVariavel *decLV  );
+		void visita(NoDeclLocalPublico  *decLPub);
+		void visita(NoDeclLocalPrivado  *decLpri);
+		void visita(NoCorpoFuncao       *cF     );
+		void visita(NoDeclClasse        *decC   );
+		void visita(NoExprUnaria    	*expU   );
+		void visita(NoExprBinaria       *expB   );
+		void visita(NoExprAtrib         *atr    );
+		void visita(NoExprAceCamp       *expAC  );
+        void visita(NoVerdadeiro        *tr     );
+        void visita(NoFalso             *fa     );
+        void visita(NoEsse              *th     );
+		void visita(NoNovo              *n      );
+		void visita(NoTipo              *tp     );
+		void visita(NoColchetes         *nc     );
+	private:
+	    Stm          *ultimaStm;
+	    Exp          *ultimaExp;
+	    NoDeclClasse *classeAtual;
+	    NoDeclFuncao *funcaoAtual;
 };
 #endif // VISITANTERI_H

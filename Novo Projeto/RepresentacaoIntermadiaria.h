@@ -91,6 +91,7 @@ class Literal : public Fragmento {
         Rotulo *rotulo;
     public:
         Literal(char* literal);
+        Literal(char *literal, Rotulo *rotulo);
         ~Literal();
         void aceita(VisitanteRI* vri);
 };
