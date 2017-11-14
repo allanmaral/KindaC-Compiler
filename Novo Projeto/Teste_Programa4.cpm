@@ -1,23 +1,21 @@
-typedef struct{
-	int k;
-	int j;
-	float kk;
-	teste p;
-	jkljk klk;
-}tteste;
-typedef struct{
-}tteste;
-class teste:teste{
+class teste{
 	public:
 		int k;
 		luis x9;
 };
+teste ok;
 class teste2:teste{
 	private:
 		kevin x9;
 	public:
 		int j;
 };
+typedef struct{
+	int k;
+	int j;
+	float kk;
+	teste p;
+}tteste;
 /*int funcao(int a, Ja a, int c){
 	int d;
 	d = a+c;

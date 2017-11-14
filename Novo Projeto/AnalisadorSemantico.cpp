@@ -7,13 +7,14 @@
 TabelaSimbolos *tabelavariaveisAtual = NULL;
 TabelaSimbolos *tabelafuncoesAtual = NULL;
 bool publico = true;
+bool verificandoClasse = false;
 
 AnalisadorSemantico::AnalisadorSemantico(){}
 AnalisadorSemantico::~AnalisadorSemantico(){}
 void AnalisadorSemantico::visita(NoPrograma* prog){
     if(NoDeclClasse* decC = dynamic_cast<NoDeclClasse*>(prog)) { decC->aceita(this); }
     else if(NoDeclTipo* decT = dynamic_cast<NoDeclTipo*>(prog)) { decT->aceita(this); }
-    //else if(NoDeclVariavel* decV = dynamic_cast<NoDeclVariavel*>(prog)) { decV->aceita(this); }
+    else if(NoDeclVariavel* decV = dynamic_cast<NoDeclVariavel*>(prog)) { decV->aceita(this); }
     //else if(NoDeclFuncao* decF = dynamic_cast<NoDeclFuncao*>(prog)) { decF->aceita(this); }
 }
 void AnalisadorSemantico::visita(NoId* id){
@@ -149,12 +150,18 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
         }
     }
     NoListaId *aux = decV->variaveis;
-    while(!aux){
+    while(aux){
         if(tabela->busca(aux->id->entradaTabela->pegarLexema())){
             saidaErro(ErroSemanticoRedefinicaoVariavel, decV->linha, decV->coluna, aux->id->entradaTabela->pegarLexema());
         }else{
             if(!erro){
-                AtributoVariavel *atr = new AtributoVariavel();
+                Atributo *atr;
+                if(verificandoClasse){
+                    atr = new AtributoVariavelClasse();
+                    ((AtributoVariavelClasse*)atr)->atribuiPublico(publico);
+                }else{
+                    atr = new AtributoVariavel();
+                }
                 Tipo *tp;
                 if(decV->tipo->primitivo == ID){
                     tp = new TipoId(decV->tipo->entradaTabela->pegarLexema(), ID);
@@ -162,7 +169,8 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
                     tp = new Tipo(decV->tipo->primitivo);
                 }
                 atr->atribuirLexema(aux->id->entradaTabela->pegarLexema());
-                atr->atribuirTipo(tp);
+                ((AtributoVariavel*)atr)->atribuirTipo(tp);
+                tabela->insere(atr->pegarLexema(), atr);
             }
         }
         aux = aux->lista;
@@ -180,6 +188,7 @@ void AnalisadorSemantico::visita(NoDeclTipo* decT){
         tabelavariaveisAtual = atr->pegaVariaveis();
         decT->campo->aceita(this);
         tabelavariaveisAtual = NULL;
+        atr->atribuirLexema(decT->id->entradaTabela->pegarLexema());
         obtemTabelaTipos()->insere(decT->id->entradaTabela->pegarLexema(), atr);
     }
     if(decT->lista){
@@ -230,8 +239,10 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
          erro = true;
     }
     atr = new AtributoClasse();
+    verificandoClasse = true;
     tabelavariaveisAtual = atr->pegarVariaveis();
     decC->local->aceita(this);
+    verificandoClasse = false;
     tabelavariaveisAtual = NULL;
     if(!erro){
         if(decC->heranca != NULL){
