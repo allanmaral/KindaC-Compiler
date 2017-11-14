@@ -304,7 +304,7 @@ class ESEQ : public Exp {
         void aceita(VisitanteRI *vri);
 };
 /// Especializações de Stm
-class ListaStm: public Stm{
+class ListaStm : public Stm{
     public:
         Stm *stm;
         ListaStm *proximoStm;
@@ -314,7 +314,7 @@ class ListaStm: public Stm{
         void aceita(VisitanteRI *v);
 
 };
-class MOVE{
+class MOVE : public Stm {
     public:
         Exp *e1;
         Exp *e2;
@@ -323,7 +323,7 @@ class MOVE{
         ~MOVE();
         void aceita(VisitanteRI *v);
 };
-class EXP{
+class EXP : public Stm {
     public:
         Exp *e;
     public:
@@ -331,7 +331,7 @@ class EXP{
         ~EXP();
         void aceita(VisitanteRI *vri);
 };
-class JUMP{
+class JUMP : public Stm {
      public:
         Exp *e;
      public:
@@ -339,7 +339,7 @@ class JUMP{
         ~JUMP();
         void aceita(VisitanteRI *vri);
 };
-class CJUMP{
+class CJUMP : public Stm {
     public:
         int op;
         Exp *e1;
@@ -351,7 +351,7 @@ class CJUMP{
         ~CJUMP();
         void aceita(VisitanteRI *v);
 };
-class SEQ{
+class SEQ : public Stm {
     public:
         Stm *s1;
         Stm *s2;
@@ -360,7 +360,7 @@ class SEQ{
         ~SEQ();
         void aceita(VisitanteRI *vri);
 };
-class LABEL{
+class LABEL : public Stm {
     public:
         Rotulo *n;
     public:

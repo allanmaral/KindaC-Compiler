@@ -8,11 +8,15 @@ VisitanteTradutor::~VisitanteTradutor() {}
 void VisitanteTradutor::visita(NoPrograma          *prog   ) {
     if(prog->lista) prog->lista->aceita(this);
 }
-void VisitanteTradutor::visita(NoId                *id     ) { // REVER
-
+void VisitanteTradutor::visita(NoId                *id     ) {
+    /// PEGAR DESLOCAMENTO
+    ultimaExp = new CONST(0);
 }
 void VisitanteTradutor::visita(NoLiteral           *lit    ) {
-
+    /// GERAR ROTULO
+    Rotulo  *r = new Rotulo();
+    Literal *l = new Literal(lit->entradaTabela->pegarLexema(), r);
+    ultimaExp  = new NAME(r);
 }
 void VisitanteTradutor::visita(NoAscii             *asc    ) {
     ultimaExp = new CONST((int)asc->entradaTabela->pegarLexema()[0]);
@@ -25,9 +29,12 @@ void VisitanteTradutor::visita(NoConteudo          *con    ) {
     ultimaExp = new MEM(ultimaExp);
 }
 void VisitanteTradutor::visita(NoEndereco          *ende   ) {
-    /// REVER COMO CONSEGUIR O DESLOCAMENTO DE UMA EXPRESSAO QUALQUER
+    /// REVER
     if(ende->primario) ende->primario->aceita(this);
-    //ultimaExp = new CONST(ultimaExp);
+    // Remove o acesso a memoria da expressão filha, pegando, assim, o endereço
+    if(MEM *mem = dynamic_cast<MEM*>(ultimaExp)) {
+        ultimaExp = mem->e;
+    }
 }
 void VisitanteTradutor::visita(NoNumInteiro        *ni     ) {
     ultimaExp = new CONST(atoi(ni->entradaTabela->pegarLexema()));
@@ -35,11 +42,49 @@ void VisitanteTradutor::visita(NoNumInteiro        *ni     ) {
 void VisitanteTradutor::visita(NoNumReal           *nr     ) {
     ultimaExp = new CONSTF(atof(nr->entradaTabela->pegarLexema()));
 }
-void VisitanteTradutor::visita(NoArranjo           *arr    ) {}
-void VisitanteTradutor::visita(NoListaExpr         *le     ) {}
-void VisitanteTradutor::visita(NoListaFormal       *lf     ) {}
-void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {}
-void VisitanteTradutor::visita(NoSe                *se     ) {}
+void VisitanteTradutor::visita(NoArranjo           *arr    ) {
+    /// REVER DEVERIA RETORNAR UM TAMANHO EM BYTES, OU NEM SER VISITADO
+}
+void VisitanteTradutor::visita(NoListaExpr         *le     ) {
+    /// LISTA DE EXP OU CONJUTO DE ESEC?
+    Exp      *e1 = NULL;
+    ListaExp *e2 = NULL;
+    if(le->expressao) {
+        le->expressao->aceita(this);
+        e1 = ultimaExp;
+    }
+    if(le->lista) {
+        le->lista->aceita(this);
+        e2 = static_cast<ListaExp*>(ultimaExp);
+    }
+    ultimaExp = new ListaExp(e1, e2);
+}
+void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
+    // Adiciona paramantros ao frame
+}
+void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
+    Stm *st1 = NULL, *st2 = NULL;
+    if(ls->sentenca) {
+        ls->sentenca->aceita(this);
+        st1 = ultimaStm;
+    }
+    if(ls->lista) {
+        ls->lista->aceita(this);
+        st2 = ultimaStm;
+    }
+    ultimaStm = new SEQ(st1, st2);
+}
+void VisitanteTradutor::visita(NoSe                *se     ) {
+    Rotulo *entaoSe = new Rotulo();
+    Rotulo *fimSe = new Rotulo();
+
+    se->expressao->aceita(this);
+    Exp *e1 = ultimaExp;
+
+    //Stm *s2 = new SEQ(new LABEL(entaoSe), new SEQ())
+
+    //ultimaStm = new SEQ(new CJUMP());
+}
 void VisitanteTradutor::visita(NoSenao             *sen    ) {}
 void VisitanteTradutor::visita(NoEnquanto          *enq    ) {}
 void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {}
@@ -60,19 +105,38 @@ void VisitanteTradutor::visita(NoDeclTipo          *decT   ) {}
 void VisitanteTradutor::visita(NoDeclLocalFuncao   *decLF  ) {}
 void VisitanteTradutor::visita(NoDeclLocalVariavel *decLV  ) {}
 void VisitanteTradutor::visita(NoDeclLocalPublico  *decLPub) {}
-void VisitanteTradutor::visita(NoDeclLocalPrivado  *decLpri) {}
+void VisitanteTradutor::visita(NoDeclLocalPrivado  *decLPri) {}
 void VisitanteTradutor::visita(NoCorpoFuncao       *cF     ) {}
 void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {}
 void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {}
 void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {}
 void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {}
 void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {}
-void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {}
-void VisitanteTradutor::visita(NoFalso             *fa     ) {}
-void VisitanteTradutor::visita(NoEsse              *th     ) {}
+void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
+    ultimaExp = new CONST(1);
+}
+void VisitanteTradutor::visita(NoFalso             *fa     ) {
+    ultimaExp = new CONST(0);
+}
+void VisitanteTradutor::visita(NoEsse              *th     ) {
+
+}
 void VisitanteTradutor::visita(NoNovo              *n      ) {}
 void VisitanteTradutor::visita(NoTipo              *tp     ) {}
-void VisitanteTradutor::visita(NoColchetes         *nc     ) {}
+void VisitanteTradutor::visita(NoColchetes         *nc     ) {
+    int tamanhoTipo;
+    Exp *base, *offset;
+    if(nc->primario) {
+        nc->primario->aceita(this);
+        base = ultimaExp;
+        // Descobre o tamanho
+    }
+    if(nc->expressao) {
+        nc->expressao->aceita(this);
+        offset = new BINOP(OP_MUL, new CONST(tamanhoTipo), ultimaExp);
+    }
+    ultimaExp = new BINOP(OP_ADD, base, offset);
+}
 
 
 
