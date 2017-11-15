@@ -1,6 +1,6 @@
 #include "VisitanteRI.h"
 #include "RepresentacaoIntermadiaria.h"
-
+#include "AnalisadorLexico.h"
 VisitanteTradutor::VisitanteTradutor() : ultimaStm(NULL), ultimaExp(NULL), classeAtual(NULL), funcaoAtual(NULL) {}
 VisitanteTradutor::~VisitanteTradutor() {}
 
@@ -75,18 +75,46 @@ void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
     ultimaStm = new SEQ(st1, st2);
 }
 void VisitanteTradutor::visita(NoSe                *se     ) {
-    Rotulo *entaoSe = new Rotulo();
+    Rotulo *entao = new Rotulo();
     Rotulo *fimSe = new Rotulo();
-
+    Rotulo *senao = new Rotulo();
     se->expressao->aceita(this);
     Exp *e1 = ultimaExp;
+    se->sentenca->aceita(this);
+    Stm *s1 = ultimaStm;
+    if(se->senao){
+        se->senao->aceita(this);
+        Stm *s2 = ultimaStm;
+        ultimaStm = new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),entao,senao),
+                          new SEQ(new LABEL(entao),
+                            new SEQ(new SEQ(s1,new JUMP(new NAME(fimSe))),
+                                     new SEQ(new LABEL(senao),
+                                        new SEQ(s2,new LABEL(fimSe))))));
+
+
+    } else{
+          ultimaStm = new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),entao,fimSe),
+                          new SEQ(new LABEL(entao),new SEQ(s1,new LABEL(fimSe))));
+      }
 
     //Stm *s2 = new SEQ(new LABEL(entaoSe), new SEQ())
 
     //ultimaStm = new SEQ(new CJUMP());
 }
 void VisitanteTradutor::visita(NoSenao             *sen    ) {}
-void VisitanteTradutor::visita(NoEnquanto          *enq    ) {}
+void VisitanteTradutor::visita(NoEnquanto          *enq    ) {
+	if(enq->expressao) enq->expressao->aceita(this);
+	Exp *e=ultimaExp;
+	if(enq->sentenca) enq->sentenca->aceita(this);
+	Stm *s=ultimaStm;
+	Rotulo *w = new Rotulo();
+	Rotulo *inicio= new Rotulo();
+	Rotulo *fim= new Rotulo();
+	ultimaStm=new SEQ(new LABEL(w),
+					new SEQ(new CJUMP(OP_NEQ,e,new CONST(0),inicio,fim),
+						new SEQ(new LABEL(inicio),new SEQ(s,
+								new SEQ(new JUMP(new NAME(w)),new LABEL(fim))))));
+}
 void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {}
 void VisitanteTradutor::visita(NoDesvia            *des    ) {}
 void VisitanteTradutor::visita(NoEscolha           *sw     ) {}
@@ -108,8 +136,72 @@ void VisitanteTradutor::visita(NoDeclLocalPublico  *decLPub) {}
 void VisitanteTradutor::visita(NoDeclLocalPrivado  *decLPri) {}
 void VisitanteTradutor::visita(NoCorpoFuncao       *cF     ) {}
 void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {}
-void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {}
-void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {}
+void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {
+	switch(expU->operador){
+        case NEGACAO:
+            break;
+        case ADICAO:
+            break;
+        case SUBTRACAO:
+            break;
+    }
+}
+void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
+	 switch(expB->operador){
+        case MENOR:
+            break;
+        case MENOR_IGUAL:
+            break;
+        case MAIOR:
+            break;
+        case MAIOR_IGUAL:
+            break;
+        case ATRIBUICAO:
+            break;
+        case E:{
+			Rotulo *l1 =  new Rotulo();
+			Rotulo *l2 =  new Rotulo();
+			Rotulo *l3 =  new Rotulo();
+			expB->exprEsquerda->aceita(this);
+			Exp *e1=ultimaExp;
+			expB->exprDireita->aceita(this);
+			Exp *e2=ultimaExp;
+			Temp *t = new Temp();
+			ultimaExp = new ESEQ(new SEQ(new MOVE(new TEMP(t),new CONST(0)),
+							new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),l1,l2),
+							  new SEQ(new LABEL(l1),new SEQ(new CJUMP(OP_NEQ,e2,new CONST(0),l3,l2),
+								new SEQ(new LABEL(l3),new SEQ(new MOVE(new TEMP(t),new CONST(1)),new LABEL(l2))))))),new TEMP(t));
+			 }break;
+        case E_COMERCIAL:
+            break;
+        case OU:{
+        	Rotulo *l1 =  new Rotulo();
+			Rotulo *l2 =  new Rotulo();
+			expB->exprEsquerda->aceita(this);
+			Exp *e1=ultimaExp;
+			expB->exprDireita->aceita(this);
+			Exp *e2=ultimaExp;
+			Temp *r = new Temp();
+			ultimaExp = new ESEQ(new SEQ(new MOVE(new TEMP(r),e1),
+							new SEQ(new CJUMP(OP_NEQ,e2,new CONST(0),l1,l2),
+								new SEQ(new LABEL(l1),
+									new SEQ(new MOVE(new TEMP(r),new CONST(1)),new LABEL(l2))))),new TEMP(r));
+
+			}break;
+        case OU_CC:
+            break;
+        case ADICAO:
+            break;
+        case SUBTRACAO:
+            break;
+        case ASTERISCO:
+            break;
+        case DIVISAO:
+            break;
+        case PORCENTO:
+            break;
+    }
+}
 void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {}
 void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {}
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {

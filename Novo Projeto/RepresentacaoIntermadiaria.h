@@ -63,6 +63,12 @@ typedef enum {
     OP_DLE,  // DESLOCAMENTO ESQUERDA
     OP_DLD,  // DESLOCAMENTO DIREITA
     OP_DLDA, // DESLOCAMENTO DIREITA ARTITIMETICO
+    OP_NEQ,
+    OP_EQ,
+    OP_LT,
+    OP_6T,
+    OP_LE,
+    OP_6E,
 } Operadores;
 
 //class Atributo;///apenas para compilar classe aoida nao foi implementada
