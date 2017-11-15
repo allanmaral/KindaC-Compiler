@@ -6,25 +6,28 @@
  *
  */
 char ErroLiteral[ErroTamanhoEnumerador][256] = {
-    "Erro: Caractere Invalido",
-    "Erro: Caractere Vazio",
-    "Erro: Faltando Caractere ' de terminacao",
-    "Erro: Faltando Caractere \" de terminacao",
-    "Erro: Final de Arquivo Inesperado",
-    "Erro: Bloco de Cometario Nao Terminado",
-    "Erro: Caractere Mal Formado",
+    "Erro: Caractere invalido",
+    "Erro: Caractere vazio",
+    "Erro: Faltando caractere ' de terminacao",
+    "Erro: Faltando caractere \" de terminacao",
+    "Erro: Final de arquivo inesperado",
+    "Erro: Bloco de cometario nao terminado",
+    "Erro: Caractere mal formado",
     "Erro: Expoente nao possui digitos",
-    "Erro: Arquivo Invalido",
+    "Erro: Arquivo invalido",
     "antes",
     "depois",
-    "Erro: Classe Herda ela Mesma",
-    "Erro: Classe Herdada nao Existe",
-    "Erro: Redefinicao da Classe ",
-    "Erro: Redefinicao da Funcao ",
-    "Erro: Paramentros com o Mesmo Nome ",
-    " nao e o Nome de um Tipo ",
+    "Erro: Classe herda ela mesma",
+    "Erro: Classe herdada nao existe",
+    "Erro: Redefinicao da classe ",
+    "Erro: Redefinicao da funcao ",
+    "Erro: Paramentros com o mesmo nome ",
+    " nao e o nome de um tipo ",
     "Erro: Redefinicao da variavel ",
-    "Erro Redefinicao do tipo "
+    "Erro Redefinicao do tipo ",
+    "Erro: Tamanho do arranjo tem que ser inteiro",
+    "Erro: O arranjo tem que conter um tamanho",
+    "Erro: Parametro e variavel com o mesmo nome "
 };
 
 /** \brief Armazena os dados do erro
@@ -121,6 +124,7 @@ void proximoErro(){
         case ErroSemanticoRedefinicaoVariavel:
         case ErroSemanticoConflitoDeDeclaracoes:
         case ErroSemanticoRedefinicaoTipo:
+        case ErroSemanticoVariavelIgualParametro:
             fprintf(stderr,"[l:%d, c:%d] - %s\"%s\"\n",linha, coluna, ErroLiteral[erro->codigo], erro->tokenEncontrado);
         break;
         case ErroSemanticoTipoVariavel:

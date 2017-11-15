@@ -226,7 +226,7 @@ NoSentencaExpr::NoSentencaExpr(NoExpr *expressao, int linha, int coluna){
 void NoSentencaExpr::aceita(Visitante *v){
     v->visita(this);
 }
-NoDeclFuncao::NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *parametros,
+NoDeclFuncao::NoDeclFuncao(NoTipo* tipo, bool ponteiro, NoId *id, NoListaFormal *parametros,
                            NoDeclVariavel *variaveis, NoListaSentenca *sentenca, NoDeclFuncao *lista, int linha, int coluna){
     this->linha = linha;
     this->coluna = coluna;

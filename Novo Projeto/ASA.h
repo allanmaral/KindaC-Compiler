@@ -218,11 +218,11 @@ class NoSentencaExpr:public NoSentenca{
 };
 class NoDeclFuncao:public NoPrograma{
     public:
-        NoDeclFuncao(NoTipo* tipo, int ponteiro, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis,
+        NoDeclFuncao(NoTipo* tipo, bool ponteiro, NoId *id, NoListaFormal *parametros, NoDeclVariavel *variaveis,
                      NoListaSentenca *sentenca, NoDeclFuncao *lista, int linha, int coluna);
         void aceita(Visitante *v);
         NoTipo* tipo;
-        int ponteiro;
+        bool ponteiro;
         NoId *id;
         NoListaFormal *parametros;
         NoDeclVariavel *variaveis;

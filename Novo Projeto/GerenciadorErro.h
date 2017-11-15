@@ -20,6 +20,9 @@ typedef enum {
     ErroSemanticoTipoVariavel,
     ErroSemanticoRedefinicaoVariavel,
     ErroSemanticoRedefinicaoTipo,
+    ErroSemanticoTamanhoArranjoReal,
+    ErroSemanticoArranjoVazio,
+    ErroSemanticoVariavelIgualParametro,
     ErroTamanhoEnumerador
 } Erros;
 

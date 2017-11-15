@@ -258,11 +258,18 @@ class AtributoFuncao:public Atributo{
         virtual ~AtributoFuncao();
         void adicionarParametro(AtributoVariavel *atributo);
         void adicionarVariavel(AtributoVariavel *atributo);
+        void atribuirParametros(TabelaSimbolos *parametros);
+        void atribuirVariaveis(TabelaSimbolos *variaveis);
+        void atribuirPonteiro(bool ponteiro);
+        bool pegarPonteiro();
+        TabelaSimbolos *pegarVariaveisLocais();
+        TabelaSimbolos *pegarParametros();
         Atributo *buscaParametro(char *id);
         Atributo *buscaVariavel(char *id);
     protected:
         TabelaSimbolos *parametros;
-        TabelaSimbolos *variveisLocais;
+        TabelaSimbolos *variaveisLocais;
+        bool ponteiro;
 };
 class AtributoFuncaoClasse:public AtributoFuncao{
     public:

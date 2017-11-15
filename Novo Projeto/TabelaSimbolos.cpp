@@ -374,23 +374,23 @@ Atributo* AtributoClasse::buscaVariavel(char* id){
 }
 AtributoFuncao::AtributoFuncao():Atributo(){
     parametros = new TabelaSimbolos();
-    variveisLocais = new TabelaSimbolos();
+    variaveisLocais = new TabelaSimbolos();
 }
 AtributoFuncao::~AtributoFuncao(){
     delete parametros;
-    delete variveisLocais;
+    delete variaveisLocais;
 }
 void AtributoFuncao::adicionarParametro(AtributoVariavel* atributo){
     parametros->insere(atributo->pegarLexema(),atributo);
 }
 void AtributoFuncao::adicionarVariavel(AtributoVariavel* atributo){
-    variveisLocais->insere(atributo->pegarLexema(),atributo);
+    variaveisLocais->insere(atributo->pegarLexema(),atributo);
 }
 Atributo* AtributoFuncao::buscaParametro(char* id){
     return parametros->busca(id);
 }
 Atributo* AtributoFuncao::buscaVariavel(char* id){
-    return variveisLocais->busca(id);
+    return variaveisLocais->busca(id);
 }
 void AtributoVariavel::atribuiArranjo(int arranjo){
     this->arranjo = arranjo;
@@ -423,7 +423,7 @@ AtributoFuncaoClasse::AtributoFuncaoClasse():AtributoFuncao(){
 }
 AtributoFuncaoClasse::~AtributoFuncaoClasse(){
     delete parametros;
-    delete variveisLocais;
+    delete variaveisLocais;
 }
 void AtributoFuncaoClasse::atribuiPublico(bool publico){
     this->publico = publico;
@@ -468,17 +468,17 @@ void Tipo::atribuirTipo(int tipo){
     this->tipo = tipo;
 }
 TipoId::TipoId(char* lexema, int primitivo):Tipo(primitivo){
-    lexema=(char*)malloc(sizeof(char) * (strlen(lexema) + 1));
+    this->lexema=(char*)malloc(sizeof(char) * (strlen(lexema) + 1));
     strcpy(this->lexema,lexema);
 }
 char* TipoId::pegarLexema(){
     return lexema;
 }
 void TipoId::atribuirLexema(char* lexema){
-    if(lexema != NULL){
+    if(this->lexema != NULL){
         delete []lexema;
     }
-    lexema=(char*)malloc(sizeof(char) * (strlen(lexema) + 1));
+    this->lexema=(char*)malloc(sizeof(char) * (strlen(lexema) + 1));
     strcpy(this->lexema,lexema);
 }
 TipoId::~TipoId(){
@@ -492,4 +492,22 @@ TabelaSimbolos* AtributoClasse::pegarFuncoes(){
 }
 TabelaSimbolos* AtributoTipo::pegaVariaveis(){
     return variaveis;
+}
+void AtributoFuncao::atribuirParametros(TabelaSimbolos* parametros){
+    this->parametros = parametros;
+}
+TabelaSimbolos* AtributoFuncao::pegarVariaveisLocais(){
+    return variaveisLocais;
+}
+TabelaSimbolos* AtributoFuncao::pegarParametros(){
+    return parametros;
+}
+void AtributoFuncao::atribuirVariaveis(TabelaSimbolos* variaveis){
+    this->variaveisLocais = variaveis;
+}
+void AtributoFuncao::atribuirPonteiro(bool ponteiro){
+    this->ponteiro = ponteiro;
+}
+bool AtributoFuncao::pegarPonteiro(){
+    return ponteiro;
 }

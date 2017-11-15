@@ -1,12 +1,24 @@
+class luis{
+	public:
+		bool x9;
+		int funcao(int k, float j){
+			int kkk;
+			float kk;
+		}
+};
+class kevyn{
+	public:
+		bool x9;
+};
 class teste{
 	public:
 		int k;
 		luis x9;
 };
-teste ok;
+teste ok[3];
 class teste2:teste{
 	private:
-		kevin x9;
+		kevyn x9;
 	public:
 		int j;
 };
@@ -16,10 +28,9 @@ typedef struct{
 	float kk;
 	teste p;
 }tteste;
-/*int funcao(int a, Ja a, int c){
+int funcao(int a, int c, int *kgada[5]){
 	int d;
-	d = a+c;
-	return c;
+	teste3 d;
+	/*d = a+c;
+	return c;*/
 }
-int funcao(){
-}*/
