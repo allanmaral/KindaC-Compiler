@@ -132,9 +132,15 @@ class VisitanteTradutor : Visitante {
 		void visita(NoTipo              *tp     );
 		void visita(NoColchetes         *nc     );
 	private:
+	    /// Retorna o prefixo do rotulo usando classe e função atuais
+	    char* RotuloBase();
+	    /// Cria um rotulo para o literal usando função e classe que ele pertence
+	    char* RotuloNome(const char* nome, int cont);
 	    Stm          *ultimaStm;
 	    Exp          *ultimaExp;
 	    NoDeclClasse *classeAtual;
 	    NoDeclFuncao *funcaoAtual;
+	    Rotulo       *ultimoFim;
+	    int contLiteral, contLaco;
 };
 #endif // VISITANTERI_H

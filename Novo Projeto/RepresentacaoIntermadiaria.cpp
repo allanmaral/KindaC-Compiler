@@ -28,7 +28,6 @@ Literal::Literal(char* literal) : literal(literal) {
 Literal::Literal(char *literal, Rotulo *rotulo) : literal(literal), rotulo(rotulo) { }
 
 Literal::~Literal(){
-    delete literal;
     delete proximoFragmento;
     delete rotulo;
 }
@@ -77,7 +76,7 @@ void ListaTemp::aceita(VisitanteRI *vri){
 int Rotulo::contador = 0;
 
 Rotulo::Rotulo() {
-    rotulo = new char[32];
+    rotulo = new char[19]; // Tamanho maximo 8: "rotulo$" + 10: max int + 1: '\0'
     sprintf(rotulo, "rotulo$%d", contador++);
 }
 Rotulo::Rotulo(char *rotulo) {

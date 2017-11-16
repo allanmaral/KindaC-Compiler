@@ -1,7 +1,11 @@
 #include "VisitanteRI.h"
 #include "RepresentacaoIntermadiaria.h"
 #include "AnalisadorLexico.h"
-VisitanteTradutor::VisitanteTradutor() : ultimaStm(NULL), ultimaExp(NULL), classeAtual(NULL), funcaoAtual(NULL) {}
+#include <string.h>
+VisitanteTradutor::VisitanteTradutor()
+    : ultimaStm(NULL), ultimaExp(NULL), classeAtual(NULL), funcaoAtual(NULL),
+      ultimoFim(NULL), contLiteral(0), contLaco(0) {}
+
 VisitanteTradutor::~VisitanteTradutor() {}
 
 // Agora é abstrato, não deve entrar aqui
@@ -13,10 +17,11 @@ void VisitanteTradutor::visita(NoId                *id     ) {
     ultimaExp = new CONST(0);
 }
 void VisitanteTradutor::visita(NoLiteral           *lit    ) {
-    /// GERAR ROTULO
-    Rotulo  *r = new Rotulo();
+    char* rot = RotuloNome("Literal", contLiteral++);
+    Rotulo  *r = new Rotulo(rot);
     Literal *l = new Literal(lit->entradaTabela->pegarLexema(), r);
     ultimaExp  = new NAME(r);
+    delete rot;
 }
 void VisitanteTradutor::visita(NoAscii             *asc    ) {
     ultimaExp = new CONST((int)asc->entradaTabela->pegarLexema()[0]);
@@ -75,49 +80,72 @@ void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
     ultimaStm = new SEQ(st1, st2);
 }
 void VisitanteTradutor::visita(NoSe                *se     ) {
-    Rotulo *entao = new Rotulo();
-    Rotulo *fimSe = new Rotulo();
-    Rotulo *senao = new Rotulo();
+    char *rEntao = RotuloNome("EntaoSe", ++contLaco);
+    char *rFimSe = RotuloNome("FimSe",   contLaco);
+    Rotulo *entao = new Rotulo(rEntao);
+    Rotulo *fimSe = new Rotulo(rFimSe);
+    Rotulo *rUltimoFim = ultimoFim; // Empilha ultimo fim
+    ultimoFim = fimSe;
+    delete rEntao;
+    delete rFimSe;
     se->expressao->aceita(this);
     Exp *e1 = ultimaExp;
     se->sentenca->aceita(this);
     Stm *s1 = ultimaStm;
     if(se->senao){
+        char* rSenao = RotuloNome("SeNao", contLaco);
+        Rotulo *senao = new Rotulo(rSenao);
+        delete rSenao;
         se->senao->aceita(this);
         Stm *s2 = ultimaStm;
         ultimaStm = new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),entao,senao),
-                          new SEQ(new LABEL(entao),
-                            new SEQ(new SEQ(s1,new JUMP(new NAME(fimSe))),
-                                     new SEQ(new LABEL(senao),
-                                        new SEQ(s2,new LABEL(fimSe))))));
-
-
+                            new SEQ(new LABEL(entao),
+                                    new SEQ(new SEQ(s1,new JUMP(new NAME(fimSe))),
+                                            new SEQ(new LABEL(senao),
+                                                    new SEQ(s2,new LABEL(fimSe))))));
     } else{
           ultimaStm = new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),entao,fimSe),
-                          new SEQ(new LABEL(entao),new SEQ(s1,new LABEL(fimSe))));
+                              new SEQ(new LABEL(entao),new SEQ(s1,new LABEL(fimSe))));
       }
-
-    //Stm *s2 = new SEQ(new LABEL(entaoSe), new SEQ())
-
-    //ultimaStm = new SEQ(new CJUMP());
+    ultimoFim = rUltimoFim; // Desempilha ultimo fim
 }
-void VisitanteTradutor::visita(NoSenao             *sen    ) {}
+void VisitanteTradutor::visita(NoSenao             *sen    ) {
+    if(sen->sentenca) sen->sentenca->aceita(this);
+}
 void VisitanteTradutor::visita(NoEnquanto          *enq    ) {
+	char *rTeste = RotuloNome("TesteEnquanto", ++contLaco);
+	char *rInicio = RotuloNome("InicioEnquanto", contLaco);
+	char *rFim = RotuloNome("FimEnquanto", contLaco);
+	Rotulo *w = new Rotulo(rTeste);
+	Rotulo *inicio= new Rotulo(rInicio);
+	Rotulo *fim= new Rotulo(rFim);
+	delete rTeste, delete rInicio, delete rFim;
+	Rotulo *rUltimoFim = ultimoFim; // Empilha o ultimo fim na pilha
+	ultimoFim = fim;
 	if(enq->expressao) enq->expressao->aceita(this);
 	Exp *e=ultimaExp;
 	if(enq->sentenca) enq->sentenca->aceita(this);
 	Stm *s=ultimaStm;
-	Rotulo *w = new Rotulo();
-	Rotulo *inicio= new Rotulo();
-	Rotulo *fim= new Rotulo();
 	ultimaStm=new SEQ(new LABEL(w),
-					new SEQ(new CJUMP(OP_NEQ,e,new CONST(0),inicio,fim),
-						new SEQ(new LABEL(inicio),new SEQ(s,
-								new SEQ(new JUMP(new NAME(w)),new LABEL(fim))))));
+					  new SEQ(new CJUMP(OP_NEQ,e,new CONST(0),inicio,fim),
+						      new SEQ(new LABEL(inicio),
+                                      new SEQ(s, new SEQ(new JUMP(new NAME(w)), new LABEL(fim))))));
+    ultimoFim = rUltimoFim; // Desempilha o ultimo fim
 }
-void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {}
-void VisitanteTradutor::visita(NoDesvia            *des    ) {}
-void VisitanteTradutor::visita(NoEscolha           *sw     ) {}
+void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {
+    /// SEQUENCIA DE IFs?
+    if(bc->lista) bc->lista->aceita(this);
+}
+void VisitanteTradutor::visita(NoDesvia            *des    ) {
+    ultimaExp = new JUMP(new NAME(ultimoFim));
+}
+void VisitanteTradutor::visita(NoEscolha           *sw     ) {
+    if(sw->expressao) sw->expressao->aceita(this);
+    TEMP *t = new TEMP(new Temp()); /// SALVA ISSO NO VISITOR
+    Exp *resultado = new MOVE(t, ultimaExp);
+    if(sw->blocoCaso) sw->blocoCaso->aceita(this);
+    ultimaStm = new SEQ(resultado, ultimaExp);
+}
 void VisitanteTradutor::visita(NoImprime           *imp    ) {}
 void VisitanteTradutor::visita(NoLeLinha           *leL    ) {}
 void VisitanteTradutor::visita(NoRetorna           *ret    ) {}
@@ -186,7 +214,6 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
 							new SEQ(new CJUMP(OP_NEQ,e2,new CONST(0),l1,l2),
 								new SEQ(new LABEL(l1),
 									new SEQ(new MOVE(new TEMP(r),new CONST(1)),new LABEL(l2))))),new TEMP(r));
-
 			}break;
         case OU_CC:
             break;
@@ -228,6 +255,33 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
         offset = new BINOP(OP_MUL, new CONST(tamanhoTipo), ultimaExp);
     }
     ultimaExp = new BINOP(OP_ADD, base, offset);
+}
+/// Retorna o prefixo do rotulo usando classe e função atuais
+char* VisitanteTradutor::RotuloBase(){
+    char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
+    int tamanho = 0;
+    if(classeAtual) {
+        t1 = classeAtual->id->entradaTabela->pegarLexema();
+        tamanho = strlen(t1);
+    }
+    if(funcaoAtual) {
+        if(t1) t2 = funcaoAtual->id->entradaTabela->pegarLexema(), tamanho += strlen(t2);
+        else   t1 = funcaoAtual->id->entradaTabela->pegarLexema(), tamanho += strlen(t1);
+    }
+    rotulo = new char[tamanho+3];
+    if(t2) sprintf(rotulo, "%s_%s_", t1, t2);
+    else if(t1) sprintf(rotulo, "%s_", t1);
+         else   rotulo[0] = '\0';
+    return rotulo;
+}
+/// Cria um rotulo para o literal usando função e classe que ele pertence
+char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
+    char *rotuloBase = NULL, *rotuloFinal = NULL;
+    rotuloBase = RotuloBase();
+    rotuloFinal = new char[strlen(rotuloBase) + strlen(nome) + 11]; //10: max int, 1: char com '\0'
+    sprintf(rotuloFinal, "%s%s_%d", rotuloBase, nome, cont);
+    delete rotuloBase;
+    return rotuloFinal;
 }
 
 
