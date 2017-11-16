@@ -1,4 +1,4 @@
-class luis{
+/*class luis{
 	public:
 		bool x9;
 		int funcao(int k, float j){
@@ -27,10 +27,10 @@ typedef struct{
 	int j;
 	float kk;
 	teste p;
-}tteste;
+}tteste;*/
 int funcao(int a, int c, int *kgada[5]){
 	int d;
-	teste3 d;
+	teste3 *d[3.5], f, g, h;
 	/*d = a+c;
 	return c;*/
 }

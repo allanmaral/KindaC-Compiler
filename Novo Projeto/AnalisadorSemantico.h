@@ -44,6 +44,7 @@ class AnalisadorSemantico : public Visitante
 		void visita(NoDeclLocalPrivado  *decLpri);
 		void visita(NoCorpoFuncao       *cF     );
 		void visita(NoDeclClasse        *decC   );
+		void visita(NoExpr              *expr   );
 		void visita(NoExprUnaria    	*expU   );
 		void visita(NoExprBinaria       *expB   );
 		void visita(NoExprAtrib         *atr    );

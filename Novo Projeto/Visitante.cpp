@@ -73,8 +73,14 @@ void VisitanteImpressao::visita(NoArranjo *arr){
     nivel--;
 }
 void VisitanteImpressao::visita(NoListaExpr *le){
-    if(le->expressao)le->expressao->aceita(this);
-    if(le->lista)le->lista->aceita(this);
+    nivel++;
+    calculaNivel();
+    fprintf(stdout, "-LISTA_EXPRESSAO\n");
+    if(le->expressao)
+        le->expressao->aceita(this);
+    if(le->lista)
+        le->lista->aceita(this);
+    nivel--;
 }
 void VisitanteImpressao::visita(NoListaFormal *lf){
     nivel++;
@@ -197,7 +203,7 @@ void VisitanteImpressao::visita(NoDeclFuncao *decF){
     fprintf(stdout, "-DEC_FUNCAO\n");
     if(decF->tipo) decF->tipo->aceita(this);
     if(decF->ponteiro) { nivel++; calculaNivel(); fprintf(stdout, "-PONTEIRO\n"); nivel--; }
-    if(decF->id) decF->id->aceita(this);
+    if(decF->id)decF->id->aceita(this);
     if(decF->parametros) decF->parametros->aceita(this);
     if(decF->variaveis) decF->variaveis->aceita(this);
     if(decF->corpoFunc) decF->corpoFunc->aceita(this);
@@ -273,6 +279,8 @@ void VisitanteImpressao::visita(NoCorpoFuncao *cF){
     nivel++;
     calculaNivel();
     fprintf(stdout, "-CORPO_FUNCAO\n");
+    if(cF->id) cF->id->aceita(this);
+    if(cF->listaid) cF->listaid->aceita(this);
     if(cF->listaExpr) cF->listaExpr->aceita(this);
     nivel--;
     if(cF->lista) cF->lista->aceita(this);

@@ -188,7 +188,13 @@ void AnalisadorSemantico::visita(NoDeclFuncao* decF){
             tabelavariaveisAtual = NULL;
             tabelaParametro = NULL;
         }
-        decF->corpoFunc->aceita(this);
+        if(decF->corpoFunc){
+            tabelavariaveisAtual = atr->pegarVariaveisLocais();
+            tabelaParametro = atr->pegarParametros();
+            decF->corpoFunc->aceita(this);
+            tabelavariaveisAtual = NULL;
+            tabelaParametro = NULL;
+        }
         if(decF->lista){
             decF->lista->aceita(this);
         }
@@ -302,6 +308,72 @@ void AnalisadorSemantico::visita(NoDeclLocalPrivado* decLpri){
     }
 }
 void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
+    if(cF->listaExpr){
+        NoExprBinaria *bin = dynamic_cast<NoExprBinaria*>(cF->listaExpr->expressao);
+        if(bin && bin->operador == ASTERISCO){
+            NoId *tipo = (NoId*)bin->exprEsquerda;
+            if(!obtemTabelaClasses()->busca(tipo->entradaTabela->pegarLexema())){
+                if(!obtemTabelaTipos()->busca(tipo->entradaTabela->pegarLexema())){
+                    saidaErro(ErroSemanticoTipoVariavel, tipo->linha, tipo->coluna, tipo->entradaTabela->pegarLexema());
+                }
+            }else{
+                AtributoVariavel *atr = new AtributoVariavel();
+                TipoId *tipoid = new TipoId(tipo->entradaTabela->pegarLexema(), ID);
+                atr->atribuiPonteiro(true);
+                atr->atribuirTipo(tipoid);
+                NoId *variavel = dynamic_cast<NoId*>(bin->exprDireita);
+                if(variavel){
+                    if(!tabelavariaveisAtual->busca(variavel->entradaTabela->pegarLexema())){
+                        if(!tabelaParametro->busca(variavel->entradaTabela->pegarLexema())){
+                            atr->atribuirLexema(variavel->entradaTabela->pegarLexema());
+                            tabelavariaveisAtual->insere(atr->pegarLexema(), atr);
+                        }else{
+                            saidaErro(ErroSemanticoRedefinicaoVariavel, variavel->linha, variavel->coluna, atr->pegarLexema());
+                            delete atr;
+                        }
+                    }else{
+                        saidaErro(ErroSemanticoRedefinicaoVariavel, variavel->linha, variavel->coluna, atr->pegarLexema());
+                        delete atr;
+                    }
+                }else{
+                    NoColchetes *arranjo = dynamic_cast<NoColchetes*>(bin->exprDireita);
+                    if(arranjo){
+                        NoId *id = dynamic_cast<NoId*>(arranjo->primario);
+                        if(id && !tabelavariaveisAtual->busca(id->entradaTabela->pegarLexema())){
+                            if(!tabelaParametro->busca(id->entradaTabela->pegarLexema())){
+                                atr->atribuirLexema(id->entradaTabela->pegarLexema());
+                                NoNumInteiro *inteiro = dynamic_cast<NoNumInteiro*>(arranjo->expressao);
+                                if(inteiro){
+                                    atr->atribuiArranjo(atoi(inteiro->entradaTabela->pegarLexema()));
+                                    tabelavariaveisAtual->insere(atr->pegarLexema(), atr);
+                                }else{
+                                    saidaErro(ErroSemanticoTamanhoArranjoReal, arranjo->expressao->linha, arranjo->expressao->coluna);
+                                    delete atr;
+                                }
+                            }else{
+                                saidaErro(ErroSemanticoRedefinicaoVariavel, arranjo->expressao->linha, arranjo->expressao->coluna, atr->pegarLexema());
+                                delete atr;
+                            }
+                        }else{
+                            saidaErro(ErroSemanticoRedefinicaoVariavel, arranjo->expressao->linha, arranjo->expressao->coluna, atr->pegarLexema());
+                            delete atr;
+                        }
+                    }
+                }
+            }
+        }else{
+            NoId *id = dynamic_cast<NoId*>(cF->listaExpr->expressao);
+            if(id){
+                if(!obtemTabelaClasses()->busca(id->entradaTabela->pegarLexema())){
+                    if(!obtemTabelaTipos()->busca(id->entradaTabela->pegarLexema())){
+                        saidaErro(ErroSemanticoTipoVariavel, id->linha, id->coluna, id->entradaTabela->pegarLexema());
+                    }
+                }else{
+
+                }
+            }
+        }
+    }
 
 }
 void AnalisadorSemantico::visita(NoDeclClasse* decC){

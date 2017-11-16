@@ -136,8 +136,8 @@ void ProgramaL(){
             casarOuPular(PONTO_VIRGULA, sincPrograma);
             NoDeclVariavel *variavel = new NoDeclVariavel(tipo, listaId, pegarLinha(), pegarColuna(), DeclVar());
             casarOuPular(CHAVE_DIR, sincPrograma);
-            casarOuPular(ID, sincPrograma);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincPrograma);
             casarOuPular(PONTO_VIRGULA, sincPrograma);
             NoDeclTipo *declTipo = new NoDeclTipo(variavel, id, pegarLinha(), pegarColuna());
             if(listaPrograma){
@@ -153,8 +153,8 @@ void ProgramaL(){
         case CARACTERE:     case ID: {
             NoTipo *tipo = Tipo();
             int ponteiro = Ponteiro();
-            casarOuPular(ID, sincPrograma);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincPrograma);
             ProgramaA(tipo, ponteiro, id);
         } break;
         case CLASSE: {
@@ -244,8 +244,8 @@ NoDeclClasse *DeclClasse(){
     switch(tokenAtual){
         case CLASSE:{
             casar(CLASSE);
-            casarOuPular(ID, sincDeclClasse);
             NoId *idClasse = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincDeclClasse);
             return DeclClasseL(idClasse);
         } break;
     }
@@ -266,8 +266,8 @@ NoDeclClasse *DeclClasseL(NoId *idClasseDeclarada){
         } break;
         case DOIS_PONTOS:{
             casar(DOIS_PONTOS);
-            casarOuPular(ID, sincDeclClasseL);
             NoId *idHeranca = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincDeclClasseL);
             casarOuPular(CHAVE_ESQ, sincDeclClasseL);
             NoDeclLocal *declLocal = DeclLocal();
             casarOuPular(CHAVE_DIR, sincDeclClasseL);
@@ -293,8 +293,8 @@ NoDeclLocal *DeclLocal(){
         case CARACTERE:     case ID:{
             NoTipo *tipo =  Tipo();
             int ponteiro = Ponteiro();
-            casarOuPular(ID, sincDeclLocal);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincDeclLocal);
             return DeclLocalL(tipo, ponteiro, id);
         } break;
         case PUBLICO:{
@@ -366,8 +366,8 @@ void CorpoFunc(NoDeclFuncao *funcao){
             NoListaExpr *listaExpr = ListaExpr();
             NoId *id = NULL;
             if(tokenAtual == ID){
-                casar(ID);
                 id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+                casar(ID);
             }
             NoListaId *listaid = ListaIdCont();
             casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
@@ -392,8 +392,8 @@ void CorpoFunc(NoDeclFuncao *funcao){
         case CARACTERE:{
             NoTipo *tipo = TipoL();
             int ponteiro = Ponteiro();
-            casarOuPular(ID, sincCorpoFunc);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincCorpoFunc);
             NoArranjo *arranjo = Arranjo();
             NoListaId *listaId = new NoListaId(ponteiro,id,arranjo,ListaIdCont(), pegarLinha(), pegarColuna());
             casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
@@ -419,8 +419,8 @@ NoDeclVariavel *DeclVar(){
         case CARACTERE:     case ID: {
             NoTipo *tipo = Tipo();
             int ponteiro = Ponteiro();
-            casarOuPular(ID, sincDeclVar);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincDeclVar);
             NoArranjo *arranjo = Arranjo();
             NoListaId *listaId = new NoListaId(ponteiro, id, arranjo, ListaIdCont(), pegarLinha(), pegarColuna());
             casarOuPular(PONTO_VIRGULA, sincDeclVar);
@@ -440,8 +440,8 @@ NoListaId *ListaId(){
         case ID:
         case ASTERISCO: {
             int ponteriro = Ponteiro();
-            casarOuPular(ID, sincListaId);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincListaId);
             NoArranjo *arranjo = Arranjo();
             return new NoListaId(ponteriro, id, arranjo, ListaIdCont(), pegarLinha(), pegarColuna());
         }
@@ -463,8 +463,8 @@ NoListaId *ListaIdCont(){
         case VIRGULA: {
             casar(VIRGULA);
             int ponteiro = Ponteiro();
-            casarOuPular(ID, followListaIdCont);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, followListaIdCont);
             NoArranjo *arranjo = Arranjo();
             return new NoListaId(ponteiro, id, arranjo, ListaIdCont(), pegarLinha(), pegarColuna());
         } break;
@@ -521,8 +521,8 @@ NoListaFormal *ListaForma(){
         case CARACTERE:     case ID: {
             NoTipo *tipo = Tipo();
             int ponteiro = Ponteiro();
-            casarOuPular(ID, sincListaForma);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincListaForma);
             NoArranjo *arranjo = Arranjo();
             return new NoListaFormal(tipo, ponteiro, id, arranjo, ListaFormaCont(), pegarLinha(), pegarColuna());
         } break;
@@ -541,8 +541,8 @@ NoListaFormal *ListaFormaCont(){
             casar(VIRGULA);
             NoTipo *tipo = Tipo();
             int ponteiro = Ponteiro();
-            casarOuPular(ID, sincListaFormaCont);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, sincListaFormaCont);
             NoArranjo *arranjo = Arranjo();
             return new NoListaFormal(tipo, ponteiro, id, arranjo, ListaFormaCont(), pegarLinha(), pegarColuna());
         } break;
@@ -1330,8 +1330,8 @@ NoPrimario *PrimarioL(){
         } break;
         case NOVO: {
             casar(NOVO);
-            casarOuPular(ID, followPrimarioL);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casarOuPular(ID, followPrimarioL);
             casarOuPular(PARENTESE_ESQ, followPrimarioL);
             NoListaExpr *listaExpr = ListaExpr();
             casarOuPular(PARENTESE_DIR, followPrimarioL);
@@ -1355,8 +1355,8 @@ NoPrimario *PrimarioID(){
     fprintf(stdout, "PrimarioID\n");
     switch(tokenAtual){
         case ID: {
-            casar(ID);
             NoId *id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+            casar(ID);
             return PrimarioIDL(id);
         } break;
         default:
