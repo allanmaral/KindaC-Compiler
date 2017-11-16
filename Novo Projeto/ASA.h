@@ -18,8 +18,8 @@ class NoErro{
 class NoPrograma:public NoErro{
     public:
         virtual void aceita(Visitante *v) = 0;
-        NoPrograma *lista;
         virtual ~NoPrograma() = 0;
+        NoPrograma *lista;
 };
 class NoSentenca:public NoErro{
     public:

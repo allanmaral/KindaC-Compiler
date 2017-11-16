@@ -28,9 +28,9 @@ typedef struct{
 	float kk;
 	teste p;
 }tteste;*/
-int funcao(int a, int c, int *kgada[5]){
-	int d;
-	teste3 *d[3.5], f, g, h;
+int funcao(int a, int b, int *kgada[5]){
+	int k;
+	teste3 *d, f, g, h;
 	/*d = a+c;
 	return c;*/
 }

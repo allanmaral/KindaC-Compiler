@@ -11,6 +11,8 @@ bool publico = true;
 bool verificandoClasse = false;
 bool erro = false;
 int retorno = 0;
+Atributo *valorRetorno = NULL;
+int verificandoCorpo = false;
 
 AnalisadorSemantico::AnalisadorSemantico(){}
 AnalisadorSemantico::~AnalisadorSemantico(){}
@@ -21,7 +23,10 @@ void AnalisadorSemantico::visita(NoPrograma* prog){
     else if(NoDeclFuncao* decF = dynamic_cast<NoDeclFuncao*>(prog)) { decF->aceita(this); }
 }
 void AnalisadorSemantico::visita(NoId* id){
-
+    if(verificandoCorpo){
+        retorno = ID;
+        valorRetorno = id->entradaTabela;
+    }
 }
 void AnalisadorSemantico::visita(NoLiteral* lit){
 
@@ -55,7 +60,11 @@ void AnalisadorSemantico::visita(NoArranjo* arr){
     }
 }
 void AnalisadorSemantico::visita(NoListaExpr* le){
-
+    if(verificandoCorpo){
+        if(le->expressao){
+            le->expressao->aceita(this);
+        }
+    }
 }
 void AnalisadorSemantico::visita(NoListaFormal* lf){
     TabelaSimbolos *tabela = tabelavariaveisAtual;
@@ -308,7 +317,11 @@ void AnalisadorSemantico::visita(NoDeclLocalPrivado* decLpri){
     }
 }
 void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
+
     if(cF->listaExpr){
+        cF->listaExpr->aceita(this);
+    }
+    /*if(cF->listaExpr){
         NoExprBinaria *bin = dynamic_cast<NoExprBinaria*>(cF->listaExpr->expressao);
         if(bin && bin->operador == ASTERISCO){
             NoId *tipo = (NoId*)bin->exprEsquerda;
@@ -373,7 +386,7 @@ void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
                 }
             }
         }
-    }
+    }*/
 
 }
 void AnalisadorSemantico::visita(NoDeclClasse* decC){
@@ -422,7 +435,14 @@ void AnalisadorSemantico::visita(NoExprUnaria* expU){
 
 }
 void AnalisadorSemantico::visita(NoExprBinaria* expB){
-
+    if(verificandoCorpo){
+        if(expB->exprEsquerda){
+            expB->exprEsquerda->aceita(this);
+            if(retorno == ID){
+                if(!obtemTabelaClasses()->busca())
+            }
+        }
+    }
 }
 void AnalisadorSemantico::visita(NoExprAtrib* atr){
 
