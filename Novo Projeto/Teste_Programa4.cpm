@@ -1,7 +1,7 @@
-/*class luis{
+class luis{
 	public:
 		bool x9;
-		int funcao(int k, float j){
+		bool funcao(int k, float j){
 			int kkk;
 			float kk;
 		}
@@ -27,10 +27,10 @@ typedef struct{
 	int j;
 	float kk;
 	teste p;
-}tteste;*/
+}tteste;
 int funcao(int a, int b, int *kgada[5]){
 	int k;
-	teste3 *d, f, g, h;
+	tteste3 f[3];
 	/*d = a+c;
 	return c;*/
 }

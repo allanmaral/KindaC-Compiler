@@ -363,15 +363,16 @@ void CorpoFunc(NoDeclFuncao *funcao){
         case LITERAL:       case E_COMERCIAL:   case VERDADEIRO:
         case FALSO:         case ESSE:          case NOVO:
         case ADICAO:        case SUBTRACAO:     case ASCII:{
-            NoListaExpr *listaExpr = ListaExpr();
+            NoExpr *expressao = Expr();
             NoId *id = NULL;
             if(tokenAtual == ID){
                 id = new NoId(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
                 casar(ID);
             }
             NoListaId *listaid = ListaIdCont();
+            NoArranjo *arranjo = Arranjo();
             casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
-            NoCorpoFuncao *corpo = new NoCorpoFuncao(id, listaid, listaExpr, pegarLinha(), pegarColuna());
+            NoCorpoFuncao *corpo = new NoCorpoFuncao(id, listaid, expressao, arranjo, pegarLinha(), pegarColuna());
             if(funcao->corpoFunc){ // Insere no final da lista
                 NoCorpoFuncao *ultimo = funcao->corpoFunc;
                 while(ultimo->lista) ultimo = ultimo->lista;

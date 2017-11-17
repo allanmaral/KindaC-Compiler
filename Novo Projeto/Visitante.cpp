@@ -280,8 +280,9 @@ void VisitanteImpressao::visita(NoCorpoFuncao *cF){
     calculaNivel();
     fprintf(stdout, "-CORPO_FUNCAO\n");
     if(cF->id) cF->id->aceita(this);
+    if(cF->arranjo) cF->arranjo->aceita(this);
     if(cF->listaid) cF->listaid->aceita(this);
-    if(cF->listaExpr) cF->listaExpr->aceita(this);
+    if(cF->expressao) cF->expressao->aceita(this);
     nivel--;
     if(cF->lista) cF->lista->aceita(this);
 }
