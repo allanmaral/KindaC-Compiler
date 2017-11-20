@@ -141,6 +141,9 @@ class VisitanteTradutor : Visitante {
 	    NoDeclClasse *classeAtual;
 	    NoDeclFuncao *funcaoAtual;
 	    Rotulo       *ultimoFim;
-	    int contLiteral, contLaco;
+	    FrameMIPS    *frame;
+	    Fragmento    *listaFragmento;
+	    Temp         *resultadoEscolha;
+	    int contLiteral, contLaco, contCaso, contEscolha;
 };
 #endif // VISITANTERI_H

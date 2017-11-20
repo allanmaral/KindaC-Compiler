@@ -75,6 +75,7 @@ typedef enum {
 class Fragmento {
     public:
         Fragmento* proximoFragmento;
+        void InsereLista(Fragmento* frag);
     public:
         Fragmento();
         virtual ~Fragmento();

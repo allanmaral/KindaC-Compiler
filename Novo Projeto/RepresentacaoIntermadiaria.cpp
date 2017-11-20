@@ -8,6 +8,12 @@ Fragmento::Fragmento() : proximoFragmento(NULL) {}
 
 Fragmento::~Fragmento(){};
 
+void Fragmento::InsereLista(Fragmento* frag) {
+    Fragmento *ultimo = this;
+    while(ultimo->proximoFragmento) ultimo = ultimo->proximoFragmento;
+    ultimo->proximoFragmento = frag;
+}
+
 Procedimento::Procedimento(Frame* frame, Stm* corpo) : frame(frame), corpo(corpo) {}
 
 Procedimento::~Procedimento(){
