@@ -53,6 +53,7 @@ void VisitanteTradutor::visita(NoNumReal           *nr     ) {
 }
 void VisitanteTradutor::visita(NoArranjo           *arr    ) {
     /// REVER DEVERIA RETORNAR UM TAMANHO EM BYTES, OU NEM SER VISITADO
+
 }
 void VisitanteTradutor::visita(NoListaExpr         *le     ) {
     /// LISTA DE EXP OU CONJUTO DE ESEC?
@@ -217,8 +218,17 @@ void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {
     expU->expressao->aceita(this);
     Exp *e1=ultimaExp;
 	switch(expU->operador){
-        case NEGACAO:
-            break;
+        case NEGACAO:{
+            Temp *r = new Temp();
+            Rotulo *nV = new Rotulo();
+            Rotulo *nF = new Rotulo();
+            Rotulo *fim = new Rotulo();
+            ultimaExp = new ESEQ(new SEQ(new CJUMP(OP_EQ,e1,new CONST(1),nV,nF),
+                            new SEQ(new LABEL(nV),
+                                    new SEQ(new SEQ(new MOVE(new TEMP(r),new CONST(0)),new JUMP(new NAME(fim))),
+                                            new SEQ(new LABEL(nF),
+                                                    new SEQ(new MOVE(new TEMP(r),new CONST(1)),new LABEL(fim)))))),new TEMP(r));
+            }break;
         case ADICAO:
             ultimaExp = new BINOP(OP_ADD,e1,new CONST(0));
             break;
@@ -289,8 +299,10 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
         case DIVISAO:
             ultimaExp = new BINOP(OP_DIV,e1,e2);
             break;
-        case PORCENTO:
-            break;
+        case PORCENTO:{
+            Temp *r = new Temp();
+            ultimaExp = new ESEQ(new MOVE(new TEMP(r),new BINOP(OP_DIV,e1,e2)),new TEMP(r));
+        }break;
     }
 }
 void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
@@ -390,6 +402,9 @@ void VisitanteImpressaoRI::visita(Literal *l){
     if(l->proximoFragmento) l->proximoFragmento->aceita(this);
 }
 void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
+    nivel++;
+    imprimeNivel();
+    fprintf(stdout,"-VAR\n");
     nivel++;
     imprimeNivel();
     if(var->tipo) {
