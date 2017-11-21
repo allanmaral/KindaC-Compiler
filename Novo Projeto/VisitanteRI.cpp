@@ -196,8 +196,13 @@ void VisitanteTradutor::visita(NoTenta             *te     ) {}
 void VisitanteTradutor::visita(NoEscopo            *esc    ) {
     esc->lista->aceita(this);
 }
-void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {}
-void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {}
+void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
+    ///Precisa definir padrão de rotulos
+}
+void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
+    if(senE->expressao) senE->expressao->aceita(this);
+    ultimaStm = new EXP(ultimaExp);
+}
 void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {}
 void VisitanteTradutor::visita(NoListaId           *lid    ) {}
 void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {}
@@ -341,12 +346,21 @@ char* VisitanteTradutor::RotuloBase(){
 }
 /// Cria um rotulo para o literal usando função e classe que ele pertence
 char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
-    char *rotuloBase = NULL, *rotuloFinal = NULL;
-    rotuloBase = RotuloBase();
-    rotuloFinal = new char[strlen(rotuloBase) + strlen(nome) + 11]; //10: max int, 1: char com '\0'
-    sprintf(rotuloFinal, "%s%s_%d", rotuloBase, nome, cont);
-    delete rotuloBase;
-    return rotuloFinal;
+    char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
+    int tamanho = strlen(nome) + 14; //10: max int, 3: '_', 1: char com '\0';
+    if(classeAtual) {
+        t1 = classeAtual->id->entradaTabela->pegarLexema();
+        tamanho += strlen(t1);
+    }
+    if(funcaoAtual) {
+        if(t1) t2 = funcaoAtual->id->entradaTabela->pegarLexema(), tamanho += strlen(t2);
+        else   t1 = funcaoAtual->id->entradaTabela->pegarLexema(), tamanho += strlen(t1);
+    }
+    rotulo = new char[tamanho];
+    if(t2) sprintf(rotulo, "%s_%s_%s_%d", t1, t2, nome, cont);
+    else if(t1) sprintf(rotulo, "%s_%s_%d", t1, nome, cont);
+         else   rotulo[0] = '\0';
+    return rotulo;
 }
 
 
