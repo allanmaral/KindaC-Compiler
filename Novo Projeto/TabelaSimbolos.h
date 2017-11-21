@@ -6,6 +6,8 @@
 #ifndef TABELASIMBOLOS_H
 #define TABELASIMBOLOS_H
 
+class AcessoLocal;
+
 class Atributo{
     public:
         Atributo();
@@ -244,13 +246,16 @@ class AtributoVariavel:public Atributo{
         void atribuirTipo(Tipo *tipo);
         void atribuiPonteiro(bool ponteiro);
         void atribuiArranjo(int arranjo);
+        void atribuiAcesso(AcessoLocal *acesso);
         int pegarArranjo();
         bool pegarPonteiro();
         Tipo* pegarTipo();
+        AcessoLocal *pegarAcesso();
     protected:
         Tipo* tipo;
         bool ponteiro;
         int arranjo;
+        AcessoLocal *acesso;
 };
 class AtributoFuncao:public Atributo{
     public:
@@ -264,6 +269,7 @@ class AtributoFuncao:public Atributo{
         bool pegarPonteiro();
         TabelaSimbolos *pegarVariaveisLocais();
         TabelaSimbolos *pegarParametros();
+        Atributo *busca(char *id);
         Atributo *buscaParametro(char *id);
         Atributo *buscaVariavel(char *id);
     protected:

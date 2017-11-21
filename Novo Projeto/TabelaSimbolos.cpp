@@ -386,6 +386,11 @@ void AtributoFuncao::adicionarParametro(AtributoVariavel* atributo){
 void AtributoFuncao::adicionarVariavel(AtributoVariavel* atributo){
     variaveisLocais->insere(atributo->pegarLexema(),atributo);
 }
+Atributo* AtributoFuncao::busca(char* id) {
+    Atributo *resultado = parametros->busca(id);
+    if(!resultado) resultado = variaveisLocais->busca(id);
+    return resultado;
+}
 Atributo* AtributoFuncao::buscaParametro(char* id){
     return parametros->busca(id);
 }
@@ -402,6 +407,7 @@ AtributoVariavel::AtributoVariavel():Atributo(){
     tipo = 0;
     ponteiro = false;
     arranjo = 0;
+    acesso = NULL;
 }
 AtributoVariavel::~AtributoVariavel(){
     delete tipo;
