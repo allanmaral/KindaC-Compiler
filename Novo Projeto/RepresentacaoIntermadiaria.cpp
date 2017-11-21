@@ -53,11 +53,13 @@ int Temp::contador = 0;
 
 Temp::Temp(){
     temp = new char[32];
-    sprintf(temp, "temp$%d", contador++);
+    sprintf(temp, "$temp%d", contador++);
 }
 Temp::Temp(char *_temp) : temp(_temp) {
-    temp = new char[strlen(_temp)+1];
-    strcpy(this->temp, _temp);
+    this->temp = new char[strlen(_temp)+2];
+    strcpy((this->temp)+1, _temp);
+    this->temp[0] = '$';
+
 }
 Temp::~Temp(){
     delete temp;

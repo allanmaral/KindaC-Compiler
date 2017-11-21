@@ -188,7 +188,20 @@ void VisitanteTradutor::visita(NoLeLinha           *leL    ) {
     ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"le_linha")), new ListaExp(ultimaExp, NULL)));
 }
 void VisitanteTradutor::visita(NoRetorna           *ret    ) {
-    /// PODE PEGAR UM ROTULO DE RETORNO DO FRAME ATUAL
+    // Cria um rotulo para o epilogo da função
+    Exp* e1 = NULL;
+    if(ret->expressao) {
+        ret->expressao->aceita(this);
+        e1 = ultimaExp;
+    } else {
+        e1 = new CONST(0);
+    }
+    char* rotuloReg = RotuloNome("Retorno", 0);
+    char* rotulo = RotuloNome("Epilogo", 0);
+    ultimaStm = new SEQ(new MOVE(new TEMP(new Temp(rotuloReg)), e1),
+                        new JUMP(new NAME(new Rotulo(rotulo))));
+    delete rotuloReg;
+    delete rotulo;
 }
 
 void VisitanteTradutor::visita(NoLanca             *lan    ) {}
@@ -199,6 +212,11 @@ void VisitanteTradutor::visita(NoEscopo            *esc    ) {
 }
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
     ///Precisa definir padrão de rotulos
+    cha->parametros->aceita(this);
+    // Descobre rotulo da função
+    char* rotulo = NULL;
+    ListaExp* listaParametros = static_cast<ListaExp*>(ultimaExp);
+    ultimaExp = new CALL(new NAME(new Rotulo(rotulo)), listaParametros);
 }
 void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
     if(senE->expressao) senE->expressao->aceita(this);
@@ -312,7 +330,9 @@ void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
     Exp *e2=ultimaExp;
     ultimaStm = new MOVE(e1,e2);
 }
-void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {}
+void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {
+
+}
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
     ultimaExp = new CONST(1);
 }
@@ -320,9 +340,19 @@ void VisitanteTradutor::visita(NoFalso             *fa     ) {
     ultimaExp = new CONST(0);
 }
 void VisitanteTradutor::visita(NoEsse              *th     ) {
-
+    ultimaExp = new MEM(new TEMP(new Temp((char*)"fp")));
 }
-void VisitanteTradutor::visita(NoNovo              *n      ) {}
+void VisitanteTradutor::visita(NoNovo              *n      ) {
+    Temp* t = new Temp();
+    char* rotulo = n->id->entradaTabela->pegarLexema();
+    if(n->listaExpr) n->listaExpr->aceita(this);
+    ultimaExp = new ESEQ(new MOVE(new TEMP(t),
+                                  new CALL(new NAME(new Rotulo((char*)"malloc")),
+                                           new ListaExp(new CONST(0), NULL))), /// REVER TAMANHO CLASSE
+                         new ESEQ(new EXP(new CALL(new NAME(new Rotulo("construtor")),
+                                                   new ListaExp(new TEMP(t), static_cast<ListaExp*>(ultimaExp)))),
+                                  new TEMP(t)));
+}
 void VisitanteTradutor::visita(NoTipo              *tp     ) {}
 void VisitanteTradutor::visita(NoColchetes         *nc     ) {
     int tamanhoTipo;
