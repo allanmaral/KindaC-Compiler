@@ -66,9 +66,9 @@ typedef enum {
     OP_NEQ,
     OP_EQ,
     OP_LT,
-    OP_6T,
+    OP_GT,
     OP_LE,
-    OP_6E,
+    OP_GE,
 } Operadores;
 
 //class Atributo;///apenas para compilar classe aoida nao foi implementada

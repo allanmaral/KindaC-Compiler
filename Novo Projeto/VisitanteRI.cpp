@@ -137,7 +137,7 @@ void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {
     if(bc->lista) bc->lista->aceita(this);
 }
 void VisitanteTradutor::visita(NoDesvia            *des    ) {
-    ultimaExp = new JUMP(new NAME(ultimoFim));
+    //ultimaExp = new JUMP(new NAME(ultimoFim));
 }
 void VisitanteTradutor::visita(NoEscolha           *sw     ) {
     if(sw->expressao) sw->expressao->aceita(this);
@@ -165,35 +165,50 @@ void VisitanteTradutor::visita(NoDeclLocalPrivado  *decLPri) {}
 void VisitanteTradutor::visita(NoCorpoFuncao       *cF     ) {}
 void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {}
 void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {
+    expU->expressao->aceita(this);
+    Exp *e1=ultimaExp;
 	switch(expU->operador){
         case NEGACAO:
             break;
         case ADICAO:
+            ultimaExp = new BINOP(OP_ADD,e1,new CONST(0));
             break;
         case SUBTRACAO:
+            ultimaExp = new BINOP(OP_SUB,e1,new CONST(0));
             break;
     }
 }
 void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
+    expB->exprEsquerda->aceita(this);
+    Exp *e1=ultimaExp;
+    expB->exprDireita->aceita(this);
+    Exp *e2=ultimaExp;
 	 switch(expB->operador){
-        case MENOR:
-            break;
-        case MENOR_IGUAL:
-            break;
-        case MAIOR:
-            break;
-        case MAIOR_IGUAL:
-            break;
+        case MENOR: case MENOR_IGUAL: case MAIOR: case MAIOR_IGUAL:{
+            int opRelacional;
+            if(expB->operador==MENOR){
+              opRelacional = OP_LT;
+            }else if(expB->operador==MENOR_IGUAL){
+                     opRelacional = OP_LE;
+                   }else if(expB->operador==MAIOR){
+                            opRelacional = OP_GT;
+                          }else if(expB->operador==MAIOR_IGUAL){
+                                   opRelacional = OP_GE;
+                                 }
+            Rotulo *l1 =  new Rotulo();
+			Rotulo *l2 =  new Rotulo();
+			Temp *r = new Temp();
+			ultimaExp = new ESEQ(new SEQ(new MOVE(new TEMP(r),new CONST(1)),
+                            new SEQ(new CJUMP(opRelacional,e1,e2,l1,l2),
+                                new SEQ(new LABEL(l2),
+                                    new SEQ(new MOVE(new TEMP(r),new CONST(0)),new LABEL(l1))))),new TEMP(r));
+            }break;
         case ATRIBUICAO:
             break;
         case E:{
 			Rotulo *l1 =  new Rotulo();
 			Rotulo *l2 =  new Rotulo();
 			Rotulo *l3 =  new Rotulo();
-			expB->exprEsquerda->aceita(this);
-			Exp *e1=ultimaExp;
-			expB->exprDireita->aceita(this);
-			Exp *e2=ultimaExp;
 			Temp *t = new Temp();
 			ultimaExp = new ESEQ(new SEQ(new MOVE(new TEMP(t),new CONST(0)),
 							new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),l1,l2),
@@ -205,10 +220,6 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
         case OU:{
         	Rotulo *l1 =  new Rotulo();
 			Rotulo *l2 =  new Rotulo();
-			expB->exprEsquerda->aceita(this);
-			Exp *e1=ultimaExp;
-			expB->exprDireita->aceita(this);
-			Exp *e2=ultimaExp;
 			Temp *r = new Temp();
 			ultimaExp = new ESEQ(new SEQ(new MOVE(new TEMP(r),e1),
 							new SEQ(new CJUMP(OP_NEQ,e2,new CONST(0),l1,l2),
@@ -218,18 +229,28 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
         case OU_CC:
             break;
         case ADICAO:
+            ultimaExp = new BINOP(OP_ADD,e1,e2);
             break;
         case SUBTRACAO:
+            ultimaExp = new BINOP(OP_SUB,e1,e2);
             break;
         case ASTERISCO:
+            ultimaExp = new BINOP(OP_MUL,e1,e2);
             break;
         case DIVISAO:
+            ultimaExp = new BINOP(OP_DIV,e1,e2);
             break;
         case PORCENTO:
             break;
     }
 }
-void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {}
+void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
+    atr->exprEsquerda->aceita(this);
+    Exp *e1=ultimaExp;
+    atr->exprDireita->aceita(this);
+    Exp *e2=ultimaExp;
+    ultimaStm = new MOVE(e1,e2);
+}
 void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {}
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
     ultimaExp = new CONST(1);
@@ -310,7 +331,7 @@ void VisitanteImpressaoRI::visita(Literal *l){
     if(l->rotulo) fprintf(stdout,"-LITERAL:%s : %s\n",l->rotulo->obterString(),l->literal);
     if(l->proximoFragmento) l->proximoFragmento->aceita(this);
 }
-void VisitanteImpressaoRI::visita(Variavel *var){
+void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
     nivel++;
     imprimeNivel();
     if(var->tipo) {
@@ -347,7 +368,7 @@ void VisitanteImpressaoRI::visita(ListaAcesso *listaAcesso){
     if(listaAcesso->acessoLocal) listaAcesso->acessoLocal->aceita(this);
     if(listaAcesso->proximoAcesso) listaAcesso->proximoAcesso->aceita(this);
 }
-void VisitanteImpressaoRI::visita(FrameMIPS *quadroMIPS){
+void VisitanteImpressaoRI::visita(FrameMIPS *quadroMIPS){///Verificar
     if(quadroMIPS->rotulo) fprintf(stdout,"Rotulo.%s\n",quadroMIPS->rotulo->rotulo);
     if(quadroMIPS->tempRetorno) fprintf(stdout,"Temp Retorno.%s\n",quadroMIPS->tempRetorno->temp);
     fprintf(stdout,"Deslocamento Parametros.%d\n",quadroMIPS->deslocamentoParametros);
@@ -401,7 +422,7 @@ void VisitanteImpressaoRI::visita(TEMP *temp){
 void VisitanteImpressaoRI::visita(BINOP *bop){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-BINOP.%d\n",bop->op);
+    fprintf(stdout,"-BINOP.%d\n",bop->op);/// Arrumar impressão do literal do operador
     if(bop->e1) bop->e1->aceita(this);
     if(bop->e2) bop->e2->aceita(this);
     nivel--;
@@ -461,7 +482,7 @@ void VisitanteImpressaoRI::visita(JUMP *jp){
 void VisitanteImpressaoRI::visita(CJUMP *cjp){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-CJUMP.%d\n",cjp->op);
+    fprintf(stdout,"-CJUMP.%d\n",cjp->op);/// Arrumar impressão do literal do operador
     if(cjp->e1) cjp->e1->aceita(this);
     if(cjp->e2) cjp->e2->aceita(this);
     if(cjp->verdadeiro) cjp->verdadeiro->aceita(this);

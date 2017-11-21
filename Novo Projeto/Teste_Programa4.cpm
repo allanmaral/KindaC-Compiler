@@ -1,9 +1,8 @@
-/*class luis{
+class luis{
 	public:
 		bool x9;
 		int funcao(int k, float j){
-			int kkk;
-			float kk;
+			return +a;
 		}
 };
 class kevyn{
