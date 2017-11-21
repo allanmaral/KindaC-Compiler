@@ -4,7 +4,8 @@
 #include <string.h>
 VisitanteTradutor::VisitanteTradutor()
     : ultimaStm(NULL), ultimaExp(NULL), classeAtual(NULL), funcaoAtual(NULL),
-      ultimoFim(NULL), contLiteral(0), contLaco(0) {}
+      ultimoFim(NULL), frame(NULL), listaFragmento(NULL), resultadoEscolha(NULL),
+      contLiteral(0), contLaco(0), contCaso(0), contEscolha(0) {}
 
 VisitanteTradutor::~VisitanteTradutor() {}
 
@@ -22,6 +23,9 @@ void VisitanteTradutor::visita(NoLiteral           *lit    ) {
     Literal *l = new Literal(lit->entradaTabela->pegarLexema(), r);
     ultimaExp  = new NAME(r);
     delete rot;
+    // Insere na lista de fragmentos
+    if(listaFragmento) listaFragmento->InsereLista(l);
+    else listaFragmento = l;
 }
 void VisitanteTradutor::visita(NoAscii             *asc    ) {
     ultimaExp = new CONST((int)asc->entradaTabela->pegarLexema()[0]);
@@ -134,25 +138,65 @@ void VisitanteTradutor::visita(NoEnquanto          *enq    ) {
 }
 void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {
     /// SEQUENCIA DE IFs?
-    if(bc->lista) bc->lista->aceita(this);
+    char *rCaso = RotuloNome("EntaoCaso", ++contCaso);
+    Rotulo *entao = new Rotulo(rCaso);
+    delete rCaso;
+    bc->num->aceita(this);
+    Exp *e1 = ultimaExp;
+    bc->listaSentenca->aceita(this);
+    Stm *s1 = ultimaStm;
+    if(bc->lista){
+        char* rSenao = RotuloNome("SeNaoCaso", contCaso);
+        Rotulo *senao = new Rotulo(rSenao);
+        delete rSenao;
+        bc->lista->aceita(this);
+        Stm *s2 = ultimaStm;
+        ultimaStm = new SEQ(new CJUMP(OP_EQ,new TEMP(resultadoEscolha),e1,entao,senao),
+                            new SEQ(new LABEL(entao),
+                                    new SEQ(new SEQ(s1,new JUMP(new NAME(ultimoFim))),
+                                            new SEQ(new LABEL(senao),
+                                                    s2))));
+    } else{
+          ultimaStm = new SEQ(new CJUMP(OP_EQ,new TEMP(resultadoEscolha),e1,entao,ultimoFim),
+                              new SEQ(new LABEL(entao),new SEQ(s1,new LABEL(ultimoFim))));
+      }
 }
 void VisitanteTradutor::visita(NoDesvia            *des    ) {
-    //ultimaExp = new JUMP(new NAME(ultimoFim));
+    ultimaStm = new JUMP(new NAME(ultimoFim));
+
 }
 void VisitanteTradutor::visita(NoEscolha           *sw     ) {
     if(sw->expressao) sw->expressao->aceita(this);
-    TEMP *t = new TEMP(new Temp()); /// SALVA ISSO NO VISITOR
-    Exp *resultado = new MOVE(t, ultimaExp);
+    resultadoEscolha = new Temp();
+    Stm *resultado = new MOVE(new TEMP(resultadoEscolha), ultimaExp);
+    contCaso = 0;
+    char *rFim = RotuloNome("FimEscolha", ++contEscolha);
+	Rotulo *fim= new Rotulo(rFim);
+	Rotulo *tFim = ultimoFim;
+	ultimoFim = fim;
     if(sw->blocoCaso) sw->blocoCaso->aceita(this);
-    ultimaStm = new SEQ(resultado, ultimaExp);
+    ultimaStm = new SEQ(resultado, ultimaStm);
+    ultimoFim = tFim;
 }
-void VisitanteTradutor::visita(NoImprime           *imp    ) {}
-void VisitanteTradutor::visita(NoLeLinha           *leL    ) {}
-void VisitanteTradutor::visita(NoRetorna           *ret    ) {}
+void VisitanteTradutor::visita(NoImprime           *imp    ) {
+    imp->listaExpr->aceita(this);
+    ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"imprime")), static_cast<ListaExp*>(ultimaExp)));
+}
+void VisitanteTradutor::visita(NoLeLinha           *leL    ) {
+    leL->expressao->aceita(this);
+    ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"le_linha")), new ListaExp(ultimaExp, NULL)));
+}
+void VisitanteTradutor::visita(NoRetorna           *ret    ) {
+    /// PODE PEGAR UM ROTULO DE RETORNO DO FRAME ATUAL
+}
+
 void VisitanteTradutor::visita(NoLanca             *lan    ) {}
-void VisitanteTradutor::visita(NoEscopo            *esc    ) {}
-void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {}
 void VisitanteTradutor::visita(NoTenta             *te     ) {}
+
+void VisitanteTradutor::visita(NoEscopo            *esc    ) {
+    esc->lista->aceita(this);
+}
+void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {}
 void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {}
 void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {}
 void VisitanteTradutor::visita(NoListaId           *lid    ) {}
