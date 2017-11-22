@@ -30,7 +30,8 @@ typedef struct{
 }tteste;
 int funcao(int a, int b, int *kgada[5]){
 	int k;
-	tteste3 f[3];
+	tteste t[9], t, *cacete;
+	tteste *f[d], *g[5], h, i[5];
 	/*d = a+c;
 	return c;*/
 }
