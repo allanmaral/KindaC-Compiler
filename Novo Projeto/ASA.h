@@ -228,7 +228,7 @@ class NoDeclFuncao:public NoPrograma{
         NoDeclVariavel *variaveis;
         NoListaSentenca *sentenca;
         NoCorpoFuncao *corpoFunc;
-        TabelaSimbolos variaveisLocais;
+        AtributoFuncao *atr;
 };
 class NoListaId:public NoErro{
     public:

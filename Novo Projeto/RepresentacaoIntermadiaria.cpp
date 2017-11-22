@@ -126,6 +126,9 @@ ListaAcesso::~ListaAcesso() {
 void ListaAcesso::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+Frame::Frame(){}
+Frame::~Frame(){}
+
 FrameMIPS::FrameMIPS(Rotulo *rotulo, ListaAcesso *variaveisLocais, int desVarLocais, int desParametros)
                      : rotulo(rotulo), variaveisLocais(variaveisLocais), numeroParametros(0),
                        deslocamentoVariaveisLocais(desVarLocais), deslocamentoParametros(desParametros) {

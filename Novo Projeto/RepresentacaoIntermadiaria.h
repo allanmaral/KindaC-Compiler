@@ -2,6 +2,7 @@
 #define REP_INTERMEDIARIA_H
 
 class Atributo;
+class AtributoFuncao;
 
 class VisitanteRI;
 
@@ -182,7 +183,7 @@ class Frame{
         virtual void aceita(VisitanteRI *vri) = 0;
 };
 
-class FrameMIPS{
+class FrameMIPS : public Frame{
      public:
         Rotulo *rotulo;
         Temp *tempRetorno;
@@ -190,6 +191,7 @@ class FrameMIPS{
         int numeroParametros;
         int deslocamentoVariaveisLocais;
         int deslocamentoParametros;
+        AtributoFuncao *atr;
      public:
         FrameMIPS(Rotulo *rotulo,ListaAcesso *variaveisLocais, int deslocamentoVariaveisLocais,
                   int deslocamentoParametros);

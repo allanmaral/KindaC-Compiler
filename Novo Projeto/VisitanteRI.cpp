@@ -86,7 +86,7 @@ void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
 }
 void VisitanteTradutor::visita(NoSe                *se     ) {
     char *rEntao = RotuloNome("EntaoSe", ++contLaco);
-    char *rFimSe = RotuloNome("FimSe",   contLaco);
+    char *rFimSe = RotuloNome("FimSe",     contLaco);
     Rotulo *entao = new Rotulo(rEntao);
     Rotulo *fimSe = new Rotulo(rFimSe);
     Rotulo *rUltimoFim = ultimoFim; // Empilha ultimo fim
@@ -222,7 +222,25 @@ void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
     if(senE->expressao) senE->expressao->aceita(this);
     ultimaStm = new EXP(ultimaExp);
 }
-void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {}
+void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
+    char *rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), (int)decF->ponteiro); // REVER NOME DEPOIS
+    FrameMIPS *novoFrame = new FrameMIPS(new Rotulo(rotulo), NULL, 0, 0);
+    novoFrame->atr = decF->atr;
+    frame = novoFrame;
+    // Visita a lista de parametros
+    decF->parametros->aceita(this);
+    // Visita as declarações locais
+    decF->variaveis->aceita(this);
+    // Visita os stmts
+    decF->sentenca->aceita(this);
+
+    Procedimento *procedimento = new Procedimento(novoFrame, ultimaStm);
+    if(listaFragmento) listaFragmento->InsereLista(procedimento);
+    else listaFragmento = procedimento;
+
+    funcaoAtual = NULL;
+    if(decF->lista) decF->lista->aceita(this);
+}
 void VisitanteTradutor::visita(NoListaId           *lid    ) {}
 void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {}
 void VisitanteTradutor::visita(NoDeclTipo          *decT   ) {}
