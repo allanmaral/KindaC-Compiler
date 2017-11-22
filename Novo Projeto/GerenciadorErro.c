@@ -27,7 +27,15 @@ char ErroLiteral[ErroTamanhoEnumerador][256] = {
     "Erro Redefinicao do tipo ",
     "Erro: Tamanho do arranjo tem que ser inteiro",
     "Erro: O arranjo tem que conter um tamanho",
-    "Erro: Parametro e variavel com o mesmo nome "
+    "Erro: Parametro e variavel com o mesmo nome ",
+    "Atribuicao de tipos incompativeis entre ",
+    "Erro: Operacao aritimetica invalida, tipos incompativeis",
+    "Erro: Acesso a campo privado da classe",
+    "Erro: Funcao acessada nao existe",
+    " nao existe",
+    "Erro: Acesso nao existe",
+    "Erro: Expressao invalida com ponteiro",
+    "Erro: Expressao invalida com arranjo"
 };
 
 /** \brief Armazena os dados do erro
@@ -129,6 +137,12 @@ void proximoErro(){
         break;
         case ErroSemanticoTipoVariavel:
             fprintf(stderr,"[l:%d, c:%d] - Erro: \"%s\"%s\n",linha, coluna, erro->tokenEncontrado, ErroLiteral[erro->codigo]);
+        break;
+        case ErroSemanticoVariavelNaoExiste:
+            fprintf(stderr,"[l:%d, c:%d] - Erro: Variavel \"%s\"%s\n",linha, coluna, erro->tokenEncontrado, ErroLiteral[erro->codigo]);
+        break;
+        case ErroSemanticoTipoAtribuicaoInvalido:
+            fprintf(stderr,"[l:%d, c:%d] - Erro: %s\"%s\" e \"%s\"\n",linha, coluna, ErroLiteral[erro->codigo], erro->tokenEncontrado, erro->tokenEsperado);
         break;
         default:{
             if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {

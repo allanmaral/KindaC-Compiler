@@ -308,13 +308,14 @@ NoDeclLocalPrivado::NoDeclLocalPrivado(NoDeclLocal *lista, int linha, int coluna
 void NoDeclLocalPrivado::aceita(Visitante *v){
     v->visita(this);
 }
-NoCorpoFuncao::NoCorpoFuncao(NoId *id, NoListaId *listaid, NoListaExpr *listaExpr, int linha, int coluna, NoCorpoFuncao *lista){
+NoCorpoFuncao::NoCorpoFuncao(NoId *id, NoListaId *listaid, NoExpr *expressao, NoArranjo *arranjo, int linha, int coluna, NoCorpoFuncao *lista){
     this->linha = linha;
     this->coluna = coluna;
-    this->listaExpr = listaExpr;
+    this->expressao = expressao;
     this->lista = lista;
     this->id = id;
     this->listaid = listaid;
+    this->arranjo = arranjo;
 }
 void NoCorpoFuncao::aceita(Visitante* v){
     v->visita(this);

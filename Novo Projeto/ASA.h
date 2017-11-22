@@ -18,8 +18,8 @@ class NoErro{
 class NoPrograma:public NoErro{
     public:
         virtual void aceita(Visitante *v) = 0;
-        NoPrograma *lista;
         virtual ~NoPrograma() = 0;
+        NoPrograma *lista;
 };
 class NoSentenca:public NoErro{
     public:
@@ -285,11 +285,12 @@ class NoDeclLocalPrivado:public NoDeclLocal{
 };
 class NoCorpoFuncao:public NoErro{
     public:
-        NoCorpoFuncao(NoId *id, NoListaId *listaid, NoListaExpr *listaExpr, int linha, int coluna,
+        NoCorpoFuncao(NoId *id, NoListaId *listaid, NoExpr *expressao, NoArranjo *arranjo, int linha, int coluna,
                       NoCorpoFuncao *lista = NULL);
         NoId *id;
+        NoArranjo *arranjo;
         NoListaId *listaid;
-        NoListaExpr *listaExpr;
+        NoExpr *expressao;
         NoCorpoFuncao *lista;
         void aceita(Visitante* v);
 };

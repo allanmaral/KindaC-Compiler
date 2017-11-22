@@ -5,16 +5,16 @@ class luis{
 			return +a;
 		}
 };
-class kevyn{
-	public:
-		bool x9;
-};
 class teste{
 	public:
 		int k;
 		luis x9;
 };
 teste ok[3];
+class kevyn{
+	public:
+		bool x9;
+};
 class teste2:teste{
 	private:
 		kevyn x9;
@@ -26,10 +26,26 @@ typedef struct{
 	int j;
 	float kk;
 	teste p;
-}tteste;*/
-int funcao(int a, int c, int *kgada[5]){
-	int d;
-	teste3 *d[3.5], f, g, h;
-	/*d = a+c;
-	return c;*/
+}tteste;
+int funcao(int a, float b[3], int c, int *kgada[5]){
+	/*
+	int k;
+	//teste3 *d, f, g, h;
+	f = a+c;
+	int c;
+	u = 0;
+	k = 1;
+	c = u+k;
+	c = !a;
+	x = a*B[5]
+	if(a){
+		a;
+	}
+	c = !a;
+	return c;
+	*/
+	float rty, fvdfvf;
+	tteste *qwe["gf"], ja, dfasd;
+	a = "a[1]";
+	fvdfvf = a * b;
 }

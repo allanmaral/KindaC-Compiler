@@ -35,13 +35,14 @@ typedef enum {
     EsperadosTipo,
     EsperadosSenteca,
     EsperadosExpressaoPrimaria,
+    EsperadosExpressao,
     EsperadosTamanhoEnumerador
 } Esperados;
 
 static char esperadosLiteral[EsperadosTamanhoEnumerador][48] = {
     "CHAVE_ESQ\" ou \"DOIS_PONTOS", "DEFINICAO_TIPO\", \"CLASSE\" ou \"Tipo",   "Inicializador",
     "Declaracao de Membros",        "Identificador",                            "Tipo",
-    "Sentenca",                     "Expressao Primaria"
+    "Sentenca",                     "Expressao Primaria",                       "Expressao"
 };
 
 void casar(int tokenEsperado){
@@ -161,6 +162,11 @@ void ProgramaL(){
             int coluna = pegarColuna();
             NoTipo *tipo = Tipo();
             int ponteiro = Ponteiro();
+<<<<<<< HEAD
+=======
+            int linha = pegarLinha();
+            int coluna = pegarColuna();
+>>>>>>> semantico
             NoId *id = new NoId(pegarUltimoAtributo(), linha, coluna);
             casarOuPular(ID, sincPrograma);
             ProgramaA(tipo, ponteiro, id);
@@ -397,15 +403,25 @@ void CorpoFunc(NoDeclFuncao *funcao){
         case ADICAO:        case SUBTRACAO:     case ASCII:{
             int linha = pegarLinha();
             int coluna = pegarColuna();
+<<<<<<< HEAD
             NoListaExpr *listaExpr = ListaExpr();
+=======
+            NoExpr *expressao = Expr();
+>>>>>>> semantico
             NoId *id = NULL;
+            NoArranjo *arranjo = NULL;
             if(tokenAtual == ID){
                 id = new NoId(pegarUltimoAtributo(), linha, coluna);
                 casar(ID);
+                arranjo = Arranjo();
             }
             NoListaId *listaid = ListaIdCont();
             casarOuPular(PONTO_VIRGULA, sincCorpoFunc);
+<<<<<<< HEAD
             NoCorpoFuncao *corpo = new NoCorpoFuncao(id, listaid, listaExpr, linha, coluna);
+=======
+            NoCorpoFuncao *corpo = new NoCorpoFuncao(id, listaid, expressao, arranjo, linha, coluna);
+>>>>>>> semantico
             if(funcao->corpoFunc){ // Insere no final da lista
                 NoCorpoFuncao *ultimo = funcao->corpoFunc;
                 while(ultimo->lista) ultimo = ultimo->lista;
@@ -553,8 +569,17 @@ NoArranjo *Arranjo(){
                 num = new NoNumInteiro(pegarUltimoAtributo(), linha2, coluna2);
             } else if(tokenAtual == NUM_REAL) { // NUM REAL AQUI É ERRO (SEMANTICO)
                        casarOuPular(NUM_REAL, sincArranjo);
+<<<<<<< HEAD
                        num = new NoNumReal(pegarUltimoAtributo(), linha2, coluna2);
                    }
+=======
+                       num = new NoNumReal(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
+                   } else if(tokenAtual != COLCHETE_DIR){
+                              NoExpr *expressao = Expr();
+                              saidaErro(ErroSintatico, pegarLinha(), pegarColuna(),
+                                        esperadosLiteral[EsperadosExpressao], tokenLiteral[NUM_INTEIRO]);
+                          }
+>>>>>>> semantico
             casarOuPular(COLCHETE_DIR, sincArranjo);
             return new NoArranjo(num, linha1, coluna1);
         } break;
