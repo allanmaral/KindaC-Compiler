@@ -57,6 +57,7 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(Rotulo *r);
           void visita(ListaRotulo *listaRotulo);
           void visita(ListaAcesso *listaAcesso);
+          void visita(AcessoLocal *ac);
           void visita(FrameMIPS *quadroMIPS);
           void visita(NoRegistrador *nr);
 
