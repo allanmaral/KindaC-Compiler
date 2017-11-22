@@ -318,8 +318,10 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
             ultimaExp = new BINOP(OP_DIV,e1,e2);
             break;
         case PORCENTO:{
-            Temp *r = new Temp();
-            ultimaExp = new ESEQ(new MOVE(new TEMP(r),new BINOP(OP_DIV,e1,e2)),new TEMP(r));
+            Temp *r= new Temp();
+            //ultimaExp = new ESEQ(new EXP(new BINOP(OP_DIV,e1,e2)),new MOVE(new TEMP(r),new CALL(new NAME(new Rotulo("mfhi")),new ListaExp(new TEMP(r),NULL))));
+            ultimaExp = new ESEQ(new SEQ(new EXP(new BINOP(OP_DIV,e1,e2)),
+                            new EXP(new CALL(new NAME(new Rotulo("mfhi")),new ListaExp(new TEMP(r),NULL)))),new TEMP(r));
         }break;
     }
 }
@@ -330,7 +332,7 @@ void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
     Exp *e2=ultimaExp;
     ultimaStm = new MOVE(e1,e2);
 }
-void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {
+void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofsset da classe + do quadroatual
 
 }
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
@@ -435,11 +437,8 @@ void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
     nivel++;
     imprimeNivel();
     fprintf(stdout,"-VAR\n");
-    nivel++;
-    imprimeNivel();
-    if(var->tipo) {
-
-    }
+    AtributoVariavel* atr=static_cast<AtributoVariavel*>(var->tipo);
+    atr->pegarAcesso()->aceita(this);
     nivel++;
     imprimeNivel();
     if(var->tamanho) fprintf(stdout,"-TAM.%d\n",var->tamanho);
@@ -470,6 +469,11 @@ void VisitanteImpressaoRI::visita(ListaRotulo *listaRotulo){
 void VisitanteImpressaoRI::visita(ListaAcesso *listaAcesso){
     if(listaAcesso->acessoLocal) listaAcesso->acessoLocal->aceita(this);
     if(listaAcesso->proximoAcesso) listaAcesso->proximoAcesso->aceita(this);
+}
+void VisitanteImpressaoRI::visita(AcessoLocal *ace){
+    nivel++;
+    ace->codigoAcesso()->aceita(this);
+    nivel--;
 }
 void VisitanteImpressaoRI::visita(FrameMIPS *quadroMIPS){///Verificar
     if(quadroMIPS->rotulo) fprintf(stdout,"Rotulo.%s\n",quadroMIPS->rotulo->rotulo);

@@ -424,6 +424,9 @@ bool AtributoVariavel::pegarPonteiro(){
 Tipo* AtributoVariavel::pegarTipo(){
     return tipo;
 }
+AcessoLocal* AtributoVariavel::pegarAcesso(){
+    return acesso;
+}
 AtributoFuncaoClasse::AtributoFuncaoClasse():AtributoFuncao(){
     publico = true;
 }
