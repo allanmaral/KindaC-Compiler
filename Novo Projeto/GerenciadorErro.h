@@ -23,6 +23,14 @@ typedef enum {
     ErroSemanticoTamanhoArranjoReal,
     ErroSemanticoArranjoVazio,
     ErroSemanticoVariavelIgualParametro,
+    ErroSemanticoTipoAtribuicaoInvalido,
+    ErroSemanticoTipoOperacaoInvalida,
+    ErroSemanticoAcessoACampoPrivado,
+    ErroSemanticoFuncaoNaoExiste,
+    ErroSemanticoVariavelNaoExiste,
+    ErroSemanticoAcessoNaoExiste,
+    ErroSemanticoExpressaoInvalidaPonteiro,
+    ErroSemanticoExpressaoInvalidaArranjo,
     ErroTamanhoEnumerador
 } Erros;
 
