@@ -28,24 +28,23 @@ typedef struct{
 	teste p;
 }tteste;
 int funcao(int a, float b[3], int c, int *kgada[5]){
-	/*
+	
 	int k;
-	//teste3 *d, f, g, h;
-	f = a+c;
+	teste3 *d, f, d, h;
+	/*f = a+c;
 	int c;
 	u = 0;
 	k = 1;
 	c = u+k;
 	c = !a;
-	x = a*B[5]
+	x = a*B[5];*/
 	if(a){
 		a;
 	}
 	c = !a;
 	return c;
-	*/
-	float rty, fvdfvf;
-	tteste *qwe["gf"], ja, dfasd;
+	//float rty, fvdfvf;
+	//tteste *qwe["gf"], ja, dfasd;
 	a = "a[1]";
 	fvdfvf = a * b;
 }

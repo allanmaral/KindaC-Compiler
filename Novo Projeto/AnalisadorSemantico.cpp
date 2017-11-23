@@ -427,7 +427,7 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
     verificandoClasse = true;
     tabelaVariaveisAtual = atr->pegarVariaveis();
     tabelaFuncoesAtual = atr->pegarFuncoes();
-    decC->local->aceita(this);
+    if(decC->local) decC->local->aceita(this);
     verificandoClasse = false;
     tabelaVariaveisAtual = NULL;
     tabelaFuncoesAtual = NULL;
