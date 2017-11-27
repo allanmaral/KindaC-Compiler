@@ -262,6 +262,7 @@ class AtributoFuncao:public Atributo{
         AtributoFuncao();
         virtual ~AtributoFuncao();
         void adicionarParametro(AtributoVariavel *atributo);
+        void adicionarRetorno(Tipo *atributo);
         void adicionarVariavel(AtributoVariavel *atributo);
         void atribuirParametros(TabelaSimbolos *parametros);
         void atribuirVariaveis(TabelaSimbolos *variaveis);
@@ -269,6 +270,7 @@ class AtributoFuncao:public Atributo{
         bool pegarPonteiro();
         TabelaSimbolos *pegarVariaveisLocais();
         TabelaSimbolos *pegarParametros();
+        Tipo *pegarRetorno();
         Atributo *busca(char *id);
         Atributo *buscaParametro(char *id);
         Atributo *buscaVariavel(char *id);
@@ -276,6 +278,7 @@ class AtributoFuncao:public Atributo{
         TabelaSimbolos *parametros;
         TabelaSimbolos *variaveisLocais;
         bool ponteiro;
+        Tipo *retorno;
 };
 class AtributoFuncaoClasse:public AtributoFuncao{
     public:

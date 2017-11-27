@@ -520,3 +520,10 @@ void AtributoFuncao::atribuirPonteiro(bool ponteiro){
 bool AtributoFuncao::pegarPonteiro(){
     return ponteiro;
 }
+void AtributoFuncao::adicionarRetorno(Tipo* atributo){
+    this->retorno = atributo;
+}
+Tipo* AtributoFuncao::pegarRetorno(){
+    return retorno;
+}
+
