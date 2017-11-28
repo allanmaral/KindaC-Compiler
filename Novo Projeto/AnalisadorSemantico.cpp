@@ -185,6 +185,7 @@ void AnalisadorSemantico::visita(NoSentencaExpr* senE){
 }
 void AnalisadorSemantico::visita(NoDeclFuncao* decF){
     TabelaSimbolos *tabela;
+    TabelaSimbolos *tabelaVariaveisAux = tabelaVariaveisAtual;
     if(!tabelaFuncoesAtual){
         tabela = obtemTabelaFuncoes();
     }else{
@@ -221,29 +222,26 @@ void AnalisadorSemantico::visita(NoDeclFuncao* decF){
         if(decF->parametros){
             tabelaVariaveisAtual = atr->pegarParametros();
             decF->parametros->aceita(this);
-            tabelaVariaveisAtual = NULL;
         }
         if(decF->variaveis){
             tabelaVariaveisAtual = atr->pegarVariaveisLocais();
             tabelaParametrosAtual = atr->pegarParametros();
             decF->variaveis->aceita(this);
-            tabelaVariaveisAtual = NULL;
             tabelaParametrosAtual = NULL;
         }
         if(decF->corpoFunc){
             tabelaVariaveisAtual = atr->pegarVariaveisLocais();
             tabelaParametrosAtual = atr->pegarParametros();
             decF->corpoFunc->aceita(this);
-            tabelaVariaveisAtual = NULL;
             tabelaParametrosAtual = NULL;
         }
         if(decF->sentenca){
             tabelaVariaveisAtual = atr->pegarVariaveisLocais();
             tabelaParametrosAtual = atr->pegarParametros();
             decF->sentenca->aceita(this);
-            tabelaVariaveisAtual = NULL;
             tabelaParametrosAtual = NULL;
         }
+        tabelaVariaveisAtual = tabelaVariaveisAux;
         if(decF->lista){
             decF->lista->aceita(this);
         }

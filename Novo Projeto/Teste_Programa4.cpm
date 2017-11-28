@@ -4,6 +4,13 @@ class luis{
 		int funcao(int k, float j){
 			return +a;
 		}
+	private:
+		float x1;
+		int funcao2(int k, float j){
+			return +a;
+		}
+	public:
+		float x2;
 };
 class teste{
 	public:
@@ -30,7 +37,7 @@ typedef struct{
 int funcao(int a, float b[3], int c, int *kgada[5]){
 	int p;
 	//luis d, f, d, h;
-	tteste *aa, *ba[9], aa;
+	tteste *aa, *ba[9];
 	float rty, fvdfvf;
 	/*f = a+c;
 	int c;
