@@ -33,9 +33,13 @@ char ErroLiteral[ErroTamanhoEnumerador][256] = {
     "Erro: Acesso a campo privado da classe",
     "Erro: Funcao acessada nao existe",
     " nao existe",
-    "Erro: Acesso nao existe",
+    " nao existe",
     "Erro: Expressao invalida com ponteiro",
-    "Erro: Expressao invalida com arranjo"
+    "Erro: Expressao invalida com arranjo",
+    "Erro: Variavel sem ponteiro, insira \".\"",
+    "Erro: Variavel com ponteiro, insira \"->\"",
+    " acessado nao existe",
+    "Erro: Expressao nao possui acesso a campo"
 };
 
 /** \brief Armazena os dados do erro
@@ -143,6 +147,12 @@ void proximoErro(){
         break;
         case ErroSemanticoTipoAtribuicaoInvalido:
             fprintf(stderr,"[l:%d, c:%d] - Erro: %s\"%s\" e \"%s\"\n",linha, coluna, ErroLiteral[erro->codigo], erro->tokenEncontrado, erro->tokenEsperado);
+        break;
+        case ErroSemanticoAcessoNaoExiste:
+            fprintf(stderr,"[l:%d, c:%d] - Erro: Tipo ou Classe \"%s\"%s\n",linha, coluna, erro->tokenEncontrado, ErroLiteral[erro->codigo]);
+        break;
+        case ErroSemanticoCampoNaoExiste:
+            fprintf(stderr,"[l:%d, c:%d] - Erro: Campo \"%s\"%s\n",linha, coluna, erro->tokenEncontrado, ErroLiteral[erro->codigo]);
         break;
         default:{
             if(erro->codigo >= 0 && erro->codigo < ErroTamanhoEnumerador) {

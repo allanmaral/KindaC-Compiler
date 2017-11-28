@@ -10,9 +10,13 @@ TabelaSimbolos *tabelaFuncoesAtual = NULL;
 TabelaSimbolos *tabelaParametrosAtual = NULL;
 bool publico = true;
 bool verificandoClasse = false;
+bool verificandoAcesso = false;
+bool verificandoParametros = false;
+bool encontrou = false;
 bool erro = false;
 int retorno = 0;
 Atributo *valorRetorno = NULL;
+Atributo *funcaoChamada = NULL;
 int verificandoCorpo = false;
 int arranjo = 0;
 Atributo *tipo = NULL;
@@ -35,15 +39,23 @@ void AnalisadorSemantico::visita(NoId* id){
                 if(verificandoCorpo){
                     tipo = valorRetorno;
                 }
+                encontrou = false;
                 return;
             }
         }
     }
+    encontrou = true;
     retorno = ((AtributoVariavel*)atr)->pegarTipo()->pegaTipo();
-    if(retorno == ID){
-        Atributo *entradaTabela = obtemTabelaClasses()->busca(((TipoId*)((AtributoVariavel*)atr)->pegarTipo())->pegarLexema());
+    if(retorno == CARACTERE &&
+            (((AtributoVariavel*)atr)->pegarPonteiro() || ((AtributoVariavel*)atr)->pegarArranjo())){
+        retorno = LITERAL;
+    }
+    if(retorno == ID && !verificandoAcesso){
+        Atributo *entradaTabela = obtemTabelaClasses()->busca(
+                                                ((TipoId*)((AtributoVariavel*)atr)->pegarTipo())->pegarLexema());
         if(!entradaTabela){
-            entradaTabela = obtemTabelaTipos()->busca(((TipoId*)((AtributoVariavel*)atr)->pegarTipo())->pegarLexema());
+            entradaTabela = obtemTabelaTipos()->busca(
+                                                ((TipoId*)((AtributoVariavel*)atr)->pegarTipo())->pegarLexema());
         }else{
             tipo = NULL;
         }
@@ -90,6 +102,20 @@ void AnalisadorSemantico::visita(NoListaExpr* le){
     if(le->lista){
         le->lista->aceita(this);
     }
+    /*
+    if(verificandoParametros){
+        if(le->expressao){
+            int tipoExp = 0;
+            Atributo *idExp = NULL;
+            le->expressao->aceita(this);
+            tipoExp = retorno;
+            idExp = valorRetorno;
+
+            ((AtributoFuncao*)funcaoChamada)->buscaParametro()
+        }
+    }
+    */
+
 }
 void AnalisadorSemantico::visita(NoListaFormal* lf){
     TabelaSimbolos *tabela = tabelaVariaveisAtual;
@@ -175,7 +201,13 @@ void AnalisadorSemantico::visita(NoEscopo* esc){
 
 }
 void AnalisadorSemantico::visita(NoChamadaFuncao* cha){
-
+    if(cha->id){
+        Atributo *aux = NULL;
+        cha->id->aceita(this);
+        aux = valorRetorno;
+        if(cha->parametros) cha->parametros->aceita(this);
+        valorRetorno = aux;
+    }
 }
 void AnalisadorSemantico::visita(NoTenta* te){
 
@@ -200,7 +232,8 @@ void AnalisadorSemantico::visita(NoDeclFuncao* decF){
         }
     }
     if(tabela->busca(decF->id->entradaTabela->pegarLexema())){
-        saidaErro(ErroSemanticoRedefinicaoFuncao, decF->id->linha, decF->id->coluna, decF->id->entradaTabela->pegarLexema());
+        saidaErro(ErroSemanticoRedefinicaoFuncao, decF->id->linha, decF->id->coluna,
+                                                    decF->id->entradaTabela->pegarLexema());
     }else{
         AtributoFuncao *atr;
         if(verificandoClasse){
@@ -211,8 +244,9 @@ void AnalisadorSemantico::visita(NoDeclFuncao* decF){
         }
         decF->atr = atr;
 
-        if(decF->tipo->primitivo == ID)
+        if(decF->tipo->primitivo == ID){
             atr->adicionarRetorno(new TipoId(decF->tipo->entradaTabela->pegarLexema(), ID));
+        }
         else
             atr->adicionarRetorno(new Tipo(decF->tipo->primitivo));
 
@@ -256,7 +290,7 @@ void AnalisadorSemantico::visita(NoListaId* lid){
                 }
                 if(!erro){
                     AtributoVariavel *atr = new AtributoVariavel();
-                    TipoId *tp = new TipoId(tipo->pegarLexema(),ID);
+                    TipoId *tp = new TipoId(tipo->pegarLexema(), ID);
                     atr->atribuirTipo(tp);
                     atr->atribuirLexema(lid->id->entradaTabela->pegarLexema());
                     atr->atribuiArranjo(arranjo);
@@ -265,13 +299,15 @@ void AnalisadorSemantico::visita(NoListaId* lid){
                 }
             }
         }else{
-            saidaErro(ErroSemanticoRedefinicaoVariavel,lid->id->linha, lid->id->coluna, lid->id->entradaTabela->pegarLexema());
+            saidaErro(ErroSemanticoRedefinicaoVariavel, lid->id->linha, lid->id->coluna,
+                                                lid->id->entradaTabela->pegarLexema());
             if(lid->arranjo){
                 lid->arranjo->aceita(this);
             }
         }
     }else{
-        saidaErro(ErroSemanticoVariavelIgualParametro,lid->id->linha, lid->id->coluna, lid->id->entradaTabela->pegarLexema());
+        saidaErro(ErroSemanticoVariavelIgualParametro, lid->id->linha, lid->id->coluna,
+                                                lid->id->entradaTabela->pegarLexema());
         if(lid->arranjo){
             lid->arranjo->aceita(this);
         }
@@ -291,7 +327,8 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
     if(decV->tipo->primitivo == ID){
         if(!obtemTabelaClasses()->busca(decV->tipo->entradaTabela->pegarLexema())){
             if(!obtemTabelaTipos()->busca(decV->tipo->entradaTabela->pegarLexema())){
-                saidaErro(ErroSemanticoTipoVariavel, decV->linha, decV->coluna, decV->tipo->entradaTabela->pegarLexema());
+                saidaErro(ErroSemanticoTipoVariavel, decV->linha, decV->coluna,
+                                                decV->tipo->entradaTabela->pegarLexema());
                 erroTipo = true;
             }
         }
@@ -299,7 +336,8 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
     NoListaId *aux = decV->variaveis;
     while(aux){
         if(tabela->busca(aux->id->entradaTabela->pegarLexema())){
-            saidaErro(ErroSemanticoRedefinicaoVariavel, decV->linha, decV->coluna, aux->id->entradaTabela->pegarLexema());
+            saidaErro(ErroSemanticoRedefinicaoVariavel, decV->linha, decV->coluna,
+                                                aux->id->entradaTabela->pegarLexema());
         }else{
             if((tabelaParametrosAtual && !tabelaParametrosAtual->busca(aux->id->entradaTabela->pegarLexema()))
                 || (tabelaParametrosAtual == NULL)){
@@ -386,7 +424,7 @@ void AnalisadorSemantico::visita(NoDeclLocalPrivado* decLpri){
     }
 }
 void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
-    if(cF->expressao) {verificandoCorpo = true; cF->expressao->aceita(this);}
+    if(cF->expressao) { verificandoCorpo = true; cF->expressao->aceita(this); }
     if(tipo && cF->expressao && valorRetorno){
         if(!obtemTabelaClasses()->busca(valorRetorno->pegarLexema())){
             if(!obtemTabelaTipos()->busca(valorRetorno->pegarLexema())){
@@ -443,7 +481,8 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
             erro = true;
         }
     }else{
-         saidaErro(ErroSemanticoRedefinicaoClasse, decC->id->linha, decC->id->coluna, decC->id->entradaTabela->pegarLexema());
+         saidaErro(ErroSemanticoRedefinicaoClasse, decC->id->linha, decC->id->coluna,
+                                            decC->id->entradaTabela->pegarLexema());
          erro = true;
     }
     atr = new AtributoClasse();
@@ -498,15 +537,16 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
             if(retorno == ID){
                 if(obtemTabelaTipos()->busca(valorRetorno->pegarLexema()) ||
                     obtemTabelaClasses()->busca(valorRetorno->pegarLexema())){
+                    Atributo *tipoRetorno = valorRetorno;
                     if(expB->exprDireita){
                         verificandoCorpo = true;
                         expB->exprDireita->aceita(this);
                         verificandoCorpo = false;
                         if(valorRetorno && !tabelaVariaveisAtual->busca(valorRetorno->pegarLexema())){
-                            tipo = valorRetorno;
+                            tipo = tipoRetorno;
                             if(!tabelaParametrosAtual->busca(valorRetorno->pegarLexema())){
                                 AtributoVariavel *atr = new AtributoVariavel();
-                                TipoId *tp = new TipoId(tipo->pegarLexema(),ID);
+                                TipoId *tp = new TipoId(tipo->pegarLexema(), ID);
                                 if(retorno == NUM_INTEIRO && arranjo > 0){
                                     atr->atribuiArranjo(arranjo);
                                 }
@@ -524,6 +564,20 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
                         }
                     }
                 }else{
+                    /*
+                    if(!tabelaVariaveisAtual->busca(valorRetorno->pegarLexema())){
+                        if(!tabelaParametrosAtual->busca(valorRetorno->pegarLexema())){
+                            saidaErro(ErroSemanticoTipoVariavel, expB->exprEsquerda->linha,
+                                      expB->exprEsquerda->coluna, valorRetorno->pegarLexema());
+
+                            retorno = 0;
+                            valorRetorno = NULL;
+                            tipo = NULL;
+                            return;
+                        }
+                    }
+                    expB->aceita(this);
+                    */
                     saidaErro(ErroSemanticoTipoVariavel, expB->exprEsquerda->linha,
                                       expB->exprEsquerda->coluna, valorRetorno->pegarLexema());
 
@@ -610,69 +664,149 @@ void AnalisadorSemantico::visita(NoExprAtrib* atr){
                  saidaErro(ErroSemanticoExpressaoInvalidaPonteiro, atr->linha, atr->coluna);
              }
     }
-    else if(tipoEsq != tipoDir && tipoEsq != 0 && tipoDir != 0 &&
-           ((tipoEsq != REAL || tipoDir != INTEIRO) && (tipoEsq != INTEIRO || tipoDir != REAL))){
-        saidaErro(ErroSemanticoTipoAtribuicaoInvalido, atr->linha, atr->coluna,
+    else if(tipoEsq != tipoDir){
+        switch(tipoEsq){
+            case ID:
+            case LITERAL:
+                saidaErro(ErroSemanticoTipoAtribuicaoInvalido, atr->linha, atr->coluna,
                   (char*) pegarTokenLiteral(tipoEsq), (char*) pegarTokenLiteral(tipoDir));
+            break;
+            case INTEIRO:
+            case REAL:
+            case BOLEANO:
+            case CARACTERE:
+                if(tipoDir == LITERAL || tipoDir == ID){
+                    saidaErro(ErroSemanticoTipoAtribuicaoInvalido, atr->linha, atr->coluna,
+                  (char*) pegarTokenLiteral(tipoEsq), (char*) pegarTokenLiteral(tipoDir));
+                }
+            break;
+        }
     }
 }
 void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
-    int tipoDir = 0;
-    int tipoEsq = 0;
+    int tipoDir = 0, tipoEsq = 0;
     Atributo *idDir = NULL, *idEsq = NULL;
     if(expAC->exprDireita){
+        verificandoAcesso = true;
         expAC->exprDireita->aceita(this);
+        verificandoAcesso = false;
         tipoDir = retorno;
         idDir = valorRetorno;
     }
     if(expAC->exprEsquerda){
+        verificandoAcesso = true;
         expAC->exprEsquerda->aceita(this);
+        verificandoAcesso = false;
         tipoEsq = retorno;
         idEsq = valorRetorno;
     }
-    fprintf(stdout, "\n\n\n%d", retorno);
-    if(idEsq && tipoEsq == ID){
-        if((expAC->terminal == PONTEIRO &&   ((AtributoVariavel*)idEsq)->pegarPonteiro()) ||
-           (expAC->terminal == PONTO    && !(((AtributoVariavel*)idEsq)->pegarPonteiro()))    ){
-            Atributo *atr = NULL;
-            if((atr = obtemTabelaClasses()->busca(idEsq->pegarLexema()))){
-                Atributo *atrFunc = NULL;
-                if((atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema()))){
-                    if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
-                        saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
+    if(encontrou && idEsq && tipoEsq == ID){
+        if(expAC->terminal == PONTEIRO){
+            if(((AtributoVariavel*)idEsq)->pegarPonteiro()){
+                Atributo *atr = NULL;
+                if(atr = obtemTabelaClasses()->busca(
+                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema())){
+                    Atributo *atrFunc = NULL;
+                    if(atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema())){
+                        if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
+                            saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
+                        }
+                        else{
+                            retorno = ((AtributoFuncao*)atrFunc)->pegarRetorno()->pegaTipo();
+                            if(retorno == CARACTERE &&
+                                    (((AtributoFuncao*)atrFunc)->pegarPonteiro())){
+                                retorno = LITERAL;
+                            }
+                        }
                     }
-                    else{
-                        retorno = ((AtributoFuncao*)atrFunc)->pegarRetorno()->pegaTipo();
+                    else if(atrFunc = ((AtributoClasse*)atr)->buscaVariavel(idDir->pegarLexema())){
+                        if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
+                            saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
+                        }
+                        else{
+                            retorno = ((AtributoVariavel*)atrFunc)->pegarTipo()->pegaTipo();
+                            if(retorno == CARACTERE &&
+                                    (((AtributoVariavel*)atrFunc)->pegarPonteiro() ||
+                                     ((AtributoVariavel*)atrFunc)->pegarArranjo())    ){
+                                retorno = LITERAL;
+                            }
+                        }
                     }
+                    else saidaErro(ErroSemanticoCampoNaoExiste, expAC->linha, expAC->coluna, idDir->pegarLexema());
                 }
-                else if((atrFunc = ((AtributoClasse*)atr)->buscaVariavel(idDir->pegarLexema()))){
-                    if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
-                        saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
+                else if(atr = obtemTabelaTipos()->busca(
+                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema())){
+                    Atributo *atrVar = NULL;
+                    if(atrVar = ((AtributoTipo*)atr)->buscaVariavel(idDir->pegarLexema())){
+                        retorno = ((AtributoVariavel*)atrVar)->pegarTipo()->pegaTipo();
+                        if(retorno == CARACTERE &&
+                                (((AtributoVariavel*)atrVar)->pegarPonteiro() ||
+                                 ((AtributoVariavel*)atrVar)->pegarArranjo())    ){
+                            retorno = LITERAL;
+                        }
                     }
-                    else{
-                        retorno = ((AtributoVariavel*)atrFunc)->pegarTipo()->pegaTipo();
-                    }
+                    else saidaErro(ErroSemanticoCampoNaoExiste, expAC->linha, expAC->coluna, idDir->pegarLexema());
                 }
-                else saidaErro(ErroSemanticoAcessoNaoExiste, expAC->linha, expAC->coluna);
+                else saidaErro(ErroSemanticoAcessoNaoExiste, expAC->exprEsquerda->linha,
+                              expAC->exprEsquerda->coluna,
+                              ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema());
             }
-            else if((atr = obtemTabelaTipos()->busca(idEsq->pegarLexema()))){
-                Atributo *atrVar = NULL;
-                if((atrVar = ((AtributoTipo*)atr)->buscaVariavel(idDir->pegarLexema()))){
-                    retorno = ((AtributoVariavel*)atrVar)->pegarTipo()->pegaTipo();
-                }
-                else{
-                    saidaErro(ErroSemanticoAcessoNaoExiste, expAC->linha, expAC->coluna);
-                }
-            }
-            else{
-                saidaErro(ErroSemanticoAcessoNaoExiste, expAC->exprEsquerda->linha, expAC->exprEsquerda->coluna);
-            }
+            else saidaErro(ErroSemanticoAcessoPonteiro, expAC->exprEsquerda->linha, expAC->exprEsquerda->coluna);
         }
-        else{
-            saidaErro(ErroSemanticoAcessoNaoExiste, expAC->exprEsquerda->linha, expAC->exprEsquerda->coluna);
+        else{ /// expAC->terminal = PONTO
+            if(!(((AtributoVariavel*)idEsq)->pegarPonteiro())){
+                Atributo *atr = NULL;
+                if(atr = obtemTabelaClasses()->busca(
+                                             ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema())){
+                    Atributo *atrFunc = NULL;
+                    if(atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema())){
+                        if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
+                            saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
+                        }
+                        else{
+                            retorno = ((AtributoFuncao*)atrFunc)->pegarRetorno()->pegaTipo();
+                            if(retorno == CARACTERE &&
+                                    (((AtributoFuncao*)atrFunc)->pegarPonteiro())){
+                                retorno = LITERAL;
+                            }
+                        }
+                    }
+                    else if(atrFunc = ((AtributoClasse*)atr)->buscaVariavel(idDir->pegarLexema())){
+                        if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
+                            saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
+                        }
+                        else{
+                            retorno = ((AtributoVariavel*)atrFunc)->pegarTipo()->pegaTipo();
+                            if(retorno == CARACTERE &&
+                                    (((AtributoVariavel*)atrFunc)->pegarPonteiro() ||
+                                     ((AtributoVariavel*)atrFunc)->pegarArranjo())    ){
+                                retorno = LITERAL;
+                            }
+                        }
+                    }
+                    else saidaErro(ErroSemanticoCampoNaoExiste, expAC->linha, expAC->coluna, idDir->pegarLexema());
+                }
+                else if(atr = obtemTabelaTipos()->busca(
+                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema())){
+                    Atributo *atrVar = NULL;
+                    if(atrVar = ((AtributoTipo*)atr)->buscaVariavel(idDir->pegarLexema())){
+                        retorno = ((AtributoVariavel*)atrVar)->pegarTipo()->pegaTipo();
+                        if(retorno == CARACTERE &&
+                                (((AtributoVariavel*)atrVar)->pegarPonteiro() ||
+                                 ((AtributoVariavel*)atrVar)->pegarArranjo())    ){
+                            retorno = LITERAL;
+                        }
+                    }
+                    else saidaErro(ErroSemanticoCampoNaoExiste, expAC->linha, expAC->coluna, idDir->pegarLexema());
+                }
+                else saidaErro(ErroSemanticoAcessoNaoExiste, expAC->exprEsquerda->linha,
+                               expAC->exprEsquerda->coluna,
+                              ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema());
+            }
+            else saidaErro(ErroSemanticoAcessoPonto, expAC->exprEsquerda->linha, expAC->exprEsquerda->coluna);
         }
     }
-    fprintf(stdout, "\n%d\n", retorno);
+    else saidaErro(ErroSemanticoNaoPossuiAcesso, expAC->exprEsquerda->linha, expAC->exprEsquerda->coluna);
 }
 void AnalisadorSemantico::visita(NoVerdadeiro* tr){
     retorno = VERDADEIRO;

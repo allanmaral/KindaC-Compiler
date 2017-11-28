@@ -1,16 +1,15 @@
 class luis{
 	public:
-		bool x9;
+		char* x9;
 		int funcao(int k, float j){
 			return +a;
 		}
+		char* pegarA(){
+			return a;
+		}
 	private:
 		float x1;
-		int funcao2(int k, float j){
-			return +a;
-		}
-	public:
-		float x2;
+		char* a;
 };
 class teste{
 	public:
@@ -32,13 +31,15 @@ typedef struct{
 	int k;
 	int j;
 	float kk;
+	char* b;
+	bool a;
 	teste p;
 }tteste;
 int funcao(int a, float b[3], int c, int *kgada[5]){
 	int p;
-	//luis d, f, d, h;
-	tteste *aa, *ba[9];
+	tteste d, f, d, h;
 	float rty, fvdfvf;
+	luis aa;
 	/*f = a+c;
 	int c;
 	u = 0;
@@ -50,7 +51,7 @@ int funcao(int a, float b[3], int c, int *kgada[5]){
 	if(a){
 		a;
 	}
-	aa.j = a;
+	aa.pegarA(v) = "false";
 	c = !a;
 	return c;
 	//tteste *qwe["gf"], ja, dfasd;
