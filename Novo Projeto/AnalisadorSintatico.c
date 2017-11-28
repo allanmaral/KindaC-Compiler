@@ -558,7 +558,8 @@ NoArranjo *Arranjo(){
                        casarOuPular(NUM_REAL, sincArranjo);
                        num = new NoNumReal(pegarUltimoAtributo(), pegarLinha(), pegarColuna());
                    } else if(tokenAtual != COLCHETE_DIR){
-                              NoExpr *expressao = Expr();
+                              //NoExpr *expressao = Expr();
+                              Expr();
                               saidaErro(ErroSintatico, pegarLinha(), pegarColuna(),
                                         esperadosLiteral[EsperadosExpressao], tokenLiteral[NUM_INTEIRO]);
                           }

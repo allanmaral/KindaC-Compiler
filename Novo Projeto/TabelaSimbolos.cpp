@@ -7,6 +7,7 @@ TabelaSimbolos::TabelaSimbolos() { raiz = new No_Trie(); altura = 0; }
 void TabelaSimbolos::limpa(){
     delete raiz;
     raiz = NULL;
+    raiz = new No_Trie();
 }
 
 /** \brief insere
@@ -125,7 +126,13 @@ void TabelaSimbolos::imprimeCabecalho(){
     fprintf(stdout,"---------------TABELA------------------\n");
     fprintf(stdout,"---------------------------------------\n");
 }
-TabelaSimbolos::~TabelaSimbolos() { delete raiz; }
+void TabelaSimbolos::deleteTabela(No_Trie* no){
+    for(int i = 0; i < TAMANHO_ALFABETO; i++){
+        if(no->pegarCaractere(i) != NULL){ deleteTabela(no->pegarCaractere(i));}
+    }
+    delete no;
+}
+TabelaSimbolos::~TabelaSimbolos() { deleteTabela(raiz); }
 
 TabelaIdentificador::TabelaIdentificador():TabelaSimbolos(){}
 
@@ -345,9 +352,6 @@ void No_Trie::atribuirChave(bool c) { chave = c; }
 bool No_Trie::EChave() { return chave; }
 
 No_Trie::~No_Trie(){
-    for(int i = 0; i < TAMANHO_ALFABETO; i++){
-        if(caracteres[i] != NULL){ delete caracteres[i]; }
-    }
     if(atributos != NULL){ delete atributos; }
 }
 AtributoClasse::AtributoClasse():Atributo(){
@@ -358,6 +362,7 @@ AtributoClasse::AtributoClasse():Atributo(){
 AtributoClasse::~AtributoClasse(){
     delete funcoes;
     delete variaveis;
+    free(lexema);
 }
 void AtributoClasse::adicionarFuncao(AtributoFuncaoClasse* atributo){
     funcoes->insere(atributo->pegarLexema(), atributo);
@@ -379,6 +384,7 @@ AtributoFuncao::AtributoFuncao():Atributo(){
 AtributoFuncao::~AtributoFuncao(){
     delete parametros;
     delete variaveisLocais;
+    free(lexema);
 }
 void AtributoFuncao::adicionarParametro(AtributoVariavel* atributo){
     parametros->insere(atributo->pegarLexema(),atributo);
@@ -411,6 +417,7 @@ AtributoVariavel::AtributoVariavel():Atributo(){
 }
 AtributoVariavel::~AtributoVariavel(){
     delete tipo;
+    free(lexema);
 }
 void AtributoVariavel::atribuirTipo(Tipo *tipo){
     this->tipo = tipo;
@@ -431,8 +438,7 @@ AtributoFuncaoClasse::AtributoFuncaoClasse():AtributoFuncao(){
     publico = true;
 }
 AtributoFuncaoClasse::~AtributoFuncaoClasse(){
-    delete parametros;
-    delete variaveisLocais;
+    if(retorno) delete retorno;
 }
 void AtributoFuncaoClasse::atribuiPublico(bool publico){
     this->publico = publico;
@@ -443,7 +449,7 @@ bool AtributoFuncaoClasse::pegaPublico(){
 AtributoVariavelClasse::AtributoVariavelClasse():AtributoVariavel(){
     publico = true;
 }
-AtributoVariavelClasse::~AtributoVariavelClasse(){}
+AtributoVariavelClasse::~AtributoVariavelClasse(){free(lexema);}
 void AtributoVariavelClasse::atribuiPublico(bool publico){
     this->publico = publico;
 }
@@ -462,6 +468,7 @@ Atributo* AtributoTipo::buscaVariavel(char* id){
 AtributoTipo::~AtributoTipo(){}
 void AtributoClasse::atribuirHeranca(Atributo* heranca){
     this->heranca = heranca;
+    free(lexema);
 }
 Atributo* AtributoClasse::pegarHeranca(){
     return heranca;

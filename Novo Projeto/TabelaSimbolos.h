@@ -134,6 +134,7 @@ class TabelaSimbolos{
          *
          */
         void imprimeRecursivo(char* saida, int indice, No_Trie *n);
+        void deleteTabela(No_Trie *no);
 };
 class TabelaIdentificador:public TabelaSimbolos{
     public:
