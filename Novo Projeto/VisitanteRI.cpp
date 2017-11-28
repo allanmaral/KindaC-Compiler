@@ -238,11 +238,40 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     if(listaFragmento) listaFragmento->InsereLista(procedimento);
     else listaFragmento = procedimento;
 
+    frame = NULL;
     funcaoAtual = NULL;
     if(decF->lista) decF->lista->aceita(this);
 }
 void VisitanteTradutor::visita(NoListaId           *lid    ) {}
-void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {}
+void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
+    if(frame) {
+        NoListaId *listaId = decV->variaveis;
+        bool escapa = false; /// PRECISA PEGAR NA TABELA DE SIMBOLOS
+        // Calcula o deslocamento base
+        int deslocamento = 4;
+        if(decV->tipo->primitivo == ID) {
+            /// DESCOBRE O TIPO E O TAMANHO
+        }
+        while(listaId) {
+            escapa = false;
+            if(listaId->ponteiro) {
+                frame->deslocamentoVariaveisLocais += 4;
+                escapa = true;
+            }
+            else {
+                frame->deslocamentoVariaveisLocais += deslocamento;
+            }
+            AcessoLocal* acesso = frame->insereLocal(escapa, frame->deslocamentoVariaveisLocais);
+            // Atribui o acesso local à tabela de simbolos
+            frame->atr->busca(listaId->id->entradaTabela->pegarLexema());
+
+            listaId = listaId->lista;
+        }
+    }
+    else {
+        /// DECLARAÇÂO NÃO LOCAL
+    }
+}
 void VisitanteTradutor::visita(NoDeclTipo          *decT   ) {}
 void VisitanteTradutor::visita(NoDeclLocalFuncao   *decLF  ) {}
 void VisitanteTradutor::visita(NoDeclLocalVariavel *decLV  ) {}
@@ -350,7 +379,7 @@ void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
     Exp *e2=ultimaExp;
     ultimaStm = new MOVE(e1,e2);
 }
-void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofsset da classe + do quadroatual
+void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofsset da classe + do frame atual
 
 }
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
