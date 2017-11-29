@@ -2,7 +2,8 @@ class luis{
 	public:
 		char* x9;
 		int funcao(int k, float j){
-			return +a;
+			this->x9;
+			return a;
 		}
 		char* pegarA(){
 			return a;
@@ -37,9 +38,11 @@ typedef struct{
 }tteste;
 int funcao(int a, float b[3], int c, int *kgada[5]){
 	int p;
-	tteste d, f, d, h;
+	tteste *d, f, e, h;
 	float rty, fvdfvf;
 	luis aa;
+	luis *z;
+	//z = new luis34();
 	/*f = a+c;
 	int c;
 	u = 0;
@@ -47,6 +50,19 @@ int funcao(int a, float b[3], int c, int *kgada[5]){
 	c = u+k;
 	c = !a;
 	x = a*B[5];*/
+	switch(a){
+		case 3:
+			print("algo");
+		break;
+	}
+	try{
+		print("algo");
+	}catch(...){
+		print("algo");
+	}
+	while(true){
+		print("algo");
+	}
 	//k->funcao(k, b[1]);
 	if(a){
 		a;
@@ -54,6 +70,7 @@ int funcao(int a, float b[3], int c, int *kgada[5]){
 	aa.pegarA(v) = "false";
 	c = !a;
 	return c;
+	f.kk = 'c';
 	//tteste *qwe["gf"], ja, dfasd;
 	a = "a[1]";
 	fvdfvf = a * b[1];

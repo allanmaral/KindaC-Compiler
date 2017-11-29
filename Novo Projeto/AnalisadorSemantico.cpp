@@ -71,7 +71,7 @@ void AnalisadorSemantico::visita(NoAscii* asc){
     retorno = ASCII;
 }
 void AnalisadorSemantico::visita(NoParenteses* pa){
-
+    if(pa->expressao) pa->expressao->aceita(this);
 }
 void AnalisadorSemantico::visita(NoConteudo* con){
 
@@ -168,22 +168,47 @@ void AnalisadorSemantico::visita(NoListaSentenca* ls){
     if(ls->lista) ls->lista->aceita(this);
 }
 void AnalisadorSemantico::visita(NoSe* se){
-
+    if(se->expressao){
+        se->expressao->aceita(this);
+        if(retorno == ID || retorno == REAL || retorno == LITERAL){
+            saidaErro(ErroSemanticoExprContr, se->expressao->linha, se->expressao->coluna);
+        }
+    }
+    if(se->sentenca){
+        se->sentenca->aceita(this);
+    }
+    if(se->senao){
+        se->senao->aceita(this);
+    }
 }
 void AnalisadorSemantico::visita(NoSenao* sen){
-
+    if(sen->sentenca){
+        sen->sentenca->aceita(this);
+    }
 }
 void AnalisadorSemantico::visita(NoEnquanto* enq){
-
+    if(enq->expressao){
+        enq->expressao->aceita(this);
+        if(retorno == ID || retorno == REAL || retorno == LITERAL){
+            saidaErro(ErroSemanticoExprContr, enq->expressao->linha, enq->expressao->coluna);
+        }
+    }
 }
 void AnalisadorSemantico::visita(NoBlocoCaso* bc){
-
+    if(bc->listaSentenca) bc->listaSentenca->aceita(this);
+    if(bc->lista) bc->lista->aceita(this);
 }
 void AnalisadorSemantico::visita(NoDesvia* des){
-
+    retorno = DESVIA;
 }
 void AnalisadorSemantico::visita(NoEscolha* sw){
-
+    if(sw->expressao){
+        sw->expressao->aceita(this);
+        if(retorno == ID || retorno == LITERAL){
+            saidaErro(ErroSemanticoExprContr, sw->expressao->linha, sw->expressao->coluna);
+        }
+    }
+    if(sw->blocoCaso)sw->blocoCaso->aceita(this);
 }
 void AnalisadorSemantico::visita(NoImprime* imp){
 
@@ -192,13 +217,12 @@ void AnalisadorSemantico::visita(NoLeLinha* leL){
 
 }
 void AnalisadorSemantico::visita(NoRetorna* ret){
-
+    if(ret->expressao) ret->expressao->aceita(this);
 }
 void AnalisadorSemantico::visita(NoLanca* lan){
-
 }
 void AnalisadorSemantico::visita(NoEscopo* esc){
-
+    if(esc->lista) esc->lista->aceita(this);
 }
 void AnalisadorSemantico::visita(NoChamadaFuncao* cha){
     if(cha->id){
@@ -210,10 +234,11 @@ void AnalisadorSemantico::visita(NoChamadaFuncao* cha){
     }
 }
 void AnalisadorSemantico::visita(NoTenta* te){
-
+    if(te->sentencaTry) te->sentencaTry->aceita(this);
+    if(te->sentencaCatch) te->sentencaCatch->aceita(this);
 }
 void AnalisadorSemantico::visita(NoSentencaExpr* senE){
-
+    if(senE->expressao)senE->expressao->aceita(this);
 }
 void AnalisadorSemantico::visita(NoDeclFuncao* decF){
     TabelaSimbolos *tabela;
@@ -560,11 +585,10 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
                             }
                         }else if(valorRetorno){
                             saidaErro(ErroSemanticoRedefinicaoVariavel, expB->exprEsquerda->linha,
-                                      expB->exprEsquerda->coluna, tipo->pegarLexema());
+                                      expB->exprEsquerda->coluna, valorRetorno->pegarLexema());
                         }
                     }
                 }else{
-                    /*
                     if(!tabelaVariaveisAtual->busca(valorRetorno->pegarLexema())){
                         if(!tabelaParametrosAtual->busca(valorRetorno->pegarLexema())){
                             saidaErro(ErroSemanticoTipoVariavel, expB->exprEsquerda->linha,
@@ -577,15 +601,7 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
                         }
                     }
                     expB->aceita(this);
-                    */
-                    saidaErro(ErroSemanticoTipoVariavel, expB->exprEsquerda->linha,
-                                      expB->exprEsquerda->coluna, valorRetorno->pegarLexema());
 
-                    retorno = 0;
-                    valorRetorno = NULL;
-                    tipo = NULL;
-                    return;
-                    expB->aceita(this);
                 }
             }
         }
@@ -704,10 +720,10 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
         if(expAC->terminal == PONTEIRO){
             if(((AtributoVariavel*)idEsq)->pegarPonteiro()){
                 Atributo *atr = NULL;
-                if(atr = obtemTabelaClasses()->busca(
-                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema())){
+                if((atr = obtemTabelaClasses()->busca(
+                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema()))){
                     Atributo *atrFunc = NULL;
-                    if(atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema())){
+                    if((atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema()))){
                         if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
                             saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
                         }
@@ -719,7 +735,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                             }
                         }
                     }
-                    else if(atrFunc = ((AtributoClasse*)atr)->buscaVariavel(idDir->pegarLexema())){
+                    else if((atrFunc = ((AtributoClasse*)atr)->buscaVariavel(idDir->pegarLexema()))){
                         if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
                             saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
                         }
@@ -734,14 +750,14 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                     }
                     else saidaErro(ErroSemanticoCampoNaoExiste, expAC->linha, expAC->coluna, idDir->pegarLexema());
                 }
-                else if(atr = obtemTabelaTipos()->busca(
-                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema())){
+                else if((atr = obtemTabelaTipos()->busca(
+                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema()))){
                     Atributo *atrVar = NULL;
-                    if(atrVar = ((AtributoTipo*)atr)->buscaVariavel(idDir->pegarLexema())){
+                    if((atrVar = ((AtributoTipo*)atr)->buscaVariavel(idDir->pegarLexema()))){
                         retorno = ((AtributoVariavel*)atrVar)->pegarTipo()->pegaTipo();
-                        if(retorno == CARACTERE &&
+                        if((retorno == CARACTERE &&
                                 (((AtributoVariavel*)atrVar)->pegarPonteiro() ||
-                                 ((AtributoVariavel*)atrVar)->pegarArranjo())    ){
+                                 ((AtributoVariavel*)atrVar)->pegarArranjo())    )){
                             retorno = LITERAL;
                         }
                     }
@@ -756,10 +772,10 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
         else{ /// expAC->terminal = PONTO
             if(!(((AtributoVariavel*)idEsq)->pegarPonteiro())){
                 Atributo *atr = NULL;
-                if(atr = obtemTabelaClasses()->busca(
-                                             ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema())){
+                if((atr = obtemTabelaClasses()->busca(
+                                             ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema()))){
                     Atributo *atrFunc = NULL;
-                    if(atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema())){
+                    if((atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema()))){
                         if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
                             saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
                         }
@@ -771,7 +787,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                             }
                         }
                     }
-                    else if(atrFunc = ((AtributoClasse*)atr)->buscaVariavel(idDir->pegarLexema())){
+                    else if((atrFunc = ((AtributoClasse*)atr)->buscaVariavel(idDir->pegarLexema()))){
                         if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
                             saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
                         }
@@ -786,10 +802,10 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                     }
                     else saidaErro(ErroSemanticoCampoNaoExiste, expAC->linha, expAC->coluna, idDir->pegarLexema());
                 }
-                else if(atr = obtemTabelaTipos()->busca(
-                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema())){
+                else if((atr = obtemTabelaTipos()->busca(
+                                            ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema()))){
                     Atributo *atrVar = NULL;
-                    if(atrVar = ((AtributoTipo*)atr)->buscaVariavel(idDir->pegarLexema())){
+                    if((atrVar = ((AtributoTipo*)atr)->buscaVariavel(idDir->pegarLexema()))){
                         retorno = ((AtributoVariavel*)atrVar)->pegarTipo()->pegaTipo();
                         if(retorno == CARACTERE &&
                                 (((AtributoVariavel*)atrVar)->pegarPonteiro() ||
@@ -815,10 +831,20 @@ void AnalisadorSemantico::visita(NoFalso* fa){
     retorno = FALSO;
 }
 void AnalisadorSemantico::visita(NoEsse* th){
-
+    if(!verificandoClasse){
+        saidaErro(ErroSemanticoEsse, th->linha, th->coluna);
+    }
+    retorno = ESSE;
 }
 void AnalisadorSemantico::visita(NoNovo* n){
-
+    if(n->id){
+        n->id->aceita(this);
+        if(!obtemTabelaClasses()->busca(valorRetorno->pegarLexema())){
+            if(!obtemTabelaTipos()->busca(valorRetorno->pegarLexema())){
+                saidaErro(ErroSemanticoTipoVariavel, n->id->linha, n->id->coluna);
+            }
+        }
+    }
 }
 void AnalisadorSemantico::visita(NoTipo* tp){
 

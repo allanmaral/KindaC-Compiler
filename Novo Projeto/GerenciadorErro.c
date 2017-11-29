@@ -39,7 +39,9 @@ char ErroLiteral[ErroTamanhoEnumerador][256] = {
     "Erro: Variavel sem ponteiro, insira \".\"",
     "Erro: Variavel com ponteiro, insira \"->\"",
     " acessado nao existe",
-    "Erro: Expressao nao possui acesso a campo"
+    "Erro: Expressao nao possui acesso a campo",
+    "Erro: Expressao de controle invalida",
+    "Erro: O ponteiro \"this\" nao pode ser usado fora do escopo de uma classe"
 };
 
 /** \brief Armazena os dados do erro
