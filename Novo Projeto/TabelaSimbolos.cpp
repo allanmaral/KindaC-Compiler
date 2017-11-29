@@ -362,7 +362,6 @@ AtributoClasse::AtributoClasse():Atributo(){
 AtributoClasse::~AtributoClasse(){
     delete funcoes;
     delete variaveis;
-    free(lexema);
 }
 void AtributoClasse::adicionarFuncao(AtributoFuncaoClasse* atributo){
     funcoes->insere(atributo->pegarLexema(), atributo);
@@ -384,7 +383,6 @@ AtributoFuncao::AtributoFuncao():Atributo(){
 AtributoFuncao::~AtributoFuncao(){
     delete parametros;
     delete variaveisLocais;
-    free(lexema);
 }
 void AtributoFuncao::adicionarParametro(AtributoVariavel* atributo){
     parametros->insere(atributo->pegarLexema(),atributo);
@@ -417,7 +415,6 @@ AtributoVariavel::AtributoVariavel():Atributo(){
 }
 AtributoVariavel::~AtributoVariavel(){
     delete tipo;
-    free(lexema);
 }
 void AtributoVariavel::atribuirTipo(Tipo *tipo){
     this->tipo = tipo;
@@ -452,7 +449,7 @@ bool AtributoFuncaoClasse::pegaPublico(){
 AtributoVariavelClasse::AtributoVariavelClasse():AtributoVariavel(){
     publico = true;
 }
-AtributoVariavelClasse::~AtributoVariavelClasse(){free(lexema);}
+AtributoVariavelClasse::~AtributoVariavelClasse(){}
 void AtributoVariavelClasse::atribuiPublico(bool publico){
     this->publico = publico;
 }
@@ -471,7 +468,6 @@ Atributo* AtributoTipo::buscaVariavel(char* id){
 AtributoTipo::~AtributoTipo(){}
 void AtributoClasse::atribuirHeranca(Atributo* heranca){
     this->heranca = heranca;
-    free(lexema);
 }
 Atributo* AtributoClasse::pegarHeranca(){
     return heranca;
@@ -536,4 +532,27 @@ void AtributoFuncao::adicionarRetorno(Tipo* atributo){
 Tipo* AtributoFuncao::pegarRetorno(){
     return retorno;
 }
-
+void AtributoVariavel::atribuirEscapa(bool escapa){
+    this->escapa = escapa;
+}
+bool AtributoVariavel::pegaEscapa(){
+    return escapa;
+}
+void AtributoClasse::adicionarTamanho(int tamBytes){
+    this->tamBytes = tamBytes;
+}
+int AtributoClasse::pegarTamBytes(){
+    return tamBytes;
+}
+void AtributoTipo::adicionarTamanho(int tamBytes){
+    this->tamBytes = tamBytes;
+}
+int AtributoTipo::pegarTamBytes(){
+    return tamBytes;
+}
+void AtributoVariavel::atribuiTamanho(int tamBytes){
+    this->tamBytes = tamBytes;
+}
+int AtributoVariavel::pegaTamanho(){
+    return tamBytes;
+}

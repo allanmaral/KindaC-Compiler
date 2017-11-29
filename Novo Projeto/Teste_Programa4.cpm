@@ -2,11 +2,11 @@ class luis{
 	public:
 		char* x9;
 		int funcao(int k, float j){
-			this->x9;
+			//this->x9;
 			return a;
 		}
 		char* pegarA(){
-			return a;
+			//return a;
 		}
 	private:
 		float x1;
@@ -67,7 +67,7 @@ int funcao(int a, float b[3], int c, int *kgada[5]){
 	if(a){
 		a;
 	}
-	aa.pegarA(v) = "false";
+	aa.pegarA() = "false";
 	c = !a;
 	return c;
 	f.kk = 'c';

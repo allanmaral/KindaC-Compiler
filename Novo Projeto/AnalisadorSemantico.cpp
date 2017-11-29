@@ -14,10 +14,11 @@ bool verificandoAcesso = false;
 bool verificandoParametros = false;
 bool encontrou = false;
 bool erro = false;
+bool verificandoCorpo = false;
+bool ponteiro = false;
 int retorno = 0;
 Atributo *valorRetorno = NULL;
 Atributo *funcaoChamada = NULL;
-int verificandoCorpo = false;
 int arranjo = 0;
 Atributo *tipo = NULL;
 
@@ -77,7 +78,17 @@ void AnalisadorSemantico::visita(NoConteudo* con){
 
 }
 void AnalisadorSemantico::visita(NoEndereco* ende){
-
+    if(ende->primario){
+        ende->primario->aceita(this);
+    }
+    if(retorno == ID){
+        if(!tipo){
+            ((AtributoVariavel*)valorRetorno)->atribuirEscapa(true);
+        }
+        ponteiro = true;
+    }else{
+        ponteiro = false;
+    }
 }
 void AnalisadorSemantico::visita(NoNumInteiro* ni){
     retorno = NUM_INTEIRO;
@@ -102,20 +113,6 @@ void AnalisadorSemantico::visita(NoListaExpr* le){
     if(le->lista){
         le->lista->aceita(this);
     }
-    /*
-    if(verificandoParametros){
-        if(le->expressao){
-            int tipoExp = 0;
-            Atributo *idExp = NULL;
-            le->expressao->aceita(this);
-            tipoExp = retorno;
-            idExp = valorRetorno;
-
-            ((AtributoFuncao*)funcaoChamada)->buscaParametro()
-        }
-    }
-    */
-
 }
 void AnalisadorSemantico::visita(NoListaFormal* lf){
     TabelaSimbolos *tabela = tabelaVariaveisAtual;
@@ -343,6 +340,8 @@ void AnalisadorSemantico::visita(NoListaId* lid){
 }
 void AnalisadorSemantico::visita(NoDeclVariavel* decV){
     bool erroTipo = false;
+    Atributo *atrC = NULL;
+    Atributo *atrT = NULL;
     TabelaSimbolos *tabela;
     if(!tabelaVariaveisAtual){
         tabela = obtemTabelaVariaveis();
@@ -350,8 +349,8 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
         tabela = tabelaVariaveisAtual;
     }
     if(decV->tipo->primitivo == ID){
-        if(!obtemTabelaClasses()->busca(decV->tipo->entradaTabela->pegarLexema())){
-            if(!obtemTabelaTipos()->busca(decV->tipo->entradaTabela->pegarLexema())){
+        if(!(atrC = obtemTabelaClasses()->busca(decV->tipo->entradaTabela->pegarLexema()))){
+            if(!(atrT = obtemTabelaTipos()->busca(decV->tipo->entradaTabela->pegarLexema()))){
                 saidaErro(ErroSemanticoTipoVariavel, decV->linha, decV->coluna,
                                                 decV->tipo->entradaTabela->pegarLexema());
                 erroTipo = true;
@@ -393,6 +392,14 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
                         }
                     }
                     atr->atribuiPonteiro(aux->ponteiro);
+                    if(aux->ponteiro){
+                        atr->atribuirEscapa(true);
+                    }
+                    if(atrT){
+                        atr->atribuiTamanho(((AtributoTipo*)atrT)->pegarTamBytes());
+                    }else if(atrC){
+                        atr->atribuiTamanho(((AtributoClasse*)atrC)->pegarTamBytes());
+                    }
                     atr->atribuirLexema(aux->id->entradaTabela->pegarLexema());
                     ((AtributoVariavel*)atr)->atribuirTipo(tp);
                     tabela->insere(atr->pegarLexema(), atr);
@@ -700,13 +707,12 @@ void AnalisadorSemantico::visita(NoExprAtrib* atr){
     }
 }
 void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
-    int tipoDir = 0, tipoEsq = 0;
+    int tipoEsq = 0;
     Atributo *idDir = NULL, *idEsq = NULL;
     if(expAC->exprDireita){
         verificandoAcesso = true;
         expAC->exprDireita->aceita(this);
         verificandoAcesso = false;
-        tipoDir = retorno;
         idDir = valorRetorno;
     }
     if(expAC->exprEsquerda){

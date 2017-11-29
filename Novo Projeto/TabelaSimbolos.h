@@ -248,6 +248,10 @@ class AtributoVariavel:public Atributo{
         void atribuiPonteiro(bool ponteiro);
         void atribuiArranjo(int arranjo);
         void atribuiAcesso(AcessoLocal *acesso);
+        void atribuirEscapa(bool escapa);
+        void atribuiTamanho(int tamBytes);
+        int pegaTamanho();
+        bool pegaEscapa();
         int pegarArranjo();
         bool pegarPonteiro();
         Tipo* pegarTipo();
@@ -257,6 +261,8 @@ class AtributoVariavel:public Atributo{
         bool ponteiro;
         int arranjo;
         AcessoLocal *acesso;
+        bool escapa;
+        int tamBytes;
 };
 class AtributoFuncao:public Atributo{
     public:
@@ -305,6 +311,8 @@ class AtributoClasse:public Atributo{
         ~AtributoClasse();
         void adicionarFuncao(AtributoFuncaoClasse *atributo);
         void adicionarVariavel(AtributoVariavelClasse *atributo);
+        void adicionarTamanho(int tamBytes);
+        int pegarTamBytes();
         Atributo *buscaFuncao(char *id);
         Atributo *buscaVariavel(char *id);
         void atribuirHeranca(Atributo *heranca);
@@ -315,15 +323,19 @@ class AtributoClasse:public Atributo{
         TabelaSimbolos *funcoes;
         TabelaSimbolos *variaveis;
         Atributo *heranca;
+        int tamBytes;
 };
 class AtributoTipo:public Atributo{
     public:
         AtributoTipo();
         void adicionarVariavel(AtributoVariavel *var);
+        void adicionarTamanho(int tamBytes);
+        int pegarTamBytes();
         Atributo *buscaVariavel(char *id);
         TabelaSimbolos *pegaVariaveis();
         ~AtributoTipo();
     private:
         TabelaSimbolos *variaveis;
+        int tamBytes;
 };
 #endif
