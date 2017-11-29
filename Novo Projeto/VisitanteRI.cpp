@@ -51,12 +51,8 @@ void VisitanteTradutor::visita(NoNumInteiro        *ni     ) {
 void VisitanteTradutor::visita(NoNumReal           *nr     ) {
     ultimaExp = new CONSTF(atof(nr->entradaTabela->pegarLexema()));
 }
-void VisitanteTradutor::visita(NoArranjo           *arr    ) {
-    /// REVER DEVERIA RETORNAR UM TAMANHO EM BYTES, OU NEM SER VISITADO
-
-}
+void VisitanteTradutor::visita(NoArranjo           *arr    ) {}
 void VisitanteTradutor::visita(NoListaExpr         *le     ) {
-    /// LISTA DE EXP OU CONJUTO DE ESEC?
     Exp      *e1 = NULL;
     ListaExp *e2 = NULL;
     if(le->expressao) {
@@ -208,22 +204,23 @@ void VisitanteTradutor::visita(NoEscopo            *esc    ) {
     esc->lista->aceita(this);
 }
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
-    ///Precisa definir padrão de rotulos
     cha->parametros->aceita(this);
-    // Descobre rotulo da função
-    char* rotulo = NULL;
+    /// Descobre rotulo da função
+    char* rotulo = RotuloCF(NULL, NULL, cha->id->entradaTabela->pegarLexema(),0);
     ListaExp* listaParametros = static_cast<ListaExp*>(ultimaExp);
     ultimaExp = new CALL(new NAME(new Rotulo(rotulo)), listaParametros);
+    delete rotulo;
 }
 void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
     if(senE->expressao) senE->expressao->aceita(this);
     ultimaStm = new EXP(ultimaExp);
 }
 void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
-    char *rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), (int)decF->ponteiro); // REVER NOME DEPOIS
+    char *rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), 0); // REVER NOME DEPOIS
     FrameMIPS *novoFrame = new FrameMIPS(new Rotulo(rotulo), NULL, 0, 0);
     novoFrame->atr = decF->atr;
     frame = novoFrame;
+    funcaoAtual = decF;
     // Visita a lista de parametros
     decF->parametros->aceita(this);
     // Visita as declarações locais
@@ -415,12 +412,23 @@ void VisitanteTradutor::visita(NoEsse              *th     ) {
 }
 void VisitanteTradutor::visita(NoNovo              *n      ) {
     Temp* t = new Temp();
-    char* rotulo = n->id->entradaTabela->pegarLexema();
+    char* nome = n->id->entradaTabela->pegarLexema();
     if(n->listaExpr) n->listaExpr->aceita(this);
+    int tamanho = 4;
+    Rotulo *rotulo;
+    if(n->id) {
+        AtributoClasse *atr = static_cast<AtributoClasse*>(
+                                                 obtemTabelaClasses()->busca(n->id->entradaTabela->pegarLexema()));
+        /// REVER TAMANHO CLASSE
+        //tamanho = atr->pegarTamanho();
+        char *r = RotuloCF(nome, NULL, nome, 0);
+        rotulo = new Rotulo(r);
+        delete r;
+    }
     ultimaExp = new ESEQ(new MOVE(new TEMP(t),
                                   new CALL(new NAME(new Rotulo((char*)"malloc")),
-                                           new ListaExp(new CONST(0), NULL))), /// REVER TAMANHO CLASSE
-                         new ESEQ(new EXP(new CALL(new NAME(new Rotulo("construtor")),
+                                           new ListaExp(new CONST(tamanho), NULL))),
+                         new ESEQ(new EXP(new CALL(new NAME(rotulo),
                                                    new ListaExp(new TEMP(t), static_cast<ListaExp*>(ultimaExp)))),
                                   new TEMP(t)));
 }
@@ -439,24 +447,6 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
     }
     ultimaExp = new BINOP(OP_ADD, base, offset);
 }
-/// Retorna o prefixo do rotulo usando classe e função atuais
-char* VisitanteTradutor::RotuloBase(){
-    char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
-    int tamanho = 0;
-    if(classeAtual) {
-        t1 = classeAtual->id->entradaTabela->pegarLexema();
-        tamanho = strlen(t1);
-    }
-    if(funcaoAtual) {
-        if(t1) t2 = funcaoAtual->id->entradaTabela->pegarLexema(), tamanho += strlen(t2);
-        else   t1 = funcaoAtual->id->entradaTabela->pegarLexema(), tamanho += strlen(t1);
-    }
-    rotulo = new char[tamanho+3];
-    if(t2) sprintf(rotulo, "%s_%s_", t1, t2);
-    else if(t1) sprintf(rotulo, "%s_", t1);
-         else   rotulo[0] = '\0';
-    return rotulo;
-}
 /// Cria um rotulo para o literal usando função e classe que ele pertence
 char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
     char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
@@ -472,7 +462,26 @@ char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
     rotulo = new char[tamanho];
     if(t2) sprintf(rotulo, "%s_%s_%s_%d", t1, t2, nome, cont);
     else if(t1) sprintf(rotulo, "%s_%s_%d", t1, nome, cont);
-         else   rotulo[0] = '\0';
+         else   sprintf(rotulo, "%s_%d", nome, cont);
+    return rotulo;
+}
+
+char* VisitanteTradutor::RotuloCF(char* classe, char* func, char* nome, int cont)
+{
+    char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
+    int tamanho = strlen(nome) + 14; //10: max int, 3: '_', 1: char com '\0';
+    if(classe) {
+        t1 = classe;
+        tamanho += strlen(t1);
+    }
+    if(func) {
+        if(t1) t2 = func, tamanho += strlen(t2);
+        else   t1 = func, tamanho += strlen(t1);
+    }
+    rotulo = new char[tamanho];
+    if(t2) sprintf(rotulo, "%s_%s_%s_%d", t1, t2, nome, cont);
+    else if(t1) sprintf(rotulo, "%s_%s_%d", t1, nome, cont);
+         else   sprintf(rotulo, "%s_%d", nome, cont);
     return rotulo;
 }
 

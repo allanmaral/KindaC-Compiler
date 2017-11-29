@@ -20,8 +20,8 @@ class VisitanteRI{
           virtual void visita(NoFrame *nq)            = 0;
           virtual void visita(NoRegistrador *nr)        = 0;
 
-          ///MÃ©todos visita para MAQUINA ABSTRATA
-          //Visita especializaÃ§Ãµes de Exp
+          ///Métodos visita para MAQUINA ABSTRATA
+          //Visita especializações de Exp
           virtual void visita(ListaExp *lex)   = 0;
           virtual void visita(CONST *c)        = 0;
           virtual void visita(CONSTF *cf)      = 0;
@@ -31,7 +31,7 @@ class VisitanteRI{
           virtual void visita(MEM *m)          = 0;
           virtual void visita(CALL *ca)        = 0;
           virtual void visita(ESEQ *es)        = 0;
-          //Visita especializaÃ§Ãµes de Stm
+          //Visita especializações de Stm
           virtual void visita(ListaStm *lstm)  = 0;
           virtual void visita(MOVE *mo)        = 0;
           virtual void visita(EXP *ex)         = 0;
@@ -61,8 +61,8 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(FrameMIPS *quadroMIPS);
           void visita(NoRegistrador *nr);
 
-          ///MÃ©todos visita para MAQUINA ABSTRATA
-          //Visita especializaÃ§Ãµes de Exp
+          ///Métodos visita para MAQUINA ABSTRATA
+          //Visita especializações de Exp
           void visita(ListaExp* lex);
           void visita(CONST *c);
           void visita(CONSTF *cf);
@@ -72,7 +72,7 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(MEM *m);
           void visita(CALL *ca);
           void visita(ESEQ *es);
-          //Visita especializaÃ§Ãµes de Stm
+          //Visita especializações de Stm
           void visita(ListaStm *lstm);
           void visita(MOVE *mo);
           void visita(EXP *ex);
@@ -133,9 +133,8 @@ class VisitanteTradutor : Visitante {
 		void visita(NoTipo              *tp     );
 		void visita(NoColchetes         *nc     );
 	private:
-	    /// Retorna o prefixo do rotulo usando classe e funÃ§Ã£o atuais
-	    char* RotuloBase();
-	    /// Cria um rotulo para o literal usando funÃ§Ã£o e classe que ele pertence
+	    char* RotuloCF(char* classe, char* func, char* nome, int cont);
+	    /// Cria um rotulo para o literal usando função e classe que ele pertence
 	    char* RotuloNome(const char* nome, int cont);
 	    Stm          *ultimaStm;
 	    Exp          *ultimaExp;
