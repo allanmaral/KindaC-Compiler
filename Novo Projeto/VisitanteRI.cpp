@@ -227,7 +227,6 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     decF->variaveis->aceita(this);
     // Visita os stmts
     decF->sentenca->aceita(this);
-
     Procedimento *procedimento = new Procedimento(novoFrame, ultimaStm);
     if(listaFragmento) listaFragmento->InsereLista(procedimento);
     else listaFragmento = procedimento;
@@ -238,6 +237,11 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
 }
 void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
     // Adiciona paramantros ao frame
+   AtributoVariavel* var = (AtributoVariavel*) funcaoAtual->atr->buscaParametro(lf->id->entradaTabela->pegarLexema());
+   if(var){
+        var->atribuiAcesso(frame->insereParametro(false/*var->escapa*/,10/*var->tamanho*/));
+   }
+   if(lf->lista) lf->lista->aceita(this);
 }
 void VisitanteTradutor::visita(NoListaId           *lid    ) {}
 void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
@@ -278,6 +282,7 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
             AcessoLocal* acesso = frame->insereLocal(escapa, frame->deslocamentoVariaveisLocais);
             /// Atribui o acesso local à tabela de simbolos
             AtributoVariavel *var =
+                 static_cast<AtributoVariavel*>(frame->atr->busca(listaId->id->entradaTabela->pegarLexema()));
                  static_cast<AtributoVariavel*>(frame->atr->busca(listaId->id->entradaTabela->pegarLexema()));
             var->atribuiAcesso(acesso);
         } else {
