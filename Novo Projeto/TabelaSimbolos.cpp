@@ -431,6 +431,9 @@ bool AtributoVariavel::pegarPonteiro(){
 Tipo* AtributoVariavel::pegarTipo(){
     return tipo;
 }
+void AtributoVariavel::atribuiAcesso(AcessoLocal *acesso){
+    this->acesso = acesso;
+}
 AcessoLocal* AtributoVariavel::pegarAcesso(){
     return acesso;
 }

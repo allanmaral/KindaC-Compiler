@@ -108,8 +108,9 @@ class Variavel : public Fragmento {
     public: //TODO
         Atributo *tipo;
         int tamanho;
+        Rotulo *rotulo;
     public:
-        Variavel(Atributo *tipo, int tamanho);
+        Variavel(Atributo *tipo, int tamanho, Rotulo *rotulo);
         ~Variavel();
         void aceita(VisitanteRI *vri);
 };

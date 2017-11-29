@@ -41,7 +41,8 @@ void Literal::aceita(VisitanteRI* vri){
     vri->visita(this);
 }
 
-Variavel::Variavel(Atributo *tipo, int tamanho) : tipo(tipo), tamanho(tamanho) {}
+Variavel::Variavel(Atributo *tipo, int tamanho, Rotulo *rotulo)
+    : tipo(tipo), tamanho(tamanho), rotulo(rotulo) {}
 
 Variavel::~Variavel(){}
 

@@ -9,7 +9,7 @@ VisitanteTradutor::VisitanteTradutor()
 
 VisitanteTradutor::~VisitanteTradutor() {}
 
-// Agora √© abstrato, n√£o deve entrar aqui
+// Agora È abstrato, n„o deve entrar aqui
 void VisitanteTradutor::visita(NoPrograma          *prog   ) {
     if(prog->lista) prog->lista->aceita(this);
 }
@@ -40,7 +40,7 @@ void VisitanteTradutor::visita(NoConteudo          *con    ) {
 void VisitanteTradutor::visita(NoEndereco          *ende   ) {
     /// REVER
     if(ende->primario) ende->primario->aceita(this);
-    // Remove o acesso a memoria da express√£o filha, pegando, assim, o endere√ßo
+    // Remove o acesso a memoria da express„o filha, pegando, assim, o endereÁo
     if(MEM *mem = dynamic_cast<MEM*>(ultimaExp)) {
         ultimaExp = mem->e;
     }
@@ -69,9 +69,6 @@ void VisitanteTradutor::visita(NoListaExpr         *le     ) {
     }
     ultimaExp = new ListaExp(e1, e2);
 }
-void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
-    // Adiciona paramantros ao frame
-}
 void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
     Stm *st1 = NULL, *st2 = NULL;
     if(ls->sentenca) {
@@ -81,8 +78,8 @@ void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
     if(ls->lista) {
         ls->lista->aceita(this);
         st2 = ultimaStm;
+        ultimaStm = new SEQ(st1, st2);
     }
-    ultimaStm = new SEQ(st1, st2);
 }
 void VisitanteTradutor::visita(NoSe                *se     ) {
     char *rEntao = RotuloNome("EntaoSe", ++contLaco);
@@ -188,7 +185,7 @@ void VisitanteTradutor::visita(NoLeLinha           *leL    ) {
     ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"le_linha")), new ListaExp(ultimaExp, NULL)));
 }
 void VisitanteTradutor::visita(NoRetorna           *ret    ) {
-    // Cria um rotulo para o epilogo da fun√ß√£o
+    // Cria um rotulo para o epilogo da funÁ„o
     Exp* e1 = NULL;
     if(ret->expressao) {
         ret->expressao->aceita(this);
@@ -211,9 +208,9 @@ void VisitanteTradutor::visita(NoEscopo            *esc    ) {
     esc->lista->aceita(this);
 }
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
-    ///Precisa definir padr√£o de rotulos
+    ///Precisa definir padr„o de rotulos
     cha->parametros->aceita(this);
-    // Descobre rotulo da fun√ß√£o
+    // Descobre rotulo da funÁ„o
     char* rotulo = NULL;
     ListaExp* listaParametros = static_cast<ListaExp*>(ultimaExp);
     ultimaExp = new CALL(new NAME(new Rotulo(rotulo)), listaParametros);
@@ -229,7 +226,7 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     frame = novoFrame;
     // Visita a lista de parametros
     decF->parametros->aceita(this);
-    // Visita as declara√ß√µes locais
+    // Visita as declaraÁıes locais
     decF->variaveis->aceita(this);
     // Visita os stmts
     decF->sentenca->aceita(this);
@@ -242,34 +239,59 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     funcaoAtual = NULL;
     if(decF->lista) decF->lista->aceita(this);
 }
+void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
+    // Adiciona paramantros ao frame
+}
 void VisitanteTradutor::visita(NoListaId           *lid    ) {}
 void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
-    if(frame) {
-        NoListaId *listaId = decV->variaveis;
-        bool escapa = false; /// PRECISA PEGAR NA TABELA DE SIMBOLOS
-        // Calcula o deslocamento base
-        int deslocamento = 4;
+    NoListaId *listaId = decV->variaveis;
+    int tamanhoTipo = 4;
+        Atributo* tipo;
         if(decV->tipo->primitivo == ID) {
-            /// DESCOBRE O TIPO E O TAMANHO
-        }
-        while(listaId) {
-            escapa = false;
-            if(listaId->ponteiro) {
-                frame->deslocamentoVariaveisLocais += 4;
-                escapa = true;
-            }
-            else {
-                frame->deslocamentoVariaveisLocais += deslocamento;
-            }
-            AcessoLocal* acesso = frame->insereLocal(escapa, frame->deslocamentoVariaveisLocais);
-            // Atribui o acesso local √† tabela de simbolos
-            frame->atr->busca(listaId->id->entradaTabela->pegarLexema());
+            char *lexema = decV->tipo->entradaTabela->pegarLexema();
+            AtributoClasse* classe = static_cast<AtributoClasse*>(obtemTabelaClasses()->busca(lexema));
+            if(classe) {
+                /// PEGA A **** DO TAMAHO
+                // tamanhoTipo = classe->
+                tipo = classe;
+            } else {
+                  AtributoTipo* aTipo = static_cast<AtributoTipo*>(obtemTabelaTipos()->busca(lexema));
+                  if(aTipo) {
 
-            listaId = listaId->lista;
+                      tipo = aTipo;
+                  }
+                  //tamanhoTipo = tipo->
+              }
         }
-    }
-    else {
-        /// DECLARA√á√ÇO N√ÉO LOCAL
+
+    while(listaId) {
+        int tamanho = tamanhoTipo;
+        bool escapa = false; /// PRECISA PEGAR NA TABELA DE SIMBOLOS
+        if(listaId->arranjo) {
+            char* lexema = (static_cast<NoNumInteiro*>(listaId->arranjo->num))->entradaTabela->pegarLexema();
+            tamanho *= atoi(lexema);
+        }
+        if(listaId->ponteiro && escapa) {
+            escapa = true;
+            tamanho = 4;
+        }
+
+        if(frame) {
+            frame->deslocamentoVariaveisLocais += tamanho;
+            AcessoLocal* acesso = frame->insereLocal(escapa, frame->deslocamentoVariaveisLocais);
+            /// Atribui o acesso local ‡ tabela de simbolos
+            AtributoVariavel *var =
+                 static_cast<AtributoVariavel*>(frame->atr->busca(listaId->id->entradaTabela->pegarLexema()));
+            var->atribuiAcesso(acesso);
+        } else {
+            Rotulo *rotulo = new Rotulo(listaId->id->entradaTabela->pegarLexema());
+            Variavel *var = new Variavel(tipo, tamanho, rotulo);
+            /// PRECISA SALVAR NA TABELA DE ESIMBOLOS
+            if(listaFragmento) listaFragmento->InsereLista(var);
+            else  listaFragmento = var;
+        }
+
+        listaId = listaId->lista;
     }
 }
 void VisitanteTradutor::visita(NoDeclTipo          *decT   ) {}
@@ -417,7 +439,7 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
     }
     ultimaExp = new BINOP(OP_ADD, base, offset);
 }
-/// Retorna o prefixo do rotulo usando classe e fun√ß√£o atuais
+/// Retorna o prefixo do rotulo usando classe e funÁ„o atuais
 char* VisitanteTradutor::RotuloBase(){
     char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
     int tamanho = 0;
@@ -435,7 +457,7 @@ char* VisitanteTradutor::RotuloBase(){
          else   rotulo[0] = '\0';
     return rotulo;
 }
-/// Cria um rotulo para o literal usando fun√ß√£o e classe que ele pertence
+/// Cria um rotulo para o literal usando funÁ„o e classe que ele pertence
 char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
     char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
     int tamanho = strlen(nome) + 14; //10: max int, 3: '_', 1: char com '\0';
@@ -541,8 +563,8 @@ void VisitanteImpressaoRI::visita(NoRegistrador *nr){
     nivel--;
 }
 
-///M√©todos visita para MAQUINA ABSTRATA
-//Visita especializa√ß√µes de Exp
+///MÈtodos visita para MAQUINA ABSTRATA
+//Visita especializaÁıes de Exp
 void VisitanteImpressaoRI::visita(ListaExp* lex){
     if(lex->exp) lex->exp->aceita(this);
     if(lex->proximoExp) lex->proximoExp->aceita(this);
@@ -576,7 +598,7 @@ void VisitanteImpressaoRI::visita(TEMP *temp){
 void VisitanteImpressaoRI::visita(BINOP *bop){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-BINOP.%d\n",bop->op);/// Arrumar impress√£o do literal do operador
+    fprintf(stdout,"-BINOP.%d\n",bop->op);/// Arrumar impress„o do literal do operador
     if(bop->e1) bop->e1->aceita(this);
     if(bop->e2) bop->e2->aceita(this);
     nivel--;
@@ -606,7 +628,7 @@ void VisitanteImpressaoRI::visita(ESEQ *es){
     nivel--;
 
 }
-//Visita especializa√ß√µes de Stm
+//Visita especializaÁıes de Stm
 void VisitanteImpressaoRI::visita(ListaStm *lstm){
     if(lstm->stm) lstm->stm->aceita(this);
     if(lstm->proximoStm) lstm->proximoStm->aceita(this);
@@ -636,7 +658,7 @@ void VisitanteImpressaoRI::visita(JUMP *jp){
 void VisitanteImpressaoRI::visita(CJUMP *cjp){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-CJUMP.%d\n",cjp->op);/// Arrumar impress√£o do literal do operador
+    fprintf(stdout,"-CJUMP.%d\n",cjp->op);/// Arrumar impress„o do literal do operador
     if(cjp->e1) cjp->e1->aceita(this);
     if(cjp->e2) cjp->e2->aceita(this);
     if(cjp->verdadeiro) cjp->verdadeiro->aceita(this);
