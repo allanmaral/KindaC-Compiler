@@ -37,6 +37,7 @@ typedef enum {
     ErroSemanticoNaoPossuiAcesso,
     ErroSemanticoExprContr,
     ErroSemanticoEsse,
+    ErroSemanticoFuncaoAtribuicaoInvalido,
     ErroTamanhoEnumerador
 } Erros;
 

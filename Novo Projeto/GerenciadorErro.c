@@ -41,7 +41,8 @@ char ErroLiteral[ErroTamanhoEnumerador][256] = {
     " acessado nao existe",
     "Erro: Expressao nao possui acesso a campo",
     "Erro: Expressao de controle invalida",
-    "Erro: O ponteiro \"this\" nao pode ser usado fora do escopo de uma classe"
+    "Erro: O ponteiro \"this\" nao pode ser usado fora do escopo de uma classe",
+    "Erro: Funcao nao pode receber atribuicao"
 };
 
 /** \brief Armazena os dados do erro

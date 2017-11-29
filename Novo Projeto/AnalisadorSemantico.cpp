@@ -696,11 +696,12 @@ void AnalisadorSemantico::visita(NoExprAtrib* atr){
         idDir = valorRetorno;
     }
     if(atr->exprEsquerda){
+        erro = false;
         atr->exprEsquerda->aceita(this);
         tipoEsq = retorno;
         idEsq = valorRetorno;
     }
-    if(tipoEsq == ID && tipoDir == ID){
+    if(tipoEsq == ID && tipoDir == ID && !erro){
         char *lex1 = ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo()->pegaTipo())->pegarLexema();
         char *lex2 = ((TipoId*)((AtributoVariavel*)idDir)->pegarTipo()->pegaTipo())->pegarLexema();
         if(!strcmp(lex1, lex2)){
@@ -710,22 +711,28 @@ void AnalisadorSemantico::visita(NoExprAtrib* atr){
                  saidaErro(ErroSemanticoExpressaoInvalidaPonteiro, atr->linha, atr->coluna);
              }
     }
-    else if(tipoEsq != tipoDir){
-        switch(tipoEsq){
-            case ID:
-            case LITERAL:
-                saidaErro(ErroSemanticoTipoAtribuicaoInvalido, atr->linha, atr->coluna,
-                  (char*) pegarTokenLiteral(tipoEsq), (char*) pegarTokenLiteral(tipoDir));
-            break;
-            case INTEIRO:
-            case REAL:
-            case BOLEANO:
-            case CARACTERE:
-                if(tipoDir == LITERAL || tipoDir == ID){
+    else{
+        if(erro){
+            erro = false;
+            saidaErro(ErroSemanticoFuncaoAtribuicaoInvalido, atr->linha, atr->coluna);
+        }
+        else if(tipoEsq != tipoDir){
+            switch(tipoEsq){
+                case ID:
+                case LITERAL:
                     saidaErro(ErroSemanticoTipoAtribuicaoInvalido, atr->linha, atr->coluna,
-                  (char*) pegarTokenLiteral(tipoEsq), (char*) pegarTokenLiteral(tipoDir));
-                }
-            break;
+                      (char*) pegarTokenLiteral(tipoEsq), (char*) pegarTokenLiteral(tipoDir));
+                break;
+                case INTEIRO:
+                case REAL:
+                case BOLEANO:
+                case CARACTERE:
+                    if(tipoDir == LITERAL || tipoDir == ID){
+                        saidaErro(ErroSemanticoTipoAtribuicaoInvalido, atr->linha, atr->coluna,
+                      (char*) pegarTokenLiteral(tipoEsq), (char*) pegarTokenLiteral(tipoDir));
+                    }
+                break;
+            }
         }
     }
 }
@@ -757,6 +764,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                             saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
                         }
                         else{
+                            erro = true;
                             retorno = ((AtributoFuncao*)atrFunc)->pegarRetorno()->pegaTipo();
                             if(retorno == CARACTERE &&
                                     (((AtributoFuncao*)atrFunc)->pegarPonteiro())){
@@ -809,6 +817,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                             saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
                         }
                         else{
+                            erro = true;
                             retorno = ((AtributoFuncao*)atrFunc)->pegarRetorno()->pegaTipo();
                             if(retorno == CARACTERE &&
                                     (((AtributoFuncao*)atrFunc)->pegarPonteiro())){
@@ -851,7 +860,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
             else saidaErro(ErroSemanticoAcessoPonto, expAC->exprEsquerda->linha, expAC->exprEsquerda->coluna);
         }
     }
-    else saidaErro(ErroSemanticoNaoPossuiAcesso, expAC->exprEsquerda->linha, expAC->exprEsquerda->coluna);
+    else saidaErro(ErroSemanticoNaoPossuiAcesso, expAC->linha, expAC->coluna);
 }
 void AnalisadorSemantico::visita(NoVerdadeiro* tr){
     retorno = VERDADEIRO;
