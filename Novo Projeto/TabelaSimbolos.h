@@ -250,7 +250,7 @@ class AtributoVariavel:public Atributo{
         void atribuiAcesso(AcessoLocal *acesso);
         void atribuirEscapa(bool escapa);
         void atribuiTamanho(int tamBytes);
-        int pegaTamanho();
+        int pegarTamanho();
         bool pegaEscapa();
         int pegarArranjo();
         bool pegarPonteiro();

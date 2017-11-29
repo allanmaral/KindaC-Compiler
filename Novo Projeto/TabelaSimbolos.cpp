@@ -358,6 +358,7 @@ AtributoClasse::AtributoClasse():Atributo(){
     funcoes = new TabelaSimbolos();
     variaveis = new TabelaSimbolos();
     heranca = NULL;
+    tamBytes = 0;
 }
 AtributoClasse::~AtributoClasse(){
     delete funcoes;
@@ -412,6 +413,7 @@ AtributoVariavel::AtributoVariavel():Atributo(){
     ponteiro = false;
     arranjo = 0;
     acesso = NULL;
+    tamBytes = 4;
 }
 AtributoVariavel::~AtributoVariavel(){
     delete tipo;
@@ -458,6 +460,7 @@ bool AtributoVariavelClasse::pegaPublico(){
 }
 AtributoTipo::AtributoTipo():Atributo(){
     variaveis = new TabelaSimbolos();
+    tamBytes = 0;
 }
 void AtributoTipo::adicionarVariavel(AtributoVariavel* var){
     variaveis->insere(var->pegarLexema(), var);
@@ -539,13 +542,13 @@ bool AtributoVariavel::pegaEscapa(){
     return escapa;
 }
 void AtributoClasse::adicionarTamanho(int tamBytes){
-    this->tamBytes = tamBytes;
+    this->tamBytes += tamBytes;
 }
 int AtributoClasse::pegarTamBytes(){
     return tamBytes;
 }
 void AtributoTipo::adicionarTamanho(int tamBytes){
-    this->tamBytes = tamBytes;
+    this->tamBytes += tamBytes;
 }
 int AtributoTipo::pegarTamBytes(){
     return tamBytes;
@@ -553,6 +556,6 @@ int AtributoTipo::pegarTamBytes(){
 void AtributoVariavel::atribuiTamanho(int tamBytes){
     this->tamBytes = tamBytes;
 }
-int AtributoVariavel::pegaTamanho(){
+int AtributoVariavel::pegarTamanho(){
     return tamBytes;
 }

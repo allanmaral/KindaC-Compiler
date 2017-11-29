@@ -21,6 +21,9 @@ Atributo *valorRetorno = NULL;
 Atributo *funcaoChamada = NULL;
 int arranjo = 0;
 Atributo *tipo = NULL;
+AtributoClasse *tamanhoClasse = NULL;
+AtributoTipo *tamanhoTipo = NULL;
+
 
 AnalisadorSemantico::AnalisadorSemantico(){}
 AnalisadorSemantico::~AnalisadorSemantico(){}
@@ -116,11 +119,13 @@ void AnalisadorSemantico::visita(NoListaExpr* le){
 }
 void AnalisadorSemantico::visita(NoListaFormal* lf){
     TabelaSimbolos *tabela = tabelaVariaveisAtual;
+    Atributo *atrT = NULL;
+    Atributo *atrC = NULL;
     bool erroTipo = false;
     while(lf){
         if(lf->tipo->primitivo == ID){
-            if(!obtemTabelaTipos()->busca(lf->tipo->entradaTabela->pegarLexema())){
-                if(!obtemTabelaClasses()->busca(lf->tipo->entradaTabela->pegarLexema())){
+            if(!(atrT = obtemTabelaTipos()->busca(lf->tipo->entradaTabela->pegarLexema()))){
+                if(!(atrC = obtemTabelaClasses()->busca(lf->tipo->entradaTabela->pegarLexema()))){
                     saidaErro(ErroSemanticoTipoVariavel, lf->tipo->linha, lf->tipo->coluna,
                                lf->tipo->entradaTabela->pegarLexema());
                     erroTipo = false;
@@ -148,6 +153,14 @@ void AnalisadorSemantico::visita(NoListaFormal* lf){
                     }
                 }
                 atr->atribuiPonteiro(lf->ponteiro);
+                if(lf->ponteiro){
+                    atr->atribuirEscapa(true);
+                }
+                if(atrT){
+                    atr->atribuiTamanho(((AtributoTipo*)atrT)->pegarTamBytes());
+                }else if(atrC){
+                    atr->atribuiTamanho(((AtributoClasse*)atrC)->pegarTamBytes());
+                }
                 atr->atribuirLexema(lf->id->entradaTabela->pegarLexema());
                 tabela->insere(lf->id->entradaTabela->pegarLexema(), atr);
             }
@@ -397,6 +410,12 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
                     }
                     if(atrT){
                         atr->atribuiTamanho(((AtributoTipo*)atrT)->pegarTamBytes());
+                        if(tamanhoClasse){
+                            tamanhoClasse->adicionarTamanho(atr->pegarTamanho());
+                        }
+                        if(tamanhoTipo){
+                            tamanhoTipo->adicionarTamanho(atr->pegarTamanho());
+                        }
                     }else if(atrC){
                         atr->atribuiTamanho(((AtributoClasse*)atrC)->pegarTamBytes());
                     }
@@ -422,7 +441,9 @@ void AnalisadorSemantico::visita(NoDeclTipo* decT){
     }else{
         AtributoTipo *atr = new AtributoTipo();
         tabelaVariaveisAtual = atr->pegaVariaveis();
+        tamanhoTipo = atr;
         decT->campo->aceita(this);
+        tamanhoTipo = NULL;
         tabelaVariaveisAtual = NULL;
         atr->atribuirLexema(decT->id->entradaTabela->pegarLexema());
         obtemTabelaTipos()->insere(decT->id->entradaTabela->pegarLexema(), atr);
@@ -521,7 +542,9 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
     verificandoClasse = true;
     tabelaVariaveisAtual = atr->pegarVariaveis();
     tabelaFuncoesAtual = atr->pegarFuncoes();
+    tamanhoClasse = atr;
     if(decC->local) decC->local->aceita(this);
+    tamanhoClasse = NULL;
     verificandoClasse = false;
     tabelaVariaveisAtual = NULL;
     tabelaFuncoesAtual = NULL;
@@ -730,7 +753,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                                             ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema()))){
                     Atributo *atrFunc = NULL;
                     if((atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema()))){
-                        if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
+                        if(!((AtributoFuncaoClasse*)atrFunc)->pegaPublico()){
                             saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
                         }
                         else{
@@ -782,7 +805,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                                              ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema()))){
                     Atributo *atrFunc = NULL;
                     if((atrFunc = ((AtributoClasse*)atr)->buscaFuncao(idDir->pegarLexema()))){
-                        if(!((AtributoVariavelClasse*)atrFunc)->pegaPublico()){
+                        if(!((AtributoFuncaoClasse*)atrFunc)->pegaPublico()){
                             saidaErro(ErroSemanticoAcessoACampoPrivado, expAC->linha, expAC->coluna);
                         }
                         else{
