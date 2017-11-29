@@ -1,6 +1,7 @@
 #ifndef REP_INTERMEDIARIA_H
 #define REP_INTERMEDIARIA_H
 
+class Tipo;
 class Atributo;
 class AtributoFuncao;
 
@@ -105,12 +106,12 @@ class Literal : public Fragmento {
 };
 
 class Variavel : public Fragmento {
-    public: //TODO
-        Atributo *tipo;
+    public:
+        Tipo *tipo;
         int tamanho;
         Rotulo *rotulo;
     public:
-        Variavel(Atributo *tipo, int tamanho, Rotulo *rotulo);
+        Variavel(Tipo *tipo, int tamanho, Rotulo *rotulo);
         ~Variavel();
         void aceita(VisitanteRI *vri);
 };
