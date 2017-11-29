@@ -51,7 +51,6 @@ void VisitanteTradutor::visita(NoNumInteiro        *ni     ) {
 void VisitanteTradutor::visita(NoNumReal           *nr     ) {
     ultimaExp = new CONSTF(atof(nr->entradaTabela->pegarLexema()));
 }
-void VisitanteTradutor::visita(NoArranjo           *arr    ) {}
 void VisitanteTradutor::visita(NoListaExpr         *le     ) {
     Exp      *e1 = NULL;
     ListaExp *e2 = NULL;
@@ -131,7 +130,6 @@ void VisitanteTradutor::visita(NoEnquanto          *enq    ) {
     ultimoFim = rUltimoFim; // Desempilha o ultimo fim
 }
 void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {
-    /// SEQUENCIA DE IFs?
     char *rCaso = RotuloNome("EntaoCaso", ++contCaso);
     Rotulo *entao = new Rotulo(rCaso);
     delete rCaso;
@@ -157,7 +155,6 @@ void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {
 }
 void VisitanteTradutor::visita(NoDesvia            *des    ) {
     ultimaStm = new JUMP(new NAME(ultimoFim));
-
 }
 void VisitanteTradutor::visita(NoEscolha           *sw     ) {
     if(sw->expressao) sw->expressao->aceita(this);
@@ -196,9 +193,6 @@ void VisitanteTradutor::visita(NoRetorna           *ret    ) {
     delete rotuloReg;
     delete rotulo;
 }
-
-void VisitanteTradutor::visita(NoLanca             *lan    ) {}
-void VisitanteTradutor::visita(NoTenta             *te     ) {}
 
 void VisitanteTradutor::visita(NoEscopo            *esc    ) {
     esc->lista->aceita(this);
@@ -246,36 +240,14 @@ void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
 void VisitanteTradutor::visita(NoListaId           *lid    ) {}
 void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
     NoListaId *listaId = decV->variaveis;
-    int tamanhoTipo = 4;
-        Atributo* tipo;
-        if(decV->tipo->primitivo == ID) {
-            char *lexema = decV->tipo->entradaTabela->pegarLexema();
-            AtributoClasse* classe = static_cast<AtributoClasse*>(obtemTabelaClasses()->busca(lexema));
-            if(classe) {
-                /// PEGA A **** DO TAMAHO
-                // tamanhoTipo = classe->
-                tipo = classe;
-            } else {
-                  AtributoTipo* aTipo = static_cast<AtributoTipo*>(obtemTabelaTipos()->busca(lexema));
-                  if(aTipo) {
-
-                      tipo = aTipo;
-                  }
-                  //tamanhoTipo = tipo->
-              }
-        }
-
     while(listaId) {
-        int tamanho = tamanhoTipo;
-        bool escapa = false; /// PRECISA PEGAR NA TABELA DE SIMBOLOS
-        if(listaId->arranjo) {
-            char* lexema = (static_cast<NoNumInteiro*>(listaId->arranjo->num))->entradaTabela->pegarLexema();
-            tamanho *= atoi(lexema);
-        }
-        if(listaId->ponteiro && escapa) {
-            escapa = true;
-            tamanho = 4;
-        }
+        Atributo *atr;
+        if(frame) atr = frame->atr->buscaVariavel(listaId->id->entradaTabela->pegarLexema());
+        else atr = obtemTabelaVariaveis()->busca(listaId->id->entradaTabela->pegarLexema());
+        AtributoVariavel *var = static_cast<AtributoVariavel*>(atr);
+
+        int tamanho = 4; //var->pegarTamanho();
+        bool escapa = false; //var->pegarEscapa();
 
         if(frame) {
             frame->deslocamentoVariaveisLocais += tamanho;
@@ -287,22 +259,17 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
             var->atribuiAcesso(acesso);
         } else {
             Rotulo *rotulo = new Rotulo(listaId->id->entradaTabela->pegarLexema());
-            Variavel *var = new Variavel(tipo, tamanho, rotulo);
+            Variavel *variavel = new Variavel(var->pegarTipo(), tamanho, rotulo);
             /// PRECISA SALVAR NA TABELA DE ESIMBOLOS
-            if(listaFragmento) listaFragmento->InsereLista(var);
-            else  listaFragmento = var;
+            if(listaFragmento) listaFragmento->InsereLista(variavel);
+            else  listaFragmento = variavel;
         }
 
         listaId = listaId->lista;
     }
 }
 void VisitanteTradutor::visita(NoDeclTipo          *decT   ) {}
-void VisitanteTradutor::visita(NoDeclLocalFuncao   *decLF  ) {}
-void VisitanteTradutor::visita(NoDeclLocalVariavel *decLV  ) {}
-void VisitanteTradutor::visita(NoDeclLocalPublico  *decLPub) {}
-void VisitanteTradutor::visita(NoDeclLocalPrivado  *decLPri) {}
-void VisitanteTradutor::visita(NoCorpoFuncao       *cF     ) {}
-void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {}
+
 void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {
     expU->expressao->aceita(this);
     Exp *e1=ultimaExp;
@@ -313,10 +280,13 @@ void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {
             Rotulo *nF = new Rotulo();
             Rotulo *fim = new Rotulo();
             ultimaExp = new ESEQ(new SEQ(new CJUMP(OP_EQ,e1,new CONST(1),nV,nF),
-                            new SEQ(new LABEL(nV),
-                                    new SEQ(new SEQ(new MOVE(new TEMP(r),new CONST(0)),new JUMP(new NAME(fim))),
-                                            new SEQ(new LABEL(nF),
-                                                    new SEQ(new MOVE(new TEMP(r),new CONST(1)),new LABEL(fim)))))),new TEMP(r));
+                                         new SEQ(new LABEL(nV),
+                                                 new SEQ(new SEQ(new MOVE(new TEMP(r), new CONST(0)),
+                                                                 new JUMP(new NAME(fim))),
+                                                         new SEQ(new LABEL(nF),
+                                                                 new SEQ(new MOVE(new TEMP(r), new CONST(1)),
+                                                                         new LABEL(fim)))))),
+                                 new TEMP(r));
             }break;
         case ADICAO:
             ultimaExp = new BINOP(OP_ADD,e1,new CONST(0));
@@ -416,7 +386,8 @@ void VisitanteTradutor::visita(NoEsse              *th     ) {
     ultimaExp = new MEM(new TEMP(new Temp((char*)"fp")));
 }
 void VisitanteTradutor::visita(NoNovo              *n      ) {
-    Temp* t = new Temp();
+    ultimaExp = new CONST(0);
+    /*Temp* t = new Temp();
     char* nome = n->id->entradaTabela->pegarLexema();
     if(n->listaExpr) n->listaExpr->aceita(this);
     int tamanho = 4;
@@ -435,7 +406,7 @@ void VisitanteTradutor::visita(NoNovo              *n      ) {
                                            new ListaExp(new CONST(tamanho), NULL))),
                          new ESEQ(new EXP(new CALL(new NAME(rotulo),
                                                    new ListaExp(new TEMP(t), static_cast<ListaExp*>(ultimaExp)))),
-                                  new TEMP(t)));
+                                  new TEMP(t)));*/
 }
 void VisitanteTradutor::visita(NoTipo              *tp     ) {}
 void VisitanteTradutor::visita(NoColchetes         *nc     ) {
@@ -444,7 +415,7 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
     if(nc->primario) {
         nc->primario->aceita(this);
         base = ultimaExp;
-        // Descobre o tamanho
+        /// Descobre o tamanho
     }
     if(nc->expressao) {
         nc->expressao->aceita(this);
@@ -452,6 +423,17 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
     }
     ultimaExp = new BINOP(OP_ADD, base, offset);
 }
+
+void VisitanteTradutor::visita(NoArranjo           *arr    ) {}
+void VisitanteTradutor::visita(NoLanca             *lan    ) {}
+void VisitanteTradutor::visita(NoTenta             *te     ) {}
+void VisitanteTradutor::visita(NoDeclLocalFuncao   *decLF  ) {}
+void VisitanteTradutor::visita(NoDeclLocalVariavel *decLV  ) {}
+void VisitanteTradutor::visita(NoDeclLocalPublico  *decLPub) {}
+void VisitanteTradutor::visita(NoDeclLocalPrivado  *decLPri) {}
+void VisitanteTradutor::visita(NoCorpoFuncao       *cF     ) {}
+void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {}
+
 /// Cria um rotulo para o literal usando função e classe que ele pertence
 char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
     char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
@@ -520,8 +502,8 @@ void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
     nivel++;
     imprimeNivel();
     fprintf(stdout,"-VAR\n");
-    AtributoVariavel* atr=static_cast<AtributoVariavel*>(var->tipo);
-    atr->pegarAcesso()->aceita(this);
+    //AtributoVariavel* atr=static_cast<AtributoVariavel*>(var->tipo);
+    //atr->pegarAcesso()->aceita(this);
     nivel++;
     imprimeNivel();
     if(var->tamanho) fprintf(stdout,"-TAM.%d\n",var->tamanho);
