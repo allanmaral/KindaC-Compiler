@@ -193,7 +193,7 @@ void VisitanteTradutor::visita(NoRetorna           *ret    ) {
     }
     char* rotuloReg = RotuloNome("Retorno", 0);
     char* rotulo = RotuloNome("Epilogo", 0);
-    ultimaStm = new SEQ(new MOVE(new TEMP(new Temp(rotuloReg)), e1),
+    ultimaStm = new SEQ(new MOVE(new TEMP(frame->tempRetorno), e1),
                         new JUMP(new NAME(new Rotulo(rotulo))));
     delete rotuloReg;
     delete rotulo;
@@ -230,7 +230,7 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     }
     // Visita os stmts
     if(decF->sentenca) {
-            decF->sentenca->aceita(this);
+        decF->sentenca->aceita(this);
     }
     Procedimento *procedimento = new Procedimento(novoFrame, ultimaStm);
     if(listaFragmento) listaFragmento->InsereLista(procedimento);
@@ -490,7 +490,23 @@ char* VisitanteTradutor::RotuloCF(char* classe, char* func, char* nome, int cont
 }
 
 
-
+static char operadorLiteral[OP_Tamanho][8] {
+    "OP_ADD",
+    "OP_SUB",
+    "OP_MUL",
+    "OP_DIV",
+    "OP_E",
+    "OP_OU",
+    "OP_DLE",
+    "OP_DLD",
+    "OP_DLDA",
+    "OP_NEQ",
+    "OP_EQ",
+    "OP_LT",
+    "OP_GT",
+    "OP_LE",
+    "OP_GE",
+};
 
 VisitanteImpressaoRI::VisitanteImpressaoRI(){
     this->nivel=0;
@@ -510,6 +526,7 @@ void VisitanteImpressaoRI::visita(Procedimento *p){
     imprimeNivel();
     fprintf(stdout,"FRAME:\n");
     if(p->frame) p->frame->aceita(this);
+    imprimeNivel();
     fprintf(stdout,"CORPO:\n");
     if(p->corpo) p->corpo->aceita(this);
     nivel--;
@@ -535,7 +552,7 @@ void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
 void VisitanteImpressaoRI::visita(Temp *t){
     nivel++;
     imprimeNivel();
-    if(t->temp) fprintf(stdout,"-TEMP.%s\n",t->temp);
+    if(t->temp) fprintf(stdout,"-Registrador: %s\n",t->temp);
     nivel--;
 }
 void VisitanteImpressaoRI::visita(ListaTemp *listaTemp){
@@ -571,7 +588,7 @@ void VisitanteImpressaoRI::visita(FrameMIPS *quadroMIPS){///Verificar
     imprimeNivel();
     fprintf(stdout,"Deslocamento Locais: %d\n",quadroMIPS->deslocamentoVariaveisLocais);
     imprimeNivel();
-    fprintf(stdout,"Lista de Acesso\n");
+    fprintf(stdout,"Lista de Acesso:\n");
     nivel++;
     if(quadroMIPS->variaveisLocais) quadroMIPS->variaveisLocais->aceita(this);
     nivel -= 2;
@@ -581,7 +598,7 @@ void VisitanteImpressaoRI::visita(NoRegistrador *nr){
     fprintf(stdout, "NoReg\n");
     nivel++;
     imprimeNivel();
-    if(nr->temp) fprintf(stdout, "Temp.%s\n", nr->temp->temp);
+    if(nr->temp) fprintf(stdout, "Temp: %s\n", nr->temp->temp);
     imprimeNivel();
     fprintf(stdout, "Codigo de Acesso\n");
     if(nr->exp) nr->codigoAcesso()->aceita(this);
@@ -635,7 +652,7 @@ void VisitanteImpressaoRI::visita(TEMP *temp){
 void VisitanteImpressaoRI::visita(BINOP *bop){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-BINOP.%d\n",bop->op);/// Arrumar impress�o do literal do operador
+    fprintf(stdout,"-BINOP.%d\n",operadorLiteral[bop->op]);/// Arrumar impress�o do literal do operador
     if(bop->e1) bop->e1->aceita(this);
     if(bop->e2) bop->e2->aceita(this);
     nivel--;
@@ -695,7 +712,7 @@ void VisitanteImpressaoRI::visita(JUMP *jp){
 void VisitanteImpressaoRI::visita(CJUMP *cjp){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-CJUMP.%d\n",cjp->op);/// Arrumar impress�o do literal do operador
+    fprintf(stdout,"-CJUMP.%s\n",operadorLiteral[cjp->op]);/// Arrumar impress�o do literal do operador
     if(cjp->e1) cjp->e1->aceita(this);
     if(cjp->e2) cjp->e2->aceita(this);
     if(cjp->verdadeiro) cjp->verdadeiro->aceita(this);

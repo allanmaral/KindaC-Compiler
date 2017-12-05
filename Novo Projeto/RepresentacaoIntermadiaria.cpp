@@ -355,7 +355,7 @@ SEQ::~SEQ(){
     delete s2;
 }
 void SEQ::aceita(VisitanteRI *vri){
-
+    vri->visita(this);
 }
 LABEL::LABEL(Rotulo *n){
     this->n=n;

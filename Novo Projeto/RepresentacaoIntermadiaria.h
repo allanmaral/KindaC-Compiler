@@ -71,6 +71,7 @@ typedef enum {
     OP_GT,
     OP_LE,
     OP_GE,
+    OP_Tamanho
 } Operadores;
 
 //class Atributo;///apenas para compilar classe aoida nao foi implementada
