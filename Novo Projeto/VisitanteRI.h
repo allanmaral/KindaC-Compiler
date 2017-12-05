@@ -16,8 +16,8 @@ class VisitanteRI{
           virtual void visita(Rotulo *r)                = 0;
           virtual void visita(ListaRotulo *listaRotulo) = 0;
           virtual void visita(ListaAcesso *listaAcesso) = 0;
-          virtual void visita(FrameMIPS *quadroMIPS)   = 0;
-          virtual void visita(NoFrame *nq)            = 0;
+          virtual void visita(FrameMIPS *quadroMIPS)    = 0;
+          virtual void visita(NoFrame *nq)              = 0;
           virtual void visita(NoRegistrador *nr)        = 0;
 
           ///Métodos visita para MAQUINA ABSTRATA
@@ -60,6 +60,7 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(AcessoLocal *ac);
           void visita(FrameMIPS *quadroMIPS);
           void visita(NoRegistrador *nr);
+          void visita(NoFrame *nq);
 
           ///Métodos visita para MAQUINA ABSTRATA
           //Visita especializações de Exp
@@ -81,7 +82,7 @@ class VisitanteImpressaoRI: public VisitanteRI{
           void visita(SEQ *se);
           void visita(LABEL *l);
 };
-class VisitanteTradutor : Visitante {
+class VisitanteTradutor : public Visitante {
     public:
 		VisitanteTradutor();
 		~VisitanteTradutor();
@@ -132,6 +133,7 @@ class VisitanteTradutor : Visitante {
 		void visita(NoNovo              *n      );
 		void visita(NoTipo              *tp     );
 		void visita(NoColchetes         *nc     );
+		Fragmento    *listaFragmento;
 	private:
 	    char* RotuloCF(char* classe, char* func, char* nome, int cont);
 	    /// Cria um rotulo para o literal usando função e classe que ele pertence
@@ -142,7 +144,6 @@ class VisitanteTradutor : Visitante {
 	    NoDeclFuncao *funcaoAtual;
 	    Rotulo       *ultimoFim;
 	    FrameMIPS    *frame;
-	    Fragmento    *listaFragmento;
 	    Temp         *resultadoEscolha;
 	    int contLiteral, contLaco, contCaso, contEscolha;
 };

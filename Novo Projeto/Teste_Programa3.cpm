@@ -1,23 +1,9 @@
-class teste:B{
-	public:
-		void t(){
-			int i;
-			i = 0;
-		}
-	private:
-		float k;
-
-};
 typedef struct{
-	int i;
-	float k;
-	char *l;
-}testeTipo;
-testeTipo tt;
-teste te;
-teste funcao(testeTipo t, teste t1){
-	teste *t2, t3, *t4, *t5, *t6;
-	funcao(t2,&t3,*t4);
-	t2.k = tt.i + t.k + t1.i;
-	return t2;
+	int x;
+	int k;
+}teste;
+int main(){
+	teste t2;
+	print("alguma coisa");
+	return 0;
 }

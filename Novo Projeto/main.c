@@ -6,6 +6,7 @@
 #include "GerenciadorErro.h"
 #include "Visitante.h"
 #include "AnalisadorSemantico.h"
+#include "VisitanteRI.h"
 
 /** \brief Destrói objetos alocados durante a execução do programa
  *  Função chamada na saida do programa
@@ -40,20 +41,15 @@ int main(int argc, char** args){
     iniciaAnalisadorLexico(arquivo);
     NoPrograma* programa = Programa();
     // Imprime a ASA
-    VisitanteImpressao vp;
-    vp.visita(programa);
+    //VisitanteImpressao vp;
+    //vp.visita(programa);
     // Semantico
     AnalisadorSemantico as;
     as.visita(programa);
-    // imprime tabelas
-    fprintf(stdout, "\nTabela de Classes\n");
-    obtemTabelaClasses()->imprime();
-    fprintf(stdout, "\nTabela de Tipos\n");
-    obtemTabelaTipos()->imprime();
-    fprintf(stdout, "\nTabela de Variaveis\n");
-    obtemTabelaVariaveis()->imprime();
-    fprintf(stdout, "\nTabela de Funcoes\n");
-    obtemTabelaFuncoes()->imprime();
+    VisitanteTradutor vt;
+    vt.visita(programa);
+    VisitanteImpressaoRI vtri;
+    vtri.visita(vt.listaFragmento);
     imprimeListaErros();
     delete programa; // Destroi a ASA
     return 0;

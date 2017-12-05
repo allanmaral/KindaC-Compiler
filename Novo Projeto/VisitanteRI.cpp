@@ -216,9 +216,13 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     frame = novoFrame;
     funcaoAtual = decF;
     // Visita a lista de parametros
-    decF->parametros->aceita(this);
+    if(decF->parametros){
+        decF->parametros->aceita(this);
+    }
     // Visita as declarações locais
-    decF->variaveis->aceita(this);
+    if(decF->variaveis){
+        decF->variaveis->aceita(this);
+    }
     // Visita os stmts
     decF->sentenca->aceita(this);
     Procedimento *procedimento = new Procedimento(novoFrame, ultimaStm);
@@ -231,11 +235,13 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
 }
 void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
     // Adiciona paramantros ao frame
-   AtributoVariavel* var = (AtributoVariavel*) funcaoAtual->atr->buscaParametro(lf->id->entradaTabela->pegarLexema());
-   if(var){
-        var->atribuiAcesso(frame->insereParametro(false/*var->escapa*/,10/*var->tamanho*/));
+   if(lf){
+        AtributoVariavel* var = (AtributoVariavel*) funcaoAtual->atr->buscaParametro(lf->id->entradaTabela->pegarLexema());
+        if(var){
+            var->atribuiAcesso(frame->insereParametro(false/*var->escapa*/,10/*var->tamanho*/));
+        }
+        if(lf->lista) lf->lista->aceita(this);
    }
-   if(lf->lista) lf->lista->aceita(this);
 }
 void VisitanteTradutor::visita(NoListaId           *lid    ) {}
 void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
@@ -303,7 +309,7 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
     Exp *e2=ultimaExp;
 	 switch(expB->operador){
         case MENOR: case MENOR_IGUAL: case MAIOR: case MAIOR_IGUAL:{
-            int opRelacional;
+            int opRelacional = 0;
             if(expB->operador==MENOR){
               opRelacional = OP_LT;
             }else if(expB->operador==MENOR_IGUAL){
@@ -362,7 +368,7 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
             Temp *r= new Temp();
             //ultimaExp = new ESEQ(new EXP(new BINOP(OP_DIV,e1,e2)),new MOVE(new TEMP(r),new CALL(new NAME(new Rotulo("mfhi")),new ListaExp(new TEMP(r),NULL))));
             ultimaExp = new ESEQ(new SEQ(new EXP(new BINOP(OP_DIV,e1,e2)),
-                            new EXP(new CALL(new NAME(new Rotulo("mfhi")),new ListaExp(new TEMP(r),NULL)))),new TEMP(r));
+                            new EXP(new CALL(new NAME(new Rotulo((char*)"mfhi")),new ListaExp(new TEMP(r),NULL)))),new TEMP(r));
         }break;
     }
 }
@@ -410,7 +416,7 @@ void VisitanteTradutor::visita(NoNovo              *n      ) {
 }
 void VisitanteTradutor::visita(NoTipo              *tp     ) {}
 void VisitanteTradutor::visita(NoColchetes         *nc     ) {
-    int tamanhoTipo;
+    int tamanhoTipo ;
     Exp *base, *offset;
     if(nc->primario) {
         nc->primario->aceita(this);
@@ -676,4 +682,5 @@ void VisitanteImpressaoRI::visita(LABEL *l){
     if(l->n) l->n->aceita(this);
     nivel--;
 }
+void VisitanteImpressaoRI::visita(NoFrame* nq){}
 
