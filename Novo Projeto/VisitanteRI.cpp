@@ -81,8 +81,17 @@ void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
     if(ls->lista) {
         ls->lista->aceita(this);
         st2 = ultimaStm;
-        ultimaStm = new SEQ(st1, st2);
     }
+
+    if(st1 && st2) {
+        ultimaStm = new SEQ(st1, st2);
+    } else if (st1) {
+               ultimaStm = st1;
+           } else if (st2) {
+                      ultimaStm = st2;
+                  } else {
+                        ultimaStm = NULL;
+                    }
 }
 void VisitanteTradutor::visita(NoSe                *se     ) {
     char *rEntao = RotuloNome("EntaoSe", ++contLaco);
@@ -392,7 +401,7 @@ void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
     ultimaStm = new MOVE(e1,e2);
 }
 void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofsset da classe + do frame atual
-
+    ultimaExp = new CONST(0);
 }
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
     ultimaExp = new CONST(1);
@@ -443,8 +452,8 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
 }
 
 void VisitanteTradutor::visita(NoArranjo           *arr    ) {}
-void VisitanteTradutor::visita(NoLanca             *lan    ) {}
-void VisitanteTradutor::visita(NoTenta             *te     ) {}
+void VisitanteTradutor::visita(NoLanca             *lan    ) { ultimaStm = NULL; }
+void VisitanteTradutor::visita(NoTenta             *te     ) { ultimaStm = NULL; }
 void VisitanteTradutor::visita(NoDeclLocalFuncao   *decLF  ) {}
 void VisitanteTradutor::visita(NoDeclLocalVariavel *decLV  ) {}
 void VisitanteTradutor::visita(NoDeclLocalPublico  *decLPub) {}
@@ -493,7 +502,7 @@ char* VisitanteTradutor::RotuloCF(char* classe, char* func, char* nome, int cont
 }
 
 
-static char operadorLiteral[OP_Tamanho][8] {
+static char operadorLiteral[OP_Tamanho][8] = {
     "OP_ADD",
     "OP_SUB",
     "OP_MUL",
@@ -508,7 +517,7 @@ static char operadorLiteral[OP_Tamanho][8] {
     "OP_LT",
     "OP_GT",
     "OP_LE",
-    "OP_GE",
+    "OP_GE"
 };
 
 VisitanteImpressaoRI::VisitanteImpressaoRI(){
@@ -555,7 +564,7 @@ void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
 void VisitanteImpressaoRI::visita(Temp *t){
     nivel++;
     imprimeNivel();
-    if(t->temp) fprintf(stdout,"-Registrador: %s\n",t->temp);
+    if(t->temp) fprintf(stdout,"-Registrador.%s\n",t->temp);
     nivel--;
 }
 void VisitanteImpressaoRI::visita(ListaTemp *listaTemp){
@@ -655,7 +664,7 @@ void VisitanteImpressaoRI::visita(TEMP *temp){
 void VisitanteImpressaoRI::visita(BINOP *bop){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-BINOP.%d\n",operadorLiteral[bop->op]);/// Arrumar impress�o do literal do operador
+    fprintf(stdout,"-BINOP.%s\n",operadorLiteral[bop->op]);/// Arrumar impress�o do literal do operador
     if(bop->e1) bop->e1->aceita(this);
     if(bop->e2) bop->e2->aceita(this);
     nivel--;
