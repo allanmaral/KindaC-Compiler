@@ -1,6 +1,6 @@
 #include "RepresentacaoIntermadiaria.h"
 #include <stdio.h>
-typedef struct FilaRegistrador;
+struct FilaRegistrador;
 
 class Gerador{
     private:
