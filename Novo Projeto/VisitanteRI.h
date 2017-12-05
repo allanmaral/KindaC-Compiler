@@ -134,7 +134,7 @@ class VisitanteTradutor : public Visitante {
 		void visita(NoNovo              *n      );
 		void visita(NoTipo              *tp     );
 		void visita(NoColchetes         *nc     );
-		Fragmento    *listaFragmento;
+
 	private:
 	    char* RotuloCF(char* classe, char* func, char* nome, int cont);
 	    /// Cria um rotulo para o literal usando fun��o e classe que ele pertence
@@ -145,6 +145,7 @@ class VisitanteTradutor : public Visitante {
 	    NoDeclFuncao *funcaoAtual;
 	    Rotulo       *ultimoFim;
 	    FrameMIPS    *frame;
+	    Fragmento    *listaFragmento;
 	    Temp         *resultadoEscolha;
 	    int contLiteral, contLaco, contCaso, contEscolha;
 };
