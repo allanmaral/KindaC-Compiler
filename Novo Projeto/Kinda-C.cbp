@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="Teste_Programa4.cpm" />
+				<Option parameters="Teste_Programa3.cpm" />
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
@@ -49,6 +49,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="AnalisadorSintatico.h" />
+		<Unit filename="CanonizadorRI.cpp" />
+		<Unit filename="CanonizadorRI.h" />
+		<Unit filename="Gerador.cpp" />
+		<Unit filename="Gerador.h" />
 		<Unit filename="GerenciadorErro.c">
 			<Option compilerVar="CC" />
 		</Unit>

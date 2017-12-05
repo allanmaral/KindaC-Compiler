@@ -69,6 +69,7 @@ void VisitanteTradutor::visita(NoListaExpr         *le     ) {
     ultimaExp = new ListaExp(e1, e2);
 }
 void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
+
     Stm *st1 = NULL, *st2 = NULL;
     if(ls->sentenca) {
         ls->sentenca->aceita(this);

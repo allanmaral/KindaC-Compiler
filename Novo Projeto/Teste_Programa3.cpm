@@ -2,8 +2,12 @@ typedef struct{
 	int x;
 	int k;
 }teste;
+void faz_alguma_coisa(int a, int b){
+
+}
 int main(){
 	teste t2;
 	print("alguma coisa");
+	faz_alguma_coisa(1,1);
 	return 0;
 }
