@@ -2,6 +2,23 @@
 #include "RepresentacaoIntermadiaria.h"
 #include "AnalisadorLexico.h"
 #include <string.h>
+static char operadorLiteral[OP_Tamanho][8] = {
+    "OP_ADD",
+    "OP_SUB",
+    "OP_MUL",
+    "OP_DIV",
+    "OP_E",
+    "OP_OU",
+    "OP_DLE",
+    "OP_DLD",
+    "OP_DLDA",
+    "OP_NEQ",
+    "OP_EQ",
+    "OP_LT",
+    "OP_GT",
+    "OP_LE",
+    "OP_GE"
+};
 VisitanteTradutor::VisitanteTradutor()
     : ultimaStm(NULL), ultimaExp(NULL), classeAtual(NULL), funcaoAtual(NULL),
       ultimoFim(NULL), frame(NULL), listaFragmento(NULL), resultadoEscolha(NULL),
@@ -502,23 +519,7 @@ char* VisitanteTradutor::RotuloCF(char* classe, char* func, char* nome, int cont
 }
 
 
-static char operadorLiteral[OP_Tamanho][8] = {
-    "OP_ADD",
-    "OP_SUB",
-    "OP_MUL",
-    "OP_DIV",
-    "OP_E",
-    "OP_OU",
-    "OP_DLE",
-    "OP_DLD",
-    "OP_DLDA",
-    "OP_NEQ",
-    "OP_EQ",
-    "OP_LT",
-    "OP_GT",
-    "OP_LE",
-    "OP_GE"
-};
+
 
 VisitanteImpressaoRI::VisitanteImpressaoRI(){
     this->nivel=0;

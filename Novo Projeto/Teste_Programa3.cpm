@@ -2,14 +2,12 @@ typedef struct{
 	int x;
 	int k;
 }teste;
-void faz_alguma_coisa(int a, int b){
+int faz_alguma_coisa(int a, int b){
 
 }
 int main(){
-	if(1){
-		2;
-	}else{
-		3;
-	}
+	try{
+
+	}catch(...){};
 	
 }

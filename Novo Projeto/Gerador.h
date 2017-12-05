@@ -1,8 +1,8 @@
-#include "VisitanteRI.h"
 #include "RepresentacaoIntermadiaria.h"
+#include <stdio.h>
 typedef struct FilaRegistrador;
 
-class Gerador: public VisitanteRI{
+class Gerador{
     private:
         FilaRegistrador* primeiroRegLivre;
         void liberaRetistrador(Temp *t);
@@ -10,6 +10,7 @@ class Gerador: public VisitanteRI{
         FILE *arqAss;
         void salvarTodosRegistradores(int offset);
         void recuperarTodosRegistradores(int offset);
+        Temp *r0;
     public:
           Gerador();
           ~Gerador();
@@ -32,14 +33,14 @@ class Gerador: public VisitanteRI{
           ///Metodos visita para MAQUINA ABSTRATA
           //Visita especializa��es de Exp
           void visita(ListaExp* lex);
-          void visita(CONST *c);
-          void visita(CONSTF *cf);
-          void visita(NAME *n);
-          void visita(TEMP *t);
-          void visita(BINOP *bop);
-          void visita(MEM *m);
-          void visita(CALL *ca);
-          void visita(ESEQ *es);
+          void visita(Exp *e);
+          Temp* visita(CONST *c);
+          Temp* visita(CONSTF *cf);
+          Temp* visita(NAME *n);
+          Temp* visita(TEMP *t);
+          Temp* visita(BINOP *bop);
+          Temp* visita(MEM *m);
+          Temp* visita(CALL *ca);
           //Visita especializa��es de Stm
           void visita(ListaStm *lstm);
           void visita(MOVE *mo);
