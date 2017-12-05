@@ -65,7 +65,6 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="src/CanonizadorRI.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

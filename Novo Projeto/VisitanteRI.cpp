@@ -9,9 +9,13 @@ VisitanteTradutor::VisitanteTradutor()
 
 VisitanteTradutor::~VisitanteTradutor() {}
 
-// Agora é abstrato, não deve entrar aqui
+Fragmento *VisitanteTradutor::pegarFragmento(){
+    return listaFragmento;
+}
+
+// Agora ï¿½ abstrato, nï¿½o deve entrar aqui
 void VisitanteTradutor::visita(NoPrograma          *prog   ) {
-    if(prog->lista) prog->lista->aceita(this);
+    prog->aceita(this);
 }
 void VisitanteTradutor::visita(NoId                *id     ) {
     /// PEGAR DESLOCAMENTO
@@ -40,7 +44,7 @@ void VisitanteTradutor::visita(NoConteudo          *con    ) {
 void VisitanteTradutor::visita(NoEndereco          *ende   ) {
     /// REVER
     if(ende->primario) ende->primario->aceita(this);
-    // Remove o acesso a memoria da expressão filha, pegando, assim, o endereço
+    // Remove o acesso a memoria da expressï¿½o filha, pegando, assim, o endereï¿½o
     if(MEM *mem = dynamic_cast<MEM*>(ultimaExp)) {
         ultimaExp = mem->e;
     }
@@ -178,7 +182,7 @@ void VisitanteTradutor::visita(NoLeLinha           *leL    ) {
     ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"le_linha")), new ListaExp(ultimaExp, NULL)));
 }
 void VisitanteTradutor::visita(NoRetorna           *ret    ) {
-    // Cria um rotulo para o epilogo da função
+    // Cria um rotulo para o epilogo da funï¿½ï¿½o
     Exp* e1 = NULL;
     if(ret->expressao) {
         ret->expressao->aceita(this);
@@ -199,7 +203,7 @@ void VisitanteTradutor::visita(NoEscopo            *esc    ) {
 }
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
     cha->parametros->aceita(this);
-    /// Descobre rotulo da função
+    /// Descobre rotulo da funï¿½ï¿½o
     char* rotulo = RotuloCF(NULL, NULL, cha->id->entradaTabela->pegarLexema(),0);
     ListaExp* listaParametros = static_cast<ListaExp*>(ultimaExp);
     ultimaExp = new CALL(new NAME(new Rotulo(rotulo)), listaParametros);
@@ -219,7 +223,7 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     if(decF->parametros){
         decF->parametros->aceita(this);
     }
-    // Visita as declarações locais
+    // Visita as declaraï¿½ï¿½es locais
     if(decF->variaveis){
         decF->variaveis->aceita(this);
     }
@@ -258,7 +262,7 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
         if(frame) {
             frame->deslocamentoVariaveisLocais += tamanho;
             AcessoLocal* acesso = frame->insereLocal(escapa, frame->deslocamentoVariaveisLocais);
-            /// Atribui o acesso local à tabela de simbolos
+            /// Atribui o acesso local ï¿½ tabela de simbolos
             AtributoVariavel *var =
                  static_cast<AtributoVariavel*>(frame->atr->busca(listaId->id->entradaTabela->pegarLexema()));
                  static_cast<AtributoVariavel*>(frame->atr->busca(listaId->id->entradaTabela->pegarLexema()));
@@ -273,8 +277,11 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
 
         listaId = listaId->lista;
     }
+    if(decV->lista) decV->lista->aceita(this);
 }
-void VisitanteTradutor::visita(NoDeclTipo          *decT   ) {}
+void VisitanteTradutor::visita(NoDeclTipo          *decT   ) {
+    if(decT->lista) decT->lista->aceita(this);
+}
 
 void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {
     expU->expressao->aceita(this);
@@ -438,9 +445,11 @@ void VisitanteTradutor::visita(NoDeclLocalVariavel *decLV  ) {}
 void VisitanteTradutor::visita(NoDeclLocalPublico  *decLPub) {}
 void VisitanteTradutor::visita(NoDeclLocalPrivado  *decLPri) {}
 void VisitanteTradutor::visita(NoCorpoFuncao       *cF     ) {}
-void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {}
+void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {
+    if(decC->lista) decC->lista->aceita(this);
+}
 
-/// Cria um rotulo para o literal usando função e classe que ele pertence
+/// Cria um rotulo para o literal usando funï¿½ï¿½o e classe que ele pertence
 char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
     char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
     int tamanho = strlen(nome) + 14; //10: max int, 3: '_', 1: char com '\0';
@@ -491,7 +500,7 @@ void VisitanteImpressaoRI::imprimeNivel(){
 }
 VisitanteImpressaoRI::~VisitanteImpressaoRI(){}
 void VisitanteImpressaoRI::visita(Fragmento *f){
-    if(f->proximoFragmento) f->proximoFragmento->aceita(this);
+    f->aceita(this);
 }
 void VisitanteImpressaoRI::visita(Procedimento *p){
     fprintf(stdout,"FRAME:\n");
@@ -565,8 +574,19 @@ void VisitanteImpressaoRI::visita(NoRegistrador *nr){
     nivel--;
 }
 
-///Métodos visita para MAQUINA ABSTRATA
-//Visita especializações de Exp
+void VisitanteImpressaoRI::visita(NoFrame *nf){
+    fprintf(stdout, "NoFrame\n");
+    nivel++;
+    imprimeNivel();
+    fprintf(stdout, "Deslocamento:%s\n", nf->deslocamento);
+    imprimeNivel();
+    fprintf(stdout, "Codigo de Acesso\n");
+    if(nf->exp) nf->codigoAcesso()->aceita(this);
+    nivel--;
+}
+
+///Mï¿½todos visita para MAQUINA ABSTRATA
+//Visita especializaï¿½ï¿½es de Exp
 void VisitanteImpressaoRI::visita(ListaExp* lex){
     if(lex->exp) lex->exp->aceita(this);
     if(lex->proximoExp) lex->proximoExp->aceita(this);
@@ -600,7 +620,7 @@ void VisitanteImpressaoRI::visita(TEMP *temp){
 void VisitanteImpressaoRI::visita(BINOP *bop){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-BINOP.%d\n",bop->op);/// Arrumar impressão do literal do operador
+    fprintf(stdout,"-BINOP.%d\n",bop->op);/// Arrumar impressï¿½o do literal do operador
     if(bop->e1) bop->e1->aceita(this);
     if(bop->e2) bop->e2->aceita(this);
     nivel--;
@@ -630,7 +650,7 @@ void VisitanteImpressaoRI::visita(ESEQ *es){
     nivel--;
 
 }
-//Visita especializações de Stm
+//Visita especializaï¿½ï¿½es de Stm
 void VisitanteImpressaoRI::visita(ListaStm *lstm){
     if(lstm->stm) lstm->stm->aceita(this);
     if(lstm->proximoStm) lstm->proximoStm->aceita(this);
@@ -660,7 +680,7 @@ void VisitanteImpressaoRI::visita(JUMP *jp){
 void VisitanteImpressaoRI::visita(CJUMP *cjp){
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-CJUMP.%d\n",cjp->op);/// Arrumar impressão do literal do operador
+    fprintf(stdout,"-CJUMP.%d\n",cjp->op);/// Arrumar impressï¿½o do literal do operador
     if(cjp->e1) cjp->e1->aceita(this);
     if(cjp->e2) cjp->e2->aceita(this);
     if(cjp->verdadeiro) cjp->verdadeiro->aceita(this);
@@ -682,5 +702,4 @@ void VisitanteImpressaoRI::visita(LABEL *l){
     if(l->n) l->n->aceita(this);
     nivel--;
 }
-void VisitanteImpressaoRI::visita(NoFrame* nq){}
 
