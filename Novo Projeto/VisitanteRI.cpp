@@ -37,6 +37,20 @@ void VisitanteTradutor::visita(NoPrograma          *prog   ) {
 void VisitanteTradutor::visita(NoId                *id     ) {
     /// PEGAR DESLOCAMENTO
     ultimaExp = new MEM(new CONST(0));
+    if(frame) {
+        Atributo* atr = frame->atr->busca(id->entradaTabela->pegarLexema());
+        if(atr)
+        {
+            AtributoVariavel* var = static_cast<AtributoVariavel*>(atr);
+            ultimaExp = var->pegarAcesso()->codigoAcesso();
+            return;
+        }
+    }
+    Atributo* atr = obtemTabelaVariaveis()->busca(id->entradaTabela->pegarLexema());
+    if(atr) {
+        AtributoVariavel* var = static_cast<AtributoVariavel*>(atr);
+        ultimaExp = new MEM(new NAME(var->pegarVariavel()->rotulo));
+    }
 }
 void VisitanteTradutor::visita(NoLiteral           *lit    ) {
     char* rot = RotuloNome("Literal", contLiteral++);
@@ -274,7 +288,7 @@ void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
    if(lf){
         AtributoVariavel* var = (AtributoVariavel*) funcaoAtual->atr->buscaParametro(lf->id->entradaTabela->pegarLexema());
         if(var){
-            var->atribuiAcesso(frame->insereParametro(var->pegaEscapa(), var->pegarTamanho()));
+            var->atribuiAcesso(frame->insereParametro(var->pegarEscapa(), var->pegarTamanho()));
         }
         if(lf->lista) lf->lista->aceita(this);
    }
@@ -288,20 +302,19 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
         else atr = obtemTabelaVariaveis()->busca(listaId->id->entradaTabela->pegarLexema());
         AtributoVariavel *var = static_cast<AtributoVariavel*>(atr);
 
-        int tamanho = 4; //var->pegarTamanho();
-        bool escapa = false; //var->pegarEscapa();
+        int tamanho = var->pegarTamanho();
+        bool escapa = var->pegarEscapa();
 
         if(frame) {
             frame->deslocamentoVariaveisLocais += tamanho;
             AcessoLocal* acesso = frame->insereLocal(escapa, frame->deslocamentoVariaveisLocais);
             /// Atribui o acesso local � tabela de simbolos
-            AtributoVariavel *var =
-                 static_cast<AtributoVariavel*>(frame->atr->busca(listaId->id->entradaTabela->pegarLexema()));
             var->atribuiAcesso(acesso);
         } else {
             Rotulo *rotulo = new Rotulo(listaId->id->entradaTabela->pegarLexema());
             Variavel *variavel = new Variavel(var->pegarTipo(), tamanho, rotulo);
             /// PRECISA SALVAR NA TABELA DE ESIMBOLOS
+            var->atribuirVariavel(variavel);
             if(listaFragmento) listaFragmento->InsereLista(variavel);
             else  listaFragmento = variavel;
         }

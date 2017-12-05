@@ -7,6 +7,7 @@
 #define TABELASIMBOLOS_H
 
 class AcessoLocal;
+class Variavel;
 
 class Atributo{
     public:
@@ -248,19 +249,22 @@ class AtributoVariavel:public Atributo{
         void atribuiPonteiro(bool ponteiro);
         void atribuiArranjo(int arranjo);
         void atribuiAcesso(AcessoLocal *acesso);
+        void atribuirVariavel(Variavel *variavel);
         void atribuirEscapa(bool escapa);
         void atribuiTamanho(int tamBytes);
         int pegarTamanho();
-        bool pegaEscapa();
+        bool pegarEscapa();
         int pegarArranjo();
         bool pegarPonteiro();
         Tipo* pegarTipo();
         AcessoLocal *pegarAcesso();
+        Variavel *pegarVariavel();
     protected:
         Tipo* tipo;
         bool ponteiro;
         int arranjo;
         AcessoLocal *acesso;
+        Variavel *variavel;
         bool escapa;
         int tamBytes;
 };

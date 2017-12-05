@@ -413,6 +413,7 @@ AtributoVariavel::AtributoVariavel():Atributo(){
     ponteiro = false;
     arranjo = 0;
     acesso = NULL;
+    variavel = NULL;
     tamBytes = 4;
 }
 AtributoVariavel::~AtributoVariavel(){
@@ -435,6 +436,12 @@ void AtributoVariavel::atribuiAcesso(AcessoLocal *acesso){
 }
 AcessoLocal* AtributoVariavel::pegarAcesso(){
     return acesso;
+}
+void AtributoVariavel::atribuirVariavel(Variavel *variavel){
+    this->variavel = variavel;
+}
+Variavel* AtributoVariavel::pegarVariavel(){
+    return variavel;
 }
 AtributoFuncaoClasse::AtributoFuncaoClasse():AtributoFuncao(){
     publico = true;
@@ -538,7 +545,7 @@ Tipo* AtributoFuncao::pegarRetorno(){
 void AtributoVariavel::atribuirEscapa(bool escapa){
     this->escapa = escapa;
 }
-bool AtributoVariavel::pegaEscapa(){
+bool AtributoVariavel::pegarEscapa(){
     return escapa;
 }
 void AtributoClasse::adicionarTamanho(int tamBytes){
