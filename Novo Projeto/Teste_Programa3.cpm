@@ -6,13 +6,10 @@ void faz_alguma_coisa(int a, int b){
 
 }
 int main(){
-	teste t2;
-	int a , int b;
-	faz_alguma_coisa(1,1);
-	if(a|b){
-		faz_alguma_coisa(1,1);
+	if(1){
+		2;
 	}else{
-		print("alguma coisa");
+		3;
 	}
-	return 0;
+	
 }
