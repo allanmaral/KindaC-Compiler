@@ -36,7 +36,7 @@ void VisitanteTradutor::visita(NoPrograma          *prog   ) {
 }
 void VisitanteTradutor::visita(NoId                *id     ) {
     /// PEGAR DESLOCAMENTO
-    ultimaExp = new CONST(0);
+    ultimaExp = new MEM(new CONST(0));
 }
 void VisitanteTradutor::visita(NoLiteral           *lit    ) {
     char* rot = RotuloNome("Literal", contLiteral++);
@@ -367,6 +367,7 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
             }break;
         case ATRIBUICAO:
             break;
+        case E_COMERCIAL: /// REVER ISSO AQUI
         case E:{
 			Rotulo *l1 =  new Rotulo();
 			Rotulo *l2 =  new Rotulo();
@@ -377,8 +378,6 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
 							  new SEQ(new LABEL(l1),new SEQ(new CJUMP(OP_NEQ,e2,new CONST(0),l3,l2),
 								new SEQ(new LABEL(l3),new SEQ(new MOVE(new TEMP(t),new CONST(1)),new LABEL(l2))))))),new TEMP(t));
 			 }break;
-        case E_COMERCIAL:
-            break;
         case OU:{
         	Rotulo *l1 =  new Rotulo();
 			Rotulo *l2 =  new Rotulo();
@@ -415,7 +414,7 @@ void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
     Exp *e1=ultimaExp;
     atr->exprDireita->aceita(this);
     Exp *e2=ultimaExp;
-    ultimaStm = new MOVE(e1,e2);
+    ultimaExp = new ESEQ(new MOVE(e1,e2), e1);
 }
 void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofsset da classe + do frame atual
     ultimaExp = new CONST(0);
@@ -460,6 +459,7 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
         nc->primario->aceita(this);
         base = ultimaExp;
         /// Descobre o tamanho
+        if(MEM* temp = dynamic_cast<MEM*>(base)) base = temp->e;
     }
     if(nc->expressao) {
         nc->expressao->aceita(this);
