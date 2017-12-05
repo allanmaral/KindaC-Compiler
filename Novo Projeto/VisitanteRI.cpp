@@ -72,6 +72,9 @@ void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
     Stm *st1 = NULL, *st2 = NULL;
     if(ls->sentenca) {
         ls->sentenca->aceita(this);
+        if(dynamic_cast<NoExpr*>(ls->sentenca)) {
+            ultimaStm = new EXP(ultimaExp);
+        }
         st1 = ultimaStm;
     }
     if(ls->lista) {
@@ -91,7 +94,7 @@ void VisitanteTradutor::visita(NoSe                *se     ) {
     delete rFimSe;
     se->expressao->aceita(this);
     Exp *e1 = ultimaExp;
-    se->sentenca->aceita(this);
+    if(se->sentenca) se->sentenca->aceita(this);
     Stm *s1 = ultimaStm;
     if(se->senao){
         char* rSenao = RotuloNome("SeNao", contLaco);
