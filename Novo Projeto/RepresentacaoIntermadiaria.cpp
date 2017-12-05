@@ -149,18 +149,35 @@ AcessoLocal *FrameMIPS::insereParametro(bool escapa, int deslocamento) {
     } else {
         acesso = new NoFrame(deslocamento);
     }
+
+    if(variaveisLocais) {
+        ListaAcesso *t = variaveisLocais;
+        while(t->proximoAcesso) t = t->proximoAcesso;
+        t->proximoAcesso = new ListaAcesso(acesso, NULL);
+    } else {
+        variaveisLocais = new ListaAcesso(acesso, NULL);
+    }
     numeroParametros++;
     return acesso;
 }
 AcessoLocal *FrameMIPS::insereLocal(bool escapa, int deslocamento) {
-    if(escapa) return new NoFrame(deslocamento);
-    else return new NoRegistrador(new Temp());
+    AcessoLocal *acesso = NULL;
+    if(escapa) acesso = new NoFrame(deslocamento);
+    else acesso = new NoRegistrador(new Temp());
+    if(variaveisLocais) {
+        ListaAcesso *t = variaveisLocais;
+        while(t->proximoAcesso) t = t->proximoAcesso;
+        t->proximoAcesso = new ListaAcesso(acesso, NULL);
+    } else {
+        variaveisLocais = new ListaAcesso(acesso, NULL);
+    }
+    return acesso;
 }
 void FrameMIPS::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
 NoFrame::NoFrame(int deslocamento) : deslocamento(deslocamento) {
-    exp = new MEM(new BINOP(OP_SUB, new TEMP(new Temp((char*)"$fp")), new CONST(deslocamento)));
+    exp = new MEM(new BINOP(OP_SUB, new TEMP(new Temp((char*)"fp")), new CONST(deslocamento)));
 }
 NoFrame::~NoFrame() {
     delete exp;

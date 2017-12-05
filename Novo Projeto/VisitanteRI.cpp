@@ -228,7 +228,9 @@ void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
         decF->variaveis->aceita(this);
     }
     // Visita os stmts
-    decF->sentenca->aceita(this);
+    if(decF->sentenca) {
+            decF->sentenca->aceita(this);
+    }
     Procedimento *procedimento = new Procedimento(novoFrame, ultimaStm);
     if(listaFragmento) listaFragmento->InsereLista(procedimento);
     else listaFragmento = procedimento;
@@ -242,7 +244,7 @@ void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
    if(lf){
         AtributoVariavel* var = (AtributoVariavel*) funcaoAtual->atr->buscaParametro(lf->id->entradaTabela->pegarLexema());
         if(var){
-            var->atribuiAcesso(frame->insereParametro(false/*var->escapa*/,10/*var->tamanho*/));
+            var->atribuiAcesso(frame->insereParametro(var->pegaEscapa(), var->pegarTamanho()));
         }
         if(lf->lista) lf->lista->aceita(this);
    }
@@ -264,7 +266,6 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
             AcessoLocal* acesso = frame->insereLocal(escapa, frame->deslocamentoVariaveisLocais);
             /// Atribui o acesso local � tabela de simbolos
             AtributoVariavel *var =
-                 static_cast<AtributoVariavel*>(frame->atr->busca(listaId->id->entradaTabela->pegarLexema()));
                  static_cast<AtributoVariavel*>(frame->atr->busca(listaId->id->entradaTabela->pegarLexema()));
             var->atribuiAcesso(acesso);
         } else {
@@ -423,7 +424,7 @@ void VisitanteTradutor::visita(NoNovo              *n      ) {
 }
 void VisitanteTradutor::visita(NoTipo              *tp     ) {}
 void VisitanteTradutor::visita(NoColchetes         *nc     ) {
-    int tamanhoTipo ;
+    int tamanhoTipo;
     Exp *base, *offset;
     if(nc->primario) {
         nc->primario->aceita(this);
@@ -503,10 +504,14 @@ void VisitanteImpressaoRI::visita(Fragmento *f){
     f->aceita(this);
 }
 void VisitanteImpressaoRI::visita(Procedimento *p){
+    fprintf(stdout,"-PROCEDIMENTO:\n");
+    nivel++;
+    imprimeNivel();
     fprintf(stdout,"FRAME:\n");
     if(p->frame) p->frame->aceita(this);
     fprintf(stdout,"CORPO:\n");
     if(p->corpo) p->corpo->aceita(this);
+    nivel--;
     if(p->proximoFragmento) p->proximoFragmento->aceita(this);
 }
 void VisitanteImpressaoRI::visita(Literal *l){
@@ -516,7 +521,7 @@ void VisitanteImpressaoRI::visita(Literal *l){
 void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
     nivel++;
     imprimeNivel();
-    fprintf(stdout,"-VAR\n");
+    fprintf(stdout,"-VARIAVEL: %s\n", var->rotulo->rotulo);
     //AtributoVariavel* atr=static_cast<AtributoVariavel*>(var->tipo);
     //atr->pegarAcesso()->aceita(this);
     nivel++;
@@ -551,19 +556,27 @@ void VisitanteImpressaoRI::visita(ListaAcesso *listaAcesso){
     if(listaAcesso->proximoAcesso) listaAcesso->proximoAcesso->aceita(this);
 }
 void VisitanteImpressaoRI::visita(AcessoLocal *ace){
-    nivel++;
+    ace->aceita(this);
+    /*nivel++;
     ace->codigoAcesso()->aceita(this);
-    nivel--;
+    nivel--;*/
 }
 void VisitanteImpressaoRI::visita(FrameMIPS *quadroMIPS){///Verificar
-    if(quadroMIPS->rotulo) fprintf(stdout,"Rotulo.%s\n",quadroMIPS->rotulo->rotulo);
-    if(quadroMIPS->tempRetorno) fprintf(stdout,"Temp Retorno.%s\n",quadroMIPS->tempRetorno->temp);
-    fprintf(stdout,"Deslocamento Parametros.%d\n",quadroMIPS->deslocamentoParametros);
-    fprintf(stdout,"Deslocamento Locais.%d",quadroMIPS->deslocamentoVariaveisLocais);
+    nivel++;
+    if(quadroMIPS->rotulo) imprimeNivel(), fprintf(stdout,"Rotulo: %s\n",quadroMIPS->rotulo->rotulo);
+    if(quadroMIPS->tempRetorno) imprimeNivel(), fprintf(stdout,"Registador de Retorno: %s\n",quadroMIPS->tempRetorno->temp);
+    imprimeNivel();
+    fprintf(stdout,"Deslocamento Parametros: %d\n",quadroMIPS->deslocamentoParametros);
+    imprimeNivel();
+    fprintf(stdout,"Deslocamento Locais: %d\n",quadroMIPS->deslocamentoVariaveisLocais);
+    imprimeNivel();
     fprintf(stdout,"Lista de Acesso\n");
-    if(quadroMIPS->variaveisLocais);
+    nivel++;
+    if(quadroMIPS->variaveisLocais) quadroMIPS->variaveisLocais->aceita(this);
+    nivel -= 2;
 }
 void VisitanteImpressaoRI::visita(NoRegistrador *nr){
+    imprimeNivel();
     fprintf(stdout, "NoReg\n");
     nivel++;
     imprimeNivel();
@@ -575,10 +588,11 @@ void VisitanteImpressaoRI::visita(NoRegistrador *nr){
 }
 
 void VisitanteImpressaoRI::visita(NoFrame *nf){
+    imprimeNivel();
     fprintf(stdout, "NoFrame\n");
     nivel++;
     imprimeNivel();
-    fprintf(stdout, "Deslocamento:%s\n", nf->deslocamento);
+    fprintf(stdout, "Deslocamento: %d\n", nf->deslocamento);
     imprimeNivel();
     fprintf(stdout, "Codigo de Acesso\n");
     if(nf->exp) nf->codigoAcesso()->aceita(this);

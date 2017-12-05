@@ -49,7 +49,7 @@ int main(int argc, char** args){
     VisitanteTradutor vt;
     vt.visita(programa);
     VisitanteImpressaoRI vtri;
-    vtri.visita(vt.listaFragmento);
+    vtri.visita(vt.pegarFragmento());
     imprimeListaErros();
     delete programa; // Destroi a ASA
     return 0;
