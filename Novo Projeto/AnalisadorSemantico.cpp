@@ -599,6 +599,14 @@ void AnalisadorSemantico::visita(NoExprUnaria* expU){
         }
     }
 }
+Tipo *precedenciaTipo(Tipo *a, Tipo *b) {
+    int _a = a->pegaTipo(), _b = b->pegaTipo();
+    if(_b == ID || _a == ASCII || (_a == NUM_INTEIRO && _b == NUM_REAL))
+        return b;
+    else
+        return a;
+}
+
 void AnalisadorSemantico::visita(NoExprBinaria* expB){
     if(verificandoCorpo){
         verificandoCorpo = false;
@@ -700,6 +708,9 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
         else{
             saidaErro(ErroSemanticoTipoOperacaoInvalida, expB->linha, expB->coluna);
         }
+        /*if(expB->exprEsquerda && expB->exprDireita) {
+            expB->tipo = precedenciaTipo(expB->exprEsquerda, expB->exprDireita)
+        }*/
     }
 }
 void AnalisadorSemantico::visita(NoExprAtrib* atr){
