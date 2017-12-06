@@ -764,6 +764,7 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
         /*if(expB->exprEsquerda && expB->exprDireita) {
             expB->tipo = precedenciaTipo(expB->exprEsquerda, expB->exprDireita)
         }*/
+
         if(expB->exprDireita && expB->exprEsquerda) {
             expB->tipo = precedenciaTipo(expB->exprDireita->tipo, expB->exprEsquerda->tipo);
         }
