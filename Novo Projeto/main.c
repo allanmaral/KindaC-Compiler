@@ -7,6 +7,7 @@
 #include "Visitante.h"
 #include "AnalisadorSemantico.h"
 #include "VisitanteRI.h"
+#include "CanonizadorRI.h"
 
 /** \brief Destrói objetos alocados durante a execução do programa
  *  Função chamada na saida do programa
@@ -49,6 +50,12 @@ int main(int argc, char** args){
     VisitanteTradutor vt;
     vt.visita(programa);
     VisitanteImpressaoRI vtri;
+    vtri.visita(vt.pegarFragmento());
+
+    fprintf(stdout, "#####################Canonizador ###########################");
+
+    CanonizadorRI canRI;
+    canRI.visita(vt.pegarFragmento());
     vtri.visita(vt.pegarFragmento());
     imprimeListaErros();
     delete programa; // Destroi a ASA

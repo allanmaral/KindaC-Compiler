@@ -2,6 +2,9 @@
 
 Exp *expAtual = NULL;
 Stm *stmAtual = NULL;
+Exp *expAnterior = NULL;
+Stm *stmAnterior = NULL;
+bool alterado = false;
 
 CanonizadorRI::CanonizadorRI():VisitanteRI(){
 
@@ -11,6 +14,8 @@ CanonizadorRI::~CanonizadorRI(){
 }
 void CanonizadorRI::visita(ListaExp* lex){
     if(lex->exp){
+        expAnterior = lex;
+        stmAnterior = NULL;
         lex->exp->aceita(this);
         lex->exp = expAtual;
     }
@@ -32,6 +37,8 @@ void CanonizadorRI::visita(TEMP* t){
 }
 void CanonizadorRI::visita(BINOP* bop){
     ESEQ *exp;
+    expAnterior = bop;
+    stmAnterior = NULL;
     if(bop->e1){
         bop->e1->aceita(this);
         bop->e1 = expAtual;
@@ -41,12 +48,14 @@ void CanonizadorRI::visita(BINOP* bop){
         bop->e2 = expAtual;
     }
     if(bop->e1 && (exp = dynamic_cast<ESEQ*>(bop->e1))){
+        alterado = true;
         Exp *e1 = exp->e;
         exp->e = bop;
         bop->e1 = e1;
         expAtual = exp;
     }else{
         if(bop->e2 && (exp = dynamic_cast<ESEQ*>(bop->e2))){
+            alterado = true;
             Temp *t = new Temp();
             TEMP *t1 = new TEMP(t);
             TEMP *t2 = new TEMP(t);
@@ -63,12 +72,15 @@ void CanonizadorRI::visita(BINOP* bop){
     }
 }
 void CanonizadorRI::visita(MEM* m){
+    expAnterior = m;
+    stmAnterior = NULL;
     if(m->e){
         m->e->aceita(this);
         m->e = expAtual;
     }
     ESEQ* eseq;
     if(m->e && (eseq = dynamic_cast<ESEQ*>(m->e))){
+        alterado = true;
         m->e = eseq->e;
         expAtual = new ESEQ(eseq->s, m);
         eseq->e = NULL;
@@ -79,15 +91,30 @@ void CanonizadorRI::visita(MEM* m){
     }
 }
 void CanonizadorRI::visita(CALL* ca){
-    Temp *t = new Temp();
-    TEMP *t1 = new TEMP(t);
-    TEMP *t2 = new TEMP(t);
-    MOVE *mo = new MOVE(t1,ca);
-    ESEQ *eseq = new ESEQ(mo,t2);
-    expAtual = eseq;
+    MOVE *mo;
+    TEMP *tmp;
+    if(!expAnterior){
+        if((mo = dynamic_cast<MOVE*>(stmAnterior))){
+            if(mo->e1 && (tmp = dynamic_cast<TEMP*>(mo->e1))){
+                expAtual = ca;
+                return;
+            }
+        }
+        alterado = true;
+        Temp *t = new Temp();
+        TEMP *t1 = new TEMP(t);
+        TEMP *t2 = new TEMP(t);
+        MOVE *mo = new MOVE(t1,ca);
+        ESEQ *eseq = new ESEQ(mo,t2);
+        expAtual = eseq;
+    }else{
+        expAtual = ca;
+    }
 }
 void CanonizadorRI::visita(ESEQ* es){
     ESEQ *exp;
+    expAnterior = es;
+    stmAnterior = NULL;
     if(es->e){
         es->e->aceita(this);
         es->e = expAtual;
@@ -97,6 +124,7 @@ void CanonizadorRI::visita(ESEQ* es){
         es->s = stmAtual;
     }
     if(es->e && (exp = dynamic_cast<ESEQ*>(es->e))){
+        alterado = true;
         SEQ *novo_seq;
         Stm *s1 = es->s;
         Stm *s2 = exp->s;
@@ -120,6 +148,8 @@ void CanonizadorRI::visita(ListaStm* lstm){
 }
 void CanonizadorRI::visita(MOVE* mo){
     ESEQ *exp;
+    stmAnterior = mo;
+    expAnterior = NULL;
     if(mo->e1){
         mo->e1->aceita(this);
         mo->e1 = expAtual;
@@ -129,6 +159,7 @@ void CanonizadorRI::visita(MOVE* mo){
         mo->e2 = expAtual;
     }
     if(mo->e1 && (exp = dynamic_cast<ESEQ*>(mo->e1))){
+        alterado = true;
         Stm *s = exp->s;
         Exp *e1 = exp->e;
         mo->e1 = e1;
@@ -142,19 +173,29 @@ void CanonizadorRI::visita(MOVE* mo){
     }
 }
 void CanonizadorRI::visita(EXP* ex){
+    ESEQ *eseq;
     if(ex->e){
+        stmAnterior = ex;
+        expAnterior = NULL;
         ex->e->aceita(this);
         ex->e = expAtual;
+        if(expAtual && (eseq = dynamic_cast<ESEQ*>(expAtual))){
+            stmAtual = new SEQ(eseq->s, new EXP(eseq->e));
+            return;
+        }
     }
     stmAtual = ex;
 }
 void CanonizadorRI::visita(JUMP* jp){
     ESEQ* eseq;
+    stmAnterior = jp;
+    expAnterior = NULL;
     if(jp->e){
         jp->e->aceita(this);
         jp->e = expAtual;
     }
     if(jp->e && (eseq = dynamic_cast<ESEQ*>(jp->e))){
+        alterado = true;
         jp->e = eseq->e;
         stmAtual = new SEQ(eseq->s, jp);
         eseq->e = NULL;
@@ -165,6 +206,8 @@ void CanonizadorRI::visita(JUMP* jp){
     }
 }
 void CanonizadorRI::visita(CJUMP* cjp){
+    stmAnterior = cjp;
+    expAnterior = NULL;
     if(cjp->e1){
         cjp->e1->aceita(this);
         cjp->e1 = expAtual;
@@ -175,10 +218,12 @@ void CanonizadorRI::visita(CJUMP* cjp){
     }
     ESEQ* eseq;
     if(cjp->e1 && (eseq = dynamic_cast<ESEQ*>(cjp->e1))){
+        alterado = true;
         cjp->e1 = eseq->e;
         stmAtual = new SEQ(eseq->s,cjp);
     }else{
         if(cjp->e2 && (eseq = dynamic_cast<ESEQ*>(cjp->e2))){
+            alterado = true;
             Temp* t = new Temp();
             Exp *e = cjp->e1;
             cjp->e1 = new TEMP(t);
@@ -193,6 +238,8 @@ void CanonizadorRI::visita(CJUMP* cjp){
     }
 }
 void CanonizadorRI::visita(SEQ* se){
+    stmAnterior = se;
+    expAnterior = NULL;
     SEQ *stm;
     if(se->s1){
         se->s1->aceita(this);
@@ -203,6 +250,7 @@ void CanonizadorRI::visita(SEQ* se){
         se->s2 = stmAtual;
     }
     if(se->s1 && (stm = dynamic_cast<SEQ*>(se->s1))){
+        alterado = true;
         Stm *s1 = stm->s1;
         Stm *s2 = stm->s2;
         Stm *s3 = se->s2;
@@ -216,15 +264,31 @@ void CanonizadorRI::visita(SEQ* se){
 void CanonizadorRI::visita(LABEL* l){
     stmAtual = l;
 }
-void CanonizadorRI::visita(Fragmento* f){}
+void CanonizadorRI::visita(Fragmento* f){
+    f->aceita(this);
+}
 void CanonizadorRI::visita(Procedimento* p){
     if(p->corpo){
-        p->corpo->aceita(this);
+        do{
+            alterado = false;
+            p->corpo->aceita(this);
+        }while(alterado);
         p->corpo = stmAtual;
     }
+    if(p->proximoFragmento){
+        p->proximoFragmento->aceita(this);
+    }
 }
-void CanonizadorRI::visita(Literal* l){}
-void CanonizadorRI::visita(Variavel* var){}
+void CanonizadorRI::visita(Literal* l){
+    if(l->proximoFragmento){
+        l->proximoFragmento->aceita(this);
+    }
+}
+void CanonizadorRI::visita(Variavel* var){
+    if(var->proximoFragmento){
+        var->proximoFragmento->aceita(this);
+    }
+}
 void CanonizadorRI::visita(Temp* t){}
 void CanonizadorRI::visita(ListaTemp* listaTemp){}
 void CanonizadorRI::visita(Rotulo* r){}
