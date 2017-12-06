@@ -1,7 +1,8 @@
+int funcao(){int a;if(1){}a=9;}
 int main(){
 	int a,c;
 	float b;
 	if(1){}
-	//2+1;
-	c=a;
+	funcao();
+	1+3;
 }
