@@ -54,27 +54,30 @@ Temp* Gerador::pegaRegistradorLivre(){
     }else return NULL;
 }
 void Gerador::salvarTodosRegistradores(int offset){
-    for(int i=0; i<NUM_REGISTRADORES; i++){
-        fprintf(arqAss,"sw $%s,%d($sp)\n", registradores[i], offset);
-        offset += 4;
-    }
     fprintf(arqAss, "sw $fp,%d($sp)\n", offset);
     offset += 4;
     fprintf(arqAss, "sw $t0,%d($sp)\n", offset);
     offset += 4;
     fprintf(arqAss, "sw $ra,%d($sp)\n", offset);
+    for(int i=0; i<NUM_REGISTRADORES; i++){
+        offset += 4;
+        fprintf(arqAss,"sw $%s,%d($sp)\n", registradores[i], offset);
+
+    }
 
 }
 void Gerador::recuperarTodosRegistradores(int offset){
-    for(int i=0; i<NUM_REGISTRADORES; i++){
-        fprintf(arqAss, "lw $%s,%d($sp)\n", registradores[i], offset);
-        offset += 4;
-    }
     fprintf(arqAss, "lw $fp,%d($sp)\n", offset);
     offset += 4;
     fprintf(arqAss, "lw $t0,%d($sp)\n", offset);
     offset += 4;
     fprintf(arqAss, "lw $ra,%d($sp)\n", offset);
+    for(int i=0; i<NUM_REGISTRADORES; i++){
+        offset += 4;
+        fprintf(arqAss, "lw $%s,%d($sp)\n", registradores[i], offset);
+
+    }
+
 }
 
 Gerador::Gerador(char *nomeArquivo) : arqAss(NULL){

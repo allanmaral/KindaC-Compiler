@@ -1,8 +1,11 @@
-int funcao(){int a;if(1){}a=9;}
-int main(){
-	int a,c;
-	float b;
-	if(1){}
-	funcao();
-	1+3;
+float PI;
+int X;
+
+int fatorial(int n){
+	if(n<1) {return 1;}
+	else {return n* fotorial(n-1);}
 }
+
+int main(){
+	fatorial(13);
+}	
