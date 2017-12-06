@@ -144,7 +144,7 @@ AcessoLocal *FrameMIPS::insereParametro(bool escapa, int deslocamento) {
     AcessoLocal* acesso = NULL;
     // Quatro primeiros parametros são colocados em registadores (se nao escaparem)
     if(numeroParametros <= 3 ) {
-        if(escapa) acesso = new NoFrame(deslocamento);
+        if(escapa) acesso = new NoFrame(-deslocamento);
         else acesso = new NoRegistrador(new Temp());
     } else {
         acesso = new NoFrame(deslocamento);

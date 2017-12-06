@@ -100,7 +100,6 @@ void VisitanteTradutor::visita(NoListaExpr         *le     ) {
     ultimaExp = new ListaExp(e1, e2);
 }
 void VisitanteTradutor::visita(NoListaSentenca     *ls     ) {
-
     Stm *st1 = NULL, *st2 = NULL;
     if(ls->sentenca) {
         ls->sentenca->aceita(this);
@@ -288,7 +287,10 @@ void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
    if(lf){
         AtributoVariavel* var = (AtributoVariavel*) funcaoAtual->atr->buscaParametro(lf->id->entradaTabela->pegarLexema());
         if(var){
-            var->atribuiAcesso(frame->insereParametro(var->pegarEscapa(), var->pegarTamanho()));
+            //var->atribuiAcesso(frame->insereParametro(var->pegarEscapa(), var->pegarTamanho()));
+            var->atribuiAcesso(frame->insereParametro(true, frame->deslocamentoParametros));
+            fprintf(stdout, "#################### %s - Arranjo: %d - ponteiro: %d\n", lf->id->entradaTabela->pegarLexema(), var->pegarArranjo(), var->pegarPonteiro());
+            frame->deslocamentoParametros += var->pegarTamanho() * (var->pegarArranjo() > 0 ? var->pegarArranjo() : 1);
         }
         if(lf->lista) lf->lista->aceita(this);
    }
@@ -303,17 +305,15 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
         AtributoVariavel *var = static_cast<AtributoVariavel*>(atr);
 
         int tamanho = var->pegarTamanho();
-        bool escapa = var->pegarEscapa();
+        bool escapa = true;//var->pegarEscapa();
 
         if(frame) {
             frame->deslocamentoVariaveisLocais += tamanho;
             AcessoLocal* acesso = frame->insereLocal(escapa, frame->deslocamentoVariaveisLocais);
-            /// Atribui o acesso local � tabela de simbolos
             var->atribuiAcesso(acesso);
         } else {
             Rotulo *rotulo = new Rotulo(listaId->id->entradaTabela->pegarLexema());
             Variavel *variavel = new Variavel(var->pegarTipo(), tamanho, rotulo);
-            /// PRECISA SALVAR NA TABELA DE ESIMBOLOS
             var->atribuirVariavel(variavel);
             if(listaFragmento) listaFragmento->InsereLista(variavel);
             else  listaFragmento = variavel;
@@ -472,6 +472,7 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
         nc->primario->aceita(this);
         base = ultimaExp;
         /// Descobre o tamanho
+        /// Só tira o mem se for um vetor
         if(MEM* temp = dynamic_cast<MEM*>(base)) base = temp->e;
     }
     if(nc->expressao) {
@@ -531,9 +532,6 @@ char* VisitanteTradutor::RotuloCF(char* classe, char* func, char* nome, int cont
     return rotulo;
 }
 
-
-
-
 VisitanteImpressaoRI::VisitanteImpressaoRI(){
     this->nivel=0;
 }
@@ -563,12 +561,9 @@ void VisitanteImpressaoRI::visita(Literal *l){
     if(l->proximoFragmento) l->proximoFragmento->aceita(this);
 }
 void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
-    nivel++;
-    imprimeNivel();
     fprintf(stdout,"-VARIAVEL: %s\n", var->rotulo->rotulo);
     //AtributoVariavel* atr=static_cast<AtributoVariavel*>(var->tipo);
     //atr->pegarAcesso()->aceita(this);
-    nivel++;
     imprimeNivel();
     if(var->tamanho) fprintf(stdout,"-TAM.%d\n",var->tamanho);
     nivel-=2;

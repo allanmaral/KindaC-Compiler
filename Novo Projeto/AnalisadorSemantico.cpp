@@ -50,6 +50,7 @@ void AnalisadorSemantico::visita(NoId* id){
     }
     encontrou = true;
     retorno = ((AtributoVariavel*)atr)->pegarTipo()->pegaTipo();
+    id->tipo = ((AtributoVariavel*)atr)->pegarTipo();
     if(retorno == CARACTERE &&
             (((AtributoVariavel*)atr)->pegarPonteiro() || ((AtributoVariavel*)atr)->pegarArranjo())){
         retorno = LITERAL;
@@ -70,19 +71,28 @@ void AnalisadorSemantico::visita(NoId* id){
 }
 void AnalisadorSemantico::visita(NoLiteral* lit){
     retorno = LITERAL;
+    lit->tipo = new Tipo(LITERAL);
 }
 void AnalisadorSemantico::visita(NoAscii* asc){
     retorno = ASCII;
+    asc->tipo = new Tipo(ASCII);
 }
 void AnalisadorSemantico::visita(NoParenteses* pa){
-    if(pa->expressao) pa->expressao->aceita(this);
+    if(pa->expressao) {
+        pa->expressao->aceita(this);
+        pa->tipo = pa->expressao->tipo;
+    }
 }
 void AnalisadorSemantico::visita(NoConteudo* con){
-
+    if(con->primario) {
+        con->primario->aceita(this);
+        con->tipo = con->primario->tipo;
+    }
 }
 void AnalisadorSemantico::visita(NoEndereco* ende){
     if(ende->primario){
         ende->primario->aceita(this);
+        ende->tipo = ende->primario->tipo;
     }
     if(retorno == ID){
         if(!tipo){
@@ -95,9 +105,11 @@ void AnalisadorSemantico::visita(NoEndereco* ende){
 }
 void AnalisadorSemantico::visita(NoNumInteiro* ni){
     retorno = NUM_INTEIRO;
+    ni->tipo = new Tipo(NUM_INTEIRO);
 }
 void AnalisadorSemantico::visita(NoNumReal* nr){
     retorno = NUM_REAL;
+    nr->tipo = new Tipo(NUM_REAL);
 }
 void AnalisadorSemantico::visita(NoArranjo* arr){
     if(arr->num){
@@ -221,10 +233,10 @@ void AnalisadorSemantico::visita(NoEscolha* sw){
     if(sw->blocoCaso)sw->blocoCaso->aceita(this);
 }
 void AnalisadorSemantico::visita(NoImprime* imp){
-
+    if(imp->listaExpr) imp->listaExpr->aceita(this);
 }
 void AnalisadorSemantico::visita(NoLeLinha* leL){
-
+    if(leL->expressao) leL->expressao->aceita(this);
 }
 void AnalisadorSemantico::visita(NoRetorna* ret){
     if(ret->expressao) ret->expressao->aceita(this);
@@ -241,6 +253,8 @@ void AnalisadorSemantico::visita(NoChamadaFuncao* cha){
         aux = valorRetorno;
         if(cha->parametros) cha->parametros->aceita(this);
         valorRetorno = aux;
+        AtributoFuncao* func = ((AtributoFuncao*) obtemTabelaFuncoes()->busca(aux->pegarLexema()));
+        if(func) cha->tipo = func->pegarRetorno();
     }
 }
 void AnalisadorSemantico::visita(NoTenta* te){
@@ -566,6 +580,7 @@ void AnalisadorSemantico::visita(NoDeclClasse* decC){
 void AnalisadorSemantico::visita(NoExprUnaria* expU){
     if(expU->expressao){
         expU->expressao->aceita(this);
+        expU->tipo = expU->expressao->tipo;
         if(retorno != 0){
             if(retorno != ID && retorno != LITERAL){
                 if(((AtributoVariavel*)valorRetorno)->pegarPonteiro()){

@@ -28,6 +28,7 @@ class NoSentenca:public NoErro{
 class NoExpr:public NoSentenca{
     public:
         virtual void aceita(Visitante *v) = 0;
+        Tipo *tipo = NULL;
 };
 class NoPrimario:public NoExpr{
     public:
