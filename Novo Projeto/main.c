@@ -53,7 +53,7 @@ int main(int argc, char** args){
     VisitanteImpressaoRI vtri;
     vtri.visita(vt.pegarFragmento());
 
-    fprintf(stdout, "#####################Canonizador ###########################");
+    fprintf(stdout, "#####################Canonizador ###########################\n");
 
     CanonizadorRI canRI;
     canRI.visita(vt.pegarFragmento());

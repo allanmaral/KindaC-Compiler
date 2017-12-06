@@ -86,7 +86,7 @@ void CanonizadorRI::visita(MEM* m){
         expAtual = new ESEQ(eseq->s, m);
         eseq->e = NULL;
         eseq->s = NULL;
-        delete eseq;
+        //delete eseq;
     }else{
         expAtual = m;
     }
@@ -134,7 +134,7 @@ void CanonizadorRI::visita(ESEQ* es){
         es->e = exp->e;
         exp->e = NULL;
         exp->s = NULL;
-        delete exp;
+        //delete exp;
     }
     expAtual = es;
 }
@@ -167,7 +167,7 @@ void CanonizadorRI::visita(MOVE* mo){
         SEQ *seq = new SEQ(s,mo);
         exp->e = NULL;
         exp->s = NULL;
-        delete exp;
+        //delete exp;
         stmAtual = seq;
     }else{
         stmAtual = mo;
@@ -201,7 +201,7 @@ void CanonizadorRI::visita(JUMP* jp){
         stmAtual = new SEQ(eseq->s, jp);
         eseq->e = NULL;
         eseq->s = NULL;
-        delete eseq;
+        //delete eseq;
     }else{
         stmAtual = jp;
     }
@@ -232,7 +232,7 @@ void CanonizadorRI::visita(CJUMP* cjp){
             stmAtual = new SEQ(new MOVE(new TEMP(t), e), new SEQ(eseq->s, cjp));
             eseq->e = NULL;
             eseq->s = NULL;
-            delete eseq;
+            //delete eseq;
         }else{
             stmAtual = cjp;
         }

@@ -1,7 +1,6 @@
 int main(){
-	int a,c;
-	float b;
-	if(1){}
-	//2+1;
-	c=a;
+	int a,b;
+	if(1){
+		a = b = 1;
+	}
 }

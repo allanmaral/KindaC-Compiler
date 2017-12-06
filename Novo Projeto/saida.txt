@@ -1,0 +1,34 @@
+.text
+
+#PROLOGO_MAIN
+subu $sp, $sp,8
+addu $fp, $sp,8
+li $t9, 1
+bne  $t9, $r0, main_EntaoSe_1
+main_EntaoSe_1:
+lw $r0, -4($fp)
+sw $r0, -8($fp)
+main_FimSe_1:
+main_0_fim:
+lw $s1,-36($sp)
+lw $s2,-32($sp)
+lw $s3,-28($sp)
+lw $s4,-24($sp)
+lw $s5,-20($sp)
+lw $s6,-16($sp)
+lw $s7,-12($sp)
+lw $t1,-8($sp)
+lw $t2,-4($sp)
+lw $t3,0($sp)
+lw $t4,4($sp)
+lw $t5,8($sp)
+lw $t6,12($sp)
+lw $t7,16($sp)
+lw $t8,20($sp)
+lw $t9,24($sp)
+lw $fp,28($sp)
+lw $t0,32($sp)
+lw $ra,36($sp)
+move $t0, $sp
+addu $sp, $sp,40
+j $ra 

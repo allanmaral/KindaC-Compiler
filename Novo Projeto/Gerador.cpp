@@ -131,7 +131,9 @@ Temp* Gerador::visita(ListaExp* lex){
 
 }
 void Gerador::visita(EXP* e){
-    liberaRetistrador(e->e->aceita(this));
+    if(e->e){
+        liberaRetistrador(e->e->aceita(this));
+    }
 }
 Temp* Gerador::visita(ESEQ *e){}
 
