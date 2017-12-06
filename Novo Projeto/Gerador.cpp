@@ -110,11 +110,17 @@ void Gerador::visita(Procedimento* p){
 }
 void Gerador::visita(Literal* l){
     fprintf(arqAss, ".rdata\nLiteral_%d:\n.asciiz %s\n", l->rotulo->obterString(), l->literal);
+    if(l->proximoFragmento){
+        l->proximoFragmento->aceita(this);
+    }
 }
 void Gerador::visita(Variavel* v){
     fprintf(arqAss, ".data\n");
     fprintf(arqAss, "var_%s: ", v->rotulo->obterString());
     fprintf(arqAss, ".space %d\n", v->tamanho);
+    if(v->proximoFragmento){
+        v->proximoFragmento->aceita(this);
+    }
 }
 
 void Gerador::visita(FrameMIPS* quadroMIPS){
@@ -304,7 +310,7 @@ Temp* Gerador::visita(CALL* call){
             fprintf(arqAss, "move %s,$v0\n", r->obterString());
 			return r;
 		}
-		else if(strcmp("readlnFloat", n->n->obterString()) == 0){
+		else if(strcmp("readlnReal", n->n->obterString()) == 0){
             fprintf(arqAss, "li $v0,0x06\n");
             fprintf(arqAss, "syscall\n");
             fprintf(arqAss, "move %s,$f0\n", r->obterString());
@@ -388,7 +394,7 @@ void Gerador::visita(MOVE* mov){
             Temp *aux = mov->e1->aceita(this);
             fprintf(arqAss, "move %s,%s\n", t->t->obterString(), aux->obterString());
         }
-	}
+    }
 }
 void Gerador::visita(JUMP* j){
     NAME *n;

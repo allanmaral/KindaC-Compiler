@@ -1,6 +1,11 @@
+int funcao(){
+	int a;
+}
 int main(){
-	int a,b;
+	int a,b,c;
 	if(1){
-		a = b = 1;
+		a = 1;
+		funcao();
+		//print("alguma coisa caralho\n");
 	}
 }

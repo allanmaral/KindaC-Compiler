@@ -65,6 +65,7 @@
 		<Unit filename="Visitante.h" />
 		<Unit filename="VisitanteRI.cpp" />
 		<Unit filename="VisitanteRI.h" />
+		<Unit filename="include/CanonizadorRI.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

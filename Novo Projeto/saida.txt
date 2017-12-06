@@ -1,34 +1,80 @@
 .text
 
+#PROLOGO_funcao_0
+sw $fp,-32($sp)
+sw $t0,-28($sp)
+sw $ra,-24($sp)
+sw $s1,-20($sp)
+sw $s2,-16($sp)
+sw $s3,-12($sp)
+sw $s4,-8($sp)
+sw $s5,-4($sp)
+sw $s6,0($sp)
+sw $s7,4($sp)
+sw $t1,8($sp)
+sw $t2,12($sp)
+sw $t3,16($sp)
+sw $t4,20($sp)
+sw $t5,24($sp)
+sw $t6,28($sp)
+sw $t7,32($sp)
+sw $t8,36($sp)
+sw $t9,40($sp)
+addi $fp, $sp, 0
+subu $sp, $sp,36
+funcao_0_fim:
+lw $fp,-32($sp)
+lw $t0,-28($sp)
+lw $ra,-24($sp)
+lw $s1,-20($sp)
+lw $s2,-16($sp)
+lw $s3,-12($sp)
+lw $s4,-8($sp)
+lw $s5,-4($sp)
+lw $s6,0($sp)
+lw $s7,4($sp)
+lw $t1,8($sp)
+lw $t2,12($sp)
+lw $t3,16($sp)
+lw $t4,20($sp)
+lw $t5,24($sp)
+lw $t6,28($sp)
+lw $t7,32($sp)
+lw $t8,36($sp)
+lw $t9,40($sp)
+move $t0, $sp
+addu $sp, $sp,36
+j $ra 
+.text
+
 #PROLOGO_MAIN
-subu $sp, $sp,8
-addu $fp, $sp,8
+subu $sp, $sp,12
+addu $fp, $sp,12
 li $t9, 1
 bne  $t9, $r0, main_EntaoSe_1
 main_EntaoSe_1:
-lw $r0, -4($fp)
-sw $r0, -8($fp)
+lw $t9, -4($fp)
 main_FimSe_1:
 main_0_fim:
-lw $s1,-36($sp)
-lw $s2,-32($sp)
-lw $s3,-28($sp)
-lw $s4,-24($sp)
-lw $s5,-20($sp)
-lw $s6,-16($sp)
-lw $s7,-12($sp)
-lw $t1,-8($sp)
-lw $t2,-4($sp)
-lw $t3,0($sp)
-lw $t4,4($sp)
-lw $t5,8($sp)
-lw $t6,12($sp)
-lw $t7,16($sp)
-lw $t8,20($sp)
-lw $t9,24($sp)
-lw $fp,28($sp)
-lw $t0,32($sp)
-lw $ra,36($sp)
+lw $fp,-40($sp)
+lw $t0,-36($sp)
+lw $ra,-32($sp)
+lw $s1,-28($sp)
+lw $s2,-24($sp)
+lw $s3,-20($sp)
+lw $s4,-16($sp)
+lw $s5,-12($sp)
+lw $s6,-8($sp)
+lw $s7,-4($sp)
+lw $t1,0($sp)
+lw $t2,4($sp)
+lw $t3,8($sp)
+lw $t4,12($sp)
+lw $t5,16($sp)
+lw $t6,20($sp)
+lw $t7,24($sp)
+lw $t8,28($sp)
+lw $t9,32($sp)
 move $t0, $sp
-addu $sp, $sp,40
+addu $sp, $sp,44
 j $ra 

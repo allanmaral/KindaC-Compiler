@@ -218,7 +218,7 @@ void VisitanteTradutor::visita(NoEscolha           *sw     ) {
 }
 void VisitanteTradutor::visita(NoImprime           *imp    ) {
     imp->listaExpr->aceita(this);
-    ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"imprime")), static_cast<ListaExp*>(ultimaExp)));
+    ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")), static_cast<ListaExp*>(ultimaExp)));
 }
 void VisitanteTradutor::visita(NoLeLinha           *leL    ) {
     leL->expressao->aceita(this);
