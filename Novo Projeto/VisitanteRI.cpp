@@ -135,6 +135,7 @@ void VisitanteTradutor::visita(NoSe                *se     ) {
     se->expressao->aceita(this);
     Exp *e1 = ultimaExp;
     if(se->sentenca) se->sentenca->aceita(this);
+
     Stm *s1 = ultimaStm;
     if(se->senao){
         char* rSenao = RotuloNome("SeNao", contLaco);
@@ -142,14 +143,16 @@ void VisitanteTradutor::visita(NoSe                *se     ) {
         delete rSenao;
         se->senao->aceita(this);
         Stm *s2 = ultimaStm;
+        s1 = ((s1) ?(Stm*)new SEQ(s1,new JUMP(new NAME(fimSe))):(Stm*)new JUMP(new NAME(fimSe)));
         ultimaStm = new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),entao,senao),
                             new SEQ(new LABEL(entao),
-                                    new SEQ(new SEQ(s1,new JUMP(new NAME(fimSe))),
+                                    new SEQ(s1,
                                             new SEQ(new LABEL(senao),
                                                     new SEQ(s2,new LABEL(fimSe))))));
     } else{
+          s1 = ((s1)?(Stm*)new SEQ(s1,new LABEL(fimSe)):(Stm*)new LABEL(fimSe));
           ultimaStm = new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),entao,fimSe),
-                              new SEQ(new LABEL(entao),new SEQ(s1,new LABEL(fimSe))));
+                              new SEQ(new LABEL(entao),s1));
       }
     ultimoFim = rUltimoFim; // Desempilha ultimo fim
 }
@@ -242,6 +245,7 @@ void VisitanteTradutor::visita(NoRetorna           *ret    ) {
 }
 
 void VisitanteTradutor::visita(NoEscopo            *esc    ) {
+    ultimaStm = NULL;
     if(esc->lista){
       esc->lista->aceita(this);
     }
@@ -259,7 +263,9 @@ void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
     ultimaStm = new EXP(ultimaExp);
 }
 void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
-    char *rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), 0); // REVER NOME DEPOIS
+    char *rotulo = NULL;
+    if(strcmp((char*)"main", decF->id->entradaTabela->pegarLexema()) == 0) { rotulo = (char*)"main"; }
+    RotuloNome(decF->id->entradaTabela->pegarLexema(), 0); // REVER NOME DEPOIS
     FrameMIPS *novoFrame = new FrameMIPS(new Rotulo(rotulo), NULL, 0, 0);
     novoFrame->atr = decF->atr;
     frame = novoFrame;
@@ -432,7 +438,30 @@ void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
     ultimaExp = new ESEQ(new MOVE(e1,e2), e1);
 }
 void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofsset da classe + do frame atual
-    ultimaExp = new CONST(0);
+    int deslocamento = 0;
+    Exp* base = NULL;
+    if(expAC->exprEsquerda) {
+        if(expAC->exprEsquerda->tipo->pegaTipo() == ID) {
+            Atributo* atr = obtemTabelaTipos()->busca(static_cast<TipoId*>(expAC->exprEsquerda->tipo)->pegarLexema());
+            if(atr) {
+                AtributoTipo *tp = static_cast<AtributoTipo*>(atr);
+                if(expAC->id_direita) {
+                    Atributo* _atr = tp->buscaVariavel(expAC->id_direita);
+                    if(_atr) {
+                        AtributoVariavel * var = static_cast<AtributoVariavel*>(_atr);
+                        deslocamento = var->pegarDeslocamento();
+                    }
+                }
+            }
+        }
+        expAC->exprEsquerda->aceita(this);
+        base = ultimaExp;
+        if(expAC->terminal == PONTO) {
+            if(MEM* m = dynamic_cast<MEM*>(base)) base = m->e;
+        }
+    }
+    ultimaExp = new MEM(new BINOP(OP_ADD, base, new CONST(deslocamento)));
+    //ultimaExp = new CONST(0);
 }
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
     ultimaExp = new CONST(1);
@@ -468,12 +497,17 @@ void VisitanteTradutor::visita(NoNovo              *n      ) {
 }
 void VisitanteTradutor::visita(NoTipo              *tp     ) {}
 void VisitanteTradutor::visita(NoColchetes         *nc     ) {
-    int tamanhoTipo;
+    int tamanhoTipo = 4;
     Exp *base, *offset;
     if(nc->primario) {
         nc->primario->aceita(this);
         base = ultimaExp;
-        /// Descobre o tamanho
+        if(nc->primario->tipo && nc->primario->tipo->pegaTipo() == ID) {
+            Atributo *atr = obtemTabelaTipos()->busca(static_cast<TipoId*>(nc->primario->tipo)->pegarLexema());
+            if(atr) {
+                tamanhoTipo = static_cast<AtributoTipo*>(atr)->pegarTamBytes();
+            }
+        }
         /// Só tira o mem se for um vetor
         if(MEM* temp = dynamic_cast<MEM*>(base)) base = temp->e;
     }

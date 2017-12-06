@@ -365,6 +365,7 @@ NoExprAceCamp::NoExprAceCamp(NoExpr *exprEsquerda, NoExpr *exprDireita, int term
     this->exprEsquerda = exprEsquerda;
     this->exprDireita = exprDireita;
     this->terminal = terminal;
+    this->id_direita = NULL;
 }
 void NoExprAceCamp::aceita(Visitante *v){
     v->visita(this);

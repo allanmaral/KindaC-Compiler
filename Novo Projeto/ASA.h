@@ -333,6 +333,7 @@ class NoExprAceCamp:public NoExpr{
         NoExpr *exprEsquerda;
         NoExpr *exprDireita;
         int terminal;
+        char* id_direita;
 };
 class NoVerdadeiro:public NoPrimario{
     void aceita(Visitante *v);

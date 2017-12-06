@@ -252,6 +252,7 @@ class AtributoVariavel:public Atributo{
         void atribuirVariavel(Variavel *variavel);
         void atribuirEscapa(bool escapa);
         void atribuiTamanho(int tamBytes);
+        void atribuirDeslocamento(int deslocamento);
         int pegarTamanho();
         bool pegarEscapa();
         int pegarArranjo();
@@ -259,6 +260,7 @@ class AtributoVariavel:public Atributo{
         Tipo* pegarTipo();
         AcessoLocal *pegarAcesso();
         Variavel *pegarVariavel();
+        int pegarDeslocamento();
     protected:
         Tipo* tipo;
         bool ponteiro;
@@ -267,6 +269,7 @@ class AtributoVariavel:public Atributo{
         Variavel *variavel;
         bool escapa;
         int tamBytes;
+        int deslocamento;
 };
 class AtributoFuncao:public Atributo{
     public:

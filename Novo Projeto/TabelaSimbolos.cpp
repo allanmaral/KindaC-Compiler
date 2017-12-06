@@ -415,6 +415,7 @@ AtributoVariavel::AtributoVariavel():Atributo(){
     acesso = NULL;
     variavel = NULL;
     tamBytes = 4;
+    deslocamento = 0;
 }
 AtributoVariavel::~AtributoVariavel(){
     delete tipo;
@@ -442,6 +443,12 @@ void AtributoVariavel::atribuirVariavel(Variavel *variavel){
 }
 Variavel* AtributoVariavel::pegarVariavel(){
     return variavel;
+}
+void AtributoVariavel::atribuirDeslocamento(int deslocamento) {
+    this->deslocamento = deslocamento;
+}
+int AtributoVariavel::pegarDeslocamento() {
+    return deslocamento;
 }
 AtributoFuncaoClasse::AtributoFuncaoClasse():AtributoFuncao(){
     publico = true;
