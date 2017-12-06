@@ -144,7 +144,7 @@ AcessoLocal *FrameMIPS::insereParametro(bool escapa, int deslocamento) {
     AcessoLocal* acesso = NULL;
     // Quatro primeiros parametros são colocados em registadores (se nao escaparem)
     if(numeroParametros <= 3 ) {
-        if(escapa) acesso = new NoFrame(-deslocamento);
+        if(escapa) acesso = new NoFrame(deslocamento);
         else acesso = new NoRegistrador(new Temp());
     } else {
         acesso = new NoFrame(deslocamento);
@@ -162,7 +162,7 @@ AcessoLocal *FrameMIPS::insereParametro(bool escapa, int deslocamento) {
 }
 AcessoLocal *FrameMIPS::insereLocal(bool escapa, int deslocamento) {
     AcessoLocal *acesso = NULL;
-    if(escapa) acesso = new NoFrame(deslocamento);
+    if(escapa) acesso = new NoFrame(-deslocamento);
     else acesso = new NoRegistrador(new Temp());
     if(variaveisLocais) {
         ListaAcesso *t = variaveisLocais;
@@ -177,7 +177,7 @@ void FrameMIPS::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
 NoFrame::NoFrame(int deslocamento) : deslocamento(deslocamento) {
-    exp = new MEM(new BINOP(OP_SUB, new TEMP(new Temp((char*)"fp")), new CONST(deslocamento)));
+    exp = new MEM(new BINOP(OP_ADD, new TEMP(new Temp((char*)"fp")), new CONST(deslocamento)));
 }
 NoFrame::~NoFrame() {
     delete exp;
