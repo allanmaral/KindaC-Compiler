@@ -1,7 +1,63 @@
-#include "RepresentacaoIntermadiaria.h"
+#ifndef GERADOR_H
+#define GERADOR_H
 #include <stdio.h>
-struct FilaRegistrador;
 
+
+class Tipo;
+class Atributo;
+class AtributoFuncao;
+
+class VisitanteRI;
+
+class Fragmento;
+class Procedimento;
+class Literal;
+class Variavel;
+
+///## Frame
+///######################
+class Temp;
+class ListaTemp;
+class Rotulo;
+class ListaRotulo;
+
+class AcessoLocal;
+class ListaAcesso;
+
+class Frame;
+class FrameMIPS;
+
+class NoFrame;
+class NoRegistrador;
+
+
+///## MAQUINA ABSTRATA
+///######################
+/// Classes abstratas
+class Exp;
+class Stm;
+
+/// Especializações de Exp
+class ListaExp;
+class CONST;
+class CONSTF;
+class NAME;
+class TEMP;
+class BINOP;
+class MEM;
+class CALL;
+class ESEQ;
+
+/// Especializações de Stm
+class ListaStm;
+class MOVE;
+class EXP;
+class JUMP;
+class CJUMP;
+class SEQ;
+class LABEL;
+
+struct FilaRegistrador;
 class Gerador{
     private:
         FilaRegistrador* primeiroRegLivre;
@@ -12,27 +68,17 @@ class Gerador{
         void recuperarTodosRegistradores(int offset);
         Temp *r0;
     public:
-          Gerador();
+          Gerador(char *nomeArquivo);
           ~Gerador();
           void visita(Fragmento *f);
           void visita(Procedimento *p);
           void visita(Literal *l);
           void visita(Variavel *var);
-          void inicializa(char *nomeArquivo);
-
-          void visita(Temp *t);
-          void visita(ListaTemp *listaTemp);
-          void visita(Rotulo *r);
-          void visita(ListaRotulo *listaRotulo);
-          void visita(ListaAcesso *listaAcesso);
-          void visita(AcessoLocal *ac);
           void visita(FrameMIPS *quadroMIPS);
-          void visita(NoRegistrador *nr);
-          void visita(NoFrame *nq);
 
           ///Metodos visita para MAQUINA ABSTRATA
           //Visita especializa��es de Exp
-          void visita(ListaExp* lex);
+          Temp* visita(ListaExp* lex);
           void visita(Exp *e);
           Temp* visita(CONST *c);
           Temp* visita(CONSTF *cf);
@@ -41,6 +87,7 @@ class Gerador{
           Temp* visita(BINOP *bop);
           Temp* visita(MEM *m);
           Temp* visita(CALL *ca);
+          Temp* visita(ESEQ *e);
           //Visita especializa��es de Stm
           void visita(ListaStm *lstm);
           void visita(MOVE *mo);
@@ -50,3 +97,4 @@ class Gerador{
           void visita(SEQ *se);
           void visita(LABEL *l);
 };
+#endif GERADOR_H

@@ -1,5 +1,7 @@
 #ifndef REP_INTERMEDIARIA_H
 #define REP_INTERMEDIARIA_H
+#include "Gerador.h"
+class Gerador;///declaracao do visitante que gera o codico
 
 class Tipo;
 class Atributo;
@@ -83,6 +85,7 @@ class Fragmento {
         Fragmento();
         virtual ~Fragmento();
         virtual void aceita(VisitanteRI *vri)=0;
+        virtual void aceita(Gerador *g)=0;
 };
 
 class Procedimento : public Fragmento {
@@ -93,6 +96,7 @@ class Procedimento : public Fragmento {
         Procedimento(Frame* frame, Stm* corpo);
         ~Procedimento();
         void aceita(VisitanteRI *vri);
+        void aceita(Gerador *g);
 };
 
 class Literal : public Fragmento {
@@ -104,6 +108,7 @@ class Literal : public Fragmento {
         Literal(char *literal, Rotulo *rotulo);
         ~Literal();
         void aceita(VisitanteRI* vri);
+        void aceita(Gerador *g);
 };
 
 class Variavel : public Fragmento {
@@ -115,6 +120,7 @@ class Variavel : public Fragmento {
         Variavel(Tipo *tipo, int tamanho, Rotulo *rotulo);
         ~Variavel();
         void aceita(VisitanteRI *vri);
+        void aceita(Gerador *g);
 };
 
 ///## Frame
@@ -175,7 +181,6 @@ class ListaAcesso{
         ListaAcesso(AcessoLocal *acessoLocal,ListaAcesso *proximoAcesso);
         ~ListaAcesso();
         void aceita(VisitanteRI *vri);
-
 };
 class Frame{
     public:
@@ -184,6 +189,7 @@ class Frame{
         virtual AcessoLocal *insereParametro(bool escapa, int deslocamento) = 0;
         virtual AcessoLocal *insereLocal(bool escapa, int deslocamento) = 0;
         virtual void aceita(VisitanteRI *vri) = 0;
+        virtual void aceita(Gerador *g) = 0;
 };
 
 class FrameMIPS : public Frame{
@@ -202,6 +208,7 @@ class FrameMIPS : public Frame{
         AcessoLocal *insereParametro(bool escapa, int deslocamento);
         AcessoLocal *insereLocal(bool escapa, int deslocamento);
         void aceita(VisitanteRI *vri);
+        void aceita(Gerador *g);
 };
 class NoFrame: public AcessoLocal{
     public:
@@ -227,15 +234,17 @@ class NoRegistrador: public AcessoLocal{
 ///######################
 
 /// Classes abstratas
-class Exp {
+class Exp{
     public:
         virtual ~Exp() = 0;
         virtual void aceita(VisitanteRI *vri) = 0;
+        virtual Temp *aceita(Gerador *g)      = 0;
 };
 class Stm {
     public:
         virtual ~Stm() = 0;
         virtual void aceita(VisitanteRI *vri) = 0;
+        virtual void aceita(Gerador *g) = 0;
 };
 /// Especializações de Exp
 class ListaExp: public Exp{
@@ -246,6 +255,7 @@ class ListaExp: public Exp{
         ListaExp(Exp *exo, ListaExp *proximoExp);
         ~ListaExp();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 class CONST : public Exp {
     public:
@@ -254,6 +264,7 @@ class CONST : public Exp {
         CONST(int ci);
         ~CONST();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 class CONSTF : public Exp {
     public:
@@ -262,6 +273,7 @@ class CONSTF : public Exp {
         CONSTF(float cf);
         ~CONSTF();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 class NAME : public Exp {
     public:
@@ -270,6 +282,7 @@ class NAME : public Exp {
         NAME(Rotulo *n);
         ~NAME();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador* g);
 };
 class TEMP : public Exp {
     public:
@@ -278,6 +291,7 @@ class TEMP : public Exp {
         TEMP(Temp *t);
         ~TEMP();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 class BINOP : public Exp {
     public:
@@ -288,6 +302,7 @@ class BINOP : public Exp {
         BINOP(int op, Exp *e1, Exp *e2);
         ~BINOP();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 class MEM : public Exp {
     public:
@@ -296,6 +311,7 @@ class MEM : public Exp {
         MEM(Exp *e);
         ~MEM();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 class CALL : public Exp {
     public:
@@ -305,6 +321,7 @@ class CALL : public Exp {
          CALL(Exp *f, ListaExp *parametros);
         ~CALL();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 class ESEQ : public Exp {
     public:
@@ -314,6 +331,7 @@ class ESEQ : public Exp {
         ESEQ(Stm *sentenca, Exp *exp);
         ~ESEQ();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 /// Especializações de Stm
 class ListaStm : public Stm{
@@ -324,6 +342,7 @@ class ListaStm : public Stm{
         ListaStm(Stm *stm, ListaStm *proximoStm);
         ~ListaStm();
         void aceita(VisitanteRI *v);
+        void aceita(Gerador *g);
 
 };
 class MOVE : public Stm {
@@ -334,6 +353,7 @@ class MOVE : public Stm {
         MOVE(Exp *e1, Exp *e2);
         ~MOVE();
         void aceita(VisitanteRI *v);
+        void aceita(Gerador *g);
 };
 class EXP : public Stm {
     public:
@@ -342,6 +362,7 @@ class EXP : public Stm {
         EXP(Exp *e);
         ~EXP();
         void aceita(VisitanteRI *vri);
+        void aceita(Gerador *g);
 };
 class JUMP : public Stm {
      public:
@@ -350,6 +371,7 @@ class JUMP : public Stm {
         JUMP(Exp *e);
         ~JUMP();
         void aceita(VisitanteRI *vri);
+        void aceita(Gerador *g);
 };
 class CJUMP : public Stm {
     public:
@@ -362,6 +384,7 @@ class CJUMP : public Stm {
         CJUMP(int op, Exp *e1, Exp *e2, Rotulo *verdadeiro, Rotulo *falso);
         ~CJUMP();
         void aceita(VisitanteRI *v);
+        void aceita(Gerador *g);
 };
 class SEQ : public Stm {
     public:
@@ -371,6 +394,7 @@ class SEQ : public Stm {
         SEQ(Stm *s1, Stm *s2);
         ~SEQ();
         void aceita(VisitanteRI *vri);
+        void aceita(Gerador *g);
 };
 class LABEL : public Stm {
     public:
@@ -379,5 +403,6 @@ class LABEL : public Stm {
         LABEL(Rotulo *n);
         ~LABEL();
         void aceita(VisitanteRI *vri);
+        void aceita(Gerador *g);
 };
 #endif // REP_INTERMEDIARIA_H

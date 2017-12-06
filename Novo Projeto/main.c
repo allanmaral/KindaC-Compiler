@@ -8,6 +8,7 @@
 #include "AnalisadorSemantico.h"
 #include "VisitanteRI.h"
 #include "CanonizadorRI.h"
+#include "Gerador.h"
 
 /** \brief Destrói objetos alocados durante a execução do programa
  *  Função chamada na saida do programa
@@ -57,6 +58,11 @@ int main(int argc, char** args){
     CanonizadorRI canRI;
     canRI.visita(vt.pegarFragmento());
     vtri.visita(vt.pegarFragmento());
+
+    Gerador *ger = new Gerador("saida.txt");
+    ger->visita(vt.pegarFragmento());
+    delete ger;
+
     imprimeListaErros();
     delete programa; // Destroi a ASA
     return 0;

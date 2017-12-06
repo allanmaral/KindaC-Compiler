@@ -1,6 +1,5 @@
 #include "RepresentacaoIntermadiaria.h"
 #include "VisitanteRI.h"
-
 #include <stdio.h>
 #include <string.h>
 
@@ -24,8 +23,15 @@ Procedimento::~Procedimento(){
 void Procedimento::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+void Procedimento::aceita(Gerador *g){
+    g->visita(this);
+}
+
 void Fragmento::aceita(VisitanteRI *vri){
     vri->visita(this);
+}
+void Fragmento::aceita(Gerador *g){
+    g->visita(this);
 }
 Literal::Literal(char* literal) : literal(literal) {
     rotulo = new Rotulo();
@@ -40,7 +46,9 @@ Literal::~Literal(){
 void Literal::aceita(VisitanteRI* vri){
     vri->visita(this);
 }
-
+void Literal::aceita(Gerador *g){
+    g->visita(this);
+}
 Variavel::Variavel(Tipo *tipo, int tamanho, Rotulo *rotulo)
     : tipo(tipo), tamanho(tamanho), rotulo(rotulo) {}
 
@@ -49,7 +57,9 @@ Variavel::~Variavel(){}
 void Variavel::aceita(VisitanteRI *vri){
     vri->visita(this);
 }
-
+void Variavel::aceita(Gerador *g){
+    g->visita(this);
+}
 int Temp::contador = 0;
 
 Temp::Temp(){
@@ -140,6 +150,9 @@ FrameMIPS::~FrameMIPS() {
     delete tempRetorno;
     delete variaveisLocais;
 }
+void FrameMIPS::aceita(Gerador *g){
+    g->visita(this);
+}
 AcessoLocal *FrameMIPS::insereParametro(bool escapa, int deslocamento) {
     AcessoLocal* acesso = NULL;
     // Quatro primeiros parametros são colocados em registadores (se nao escaparem)
@@ -201,7 +214,6 @@ Exp *NoRegistrador::codigoAcesso() {
 void NoRegistrador::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
-
 ///## MAQUINA ABSTRATA
 ///######################
 Exp::~Exp() {}
@@ -215,6 +227,10 @@ ListaExp::~ListaExp(){
 void ListaExp::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+Temp* ListaExp::aceita(Gerador *g) {
+   return g->visita(this);
+}
+
 
 CONST::CONST(int ci) : ci(ci) { }
 
@@ -222,6 +238,9 @@ CONST::~CONST() { }
 
 void CONST::aceita(VisitanteRI *vri) {
     vri->visita(this);
+}
+Temp* CONST::aceita(Gerador *g) {
+   return g->visita(this);
 }
 
 CONSTF::CONSTF(float cf) : cf(cf) { }
@@ -231,6 +250,9 @@ CONSTF::~CONSTF() { }
 void CONSTF::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+Temp* CONSTF::aceita(Gerador *g) {
+   return g->visita(this);
+}
 
 NAME::NAME(Rotulo *n) : n(n) {}
 
@@ -239,13 +261,18 @@ NAME::~NAME() {}
 void NAME::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
-
+Temp* NAME::aceita(Gerador *g) {
+   return g->visita(this);
+}
 TEMP::TEMP(Temp *t) : t(t) { }
 
 TEMP::~TEMP() { }
 
 void TEMP::aceita(VisitanteRI *vri) {
     vri->visita(this);
+}
+Temp* TEMP::aceita(Gerador *g) {
+   return g->visita(this);
 }
 
 BINOP::BINOP(int op, Exp *e1, Exp *e2) : op(op), e1(e1), e2(e2) { }
@@ -257,6 +284,9 @@ BINOP::~BINOP() {
 void BINOP::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+Temp* BINOP::aceita(Gerador *g) {
+   return g->visita(this);
+}
 
 MEM::MEM(Exp *e) : e(e) {}
 
@@ -265,6 +295,9 @@ MEM::~MEM() {
 }
 void MEM::aceita(VisitanteRI *vri) {
     vri->visita(this);
+}
+Temp* MEM::aceita(Gerador *g) {
+   return g->visita(this);
 }
 
 CALL::CALL(Exp *f, ListaExp *parametros) : f(f), parametros(parametros) { }
@@ -276,6 +309,9 @@ CALL::~CALL() {
 void CALL::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+Temp* CALL::aceita(Gerador *g) {
+    return g->visita(this);
+}
 ESEQ::ESEQ(Stm *sentenca, Exp *exp){
     this->s=sentenca;
     this->e=exp;
@@ -286,6 +322,9 @@ ESEQ::~ESEQ(){
 }
 void ESEQ::aceita(VisitanteRI *vri){
     vri->visita(this);
+}
+Temp* ESEQ::aceita(Gerador *g){
+    return g->visita(this);
 }
 
 Stm::~Stm() {}
@@ -301,6 +340,9 @@ ListaStm::~ListaStm(){
 void ListaStm::aceita(VisitanteRI *vri){
     vri->visita(this);
 }
+void ListaStm::aceita(Gerador *g){
+    g->visita(this);
+}
 MOVE::MOVE(Exp *e1, Exp *e2){
     this->e1=e1;
     this->e2=e2;
@@ -312,6 +354,9 @@ MOVE::~MOVE(){
 void MOVE::aceita(VisitanteRI *vri){
     vri->visita(this);
 }
+void MOVE::aceita(Gerador *g){
+    g->visita(this);
+}
 EXP::EXP(Exp *e){
     this->e=e;
 }
@@ -321,6 +366,9 @@ EXP::~EXP(){
 void EXP::aceita(VisitanteRI *vri){
     vri->visita(this);
 }
+void EXP::aceita(Gerador *g){
+    g->visita(this);
+}
 JUMP::JUMP(Exp *e){
     this->e=e;
 }
@@ -329,6 +377,9 @@ JUMP::~JUMP(){
 }
 void JUMP::aceita(VisitanteRI *vri){
     vri->visita(this);
+}
+void JUMP::aceita(Gerador *g){
+    g->visita(this);
 }
 CJUMP::CJUMP(int op, Exp *e1, Exp *e2, Rotulo *verdadeiro, Rotulo *falso){
     this->op=op;
@@ -346,6 +397,9 @@ CJUMP::~CJUMP(){
 void CJUMP::aceita(VisitanteRI *vri){
     vri->visita(this);
 }
+void CJUMP::aceita(Gerador *g){
+    g->visita(this);
+}
 SEQ::SEQ(Stm *s1, Stm *s2){
     this->s1=s1;
     this->s2=s2;
@@ -357,6 +411,9 @@ SEQ::~SEQ(){
 void SEQ::aceita(VisitanteRI *vri){
     vri->visita(this);
 }
+void SEQ::aceita(Gerador *g){
+    g->visita(this);
+}
 LABEL::LABEL(Rotulo *n){
     this->n=n;
 }
@@ -365,4 +422,7 @@ LABEL::~LABEL(){
 }
 void LABEL::aceita(VisitanteRI *vri){
     vri->visita(this);
+}
+void LABEL::aceita(Gerador *g){
+    g->visita(this);
 }

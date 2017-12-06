@@ -2,6 +2,7 @@
 #define CANONIZADORRI_H
 #include "VisitanteRI.h"
 
+
 class CanonizadorRI:VisitanteRI{
     public:
         CanonizadorRI();
