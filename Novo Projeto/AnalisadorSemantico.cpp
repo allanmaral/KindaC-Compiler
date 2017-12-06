@@ -258,6 +258,8 @@ void AnalisadorSemantico::visita(NoChamadaFuncao* cha){
         aux = valorRetorno;
         if(cha->parametros) cha->parametros->aceita(this);
         valorRetorno = aux;
+        AtributoFuncao* atrF = (AtributoFuncao*)obtemTabelaFuncoes()->busca(valorRetorno->pegarLexema());
+        retorno = atrF->pegarRetorno()->pegaTipo();
         AtributoFuncao* func = ((AtributoFuncao*) obtemTabelaFuncoes()->busca(aux->pegarLexema()));
         if(func) cha->tipo = func->pegarRetorno();
     }
@@ -733,7 +735,7 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
                 tipoEsq = 0;
             }
         }
-        if(tipoDir != ID && tipoEsq != ID && tipoDir != LITERAL && tipoEsq != LITERAL){
+        /*if(tipoDir != ID && tipoEsq != ID && tipoDir != LITERAL && tipoEsq != LITERAL){
             bool erro = false;
             if(idDir){
                 if(((AtributoVariavel*)idDir)->pegarPonteiro()){
@@ -757,7 +759,7 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
         else{
             saidaErro(ErroSemanticoTipoOperacaoInvalida, expB->linha, expB->coluna);
         }
-        /*if(expB->exprEsquerda && expB->exprDireita) {
+        if(expB->exprEsquerda && expB->exprDireita) {
             expB->tipo = precedenciaTipo(expB->exprEsquerda, expB->exprDireita)
         }*/
     }

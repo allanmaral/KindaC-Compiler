@@ -247,7 +247,7 @@ void VisitanteTradutor::visita(NoEscopo            *esc    ) {
     }
 }
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
-    cha->parametros->aceita(this);
+    if(cha->parametros)cha->parametros->aceita(this);
     /// Descobre rotulo da fun��o
     char* rotulo = RotuloCF(NULL, NULL, cha->id->entradaTabela->pegarLexema(),0);
     ListaExp* listaParametros = static_cast<ListaExp*>(ultimaExp);

@@ -30,21 +30,23 @@ static char registradores [16][3]{
 };
 
 void Gerador::liberaRetistrador(Temp* t){
-    if(primeiroRegLivre){
+    if( strcmp(t->obterString(),"$fp") && strcmp(t->obterString(),"$v0") &&  strcmp(t->obterString(),"$r0") &&
+        strcmp(t->obterString(),"$sp")){
+       if(primeiroRegLivre){
         FilaRegistrador * liberado = new FilaRegistrador();
         liberado->reg = t;
         liberado->proximo = primeiroRegLivre;
         primeiroRegLivre = liberado;
-    }else {
-        primeiroRegLivre=new FilaRegistrador();
-        primeiroRegLivre->proximo=NULL;
-        primeiroRegLivre->reg=t;
-     }
-
+        }else {
+            primeiroRegLivre=new FilaRegistrador();
+            primeiroRegLivre->proximo=NULL;
+            primeiroRegLivre->reg=t;
+         }
+    }
 }
 Temp* Gerador::pegaRegistradorLivre(){
     if(primeiroRegLivre){
-        Temp* t= primeiroRegLivre->reg;
+        Temp* t = primeiroRegLivre->reg;
         FilaRegistrador *prox = primeiroRegLivre->proximo;
         delete primeiroRegLivre;
         primeiroRegLivre = prox;
@@ -52,31 +54,37 @@ Temp* Gerador::pegaRegistradorLivre(){
     }else return NULL;
 }
 void Gerador::salvarTodosRegistradores(int offset){
-    for(int i=0; i<NUM_REGISTRADORES; i++){
-        fprintf(arqAss,"sw $%s,%d($sp)\n", registradores[i], offset);
-        offset += 4;
-    }
     fprintf(arqAss, "sw $fp,%d($sp)\n", offset);
     offset += 4;
     fprintf(arqAss, "sw $t0,%d($sp)\n", offset);
     offset += 4;
     fprintf(arqAss, "sw $ra,%d($sp)\n", offset);
+    for(int i=0; i<NUM_REGISTRADORES; i++){
+        offset += 4;
+        fprintf(arqAss,"sw $%s,%d($sp)\n", registradores[i], offset);
+
+    }
 
 }
 void Gerador::recuperarTodosRegistradores(int offset){
-    for(int i=0; i<NUM_REGISTRADORES; i++){
-        fprintf(arqAss, "lw $%s,%d($sp)\n", registradores[i], offset);
-        offset += 4;
-    }
     fprintf(arqAss, "lw $fp,%d($sp)\n", offset);
     offset += 4;
     fprintf(arqAss, "lw $t0,%d($sp)\n", offset);
     offset += 4;
     fprintf(arqAss, "lw $ra,%d($sp)\n", offset);
+    for(int i=0; i<NUM_REGISTRADORES; i++){
+        offset += 4;
+        fprintf(arqAss, "lw $%s,%d($sp)\n", registradores[i], offset);
+
+    }
+
 }
 
-Gerador::Gerador(char *nomeArquivo) : arqAss(NULL), primeiroRegLivre(NULL), r0(new Temp("r0")){
+Gerador::Gerador(char *nomeArquivo) : arqAss(NULL){
     arqAss = fopen(nomeArquivo,"w+");
+    primeiroRegLivre=NULL;
+    r0=new Temp("r0");
+    primeiroRegLivre=NULL;
     for(int i=0; i<NUM_REGISTRADORES; i++){
         liberaRetistrador(new Temp(registradores[i]));
     }
@@ -120,8 +128,8 @@ void Gerador::visita(FrameMIPS* quadroMIPS){
     }
     else{
         //armazena o deslocamento necessário para os argumentos das chamadas
+        fprintf(arqAss,"\n#PROLOGO_%s\n",quadroMIPS->rotulo->obterString());
         salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
-        fprintf(arqAss,"\n#PROLOGO\n");
         fprintf(arqAss,"addi $fp, $sp, 0\n");
         fprintf(arqAss,"subu $sp, $sp,%d\n", tamanhoQuadro + QUADRO_BASICO);
     }
@@ -162,7 +170,7 @@ Temp* Gerador::visita(TEMP* t){
     return t->t;
 }
 Temp* Gerador::visita(BINOP* b){
-     Temp *r = pegaRegistradorLivre();
+    Temp *r = pegaRegistradorLivre();
     if(b->op == OP_ADD){
         CONST *c1, *c2;
         if(b->e1 && (c1 = dynamic_cast<CONST*>(b->e1))){
@@ -333,6 +341,7 @@ void Gerador::visita(ListaStm* lstm){
 void Gerador::visita(MOVE* mov){
     MEM *m;
 	TEMP *t = dynamic_cast<TEMP*>(mov->e2);
+
 	if(mov->e2 && (m = dynamic_cast<MEM*>(mov->e2))){
         BINOP *bop;
         if(m->e && (bop = dynamic_cast<BINOP*>(m->e)) && bop->op == OP_ADD){
@@ -358,9 +367,10 @@ void Gerador::visita(MOVE* mov){
         }else{
             NAME *name;
             Temp *org = mov->e1->aceita(this);
-            if(m->e && (name = dynamic_cast<NAME*>(m->e)))
+            if(m->e && (name = dynamic_cast<NAME*>(m->e))){
+                fprintf(stdout,"%s\n",org->obterString());
                 fprintf(arqAss, "sw %s, %s(%s)\n", org->obterString(), name->n->obterString(), r0->obterString());
-            else{
+            }else{
                 Temp *r = m->e->aceita(this);
                 fprintf(arqAss, "sw %s, %d(%s)\n", org->obterString(), 0, r->obterString());
                 liberaRetistrador(r);
@@ -391,7 +401,7 @@ void Gerador::visita(JUMP* j){
     }
 }
 void Gerador::visita(CJUMP* cjp){
-	char parte1[16], parte2[16];
+	char parte1[32], parte2[32];
 	switch (cjp->op) {
 		case OP_EQ:
 			sprintf(parte1, "beq ");
