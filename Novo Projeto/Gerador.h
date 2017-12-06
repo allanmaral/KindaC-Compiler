@@ -1,7 +1,6 @@
 #include "RepresentacaoIntermadiaria.h"
 #include <stdio.h>
 struct FilaRegistrador;
-
 class Gerador{
     private:
         FilaRegistrador* primeiroRegLivre;

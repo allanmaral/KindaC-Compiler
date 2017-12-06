@@ -28,10 +28,17 @@ static char registradores [16][4]{
 };
 
 void Gerador::liberaRetistrador(Temp* t){
-    FilaRegistrador * liberado = new FilaRegistrador();
-    liberado->reg = t;
-    liberado->proximo = primeiroRegLivre;
-    primeiroRegLivre = liberado;
+    if(primeiroRegLivre){
+        FilaRegistrador * liberado = new FilaRegistrador();
+        liberado->reg = t;
+        liberado->proximo = primeiroRegLivre;
+        primeiroRegLivre = liberado;
+    }else {
+        primeiroRegLivre=new FilaRegistrador();
+        primeiroRegLivre->proximo=NULL;
+        primeiroRegLivre->reg=t;
+     }
+
 }
 Temp* Gerador::pegaRegistradorLivre(){
     if(primeiroRegLivre){

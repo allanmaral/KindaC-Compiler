@@ -1,5 +1,6 @@
 #ifndef REP_INTERMEDIARIA_H
 #define REP_INTERMEDIARIA_H
+class Gerador;///declaracao do visitante que gera o codico
 
 class Tipo;
 class Atributo;
@@ -227,10 +228,11 @@ class NoRegistrador: public AcessoLocal{
 ///######################
 
 /// Classes abstratas
-class Exp {
+class Exp{
     public:
         virtual ~Exp() = 0;
         virtual void aceita(VisitanteRI *vri) = 0;
+        virtual Temp *aceita(Gerador *g)      = 0;
 };
 class Stm {
     public:
@@ -246,6 +248,7 @@ class ListaExp: public Exp{
         ListaExp(Exp *exo, ListaExp *proximoExp);
         ~ListaExp();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador *g);
 };
 class CONST : public Exp {
     public:
@@ -254,6 +257,7 @@ class CONST : public Exp {
         CONST(int ci);
         ~CONST();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador g);
 };
 class CONSTF : public Exp {
     public:
@@ -262,6 +266,7 @@ class CONSTF : public Exp {
         CONSTF(float cf);
         ~CONSTF();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador g);
 };
 class NAME : public Exp {
     public:
@@ -270,6 +275,7 @@ class NAME : public Exp {
         NAME(Rotulo *n);
         ~NAME();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador g);
 };
 class TEMP : public Exp {
     public:
@@ -278,6 +284,7 @@ class TEMP : public Exp {
         TEMP(Temp *t);
         ~TEMP();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador g);
 };
 class BINOP : public Exp {
     public:
@@ -288,6 +295,7 @@ class BINOP : public Exp {
         BINOP(int op, Exp *e1, Exp *e2);
         ~BINOP();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador g);
 };
 class MEM : public Exp {
     public:
@@ -296,6 +304,7 @@ class MEM : public Exp {
         MEM(Exp *e);
         ~MEM();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador g);
 };
 class CALL : public Exp {
     public:
@@ -305,6 +314,7 @@ class CALL : public Exp {
          CALL(Exp *f, ListaExp *parametros);
         ~CALL();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador g);
 };
 class ESEQ : public Exp {
     public:
@@ -314,6 +324,7 @@ class ESEQ : public Exp {
         ESEQ(Stm *sentenca, Exp *exp);
         ~ESEQ();
         void aceita(VisitanteRI *vri);
+        Temp* aceita(Gerador g);
 };
 /// Especializações de Stm
 class ListaStm : public Stm{

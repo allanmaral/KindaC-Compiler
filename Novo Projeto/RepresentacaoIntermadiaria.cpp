@@ -1,6 +1,5 @@
 #include "RepresentacaoIntermadiaria.h"
 #include "VisitanteRI.h"
-
 #include <stdio.h>
 #include <string.h>
 
@@ -215,6 +214,10 @@ ListaExp::~ListaExp(){
 void ListaExp::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+Temp* ListaExp::aceita(Gerador *g) {
+   return g->visita(this);
+}
+
 
 CONST::CONST(int ci) : ci(ci) { }
 
@@ -222,6 +225,9 @@ CONST::~CONST() { }
 
 void CONST::aceita(VisitanteRI *vri) {
     vri->visita(this);
+}
+Temp* CONST::aceita(Gerador *g) {
+   return g->visita(this);
 }
 
 CONSTF::CONSTF(float cf) : cf(cf) { }
@@ -231,6 +237,9 @@ CONSTF::~CONSTF() { }
 void CONSTF::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+Temp* CONSTF::aceita(Gerador *g) {
+   return g->visita(this);
+}
 
 NAME::NAME(Rotulo *n) : n(n) {}
 
@@ -239,13 +248,18 @@ NAME::~NAME() {}
 void NAME::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
-
+Temp* NAME::aceita(Gerador *g) {
+   return g->visita(this);
+}
 TEMP::TEMP(Temp *t) : t(t) { }
 
 TEMP::~TEMP() { }
 
 void TEMP::aceita(VisitanteRI *vri) {
     vri->visita(this);
+}
+Temp* TEMP::aceita(Gerador *g) {
+   return g->visita(this);
 }
 
 BINOP::BINOP(int op, Exp *e1, Exp *e2) : op(op), e1(e1), e2(e2) { }
@@ -257,6 +271,9 @@ BINOP::~BINOP() {
 void BINOP::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
+Temp* BINOP::aceita(Gerador *g) {
+   return g->visita(this);
+}
 
 MEM::MEM(Exp *e) : e(e) {}
 
@@ -265,6 +282,9 @@ MEM::~MEM() {
 }
 void MEM::aceita(VisitanteRI *vri) {
     vri->visita(this);
+}
+Temp* MEM::aceita(Gerador *g) {
+   return g->visita(this);
 }
 
 CALL::CALL(Exp *f, ListaExp *parametros) : f(f), parametros(parametros) { }
@@ -275,6 +295,9 @@ CALL::~CALL() {
 }
 void CALL::aceita(VisitanteRI *vri) {
     vri->visita(this);
+}
+Temp* CALL::aceita(Gerador *g) {
+    return g->visita(this);
 }
 ESEQ::ESEQ(Stm *sentenca, Exp *exp){
     this->s=sentenca;

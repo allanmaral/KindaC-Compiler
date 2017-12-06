@@ -1,5 +1,5 @@
 #include "CanonizadorRI.h"
-
+#include "RepresentacaoIntermadiaria.h"
 Exp *expAtual = NULL;
 Stm *stmAtual = NULL;
 
@@ -40,6 +40,7 @@ void CanonizadorRI::visita(BINOP* bop){
         bop->e2->aceita(this);
         bop->e2 = expAtual;
     }
+
     if(bop->e1 && (exp = dynamic_cast<ESEQ*>(bop->e1))){
         Exp *e1 = exp->e;
         exp->e = bop;
