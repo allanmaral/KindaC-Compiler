@@ -389,7 +389,7 @@ void Gerador::visita(JUMP* j){
     }
 }
 void Gerador::visita(CJUMP* cjp){
-	char parte1[8], parte2[8];
+	char parte1[16], parte2[16];
 	switch (cjp->op) {
 		case OP_EQ:
 			sprintf(parte1, "beq ");
@@ -410,7 +410,7 @@ void Gerador::visita(CJUMP* cjp){
 			sprintf(parte1, "ble ");
 			break;
 	}
-	CONST *c1, *c2;
+	/*CONST *c1, *c2;
 	CONSTF *cf1, *cf2;
     if(cjp->e1 && ((c1 = dynamic_cast<CONST*>(cjp->e1)) || (cf1 = dynamic_cast<CONSTF*>(cjp->e1)))){
         Temp *t = cjp->e2->aceita(this);
@@ -421,19 +421,20 @@ void Gerador::visita(CJUMP* cjp){
         Temp *t = cjp->e1->aceita(this);
         if(c2) sprintf(parte2, "%s, %d ", t->obterString(), c2->ci);
         liberaRetistrador(t);
-	}
-	else{
+	}*/
+	//else{
         Temp *t = cjp->e1->aceita(this);
         Temp *t2 = cjp->e2->aceita(this);
-        sprintf(parte2, "%s, %s ", t->obterString(), t2->obterString());
+        sprintf(parte2, " %s, %s, ", t->obterString(), t2->obterString());
         liberaRetistrador(t);
         liberaRetistrador(t2);
-	}
-    if(cjp->verdadeiro) fprintf(arqAss, "%s%s%s\n", parte1, parte2, cjp->verdadeiro->obterString());
+	//}
+	//fprintf(stdout,"%s\n",parte1);
+    fprintf(arqAss, "%s%s%s\n", parte1, parte2, cjp->verdadeiro->obterString());
 }
 void Gerador::visita(SEQ* s){
-	s->s1->aceita(this);
-    s->s2->aceita(this);
+    if(s->s1) s->s1->aceita(this);
+    if(s->s2) s->s2->aceita(this);
 }
 void Gerador::visita(LABEL* l){
     fprintf(arqAss, "%s:\n", l->n->obterString());

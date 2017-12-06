@@ -242,7 +242,9 @@ void VisitanteTradutor::visita(NoRetorna           *ret    ) {
 }
 
 void VisitanteTradutor::visita(NoEscopo            *esc    ) {
-    esc->lista->aceita(this);
+    if(esc->lista){
+      esc->lista->aceita(this);
+    }
 }
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
     cha->parametros->aceita(this);
