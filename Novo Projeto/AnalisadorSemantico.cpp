@@ -16,6 +16,7 @@ bool encontrou = false;
 bool erro = false;
 bool verificandoCorpo = false;
 bool ponteiro = false;
+bool declVariavel = false;
 int retorno = 0;
 Atributo *valorRetorno = NULL;
 Atributo *funcaoChamada = NULL;
@@ -25,7 +26,7 @@ AtributoClasse *tamanhoClasse = NULL;
 AtributoTipo *tamanhoTipo = NULL;
 NoDeclFuncao *funcAtual = NULL;
 Atributo *arranjoEntrada = NULL;
-
+NoListaSentenca *listaSentencaTemp = NULL;
 
 AnalisadorSemantico::AnalisadorSemantico(){}
 AnalisadorSemantico::~AnalisadorSemantico(){}
@@ -319,10 +320,17 @@ void AnalisadorSemantico::visita(NoDeclFuncao* decF){
             decF->variaveis->aceita(this);
             tabelaParametrosAtual = NULL;
         }
+        listaSentencaTemp = NULL;
         if(decF->corpoFunc){
             tabelaVariaveisAtual = atr->pegarVariaveisLocais();
             tabelaParametrosAtual = atr->pegarParametros();
             decF->corpoFunc->aceita(this);
+            if(listaSentencaTemp) {
+                NoListaSentenca* t = listaSentencaTemp;
+                while(t->lista) { t = t->lista; }
+                t->lista = decF->sentenca;
+                decF->sentenca = listaSentencaTemp;
+            }
             tabelaParametrosAtual = NULL;
         }
         if(decF->sentenca){
@@ -431,14 +439,14 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
                     }
                     if(atrT){
                         atr->atribuiTamanho(((AtributoTipo*)atrT)->pegarTamBytes());
-                        if(tamanhoClasse){
-                            tamanhoClasse->adicionarTamanho(atr->pegarTamanho());
-                        }
-                        if(tamanhoTipo){
-                            tamanhoTipo->adicionarTamanho(atr->pegarTamanho());
-                        }
                     }else if(atrC){
                         atr->atribuiTamanho(((AtributoClasse*)atrC)->pegarTamBytes());
+                    }
+                    if(tamanhoClasse){
+                        tamanhoClasse->adicionarTamanho(atr->pegarTamanho());
+                    }
+                    if(tamanhoTipo){
+                        tamanhoTipo->adicionarTamanho(atr->pegarTamanho());
                     }
                     atr->atribuirLexema(aux->id->entradaTabela->pegarLexema());
                     ((AtributoVariavel*)atr)->atribuirTipo(tp);
@@ -498,6 +506,7 @@ void AnalisadorSemantico::visita(NoDeclLocalPrivado* decLpri){
     }
 }
 void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
+    declVariavel = false;
     if(cF->expressao) { verificandoCorpo = true; cF->expressao->aceita(this); }
     if(tipo && cF->expressao && valorRetorno){
         if(!obtemTabelaClasses()->busca(valorRetorno->pegarLexema())){
@@ -518,19 +527,27 @@ void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
                     if(!erro){
                         AtributoVariavel *atr = new AtributoVariavel();
                         TipoId *tp = new TipoId(tipo->pegarLexema(),ID);
+                        int tamanho = 4;
+                        if(AtributoTipo* __atr = (AtributoTipo*)obtemTabelaTipos()->busca(tipo->pegarLexema())){
+                            tamanho = __atr->pegarTamBytes();
+                        } else if(AtributoClasse* __atr = (AtributoClasse*)obtemTabelaClasses()->busca(tipo->pegarLexema())) {
+                            tamanho = __atr->pegarTamBytes();
+                        }
                         atr->atribuirTipo(tp);
+                        atr->atribuiTamanho(tamanho);
                         atr->atribuirLexema(cF->id->entradaTabela->pegarLexema());
                         atr->atribuiArranjo(arranjo);
                         atr->atribuiPonteiro(false);
                         tabelaVariaveisAtual->insere(atr->pegarLexema(), atr);
-                        NoListaId * lsId = new NoListaId(true, new NoId(valorRetorno, cF->linha, cF->coluna),
+                        NoListaId * lsId = new NoListaId(true, new NoId(cF->id->entradaTabela, cF->linha, cF->coluna),
                                                          (atr->pegarArranjo() > 0) ? new NoArranjo(new NoNumInteiro(arranjoEntrada,
                                                                                                                     cF->linha,
                                                                                                                     cF->coluna),
                                                                                                    cF->linha, cF->coluna) : NULL,
                                                          NULL, cF->linha, cF->coluna);
                         NoDeclVariavel *dclVar = new NoDeclVariavel(new NoTipo(ID, cF->linha, cF->coluna, tipo), lsId, cF->linha, cF->coluna, funcAtual->variaveis);
-                        //funcAtual->variaveis = dclVar;
+                        funcAtual->variaveis = dclVar;
+                        declVariavel = true;
                     }
                 }
             }else{
@@ -545,6 +562,16 @@ void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
     if(cF->listaid) cF->listaid->aceita(this);
     erro = false;
     tipo = NULL;
+    if(!declVariavel) {
+        NoListaSentenca* temp = listaSentencaTemp;
+        if(temp){
+            while(temp->lista) { temp = temp->lista; }
+            temp->lista = new NoListaSentenca(cF->expressao, NULL, cF->linha, cF->coluna);
+        } else {
+            listaSentencaTemp = new NoListaSentenca(cF->expressao, NULL, cF->linha, cF->coluna);
+        }
+        cF->expressao = NULL;
+    }
     if(cF->lista) cF->lista->aceita(this);
 }
 void AnalisadorSemantico::visita(NoDeclClasse* decC){
@@ -644,6 +671,7 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
                                     atr->atribuiArranjo(arranjo);
                                 }
                                 atr->atribuiPonteiro(true);
+                                atr->atribuiTamanho(4);
                                 atr->atribuirTipo(tp);
                                 atr->atribuirLexema(valorRetorno->pegarLexema());
                                 tabelaVariaveisAtual->insere(atr->pegarLexema(),atr);
@@ -653,7 +681,8 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
                                                                                                            expB->linha, expB->coluna) : NULL ,
                                                                  NULL, expB->linha, expB->coluna);
                                 NoDeclVariavel *dclVar = new NoDeclVariavel(new NoTipo(ID, expB->linha, expB->coluna, tipo), lsId, expB->linha, expB->coluna, funcAtual->variaveis);
-                                //funcAtual->variaveis = dclVar;
+                                funcAtual->variaveis = dclVar;
+                                declVariavel = true;
                             }else{
                                 saidaErro(ErroSemanticoRedefinicaoVariavel, expB->exprEsquerda->linha,
                                           expB->exprEsquerda->coluna, tipo->pegarLexema());
