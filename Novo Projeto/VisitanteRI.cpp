@@ -251,7 +251,7 @@ void VisitanteTradutor::visita(NoEscopo            *esc    ) {
     }
 }
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
-    cha->parametros->aceita(this);
+    if(cha->parametros) cha->parametros->aceita(this);
     /// Descobre rotulo da fun��o
     char* rotulo = RotuloCF(NULL, NULL, cha->id->entradaTabela->pegarLexema(),0);
     ListaExp* listaParametros = static_cast<ListaExp*>(ultimaExp);
@@ -265,7 +265,7 @@ void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
 void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     char *rotulo = NULL;
     if(strcmp((char*)"main", decF->id->entradaTabela->pegarLexema()) == 0) { rotulo = (char*)"main"; }
-    RotuloNome(decF->id->entradaTabela->pegarLexema(), 0); // REVER NOME DEPOIS
+    else rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), 0); // REVER NOME DEPOIS
     FrameMIPS *novoFrame = new FrameMIPS(new Rotulo(rotulo), NULL, 0, 0);
     novoFrame->atr = decF->atr;
     frame = novoFrame;
