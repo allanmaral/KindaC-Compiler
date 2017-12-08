@@ -143,7 +143,7 @@ Frame::~Frame(){}
 FrameMIPS::FrameMIPS(Rotulo *rotulo, ListaAcesso *variaveisLocais, int desVarLocais, int desParametros)
                      : rotulo(rotulo), variaveisLocais(variaveisLocais), numeroParametros(0),
                        deslocamentoVariaveisLocais(desVarLocais), deslocamentoParametros(desParametros) {
-    tempRetorno = new Temp();
+    tempRetorno = new Temp("v0");
 }
 FrameMIPS::~FrameMIPS() {
     delete rotulo;

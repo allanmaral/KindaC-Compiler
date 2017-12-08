@@ -1,7 +1,7 @@
+int g(int a,int b,int c, int k,int y){return 78;}
 int main(){
 	int a,c;
 	float b;
-	if(1){}
-	//2+1;
-	c=a;
+	g(1,2,3,4,5);
+	/*c=a;*/
 }
