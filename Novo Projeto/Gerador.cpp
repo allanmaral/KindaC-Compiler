@@ -28,11 +28,25 @@ static char registradores [16][3]{
     "t8",
     "t9",
 };
-
-void Gerador::liberaRetistrador(Temp* t){
+static bool registradorReservado(Temp *t){
     if(strcmp(t->obterString(),"$fp") && strcmp(t->obterString(),"$v0") &&  strcmp(t->obterString(),"$0") &&
         strcmp(t->obterString(),"$a0") &&  strcmp(t->obterString(),"$a1") &&  strcmp(t->obterString(),"$a2") &&
         strcmp(t->obterString(),"$a3") &&  strcmp(t->obterString(),"$sp")&&  strcmp(t->obterString(),"$r0")){
+        return false;
+    }else return true;
+}
+static bool registradorValido(Temp *t){
+    for(int i=0;i<NUM_REGISTRADORES;i++){
+        char aux[32];
+        sprintf(aux,"$%s",registradores[i]);
+        if(strcmp(t->obterString(),aux)==0){
+            return true;
+        }
+    }
+    return false;
+}
+void Gerador::liberaRetistrador(Temp* t){
+    if(!registradorReservado(t)){
             if(primeiroRegLivre){
                 FilaRegistrador * liberado = new FilaRegistrador();
                 liberado->reg = t;
@@ -96,7 +110,7 @@ void Gerador::visita(Procedimento* p){
     p->frame->aceita(this);
     if(p->corpo)p->corpo->aceita(this);
     FrameMIPS *frame=dynamic_cast<FrameMIPS*>(p->frame);
-    fprintf(arqAss,"EPILOGO_%s:\n",frame->rotulo->obterString());
+    fprintf(arqAss,"%s_Epilogo_0:\n",frame->rotulo->obterString());
     int tamanhoQuadro =frame->deslocamentoVariaveisLocais;
     recuperarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
     fprintf(arqAss,"addi $sp, $fp, 0\n");
@@ -118,7 +132,7 @@ void Gerador::visita(FrameMIPS* quadroMIPS){
     //if(quadroMIPS->rotulo) quadroMIPS->rotulo->aceita(this);
     if(strcmp(quadroMIPS->rotulo->rotulo,"main") == 0){
         //caso seja o método main aloca somente o espaço das variáveis locais
-        fprintf(arqAss,"PROLOGO_main:\n",quadroMIPS->rotulo->obterString());
+        fprintf(arqAss,"main_0_Prologo_0:\n",quadroMIPS->rotulo->obterString());
         salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
         fprintf(arqAss,"main:\n");
         fprintf(arqAss,"subu $sp, $sp,%d\n",tamanhoQuadro);
@@ -127,12 +141,12 @@ void Gerador::visita(FrameMIPS* quadroMIPS){
     }
     else{
         //armazena o deslocamento necessário para os argumentos das chamadas
-        fprintf(arqAss,"PROLOGO_%s:\n",quadroMIPS->rotulo->obterString());
+        fprintf(arqAss,"%s_Prologo_0:\n",quadroMIPS->rotulo->obterString());
         salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
         fprintf(arqAss,"addi $fp, $sp, 0\n");
         fprintf(arqAss,"subu $sp, $sp,%d\n", tamanhoQuadro + QUADRO_BASICO);
         fprintf(arqAss,"j %s\n", quadroMIPS->rotulo->obterString());
-        fprintf(arqAss,"%s\n", quadroMIPS->rotulo->obterString());
+        fprintf(arqAss,"%s:\n", quadroMIPS->rotulo->obterString());
     }
 }
 
@@ -166,7 +180,16 @@ Temp* Gerador::visita(NAME* n){
     return r;
 }
 Temp* Gerador::visita(TEMP* t){
-    return t->t;
+    if(!registradorReservado(t->t)){
+        if(registradorValido(t->t)){
+            return t->t;
+        }else{
+             Temp *tAux = pegaRegistradorLivre();
+            fprintf(stdout,"Substituiu %s por %s\n",t->t->obterString(),tAux->obterString());
+            *t->t=*tAux;
+            return tAux;
+        }
+    }else return t->t;
 }
 Temp* Gerador::visita(BINOP* b){
      Temp *r = pegaRegistradorLivre();
@@ -327,7 +350,7 @@ Temp* Gerador::visita(CALL* call){
                 aux = aux->proximoExp;
                 i++;
 		    }
-		    fprintf(arqAss, "jal PROLOGO_%s\n", n->n->obterString());
+		    fprintf(arqAss, "jal %s_Prologo_0\n", n->n->obterString());
             fprintf(arqAss, "move %s,$v0\n", r->obterString());
             return r;
 		}
@@ -377,6 +400,7 @@ void Gerador::visita(MOVE* mov){
 	}else if(t){
         CONST *c;
         NAME *nome;
+        t->t= mov->e1->aceita(this);
         if(mov->e2 && (c = dynamic_cast<CONST*>(mov->e2)))
             fprintf(arqAss, "li %s,%d\n", t->t->obterString(), c->ci);
         else if(mov->e2 && (nome = dynamic_cast<NAME*>(mov->e2)))
