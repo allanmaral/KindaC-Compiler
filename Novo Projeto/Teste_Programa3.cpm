@@ -15,6 +15,7 @@ int main(){
 /*int teste(int a){return a;}
 int main(){
 	int a;
-	a=teste(1);
+	a=3;
+	a=teste(a);
 }
 */

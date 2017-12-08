@@ -93,7 +93,7 @@ void Gerador::recuperarTodosRegistradores(int offset){
     fprintf(arqAss, "lw $ra,%d($sp)\n", offset);
 }
 
-Gerador::Gerador(char *nomeArquivo) : arqAss(NULL), primeiroRegLivre(NULL), r0(new Temp("r0")){
+Gerador::Gerador(char *nomeArquivo) : arqAss(NULL), primeiroRegLivre(NULL){
     arqAss = fopen(nomeArquivo,"w+");
     for(int i=0; i<NUM_REGISTRADORES; i++){
         liberaRetistrador(new Temp(registradores[i]));
@@ -110,13 +110,16 @@ void Gerador::visita(Procedimento* p){
     p->frame->aceita(this);
     if(p->corpo)p->corpo->aceita(this);
     FrameMIPS *frame=dynamic_cast<FrameMIPS*>(p->frame);
-    fprintf(arqAss,"%s_Epilogo_0:\n",frame->rotulo->obterString());
-    int tamanhoQuadro =frame->deslocamentoVariaveisLocais;
-    recuperarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
-    fprintf(arqAss,"addi $sp, $fp, 0\n");
-    fprintf(arqAss,"addu $fp, $fp,%d\n",tamanhoQuadro+QUADRO_BASICO);
-    fprintf(arqAss,"j $ra \n",tamanhoQuadro+QUADRO_BASICO);
-    if(p->proximoFragmento) p->proximoFragmento->aceita(this);
+    if(strcmp(frame->rotulo->rotulo,"main")){
+        fprintf(arqAss,"%s_Epilogo_0:\n",frame->rotulo->obterString());
+        int tamanhoQuadro =frame->deslocamentoVariaveisLocais;
+        recuperarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
+        fprintf(arqAss,"addi $sp, $fp, 0\n");
+        fprintf(arqAss,"addu $fp, $fp,%d\n",tamanhoQuadro+QUADRO_BASICO);
+        fprintf(arqAss,"j $ra \n",tamanhoQuadro+QUADRO_BASICO);
+        if(p->proximoFragmento) p->proximoFragmento->aceita(this);
+    }
+
 }
 void Gerador::visita(Literal* l){
     fprintf(arqAss, ".rdata\nLiteral_%d:\n.asciiz %s\n", l->rotulo->obterString(), l->literal);
@@ -132,8 +135,6 @@ void Gerador::visita(FrameMIPS* quadroMIPS){
     //if(quadroMIPS->rotulo) quadroMIPS->rotulo->aceita(this);
     if(strcmp(quadroMIPS->rotulo->rotulo,"main") == 0){
         //caso seja o método main aloca somente o espaço das variáveis locais
-        fprintf(arqAss,"main_0_Prologo_0:\n",quadroMIPS->rotulo->obterString());
-        salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
         fprintf(arqAss,"main:\n");
         fprintf(arqAss,"subu $sp, $sp,%d\n",tamanhoQuadro);
         fprintf(arqAss,"addu $fp, $sp,%d\n",tamanhoQuadro);
@@ -159,20 +160,14 @@ void Gerador::visita(EXP* e){
 Temp* Gerador::visita(ESEQ *e){}
 
 Temp* Gerador::visita(CONST* c){
-    if(c->ci == 0) return r0;
-    else{
-        Temp *t = pegaRegistradorLivre();
-        fprintf(arqAss, "li %s, %d\n", t->obterString(), c->ci);
-        return t;
-    }
+    Temp *t = pegaRegistradorLivre();
+    fprintf(arqAss, "li %s, %d\n", t->obterString(), c->ci);
+    return t;
 }
 Temp* Gerador::visita(CONSTF* c){
-	if(c->cf==0.0) return r0;
-	else{
-        Temp *t = pegaRegistradorLivre();
-        fprintf(arqAss, "li %s, %d\n", t->obterString(), (int)c->cf);
-        return t;
-    }
+    Temp *t = pegaRegistradorLivre();
+    fprintf(arqAss, "li %s, %d\n", t->obterString(), (int)c->cf);
+    return t;
 }
 Temp* Gerador::visita(NAME* n){
     Temp *r = pegaRegistradorLivre();
@@ -280,7 +275,7 @@ Temp* Gerador::visita(MEM* m){
     }else{
         NAME *n;
         if(m->e && (n = dynamic_cast<NAME*>(m->e)))
-            fprintf(arqAss, "lw %s, %s(%s)\n", r->obterString(), n->n->obterString(), r0->obterString());
+            fprintf(arqAss, "lw %s, %s(%d)\n", r->obterString(), n->n->obterString(), 0);
         else{
 			Temp* base =m->e->aceita(this);
             fprintf(arqAss, "lw %s, 0(%s)\n", r->obterString(), base->obterString());
@@ -389,7 +384,7 @@ void Gerador::visita(MOVE* mov){
             NAME *name;
             Temp *org = mov->e2->aceita(this);
             if(m->e && (name = dynamic_cast<NAME*>(m->e)))
-                fprintf(arqAss, "sw %s, %s(%s)\n", org->obterString(), name->n->obterString(), r0->obterString());
+                fprintf(arqAss, "sw %s, %s(%d)\n", org->obterString(), name->n->obterString(), 0);
             else{
                 Temp *r = m->e->aceita(this);
                 fprintf(arqAss, "sw %s, %d(%s)\n", org->obterString(), 0, r->obterString());

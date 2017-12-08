@@ -66,7 +66,6 @@ class Gerador{
         FILE *arqAss;
         void salvarTodosRegistradores(int offset);
         void recuperarTodosRegistradores(int offset);
-        Temp *r0;
     public:
           Gerador(char *nomeArquivo);
           ~Gerador();

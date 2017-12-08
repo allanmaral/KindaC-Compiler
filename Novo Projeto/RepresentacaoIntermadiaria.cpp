@@ -95,8 +95,8 @@ void ListaTemp::aceita(VisitanteRI *vri){
 int Rotulo::contador = 0;
 
 Rotulo::Rotulo() {
-    rotulo = new char[19]; // Tamanho maximo 8: "rotulo$" + 10: max int + 1: '\0'
-    sprintf(rotulo, "rotulo$%d", contador++);
+    rotulo = new char[19]; // Tamanho maximo 8: "rotulo_" + 10: max int + 1: '\0'
+    sprintf(rotulo, "rotulo_%d", contador++);
 }
 Rotulo::Rotulo(char *rotulo) {
     this->rotulo = new char[strlen(rotulo) + 1];
