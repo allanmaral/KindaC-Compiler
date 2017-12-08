@@ -1,7 +1,20 @@
-int g(int a,int b,int c, int k,int y){return 78;}
-int main(){
-	int a,c;
-	float b;
-	g(1,2,3,4,5);
-	/*c=a;*/
+/*float PI;
+int X;*/
+int fatorial(int n){
+ if(n<1) {
+ 	return 1;
+ }
+ else {
+	return n*fatorial(n-1);
+	}
 }
+int main(){
+	int a;
+	a=fatorial(6);
+}
+/*int teste(int a){return a;}
+int main(){
+	int a;
+	a=teste(1);
+}
+*/

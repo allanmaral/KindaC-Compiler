@@ -30,15 +30,19 @@ static char registradores [16][3]{
 };
 
 void Gerador::liberaRetistrador(Temp* t){
-    if(primeiroRegLivre){
-        FilaRegistrador * liberado = new FilaRegistrador();
-        liberado->reg = t;
-        liberado->proximo = primeiroRegLivre;
-        primeiroRegLivre = liberado;
-    }else {
-        primeiroRegLivre=new FilaRegistrador();
-        primeiroRegLivre->proximo=NULL;
-        primeiroRegLivre->reg=t;
+    if(strcmp(t->obterString(),"$fp") && strcmp(t->obterString(),"$v0") &&  strcmp(t->obterString(),"$0") &&
+        strcmp(t->obterString(),"$a0") &&  strcmp(t->obterString(),"$a1") &&  strcmp(t->obterString(),"$a2") &&
+        strcmp(t->obterString(),"$a3") &&  strcmp(t->obterString(),"$sp")&&  strcmp(t->obterString(),"$r0")){
+            if(primeiroRegLivre){
+                FilaRegistrador * liberado = new FilaRegistrador();
+                liberado->reg = t;
+                liberado->proximo = primeiroRegLivre;
+                primeiroRegLivre = liberado;
+            }else {
+                primeiroRegLivre=new FilaRegistrador();
+                primeiroRegLivre->proximo=NULL;
+                primeiroRegLivre->reg=t;
+             }
      }
 
 }
@@ -114,13 +118,16 @@ void Gerador::visita(FrameMIPS* quadroMIPS){
     //if(quadroMIPS->rotulo) quadroMIPS->rotulo->aceita(this);
     if(strcmp(quadroMIPS->rotulo->rotulo,"main") == 0){
         //caso seja o método main aloca somente o espaço das variáveis locais
-        fprintf(arqAss,"PROLOGO_MAIN\n");
+        fprintf(arqAss,"PROLOGO_main:\n",quadroMIPS->rotulo->obterString());
+        salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
+        fprintf(arqAss,"main:\n");
         fprintf(arqAss,"subu $sp, $sp,%d\n",tamanhoQuadro);
         fprintf(arqAss,"addu $fp, $sp,%d\n",tamanhoQuadro);
+
     }
     else{
         //armazena o deslocamento necessário para os argumentos das chamadas
-        fprintf(arqAss,"PROLOGO_%s\n",quadroMIPS->rotulo->obterString());
+        fprintf(arqAss,"PROLOGO_%s:\n",quadroMIPS->rotulo->obterString());
         salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
         fprintf(arqAss,"addi $fp, $sp, 0\n");
         fprintf(arqAss,"subu $sp, $sp,%d\n", tamanhoQuadro + QUADRO_BASICO);
@@ -425,6 +432,7 @@ void Gerador::visita(CJUMP* cjp){
         liberaRetistrador(t);
 	}*/
 	//else{
+
         Temp *t = cjp->e1->aceita(this);
         Temp *t2 = cjp->e2->aceita(this);
         sprintf(parte2, " %s, %s, ", t->obterString(), t2->obterString());
