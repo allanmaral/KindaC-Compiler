@@ -435,7 +435,9 @@ void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
     Exp *e1=ultimaExp;
     atr->exprDireita->aceita(this);
     Exp *e2=ultimaExp;
-    ultimaExp = new ESEQ(new MOVE(e1,e2), e1);
+    atr->exprDireita->aceita(this);
+    Exp *e3=ultimaExp;
+    ultimaExp = new ESEQ(new MOVE(e1,e2), e3);
 }
 void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofsset da classe + do frame atual
     int deslocamento = 0;
