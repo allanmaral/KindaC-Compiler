@@ -159,11 +159,11 @@ void CanonizadorRI::visita(MOVE* mo){
         mo->e2->aceita(this);
         mo->e2 = expAtual;
     }
-    if(mo->e1 && (exp = dynamic_cast<ESEQ*>(mo->e1))){
+    if(mo->e2 && (exp = dynamic_cast<ESEQ*>(mo->e2))){
         alterado = true;
         Stm *s = exp->s;
         Exp *e1 = exp->e;
-        mo->e1 = e1;
+        mo->e2 = e1;
         SEQ *seq = new SEQ(s,mo);
         exp->e = NULL;
         exp->s = NULL;
@@ -171,6 +171,17 @@ void CanonizadorRI::visita(MOVE* mo){
         stmAtual = seq;
     }else{
         stmAtual = mo;
+    }
+    if(mo->e1 && (exp = dynamic_cast<ESEQ*>(mo->e1))){
+        alterado = true;
+        Stm *s = exp->s;
+        Exp *e1 = exp->e;
+        mo->e1 = e1;
+        SEQ *seq = new SEQ(s, stmAtual);
+        exp->e = NULL;
+        exp->s = NULL;
+        delete exp;
+        stmAtual = seq;
     }
 }
 void CanonizadorRI::visita(EXP* ex){

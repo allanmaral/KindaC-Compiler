@@ -138,7 +138,7 @@ class VisitanteTradutor : public Visitante {
 	private:
 	    char* RotuloCF(char* classe, char* func, char* nome, int cont);
 	    /// Cria um rotulo para o literal usando fun��o e classe que ele pertence
-	    char* RotuloNome(const char* nome, int cont);
+	    char* RotuloNome(const char* nome, int cont, bool contador = true);
 	    Stm          *ultimaStm;
 	    Exp          *ultimaExp;
 	    NoDeclClasse *classeAtual;

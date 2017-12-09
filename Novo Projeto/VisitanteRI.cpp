@@ -342,8 +342,8 @@ void VisitanteTradutor::visita(NoRetorna           *ret    ) {
     } else {
         e1 = new CONST(0);
     }
-    char* rotuloReg = RotuloNome("Retorno", 0);
-    char* rotulo = RotuloNome("Epilogo", 0);
+    char* rotuloReg = RotuloNome("Retorno", 0 /*false*/);
+    char* rotulo = RotuloNome("Epilogo", 0 /*false*/);
     ultimaStm = new SEQ(new MOVE(new TEMP(frame->tempRetorno), e1),
                         new JUMP(new NAME(new Rotulo(rotulo))));
     delete rotuloReg;
@@ -371,7 +371,7 @@ void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
 void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     char *rotulo = NULL;
     if(strcmp((char*)"main", decF->id->entradaTabela->pegarLexema()) == 0) { rotulo = (char*)"main"; }
-    else rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), 0); // REVER NOME DEPOIS
+    else rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), 0 /*false*/); // REVER NOME DEPOIS
     FrameMIPS *novoFrame = new FrameMIPS(new Rotulo(rotulo), NULL, 0, 0);
     novoFrame->atr = decF->atr;
     frame = novoFrame;
@@ -537,13 +537,24 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
     }
 }
 void VisitanteTradutor::visita(NoExprAtrib         *atr    ) {
-    atr->exprEsquerda->aceita(this);
-    Exp *e1=ultimaExp;
-    atr->exprDireita->aceita(this);
-    Exp *e2=ultimaExp;
-    atr->exprDireita->aceita(this);
-    Exp *e3=ultimaExp;
-    ultimaExp = new ESEQ(new MOVE(e1,e2), e3);
+    NoExprAtrib *a;
+    if((a = dynamic_cast<NoExprAtrib *>(atr->exprEsquerda))) {
+        atr->exprEsquerda->aceita(this);
+        Exp *e1=ultimaExp;
+        atr->exprDireita->aceita(this);
+        Exp *e2=ultimaExp;
+        atr->exprDireita->aceita(this);
+        Exp *e3=ultimaExp;
+        ultimaExp = new ESEQ(new MOVE(e2, e1), e3);
+    } else {
+        atr->exprEsquerda->aceita(this);
+        Exp *e1=ultimaExp;
+        atr->exprDireita->aceita(this);
+        Exp *e2=ultimaExp;
+        atr->exprEsquerda->aceita(this);
+        Exp *e3=ultimaExp;
+        ultimaExp = new ESEQ(new MOVE(e1,e2), e3);
+    }
 }
 void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofsset da classe + do frame atual
     int deslocamento = 0;
@@ -639,7 +650,7 @@ void VisitanteTradutor::visita(NoDeclClasse        *decC   ) {
 }
 
 /// Cria um rotulo para o literal usando fun��o e classe que ele pertence
-char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
+char* VisitanteTradutor::RotuloNome(const char *nome, int cont, bool contador) {
     char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
     int tamanho = strlen(nome) + 14; //10: max int, 3: '_', 1: char com '\0';
     if(classeAtual) {
@@ -651,9 +662,15 @@ char* VisitanteTradutor::RotuloNome(const char *nome, int cont) {
         else   t1 = funcaoAtual->id->entradaTabela->pegarLexema(), tamanho += strlen(t1);
     }
     rotulo = new char[tamanho];
-    if(t2) sprintf(rotulo, "%s_%s_%s_%d", t1, t2, nome, cont);
-    else if(t1) sprintf(rotulo, "%s_%s_%d", t1, nome, cont);
-         else   sprintf(rotulo, "%s_%d", nome, cont);
+    if(contador) {
+        if(t2) sprintf(rotulo, "%s_%s_%s_%d", t1, t2, nome, cont);
+        else if(t1) sprintf(rotulo, "%s_%s_%d", t1, nome, cont);
+             else   sprintf(rotulo, "%s_%d", nome, cont);
+    } else {
+          if(t2) sprintf(rotulo, "%s_%s_%s", t1, t2, nome);
+          else if(t1) sprintf(rotulo, "%s_%s", t1, nome);
+               else   sprintf(rotulo, "%s", nome);
+    }
     return rotulo;
 }
 

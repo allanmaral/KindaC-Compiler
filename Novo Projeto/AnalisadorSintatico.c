@@ -974,6 +974,18 @@ NoExpr  *ExprAtrib(NoExpr *exprEsquerda) {
             int coluna = pegarColuna();
             casar(ATRIBUICAO);
             NoExpr *exprDireita =  ExprOuBool();
+            NoExprAtrib *a, *b;
+            if((a = dynamic_cast<NoExprAtrib*>(exprEsquerda))){
+                NoExpr* temp = a->exprDireita;
+                a->exprDireita = exprDireita;
+                exprDireita = temp;
+                while((b = dynamic_cast<NoExprAtrib*>(a->exprEsquerda))) {
+                    temp = b->exprDireita;
+                    b->exprDireita = a->exprDireita;
+                    a->exprDireita = temp;
+                    a = b;
+                }
+            }
             return ExprAtrib(new NoExprAtrib(exprEsquerda,exprDireita, linha, coluna));
         } break;
         default: return exprEsquerda; break;
