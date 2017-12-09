@@ -460,6 +460,7 @@ void Gerador::visita(CJUMP* cjp){
 	//}
 	//fprintf(stdout,"%s\n",parte1);
     fprintf(arqAss, "%s%s%s\n", parte1, parte2, cjp->verdadeiro->obterString());
+    fprintf(arqAss, "j %s\n", cjp->falso->obterString());
 }
 void Gerador::visita(SEQ* s){
     if(s->s1) s->s1->aceita(this);

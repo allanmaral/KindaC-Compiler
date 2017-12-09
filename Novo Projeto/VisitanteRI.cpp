@@ -60,7 +60,7 @@ void VisitanteTradutor::visita(NoLiteral           *lit    ) {
     n->l = l;
     ultimaExp  = n;
 
-    delete rot;
+    delete [] rot;
     // Insere na lista de fragmentos
     if(listaFragmento) listaFragmento->InsereLista(l);
     else listaFragmento = l;
@@ -133,8 +133,8 @@ void VisitanteTradutor::visita(NoSe                *se     ) {
     Rotulo *fimSe = new Rotulo(rFimSe);
     Rotulo *rUltimoFim = ultimoFim; // Empilha ultimo fim
     ultimoFim = fimSe;
-    delete rEntao;
-    delete rFimSe;
+    delete [] rEntao;
+    delete [] rFimSe;
     se->expressao->aceita(this);
     Exp *e1 = ultimaExp;
     if(se->sentenca) se->sentenca->aceita(this);
@@ -143,7 +143,7 @@ void VisitanteTradutor::visita(NoSe                *se     ) {
     if(se->senao){
         char* rSenao = RotuloNome("SeNao", contLaco);
         Rotulo *senao = new Rotulo(rSenao);
-        delete rSenao;
+        delete [] rSenao;
         se->senao->aceita(this);
         Stm *s2 = ultimaStm;
         s1 = ((s1) ?(Stm*)new SEQ(s1,new JUMP(new NAME(fimSe))):(Stm*)new JUMP(new NAME(fimSe)));
@@ -169,7 +169,7 @@ void VisitanteTradutor::visita(NoEnquanto          *enq    ) {
 	Rotulo *w = new Rotulo(rTeste);
 	Rotulo *inicio= new Rotulo(rInicio);
 	Rotulo *fim= new Rotulo(rFim);
-	delete rTeste, delete rInicio, delete rFim;
+	delete [] rTeste, delete [] rInicio, delete [] rFim;
 	Rotulo *rUltimoFim = ultimoFim; // Empilha o ultimo fim na pilha
 	ultimoFim = fim;
 	if(enq->expressao) enq->expressao->aceita(this);
@@ -185,7 +185,7 @@ void VisitanteTradutor::visita(NoEnquanto          *enq    ) {
 void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {
     char *rCaso = RotuloNome("EntaoCaso", ++contCaso);
     Rotulo *entao = new Rotulo(rCaso);
-    delete rCaso;
+    delete [] rCaso;
     bc->num->aceita(this);
     Exp *e1 = ultimaExp;
     bc->listaSentenca->aceita(this);
@@ -193,7 +193,7 @@ void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {
     if(bc->lista){
         char* rSenao = RotuloNome("SeNaoCaso", contCaso);
         Rotulo *senao = new Rotulo(rSenao);
-        delete rSenao;
+        delete [] rSenao;
         bc->lista->aceita(this);
         Stm *s2 = ultimaStm;
         ultimaStm = new SEQ(new CJUMP(OP_EQ,new TEMP(resultadoEscolha),e1,entao,senao),
@@ -346,8 +346,8 @@ void VisitanteTradutor::visita(NoRetorna           *ret    ) {
     char* rotulo = RotuloNome("Epilogo", 0, false);
     ultimaStm = new SEQ(new MOVE(new TEMP(frame->tempRetorno), e1),
                         new JUMP(new NAME(new Rotulo(rotulo))));
-    delete rotuloReg;
-    delete rotulo;
+    delete [] rotuloReg;
+    delete [] rotulo;
 }
 
 void VisitanteTradutor::visita(NoEscopo            *esc    ) {
@@ -592,26 +592,6 @@ void VisitanteTradutor::visita(NoEsse              *th     ) {
 }
 void VisitanteTradutor::visita(NoNovo              *n      ) {
     ultimaExp = new CONST(0);
-    /*Temp* t = new Temp();
-    char* nome = n->id->entradaTabela->pegarLexema();
-    if(n->listaExpr) n->listaExpr->aceita(this);
-    int tamanho = 4;
-    Rotulo *rotulo;
-    if(n->id) {
-        AtributoClasse *atr = static_cast<AtributoClasse*>(
-                                                 obtemTabelaClasses()->busca(n->id->entradaTabela->pegarLexema()));
-        /// REVER TAMANHO CLASSE
-        //tamanho = atr->pegarTamanho();
-        char *r = RotuloCF(nome, NULL, nome, 0);
-        rotulo = new Rotulo(r);
-        delete r;
-    }
-    ultimaExp = new ESEQ(new MOVE(new TEMP(t),
-                                  new CALL(new NAME(new Rotulo((char*)"malloc")),
-                                           new ListaExp(new CONST(tamanho), NULL))),
-                         new ESEQ(new EXP(new CALL(new NAME(rotulo),
-                                                   new ListaExp(new TEMP(t), static_cast<ListaExp*>(ultimaExp)))),
-                                  new TEMP(t)));*/
 }
 void VisitanteTradutor::visita(NoTipo              *tp     ) {}
 void VisitanteTradutor::visita(NoColchetes         *nc     ) {
