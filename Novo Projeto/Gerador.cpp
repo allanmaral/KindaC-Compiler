@@ -10,7 +10,7 @@ typedef struct FilaRegistrador{
     FilaRegistrador *proximo;
 }FilaRegistrador;
 
-static char registradores [16][3]{
+static char registradores [16][3] = {
     "s1",
     "s2",
     "s3",
@@ -122,12 +122,14 @@ void Gerador::visita(Procedimento* p){
 
 }
 void Gerador::visita(Literal* l){
-    fprintf(arqAss, ".rdata\nLiteral_%d:\n.asciiz %s\n", l->rotulo->obterString(), l->literal);
+    fprintf(arqAss, ".rdata\nLiteral_%s:\n.asciiz %s\n", l->rotulo->obterString(), l->literal);
+    if(l->proximoFragmento) l->proximoFragmento->aceita(this);
 }
 void Gerador::visita(Variavel* v){
     fprintf(arqAss, ".data\n");
     fprintf(arqAss, "var_%s: ", v->rotulo->obterString());
     fprintf(arqAss, ".space %d\n", v->tamanho);
+    if(v->proximoFragmento) v->proximoFragmento->aceita(this);
 }
 
 void Gerador::visita(FrameMIPS* quadroMIPS){
@@ -151,13 +153,11 @@ void Gerador::visita(FrameMIPS* quadroMIPS){
     }
 }
 
-Temp* Gerador::visita(ListaExp* lex){
-
-}
+Temp* Gerador::visita(ListaExp* lex){ return NULL; }
 void Gerador::visita(EXP* e){
     if(e->e)liberaRetistrador(e->e->aceita(this));
 }
-Temp* Gerador::visita(ESEQ *e){}
+Temp* Gerador::visita(ESEQ *e){ return NULL; }
 
 Temp* Gerador::visita(CONST* c){
     Temp *t = pegaRegistradorLivre();
@@ -321,7 +321,7 @@ Temp* Gerador::visita(CALL* call){
             fprintf(arqAss, "move %s,$v0\n", r->obterString());
 			return r;
 		}
-		else if(strcmp("readlnFloat", n->n->obterString()) == 0){
+		else if(strcmp("readlnReal", n->n->obterString()) == 0){
             fprintf(arqAss, "li $v0,0x06\n");
             fprintf(arqAss, "syscall\n");
             fprintf(arqAss, "move %s,$f0\n", r->obterString());

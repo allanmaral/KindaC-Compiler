@@ -278,6 +278,7 @@ class CONSTF : public Exp {
 class NAME : public Exp {
     public:
         Rotulo *n;
+        Literal *l;
     public:
         NAME(Rotulo *n);
         ~NAME();

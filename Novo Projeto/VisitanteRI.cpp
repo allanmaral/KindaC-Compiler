@@ -56,7 +56,10 @@ void VisitanteTradutor::visita(NoLiteral           *lit    ) {
     char* rot = RotuloNome("Literal", contLiteral++);
     Rotulo  *r = new Rotulo(rot);
     Literal *l = new Literal(lit->entradaTabela->pegarLexema(), r);
-    ultimaExp  = new NAME(r);
+    NAME *n = new NAME(r);
+    n->l = l;
+    ultimaExp  = n;
+
     delete rot;
     // Insere na lista de fragmentos
     if(listaFragmento) listaFragmento->InsereLista(l);
@@ -221,11 +224,114 @@ void VisitanteTradutor::visita(NoEscolha           *sw     ) {
 }
 void VisitanteTradutor::visita(NoImprime           *imp    ) {
     imp->listaExpr->aceita(this);
-    ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"imprime")), static_cast<ListaExp*>(ultimaExp)));
+    Stm *printExp = NULL;
+    // Converte o println em varios prints separados
+    ListaExp* listaExp = static_cast<ListaExp*>(ultimaExp);
+    if(listaExp) {
+        NAME *lit = dynamic_cast<NAME*>(listaExp->exp); // Se o primeiro nó for o literal, faz o parsing
+        if(lit) {
+            fprintf(stdout, "Entrou IMPRIME\n");
+            char* format = lit->l->literal; // A cada leitura do um % separa a impressão
+            int comeco = 1, i = 1;
+            listaExp = listaExp->proximoExp;
+            for(i = 1; format[i]; i++) {
+                if(format[i] == '%' && listaExp) {
+                    if(comeco > 0) { // Cria um novo literal e um imprime literal "printLiteral"
+                        char* literal = new char[i - comeco + 1];
+                        memcpy(literal, &format[comeco], i - comeco);
+                        literal[i - comeco] = '\0';
+                        Literal *l = new Literal(literal);
+                        delete [] literal;
+                        if(listaFragmento) listaFragmento->InsereLista(l);
+                        else listaFragmento = l;
+                        if(printExp) {
+                            printExp = new SEQ(printExp,
+                                               new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
+                                                                new ListaExp(new NAME(l->rotulo), NULL))));
+                        } else {
+                            printExp = new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
+                                                        new ListaExp(new NAME(l->rotulo), NULL)));
+                        }
+                        comeco = -1;
+                    }
+                    if(format[i+1]) {
+                        if(format[i+1] == 'd') { // Inteiro
+                            if(printExp) {
+                                printExp = new SEQ(printExp,
+                                                   new EXP(new CALL(new NAME(new Rotulo((char*)"printInt")),
+                                                                    new ListaExp(listaExp->exp, NULL))));
+                            } else {
+                                  printExp = new EXP(new CALL(new NAME(new Rotulo((char*)"printInt")),
+                                                            new ListaExp(listaExp->exp, NULL)));
+                            }
+                            listaExp = listaExp->proximoExp;
+                            i++;
+                        } else if(format[i+1] == 'f') { // Real
+                                   if(printExp) {
+                                       printExp = new SEQ(printExp,
+                                                          new EXP(new CALL(new NAME(new Rotulo((char*)"printReal")),
+                                                                        new ListaExp(listaExp->exp, NULL))));
+                                   } else {
+                                         printExp = new EXP(new CALL(new NAME(new Rotulo((char*)"printReal")),
+                                                                     new ListaExp(listaExp->exp, NULL)));
+                                   }
+                                   listaExp = listaExp->proximoExp;
+                                   i++;
+                               } else if(format[i+1] == 's') { // Literal
+                                          if(printExp) {
+                                              printExp = new SEQ(printExp,
+                                                                 new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
+                                                                                  new ListaExp(listaExp->exp, NULL))));
+                                          } else {
+                                                printExp = new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
+                                                                            new ListaExp(listaExp->exp, NULL)));
+                                          }
+                                          listaExp = listaExp->proximoExp;
+                                          i++;
+                                      }
+                    }
+                } else if( comeco < 0) {
+                           comeco = i;
+                       }
+            }
+            if (comeco > 0 && comeco < i-2 ) {
+                char* literal_char = new char[i - comeco];
+                memcpy(literal_char, &format[comeco], i - comeco - 1);
+                literal_char[i - comeco - 1] = '\0';
+                Literal *literal = new Literal(literal_char);
+                delete [] literal_char;
+                if(listaFragmento) listaFragmento->InsereLista(literal);
+                else listaFragmento = literal;
+                if(printExp) {
+                    printExp = new SEQ(printExp,
+                                       new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
+                                                        new ListaExp(new NAME(literal->rotulo), NULL))));
+                } else {
+                    printExp = new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
+                                                new ListaExp(new NAME(literal->rotulo), NULL)));
+                }
+            }
+        }
+    }
+    ultimaStm = printExp;
 }
 void VisitanteTradutor::visita(NoLeLinha           *leL    ) {
+    if(!leL->expressao) {
+        ultimaStm = new EXP(new CONST(0));
+        return;
+    }
     leL->expressao->aceita(this);
-    ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"le_linha")), new ListaExp(ultimaExp, NULL)));
+    switch(leL->expressao->tipo->pegaTipo()) {
+        case INTEIRO: {
+            ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"readlnInt")), new ListaExp(ultimaExp, NULL)));
+        }break;
+        case REAL: {
+            ultimaStm = new EXP(new CALL(new NAME(new Rotulo((char*)"readlnReal")), new ListaExp(ultimaExp, NULL)));
+        }break;
+        default: {
+            ultimaStm = new EXP(new CONST(0));
+        }
+    }
 }
 void VisitanteTradutor::visita(NoRetorna           *ret    ) {
     // Cria um rotulo para o epilogo da fun��o

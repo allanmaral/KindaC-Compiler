@@ -33,15 +33,21 @@ void Fragmento::aceita(VisitanteRI *vri){
 void Fragmento::aceita(Gerador *g){
     g->visita(this);
 }
-Literal::Literal(char* literal) : literal(literal) {
+Literal::Literal(char* _literal) : literal(NULL) {
+    literal = new char[strlen(_literal)+1];
+    strcpy(literal, _literal);
     rotulo = new Rotulo();
 }
 
-Literal::Literal(char *literal, Rotulo *rotulo) : literal(literal), rotulo(rotulo) { }
+Literal::Literal(char *_literal, Rotulo *rotulo) : literal(literal), rotulo(rotulo) {
+    literal = new char[strlen(_literal)+1];
+    strcpy(literal, _literal);
+}
 
 Literal::~Literal(){
     delete proximoFragmento;
     delete rotulo;
+    delete[] literal;
 }
 void Literal::aceita(VisitanteRI* vri){
     vri->visita(this);
@@ -254,7 +260,7 @@ Temp* CONSTF::aceita(Gerador *g) {
    return g->visita(this);
 }
 
-NAME::NAME(Rotulo *n) : n(n) {}
+NAME::NAME(Rotulo *n) : n(n), l(NULL) {}
 
 NAME::~NAME() {}
 

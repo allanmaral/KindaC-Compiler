@@ -58,12 +58,12 @@ class SEQ;
 class LABEL;
 
 struct FilaRegistrador;
-class Gerador{
+class Gerador {
     private:
+        FILE *arqAss;
         FilaRegistrador* primeiroRegLivre;
         void liberaRetistrador(Temp *t);
         Temp* pegaRegistradorLivre();
-        FILE *arqAss;
         void salvarTodosRegistradores(int offset);
         void recuperarTodosRegistradores(int offset);
     public:
@@ -96,4 +96,4 @@ class Gerador{
           void visita(SEQ *se);
           void visita(LABEL *l);
 };
-#endif GERADOR_H
+#endif
