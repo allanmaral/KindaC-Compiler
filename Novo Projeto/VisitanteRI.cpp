@@ -342,8 +342,8 @@ void VisitanteTradutor::visita(NoRetorna           *ret    ) {
     } else {
         e1 = new CONST(0);
     }
-    char* rotuloReg = RotuloNome("Retorno", 0 /*false*/);
-    char* rotulo = RotuloNome("Epilogo", 0 /*false*/);
+    char* rotuloReg = RotuloNome("Retorno", 0, false);
+    char* rotulo = RotuloNome("Epilogo", 0, false);
     ultimaStm = new SEQ(new MOVE(new TEMP(frame->tempRetorno), e1),
                         new JUMP(new NAME(new Rotulo(rotulo))));
     delete rotuloReg;
@@ -359,10 +359,9 @@ void VisitanteTradutor::visita(NoEscopo            *esc    ) {
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
     if(cha->parametros) cha->parametros->aceita(this);
     /// Descobre rotulo da fun��o
-    char* rotulo = RotuloCF(NULL, NULL, cha->id->entradaTabela->pegarLexema(),0);
+    char* rotulo = cha->id->entradaTabela->pegarLexema();
     ListaExp* listaParametros = static_cast<ListaExp*>(ultimaExp);
     ultimaExp = new CALL(new NAME(new Rotulo(rotulo)), listaParametros);
-    delete rotulo;
 }
 void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
     if(senE->expressao) senE->expressao->aceita(this);
@@ -371,7 +370,7 @@ void VisitanteTradutor::visita(NoSentencaExpr      *senE   ) {
 void VisitanteTradutor::visita(NoDeclFuncao        *decF   ) {
     char *rotulo = NULL;
     if(strcmp((char*)"main", decF->id->entradaTabela->pegarLexema()) == 0) { rotulo = (char*)"main"; }
-    else rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), 0 /*false*/); // REVER NOME DEPOIS
+    else rotulo = RotuloNome(decF->id->entradaTabela->pegarLexema(), 0, false); // REVER NOME DEPOIS
     FrameMIPS *novoFrame = new FrameMIPS(new Rotulo(rotulo), NULL, 0, 0);
     novoFrame->atr = decF->atr;
     frame = novoFrame;
@@ -671,25 +670,6 @@ char* VisitanteTradutor::RotuloNome(const char *nome, int cont, bool contador) {
           else if(t1) sprintf(rotulo, "%s_%s", t1, nome);
                else   sprintf(rotulo, "%s", nome);
     }
-    return rotulo;
-}
-
-char* VisitanteTradutor::RotuloCF(char* classe, char* func, char* nome, int cont)
-{
-    char *rotulo = NULL, *t1 = NULL, *t2 = NULL;
-    int tamanho = strlen(nome) + 14; //10: max int, 3: '_', 1: char com '\0';
-    if(classe) {
-        t1 = classe;
-        tamanho += strlen(t1);
-    }
-    if(func) {
-        if(t1) t2 = func, tamanho += strlen(t2);
-        else   t1 = func, tamanho += strlen(t1);
-    }
-    rotulo = new char[tamanho];
-    if(t2) sprintf(rotulo, "%s_%s_%s_%d", t1, t2, nome, cont);
-    else if(t1) sprintf(rotulo, "%s_%s_%d", t1, nome, cont);
-         else   sprintf(rotulo, "%s_%d", nome, cont);
     return rotulo;
 }
 
