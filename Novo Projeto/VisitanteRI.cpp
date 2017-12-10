@@ -539,10 +539,7 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
             ultimaExp = new BINOP(OP_DIV,e1,e2);
             break;
         case PORCENTO:{
-            Temp *r= new Temp();
-            //ultimaExp = new ESEQ(new EXP(new BINOP(OP_DIV,e1,e2)),new MOVE(new TEMP(r),new CALL(new NAME(new Rotulo("mfhi")),new ListaExp(new TEMP(r),NULL))));
-            ultimaExp = new ESEQ(new SEQ(new EXP(new BINOP(OP_DIV,e1,e2)),
-                            new EXP(new CALL(new NAME(new Rotulo((char*)"mfhi")),new ListaExp(new TEMP(r),NULL)))),new TEMP(r));
+            ultimaExp = new CALL(new NAME(new Rotulo((char*)"mfhi")),new ListaExp(new BINOP(OP_DIV,e1,e2),NULL));
         }break;
     }
 }

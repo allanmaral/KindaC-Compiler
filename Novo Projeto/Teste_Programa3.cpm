@@ -1,9 +1,28 @@
-int Teste() {
-	print("This aren't the function you're looking for...\n");
+/*float PI;
+int X;*/
+/*int fatorial(int n){
+ if(n < 1) {
+ 	return 1;
+ }
+ else{
+	return n*fatorial(n-1);
+  }
 }
 
 int main() {
 	int a;
-	a = 3 * 6;
-	print("Hello %d World!", a);
+	a=fatorial(6);
+}*/
+/*int teste(int a){return a;}
+int main(){
+	int a;
+	a=3;
+	a=teste(a);
+}
+*/
+int main(){
+	int a;
+	int b;
+	b=5;
+	a=(b+4)%2-1;
 }
