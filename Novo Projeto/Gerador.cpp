@@ -47,6 +47,7 @@ static bool registradorValido(Temp *t){
 }
 void Gerador::liberaRetistrador(Temp* t){
     if(!registradorReservado(t)){
+            fprintf(stdout, "liberou: %s\n", t->obterString());///tambem tirar isso
             if(primeiroRegLivre){
                 FilaRegistrador * liberado = new FilaRegistrador();
                 liberado->reg = t;
@@ -62,6 +63,7 @@ void Gerador::liberaRetistrador(Temp* t){
 }
 Temp* Gerador::pegaRegistradorLivre(){
     if(primeiroRegLivre){
+        fprintf(stdout, "pegou: %s\n", primeiroRegLivre->reg->obterString());///tambem tirar isso
         Temp* t= primeiroRegLivre->reg;
         FilaRegistrador *prox = primeiroRegLivre->proximo;
         delete primeiroRegLivre;
@@ -195,7 +197,7 @@ Temp* Gerador::visita(TEMP* t){
             Temp *tAux = pegaRegistradorLivre();
             fprintf(stdout,"Substituiu %s por %s\n",t->t->obterString(),tAux->obterString());///tem que tirar esse print depois
             *t->t=*tAux;
-            delete tAux;
+            free(tAux);
             return t->t;
         }
     }else return t->t;
@@ -343,7 +345,7 @@ Temp* Gerador::visita(CALL* call){
 		}else if(strcmp("mfhi", n->n->obterString()) == 0){
             ListaExp *aux = call->parametros;
             Temp *reg = aux->exp->aceita(this);
-            fprintf(arqAss, "mfhi %s\n",r->obterString());
+            fprintf(arqAss, "\tmfhi %s\n",r->obterString());
             liberaRetistrador(reg);
 			return r;
 		}
@@ -423,6 +425,7 @@ void Gerador::visita(MOVE* mov){
         else{
             Temp *aux = mov->e2->aceita(this);
             fprintf(arqAss, "\tmove %s,%s\n", t->t->obterString(), aux->obterString());
+            liberaRetistrador(aux);
         }
 	}
 }
