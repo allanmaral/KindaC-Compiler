@@ -19,21 +19,45 @@ void finalizaPrograma();
  */
 int main(int argc, char** args){
     FILE* arquivo = stdin;
-    if ( argc == 2 ) {
+    FILE* arqAss  = stdout;
+    if ( argc == 2| argc == 3 ) {
         char caminhoArquivo[strlen(args[1])+5];
+        char *caminhoSaida;
+        if(argc==2){
+            caminhoSaida=(char*)malloc(sizeof(char) * (strlen(args[1])+5));
+        }else{
+            caminhoSaida=(char*)malloc(sizeof(char) * (strlen(args[2])+5));
+            strcpy(caminhoSaida, args[2]);
+        }
         strcpy(caminhoArquivo, args[1]);
         // Se não tiver a extenção .cpm, adicione
         if(strstr(caminhoArquivo, ".cpm") == NULL ){
+            if(argc==2){
+                strcpy(caminhoSaida, caminhoArquivo);
+                strcat(caminhoSaida, ".asm");
+            }
             strcat(caminhoArquivo, ".cpm");
+        }else{
+            if(argc==2){
+                for(int i = 0;i<(strlen(args[1])-4);i++){
+                    caminhoSaida[i]=caminhoArquivo[i];
+                }
+                strcat(caminhoSaida, ".asm");
+            }
+         }
+        if(strstr(caminhoSaida, ".asm") == NULL ){
+             strcat(caminhoSaida, ".asm");
         }
         arquivo = fopen(caminhoArquivo, "r");
+        arqAss  = fopen(caminhoSaida,"w+");
+        free(caminhoSaida);
         if(!arquivo){
             fprintf(stderr, "Arquivo invalido!");
             exit(1);
         }
-    } else if( argc > 2){
+    } else if( argc > 3){
                fprintf(stderr, "Argumento invalido!\n");
-               fprintf(stderr, "Exemplo de uso:\n\tKindaC teste.cpm\n\tKindaC teste\n\tKindaC\n");
+               fprintf(stderr, "Exemplos de uso:\n\tKindaC\n\tKindaC <arquivo_entrada>\n\tKindaC <arquivo_entrada> <arquivo_saida>\n");
                exit(1);
            }
 
@@ -59,7 +83,7 @@ int main(int argc, char** args){
     canRI.visita(vt.pegarFragmento());
     vtri.visita(vt.pegarFragmento());
 
-    Gerador *ger = new Gerador("saida.txt");
+    Gerador *ger = new Gerador(arqAss);
     ger->visita(vt.pegarFragmento());
     delete ger;
 

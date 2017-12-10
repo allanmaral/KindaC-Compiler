@@ -67,7 +67,7 @@ class Gerador {
         void salvarTodosRegistradores(int offset);
         void recuperarTodosRegistradores(int offset);
     public:
-          Gerador(char *nomeArquivo);
+          Gerador(FILE *arquivo);
           ~Gerador();
           void visita(Fragmento *f);
           void visita(Procedimento *p);

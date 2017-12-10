@@ -93,13 +93,20 @@ void Gerador::recuperarTodosRegistradores(int offset){
     fprintf(arqAss, "lw $ra,%d($sp)\n", offset);
 }
 
-Gerador::Gerador(char *nomeArquivo) : arqAss(NULL), primeiroRegLivre(NULL){
-    arqAss = fopen(nomeArquivo,"w+");
+Gerador::Gerador(FILE* arquivo) : arqAss(NULL), primeiroRegLivre(NULL){
+    arqAss = arquivo;
     for(int i=0; i<NUM_REGISTRADORES; i++){
         liberaRetistrador(new Temp(registradores[i]));
     }
 }
 Gerador::~Gerador(){
+    FilaRegistrador *aux;
+    while(primeiroRegLivre!=NULL){
+        aux=primeiroRegLivre->proximo;
+        delete primeiroRegLivre;
+        primeiroRegLivre=aux;
+
+    }
     fclose(arqAss);
 }
 void Gerador::visita(Fragmento* f){
@@ -179,10 +186,11 @@ Temp* Gerador::visita(TEMP* t){
         if(registradorValido(t->t)){
             return t->t;
         }else{
-             Temp *tAux = pegaRegistradorLivre();
-            fprintf(stdout,"Substituiu %s por %s\n",t->t->obterString(),tAux->obterString());
+            Temp *tAux = pegaRegistradorLivre();
+            fprintf(stdout,"Substituiu %s por %s\n",t->t->obterString(),tAux->obterString());///tem que tirar esse print depois
             *t->t=*tAux;
-            return tAux;
+            delete tAux;
+            return t->t;
         }
     }else return t->t;
 }
@@ -325,6 +333,12 @@ Temp* Gerador::visita(CALL* call){
             fprintf(arqAss, "li $v0,0x06\n");
             fprintf(arqAss, "syscall\n");
             fprintf(arqAss, "move %s,$f0\n", r->obterString());
+			return r;
+		}else if(strcmp("mfhi", n->n->obterString()) == 0){
+            ListaExp *aux = call->parametros;
+            Temp *reg = aux->exp->aceita(this);
+            fprintf(arqAss, "mfhi %s\n",r->obterString());
+            liberaRetistrador(reg);
 			return r;
 		}
 		else{
