@@ -23,5 +23,6 @@ int main(){
 int main(){
 	int a,b;
 	a=(5+4)%2-1;
-	print("%d\n",b);
+	a=main();
+
 }
