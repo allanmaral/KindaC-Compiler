@@ -33,13 +33,19 @@ void Fragmento::aceita(VisitanteRI *vri){
 void Fragmento::aceita(Gerador *g){
     g->visita(this);
 }
+
+int Literal::cont = 0;
+
 Literal::Literal(char* _literal) : literal(NULL) {
     literal = new char[strlen(_literal)+1];
     strcpy(literal, _literal);
-    rotulo = new Rotulo();
+    char* rName = new char[19]; // Literal_:8 + INT:10 + '\0':1
+    sprintf(rName, "Literal_%d", cont++);
+    rotulo = new Rotulo(rName);
+    delete [] rName;
 }
 
-Literal::Literal(char *_literal, Rotulo *rotulo) : literal(literal), rotulo(rotulo) {
+Literal::Literal(char *_literal, Rotulo *rotulo) : literal(NULL), rotulo(rotulo) {
     literal = new char[strlen(_literal)+1];
     strcpy(literal, _literal);
 }
@@ -149,7 +155,7 @@ Frame::~Frame(){}
 FrameMIPS::FrameMIPS(Rotulo *rotulo, ListaAcesso *variaveisLocais, int desVarLocais, int desParametros)
                      : rotulo(rotulo), variaveisLocais(variaveisLocais), numeroParametros(0),
                        deslocamentoVariaveisLocais(desVarLocais), deslocamentoParametros(desParametros) {
-    tempRetorno = new Temp("v0");
+    tempRetorno = new Temp((char*)"v0");
 }
 FrameMIPS::~FrameMIPS() {
     delete rotulo;

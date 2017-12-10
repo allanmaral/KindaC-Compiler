@@ -109,6 +109,8 @@ class Literal : public Fragmento {
         ~Literal();
         void aceita(VisitanteRI* vri);
         void aceita(Gerador *g);
+    private:
+        static int cont;
 };
 
 class Variavel : public Fragmento {

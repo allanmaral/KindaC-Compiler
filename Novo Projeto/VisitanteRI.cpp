@@ -22,7 +22,7 @@ static char operadorLiteral[OP_Tamanho][8] = {
 VisitanteTradutor::VisitanteTradutor()
     : ultimaStm(NULL), ultimaExp(NULL), classeAtual(NULL), funcaoAtual(NULL),
       ultimoFim(NULL), frame(NULL), listaFragmento(NULL), resultadoEscolha(NULL),
-      contLiteral(0), contLaco(0), contCaso(0), contEscolha(0) {}
+      contLiteral(0), contLaco(0), contCaso(0), contEscolha(0), contComp(0) {}
 
 VisitanteTradutor::~VisitanteTradutor() {}
 
@@ -237,9 +237,11 @@ void VisitanteTradutor::visita(NoImprime           *imp    ) {
             for(i = 1; format[i]; i++) {
                 if(format[i] == '%' && listaExp) {
                     if(comeco > 0) { // Cria um novo literal e um imprime literal "printLiteral"
-                        char* literal = new char[i - comeco + 1];
-                        memcpy(literal, &format[comeco], i - comeco);
-                        literal[i - comeco] = '\0';
+                        char* literal = new char[i - comeco + 3];
+                        memcpy(&literal[1], &format[comeco], i - comeco);
+                        literal[0] = '\"';
+                        literal[i - comeco + 1] = '\"';
+                        literal[i - comeco + 2] = '\0';
                         Literal *l = new Literal(literal);
                         delete [] literal;
                         if(listaFragmento) listaFragmento->InsereLista(l);
@@ -295,9 +297,11 @@ void VisitanteTradutor::visita(NoImprime           *imp    ) {
                        }
             }
             if (comeco > 0 && comeco < i-2 ) {
-                char* literal_char = new char[i - comeco];
-                memcpy(literal_char, &format[comeco], i - comeco - 1);
-                literal_char[i - comeco - 1] = '\0';
+                char* literal_char = new char[i - comeco+2];
+                memcpy(&literal_char[1], &format[comeco], i - comeco - 1);
+                literal_char[0] = '\"';
+                literal_char[i - comeco] = '\"';
+                literal_char[i - comeco + 1] = '\0';
                 Literal *literal = new Literal(literal_char);
                 delete [] literal_char;
                 if(listaFragmento) listaFragmento->InsereLista(literal);
@@ -472,7 +476,7 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
     expB->exprDireita->aceita(this);
     Exp *e2=ultimaExp;
 	 switch(expB->operador){
-        case MENOR: case MENOR_IGUAL: case MAIOR: case MAIOR_IGUAL:{
+        case MENOR: case MENOR_IGUAL: case MAIOR: case MAIOR_IGUAL: case COMPARACAO: {
             int opRelacional = 0;
             if(expB->operador==MENOR){
               opRelacional = OP_LT;
@@ -482,14 +486,21 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
                             opRelacional = OP_GT;
                           }else if(expB->operador==MAIOR_IGUAL){
                                    opRelacional = OP_GE;
-                                 }
-            Rotulo *l1 =  new Rotulo();
-			Rotulo *l2 =  new Rotulo();
+                                 } else if(expB->operador==COMPARACAO){
+                                            opRelacional = OP_EQ;
+                                        }
+            char *rFalso = RotuloNome("Comparacao_Falsa", contComp);
+            char *rFim = RotuloNome("Comparacao_Fim", contComp++);
+            Rotulo *lFalso =  new Rotulo(rFalso);
+			Rotulo *lFim   =  new Rotulo(rFim);
+			delete [] rFalso; delete [] rFim;
 			Temp *r = new Temp();
 			ultimaExp = new ESEQ(new SEQ(new MOVE(new TEMP(r),new CONST(1)),
-                            new SEQ(new CJUMP(opRelacional,e1,e2,l1,l2),
-                                new SEQ(new LABEL(l2),
-                                    new SEQ(new MOVE(new TEMP(r),new CONST(0)),new LABEL(l1))))),new TEMP(r));
+                                         new SEQ(new CJUMP(opRelacional,e1,e2,lFim,lFalso),
+                                                 new SEQ(new LABEL(lFalso),
+                                                         new SEQ(new MOVE(new TEMP(r),new CONST(0)),
+                                                                 new LABEL(lFim))))),
+                                 new TEMP(r));
             }break;
         case ATRIBUICAO:
             break;

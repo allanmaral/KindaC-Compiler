@@ -3,7 +3,7 @@
 #include <string.h>
 #define NUM_REGISTRADORES 16
 #include "RepresentacaoIntermadiaria.h"
-#define QUADRO_BASICO 32
+#define QUADRO_BASICO (19*4)
 #define PALAVRA 32
 typedef struct FilaRegistrador{
     Temp *reg;
@@ -71,26 +71,26 @@ Temp* Gerador::pegaRegistradorLivre(){
 }
 void Gerador::salvarTodosRegistradores(int offset){
     for(int i=0; i<NUM_REGISTRADORES; i++){
-        fprintf(arqAss,"sw $%s,%d($sp)\n", registradores[i], offset);
+        fprintf(arqAss,"\tsw $%s,%d($sp)\n", registradores[i], offset);
         offset += 4;
     }
-    fprintf(arqAss, "sw $fp,%d($sp)\n", offset);
+    fprintf(arqAss, "\tsw $fp,%d($sp)\n", offset);
     offset += 4;
-    fprintf(arqAss, "sw $t0,%d($sp)\n", offset);
+    fprintf(arqAss, "\tsw $t0,%d($sp)\n", offset);
     offset += 4;
-    fprintf(arqAss, "sw $ra,%d($sp)\n", offset);
+    fprintf(arqAss, "\tsw $ra,%d($sp)\n", offset);
 
 }
 void Gerador::recuperarTodosRegistradores(int offset){
     for(int i=0; i<NUM_REGISTRADORES; i++){
-        fprintf(arqAss, "lw $%s,%d($sp)\n", registradores[i], offset);
+        fprintf(arqAss, "\tlw $%s,%d($sp)\n", registradores[i], offset);
         offset += 4;
     }
-    fprintf(arqAss, "lw $fp,%d($sp)\n", offset);
+    fprintf(arqAss, "\tlw $fp,%d($sp)\n", offset);
     offset += 4;
-    fprintf(arqAss, "lw $t0,%d($sp)\n", offset);
+    fprintf(arqAss, "\tlw $t0,%d($sp)\n", offset);
     offset += 4;
-    fprintf(arqAss, "lw $ra,%d($sp)\n", offset);
+    fprintf(arqAss, "\tlw $ra,%d($sp)\n", offset);
 }
 
 Gerador::Gerador(char *nomeArquivo) : arqAss(NULL), primeiroRegLivre(NULL){
@@ -114,15 +114,17 @@ void Gerador::visita(Procedimento* p){
         fprintf(arqAss,"%s_Epilogo:\n",frame->rotulo->obterString());
         int tamanhoQuadro =frame->deslocamentoVariaveisLocais;
         recuperarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
-        fprintf(arqAss,"addi $sp, $fp, 0\n");
-        fprintf(arqAss,"addu $fp, $fp,%d\n",tamanhoQuadro+QUADRO_BASICO);
-        fprintf(arqAss,"j $ra \n",tamanhoQuadro+QUADRO_BASICO);
+        fprintf(arqAss,"\taddi $sp, $fp, 0\n");
+        fprintf(arqAss,"\taddu $fp, $fp,%d\n",tamanhoQuadro+QUADRO_BASICO);
+        fprintf(arqAss,"\tj $ra \n\n\n",tamanhoQuadro+QUADRO_BASICO);
         if(p->proximoFragmento) p->proximoFragmento->aceita(this);
+    } else { // Epilogo do main
+        fprintf(arqAss,"\tj $ra \n\n\n");
     }
 
 }
 void Gerador::visita(Literal* l){
-    fprintf(arqAss, ".rdata\nLiteral_%s:\n.asciiz %s\n", l->rotulo->obterString(), l->literal);
+    fprintf(arqAss, ".rdata\n%s:\n\t.asciiz %s\n", l->rotulo->obterString(), l->literal);
     if(l->proximoFragmento) l->proximoFragmento->aceita(this);
 }
 void Gerador::visita(Variavel* v){
@@ -138,40 +140,44 @@ void Gerador::visita(FrameMIPS* quadroMIPS){
     if(strcmp(quadroMIPS->rotulo->rotulo,"main") == 0){
         //caso seja o método main aloca somente o espaço das variáveis locais
         fprintf(arqAss,"main:\n");
-        fprintf(arqAss,"subu $sp, $sp,%d\n",tamanhoQuadro);
-        fprintf(arqAss,"addu $fp, $sp,%d\n",tamanhoQuadro);
+        fprintf(arqAss,"\tsubu $sp, $sp,%d\n",tamanhoQuadro);
+        fprintf(arqAss,"\taddu $fp, $sp,%d\n",tamanhoQuadro);
 
     }
     else{
         //armazena o deslocamento necessário para os argumentos das chamadas
         fprintf(arqAss,"%s_Prologo:\n",quadroMIPS->rotulo->obterString());
         salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
-        fprintf(arqAss,"addi $fp, $sp, 0\n");
-        fprintf(arqAss,"subu $sp, $sp,%d\n", tamanhoQuadro + QUADRO_BASICO);
-        fprintf(arqAss,"j %s\n", quadroMIPS->rotulo->obterString());
+        fprintf(arqAss,"\taddi $fp, $sp, 0\n");
+        fprintf(arqAss,"\tsubu $sp, $sp,%d\n", tamanhoQuadro + QUADRO_BASICO);
+        fprintf(arqAss,"\tj %s\n", quadroMIPS->rotulo->obterString());
         fprintf(arqAss,"%s:\n", quadroMIPS->rotulo->obterString());
     }
 }
 
 Temp* Gerador::visita(ListaExp* lex){ return NULL; }
 void Gerador::visita(EXP* e){
-    if(e->e)liberaRetistrador(e->e->aceita(this));
+    TEMP *t;
+    MEM *m;
+    if(!(e->e && ((t = dynamic_cast<TEMP*>(e->e)) || (m = dynamic_cast<MEM*>(e->e))))) {
+        if(e->e)liberaRetistrador(e->e->aceita(this));
+    }
 }
 Temp* Gerador::visita(ESEQ *e){ return NULL; }
 
 Temp* Gerador::visita(CONST* c){
     Temp *t = pegaRegistradorLivre();
-    fprintf(arqAss, "li %s, %d\n", t->obterString(), c->ci);
+    fprintf(arqAss, "\tli %s, %d\n", t->obterString(), c->ci);
     return t;
 }
 Temp* Gerador::visita(CONSTF* c){
     Temp *t = pegaRegistradorLivre();
-    fprintf(arqAss, "li %s, %d\n", t->obterString(), (int)c->cf);
+    fprintf(arqAss, "\tli %s, %d\n", t->obterString(), (int)c->cf);
     return t;
 }
 Temp* Gerador::visita(NAME* n){
     Temp *r = pegaRegistradorLivre();
-    fprintf(arqAss, "la %s %s\n", r->obterString(), n->n->obterString());
+    fprintf(arqAss, "\tla %s %s\n", r->obterString(), n->n->obterString());
     return r;
 }
 Temp* Gerador::visita(TEMP* t){
@@ -192,16 +198,16 @@ Temp* Gerador::visita(BINOP* b){
         CONST *c1, *c2;
         if(b->e1 && (c1 = dynamic_cast<CONST*>(b->e1))){
             Temp *t2 = b->e2->aceita(this);
-            fprintf(arqAss, "addi %s,%s,%d\n", r->obterString(), t2->obterString(), c1->ci);
+            fprintf(arqAss, "\taddi %s,%s,%d\n", r->obterString(), t2->obterString(), c1->ci);
             liberaRetistrador(t2);
         }else if(b->e2 && (c2 = dynamic_cast<CONST*>(b->e2))){
             Temp *t1 = b->e1->aceita(this);
-            fprintf(arqAss,"addi %s,%s,%d\n", r->obterString(), t1->obterString(), c2->ci);
+            fprintf(arqAss,"\taddi %s,%s,%d\n", r->obterString(), t1->obterString(), c2->ci);
             liberaRetistrador(t1);
         }else{
             Temp *t1 = b->e1->aceita(this);
             Temp *t2 = b->e2->aceita(this);
-            fprintf(arqAss,"add %s,%s,%s\n", r->obterString(), t1->obterString(), t2->obterString());
+            fprintf(arqAss,"\tadd %s,%s,%s\n", r->obterString(), t1->obterString(), t2->obterString());
             liberaRetistrador(t1);
             liberaRetistrador(t2);
         }
@@ -210,16 +216,16 @@ Temp* Gerador::visita(BINOP* b){
         CONST *c1, *c2;
         if(b->e1 && (c1 = dynamic_cast<CONST*>(b->e1))){
             Temp *t2 = b->e2->aceita(this);
-            fprintf(arqAss, "mul %s,%s,%d\n", r->obterString(), t2->obterString(), c1->ci);
+            fprintf(arqAss, "\tmul %s,%s,%d\n", r->obterString(), t2->obterString(), c1->ci);
             liberaRetistrador(t2);
         }else if(b->e2 && (c2 = dynamic_cast<CONST*>(b->e2))){
             Temp *t1 = b->e1->aceita(this);
-            fprintf(arqAss, "mul %s,%s,%d\n", r->obterString(), t1->obterString(), c2->ci);
+            fprintf(arqAss, "\tmul %s,%s,%d\n", r->obterString(), t1->obterString(), c2->ci);
             liberaRetistrador(t1);
         }else{
             Temp *t1 = b->e1->aceita(this);
             Temp *t2 = b->e2->aceita(this);
-            fprintf(arqAss, "mul %s,%s,%s\n", r->obterString(), t1->obterString(), t2->obterString());
+            fprintf(arqAss, "\tmul %s,%s,%s\n", r->obterString(), t1->obterString(), t2->obterString());
             liberaRetistrador(t1);
             liberaRetistrador(t2);
         }
@@ -228,12 +234,12 @@ Temp* Gerador::visita(BINOP* b){
         CONST *c2;
         if(b->e2 && (c2 = dynamic_cast<CONST*>(b->e2))){
             Temp *t1 =b->e1->aceita(this);
-            fprintf(arqAss,"div %s,%s,%d\n",r->obterString(),t1->obterString(),c2->ci);
+            fprintf(arqAss,"\tdiv %s,%s,%d\n",r->obterString(),t1->obterString(),c2->ci);
             liberaRetistrador(t1);
         }else{
             Temp *t1 = b->e1->aceita(this);
             Temp *t2 = b->e2->aceita(this);
-            fprintf(arqAss,"div %s,%s,%s\n",r->obterString(),t1->obterString(),t2->obterString());
+            fprintf(arqAss,"\tdiv %s,%s,%s\n",r->obterString(),t1->obterString(),t2->obterString());
             liberaRetistrador(t1);
             liberaRetistrador(t2);
         }
@@ -242,12 +248,12 @@ Temp* Gerador::visita(BINOP* b){
         CONST *c2;
         if(b->e2 && (c2 = dynamic_cast<CONST*>(b->e2))){
             Temp *t1 = b->e1->aceita(this);
-            fprintf(arqAss, "addi %s,%s,%d\n", r->obterString(), t1->obterString(), -c2->ci);
+            fprintf(arqAss, "\taddi %s,%s,%d\n", r->obterString(), t1->obterString(), -c2->ci);
             liberaRetistrador(t1);
         }else{
             Temp *t1 = b->e1->aceita(this);
             Temp *t2 = b->e2->aceita(this);
-            fprintf(arqAss, "sub %s,%s,%s\n", r->obterString(), t1->obterString(), t2->obterString());
+            fprintf(arqAss, "\tsub %s,%s,%s\n", r->obterString(), t1->obterString(), t2->obterString());
             liberaRetistrador(t1);
         }
     }
@@ -260,25 +266,25 @@ Temp* Gerador::visita(MEM* m){
         CONST *c1, *c2;
         if(bop->e1 && (c1 = dynamic_cast<CONST*>(bop->e1))){
             Temp *base = bop->e2->aceita(this);
-            fprintf(arqAss, "lw %s, %d(%s)\n", r->obterString(), c1->ci, base->obterString());
+            fprintf(arqAss, "\tlw %s, %d(%s)\n", r->obterString(), c1->ci, base->obterString());
             liberaRetistrador(base);
         }else if(bop->e2 && (c2 = dynamic_cast<CONST*>(bop->e2))){
             Temp* base = bop->e1->aceita(this);
-            fprintf(arqAss, "lw %s, %d(%s)\n", r->obterString(), c2->ci, base->obterString());
+            fprintf(arqAss, "\tlw %s, %d(%s)\n", r->obterString(), c2->ci, base->obterString());
             liberaRetistrador(base);
         }else{
             Temp* base = bop->aceita(this);
-            fprintf(arqAss, "lw %s, 0(%s)\n", r->obterString(), base->obterString());
+            fprintf(arqAss, "\tlw %s, 0(%s)\n", r->obterString(), base->obterString());
             liberaRetistrador(base);
         }
 
     }else{
         NAME *n;
         if(m->e && (n = dynamic_cast<NAME*>(m->e)))
-            fprintf(arqAss, "lw %s, %s(%d)\n", r->obterString(), n->n->obterString(), 0);
+            fprintf(arqAss, "\tlw %s, %s(%d)\n", r->obterString(), n->n->obterString(), 0);
         else{
 			Temp* base =m->e->aceita(this);
-            fprintf(arqAss, "lw %s, 0(%s)\n", r->obterString(), base->obterString());
+            fprintf(arqAss, "\tlw %s, 0(%s)\n", r->obterString(), base->obterString());
             liberaRetistrador(base);
         }
     }
@@ -291,40 +297,40 @@ Temp* Gerador::visita(CALL* call){
 		if(strcmp("printInt", n->n->obterString()) == 0){
 			ListaExp *aux = call->parametros;
             Temp *reg = aux->exp->aceita(this);
-            fprintf(arqAss, "move $a0,%s\n", reg->obterString());
-            fprintf(arqAss, "li $v0,0x01\n");
-            fprintf(arqAss, "syscall\n");
+            fprintf(arqAss, "\tmove $a0,%s\n", reg->obterString());
+            fprintf(arqAss, "\tli $v0,0x01\n");
+            fprintf(arqAss, "\tsyscall\n");
             liberaRetistrador(reg);
             return r;
 		}
 		else if(strcmp("printReal", n->n->obterString()) == 0){
 			ListaExp *aux = call->parametros;
             Temp *reg =aux->exp->aceita(this);
-            fprintf(arqAss, "move $a0,%s\n", reg->obterString());
-            fprintf(arqAss, "li $v0,0x02\n");
-            fprintf(arqAss, "syscall\n");
+            fprintf(arqAss, "\tmove $a0,%s\n", reg->obterString());
+            fprintf(arqAss, "\tli $v0,0x02\n");
+            fprintf(arqAss, "\tsyscall\n");
             liberaRetistrador(reg);
 			return r;
 		}
 		else if(strcmp("printLiteral", n->n->obterString()) == 0){
 			ListaExp *aux = call->parametros;
             Temp *reg = aux->exp->aceita(this);
-            fprintf(arqAss, "move $a0,%s\n", reg->obterString());
-            fprintf(arqAss, "li $v0,0x04\n");
-            fprintf(arqAss, "syscall\n");
+            fprintf(arqAss, "\tmove $a0,%s\n", reg->obterString());
+            fprintf(arqAss, "\tli $v0,0x04\n");
+            fprintf(arqAss, "\tsyscall\n");
             liberaRetistrador(reg);
 			return r;
 		}
 		else if(strcmp("readlnInt", n->n->obterString()) == 0){
-            fprintf(arqAss, "li $v0,0x05\n");
-            fprintf(arqAss, "syscall\n");
-            fprintf(arqAss, "move %s,$v0\n", r->obterString());
+            fprintf(arqAss, "\tli $v0,0x05\n");
+            fprintf(arqAss, "\tsyscall\n");
+            fprintf(arqAss, "\tmove %s,$v0\n", r->obterString());
 			return r;
 		}
 		else if(strcmp("readlnReal", n->n->obterString()) == 0){
-            fprintf(arqAss, "li $v0,0x06\n");
-            fprintf(arqAss, "syscall\n");
-            fprintf(arqAss, "move %s,$f0\n", r->obterString());
+            fprintf(arqAss, "\tli $v0,0x06\n");
+            fprintf(arqAss, "\tsyscall\n");
+            fprintf(arqAss, "\tmove %s,$f0\n", r->obterString());
 			return r;
 		}
 		else{
@@ -338,15 +344,15 @@ Temp* Gerador::visita(CALL* call){
 		    while(aux){
                 Temp *param  = aux->exp->aceita(this);
                 if(i<4){
-                    fprintf(arqAss,"move $a%d, %s\n", i, param->obterString());
+                    fprintf(arqAss,"\tmove $a%d, %s\n", i, param->obterString());
                 }
-                fprintf(arqAss,"sw %s, %d($sp)\n", param->obterString(), i*PALAVRA);
+                fprintf(arqAss,"\tsw %s, %d($sp)\n", param->obterString(), i*PALAVRA);
                 liberaRetistrador(param);
                 aux = aux->proximoExp;
                 i++;
 		    }
-		    fprintf(arqAss, "jal %s_Prologo\n", n->n->obterString());
-            fprintf(arqAss, "move %s,$v0\n", r->obterString());
+		    fprintf(arqAss, "\tjal %s_Prologo\n", n->n->obterString());
+            fprintf(arqAss, "\tmove %s,$v0\n", r->obterString());
             return r;
 		}
 	}
@@ -369,13 +375,13 @@ void Gerador::visita(MOVE* mov){
                 t1 = bop->e1->aceita(this);
             if(const1 && t1){
 				Temp *org = mov->e2->aceita(this);
-                fprintf(arqAss, "sw %s, %d(%s)\n", org->obterString(), const1->ci, t1->obterString());
+                fprintf(arqAss, "\tsw %s, %d(%s)\n", org->obterString(), const1->ci, t1->obterString());
                 liberaRetistrador(t1);
                 liberaRetistrador(org);
             }else{
                 Temp *org = mov->e2->aceita(this);
                 Temp *dest= m->e->aceita(this);
-                fprintf(arqAss, "sw %s, %d(%s)\n", org->obterString(), 0, dest->obterString());
+                fprintf(arqAss, "\tsw %s, %d(%s)\n", org->obterString(), 0, dest->obterString());
                 liberaRetistrador(org);
                 liberaRetistrador(dest);
             }
@@ -384,10 +390,10 @@ void Gerador::visita(MOVE* mov){
             NAME *name;
             Temp *org = mov->e2->aceita(this);
             if(m->e && (name = dynamic_cast<NAME*>(m->e)))
-                fprintf(arqAss, "sw %s, %s(%d)\n", org->obterString(), name->n->obterString(), 0);
+                fprintf(arqAss, "\tsw %s, %s(%d)\n", org->obterString(), name->n->obterString(), 0);
             else{
                 Temp *r = m->e->aceita(this);
-                fprintf(arqAss, "sw %s, %d(%s)\n", org->obterString(), 0, r->obterString());
+                fprintf(arqAss, "\tsw %s, %d(%s)\n", org->obterString(), 0, r->obterString());
                 liberaRetistrador(r);
             }
             liberaRetistrador(org);
@@ -397,22 +403,22 @@ void Gerador::visita(MOVE* mov){
         NAME *nome;
         t->t= mov->e1->aceita(this);
         if(mov->e2 && (c = dynamic_cast<CONST*>(mov->e2)))
-            fprintf(arqAss, "li %s,%d\n", t->t->obterString(), c->ci);
+            fprintf(arqAss, "\tli %s,%d\n", t->t->obterString(), c->ci);
         else if(mov->e2 && (nome = dynamic_cast<NAME*>(mov->e2)))
-            fprintf(arqAss, "la %s,%s\n", t->t->obterString(), nome->n->obterString());
+            fprintf(arqAss, "\tla %s,%s\n", t->t->obterString(), nome->n->obterString());
         else{
             Temp *aux = mov->e2->aceita(this);
-            fprintf(arqAss, "move %s,%s\n", t->t->obterString(), aux->obterString());
+            fprintf(arqAss, "\tmove %s,%s\n", t->t->obterString(), aux->obterString());
         }
 	}
 }
 void Gerador::visita(JUMP* j){
     NAME *n;
     if(j->e && (n=dynamic_cast<NAME*>(j->e)))
-        fprintf(arqAss, "j %s\n", n->n->obterString());
+        fprintf(arqAss, "\tj %s\n", n->n->obterString());
     else{
         Temp *t = j->e->aceita(this);
-        fprintf(arqAss, "jr %s\n", t->obterString());
+        fprintf(arqAss, "\tjr %s\n", t->obterString());
         liberaRetistrador(t);
     }
 }
@@ -459,8 +465,8 @@ void Gerador::visita(CJUMP* cjp){
         liberaRetistrador(t2);
 	//}
 	//fprintf(stdout,"%s\n",parte1);
-    fprintf(arqAss, "%s%s%s\n", parte1, parte2, cjp->verdadeiro->obterString());
-    fprintf(arqAss, "j %s\n", cjp->falso->obterString());
+    fprintf(arqAss, "\t%s%s%s\n", parte1, parte2, cjp->verdadeiro->obterString());
+    fprintf(arqAss, "\tj %s\n", cjp->falso->obterString());
 }
 void Gerador::visita(SEQ* s){
     if(s->s1) s->s1->aceita(this);

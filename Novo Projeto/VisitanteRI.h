@@ -146,6 +146,6 @@ class VisitanteTradutor : public Visitante {
 	    FrameMIPS    *frame;
 	    Fragmento    *listaFragmento;
 	    Temp         *resultadoEscolha;
-	    int contLiteral, contLaco, contCaso, contEscolha;
+	    int contLiteral, contLaco, contCaso, contEscolha, contComp;
 };
 #endif // VISITANTERI_H
