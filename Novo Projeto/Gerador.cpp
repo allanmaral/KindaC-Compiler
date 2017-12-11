@@ -121,13 +121,21 @@ void Gerador::visita(Procedimento* p){
     FrameMIPS *frame=dynamic_cast<FrameMIPS*>(p->frame);
     if(strcmp(frame->rotulo->rotulo,"main")){
         fprintf(arqAss,"%s_Epilogo:\n",frame->rotulo->obterString());
-        int tamanhoQuadro =frame->deslocamentoVariaveisLocais;
-        recuperarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
-        fprintf(arqAss,"\taddi $sp, $fp, 0\n");
-        fprintf(arqAss,"\taddu $fp, $fp,%d\n",tamanhoQuadro+QUADRO_BASICO);
+        int tamanhoQuadro = frame->deslocamentoVariaveisLocais;
+        int tamanhoParametros = frame->deslocamentoParametros;
+        recuperarTodosRegistradores(tamanhoParametros);
         fprintf(arqAss,"\tj $ra \n\n\n",tamanhoQuadro+QUADRO_BASICO);
+        //recuperarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
+        //fprintf(arqAss,"\taddi $sp, $fp, 0\n");
+        //fprintf(arqAss,"\taddu $fp, $fp,%d\n",tamanhoQuadro+QUADRO_BASICO);
+        //fprintf(arqAss,"\tj $ra \n\n\n",tamanhoQuadro+QUADRO_BASICO);
         if(p->proximoFragmento) p->proximoFragmento->aceita(this);
     } else { // Epilogo do main
+        fprintf(arqAss,"%s_Epilogo:\n",frame->rotulo->obterString());
+        int tamanhoQuadro = frame->deslocamentoVariaveisLocais;
+        fprintf(arqAss,"\tlw $ra, %d($sp)\n", tamanhoQuadro);
+        fprintf(arqAss,"\tlw $fp, %d($sp)\n", tamanhoQuadro+4);
+        fprintf(arqAss,"\taddu $sp, $sp, %d\n",tamanhoQuadro+8);
         fprintf(arqAss,"\tj $ra \n\n\n");
     }
 
@@ -145,29 +153,35 @@ void Gerador::visita(Variavel* v){
 
 void Gerador::visita(FrameMIPS* quadroMIPS){
     int tamanhoQuadro = quadroMIPS->deslocamentoVariaveisLocais;
+    int tamanhoParametros = quadroMIPS->deslocamentoParametros;
     //if(quadroMIPS->rotulo) quadroMIPS->rotulo->aceita(this);
     if(strcmp(quadroMIPS->rotulo->rotulo,"main") == 0){
         //caso seja o método main aloca somente o espaço das variáveis locais
         fprintf(arqAss,"main:\n");
-        fprintf(arqAss,"\tsubu $sp, $sp,%d\n",tamanhoQuadro);
-        fprintf(arqAss,"\taddu $fp, $sp,%d\n",tamanhoQuadro);
-
+        fprintf(arqAss,"\tsubu $sp, $sp, %d\n",tamanhoQuadro+8);
+        fprintf(arqAss,"\tsw $ra, %d($sp)\n", tamanhoQuadro);
+        fprintf(arqAss,"\tsw $fp, %d($sp)\n", tamanhoQuadro+4);
+        fprintf(arqAss,"\taddu $fp, $sp, %d\n",tamanhoQuadro);
     }
     else{
         //armazena o deslocamento necessário para os argumentos das chamadas
         fprintf(arqAss,"%s_Prologo:\n",quadroMIPS->rotulo->obterString());
-        salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
-        fprintf(arqAss,"\taddi $fp, $sp, 0\n");
-        fprintf(arqAss,"\tsubu $sp, $sp,%d\n", tamanhoQuadro + QUADRO_BASICO);
-        fprintf(arqAss,"\tj %s\n", quadroMIPS->rotulo->obterString());
+        salvarTodosRegistradores(tamanhoParametros);
+        fprintf(arqAss,"\tmove $fp, $sp\n");
+        if(tamanhoQuadro) fprintf(arqAss,"\tsubu $sp, $sp, %d\n", tamanhoQuadro);
         fprintf(arqAss,"%s:\n", quadroMIPS->rotulo->obterString());
+        //salvarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
+        //fprintf(arqAss,"\taddi $fp, $sp, 0\n");
+        //fprintf(arqAss,"\tsubu $sp, $sp,%d\n", tamanhoQuadro + QUADRO_BASICO);
+        //fprintf(arqAss,"\tj %s\n", quadroMIPS->rotulo->obterString());
+        //fprintf(arqAss,"%s:\n", quadroMIPS->rotulo->obterString());
     }
 }
 
 Temp* Gerador::visita(ListaExp* lex){ return NULL; }
 void Gerador::visita(EXP* e){
-    TEMP *t;
-    MEM *m;
+    TEMP *t = NULL;
+    MEM *m = NULL;
     if(!(e->e && ((t = dynamic_cast<TEMP*>(e->e)) || (m = dynamic_cast<MEM*>(e->e))))) {
         if(e->e)liberaRetistrador(e->e->aceita(this));
     }
@@ -324,12 +338,16 @@ Temp* Gerador::visita(CALL* call){
 		}
 		else{
 		    ListaExp *l = NULL, *aux = call->parametros;
+		    int i = 0;
 		    while(aux){
                 l = new ListaExp(aux->exp, l);
                 aux = aux->proximoExp;
+                i++;
 		    }
 		    aux = l;
-		    int i = 0;
+		    int deslocamento = i*4;
+		    fprintf(arqAss, "\t#Pre-Chamada\n\tsubu $sp, $sp, %d\n", deslocamento+QUADRO_BASICO);
+		    i = 0;
 		    while(aux){
                 Temp *param  = aux->exp->aceita(this);
                 if(i<4){
@@ -342,6 +360,7 @@ Temp* Gerador::visita(CALL* call){
 		    }
 		    fprintf(arqAss, "\tjal %s_Prologo\n", n->n->obterString());
             fprintf(arqAss, "\tmove %s,$v0\n", r->obterString());
+            fprintf(arqAss, "\t#Pos-Chamada\n\taddu $sp, $sp, %d\n", deslocamento+QUADRO_BASICO);
             return r;
 		}
 	}
@@ -430,6 +449,7 @@ void Gerador::visita(MOVE* mov){
                         Temp *aux = mov->e2->aceita(this);
                         fprintf(arqAss, "\tmove %s,%s\n", t->t->obterString(), aux->obterString());
                         liberaRetistrador(aux);
+                        liberaRetistrador(t->t);
                     }
                 }
 
@@ -438,6 +458,7 @@ void Gerador::visita(MOVE* mov){
             Temp *aux = mov->e2->aceita(this);
             fprintf(arqAss, "\tmove %s,%s\n", t->t->obterString(), aux->obterString());
             liberaRetistrador(aux);
+            liberaRetistrador(t->t);
         }
 	}
 }

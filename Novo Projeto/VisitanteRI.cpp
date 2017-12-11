@@ -90,6 +90,7 @@ void VisitanteTradutor::visita(NoNumReal           *nr     ) {
     ultimaExp = new CONSTF(atof(nr->entradaTabela->pegarLexema()));
 }
 void VisitanteTradutor::visita(NoListaExpr         *le     ) {
+    ultimaExp = NULL;
     Exp      *e1 = NULL;
     ListaExp *e2 = NULL;
     if(le->expressao) {
@@ -361,6 +362,7 @@ void VisitanteTradutor::visita(NoEscopo            *esc    ) {
     }
 }
 void VisitanteTradutor::visita(NoChamadaFuncao     *cha    ) {
+    ultimaExp = NULL;
     if(cha->parametros) cha->parametros->aceita(this);
     /// Descobre rotulo da fun��o
     char* rotulo = cha->id->entradaTabela->pegarLexema();
