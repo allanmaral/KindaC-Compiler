@@ -182,7 +182,7 @@ void Gerador::visita(EXP* e){
     TEMP *t = NULL;
     MEM *m = NULL;
     CALL *call = NULL;
-    if(!(e->e && ((t = dynamic_cast<TEMP*>(e->e)) || (m = dynamic_cast<MEM*>(e->e))))) {
+    if(!(e->e && (m = dynamic_cast<MEM*>(e->e)))) {
         if(e->e && (call = dynamic_cast<CALL*>(e->e))){
             NAME *n;
             if(call->f && (n = dynamic_cast<NAME*>(call->f))){
@@ -517,7 +517,6 @@ void Gerador::visita(MOVE* mov){
                         Temp *aux = mov->e2->aceita(this);
                         fprintf(arqAss, "\tmove %s, %s\n", t->t->obterString(), aux->obterString());
                         liberaRetistrador(aux);
-                        liberaRetistrador(t->t);
                     }
                 }
 
@@ -526,7 +525,6 @@ void Gerador::visita(MOVE* mov){
             Temp *aux = mov->e2->aceita(this);
             fprintf(arqAss, "\tmove %s,%s\n", t->t->obterString(), aux->obterString());
             liberaRetistrador(aux);
-            liberaRetistrador(t->t);
         }
 	}
 }
