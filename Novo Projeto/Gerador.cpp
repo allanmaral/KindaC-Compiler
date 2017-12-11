@@ -10,23 +10,23 @@ typedef struct FilaRegistrador{
     FilaRegistrador *proximo;
 }FilaRegistrador;
 
-static char registradores [16][3] = {
-    "s1",
-    "s2",
-    "s3",
-    "s4",
-    "s5",
-    "s6",
-    "s7",
-    "t1",
-    "t2",
-    "t3",
-    "t4",
-    "t5",
-    "t6",
-    "t7",
-    "t8",
-    "t9",
+static char registradores [16][4] = {
+    "$s1",
+    "$s2",
+    "$s3",
+    "$s4",
+    "$s5",
+    "$s6",
+    "$s7",
+    "$t1",
+    "$t2",
+    "$t3",
+    "$t4",
+    "$t5",
+    "$t6",
+    "$t7",
+    "$t8",
+    "$t9",
 };
 static bool registradorReservado(Temp *t){
     if(strcmp(t->obterString(),"$fp") && strcmp(t->obterString(),"$v0") &&  strcmp(t->obterString(),"$0") &&
@@ -37,9 +37,7 @@ static bool registradorReservado(Temp *t){
 }
 static bool registradorValido(Temp *t){
     for(int i=0;i<NUM_REGISTRADORES;i++){
-        char aux[32];
-        sprintf(aux,"$%s",registradores[i]);
-        if(strcmp(t->obterString(),aux)==0){
+        if(strcmp(t->obterString(),registradores[i])==0){
             return true;
         }
     }
@@ -73,7 +71,7 @@ Temp* Gerador::pegaRegistradorLivre(){
 }
 void Gerador::salvarTodosRegistradores(int offset){
     for(int i=0; i<NUM_REGISTRADORES; i++){
-        fprintf(arqAss,"\tsw $%s,%d($sp)\n", registradores[i], offset);
+        fprintf(arqAss,"\tsw %s,%d($sp)\n", registradores[i], offset);
         offset += 4;
     }
     fprintf(arqAss, "\tsw $fp,%d($sp)\n", offset);
@@ -85,7 +83,7 @@ void Gerador::salvarTodosRegistradores(int offset){
 }
 void Gerador::recuperarTodosRegistradores(int offset){
     for(int i=0; i<NUM_REGISTRADORES; i++){
-        fprintf(arqAss, "\tlw $%s,%d($sp)\n", registradores[i], offset);
+        fprintf(arqAss, "\tlw %s,%d($sp)\n", registradores[i], offset);
         offset += 4;
     }
     fprintf(arqAss, "\tlw $fp,%d($sp)\n", offset);
@@ -182,62 +180,11 @@ void Gerador::visita(EXP* e){
     TEMP *t = NULL;
     MEM *m = NULL;
     CALL *call = NULL;
-    if(!(e->e && (m = dynamic_cast<MEM*>(e->e)))) {
-        if(e->e && (call = dynamic_cast<CALL*>(e->e))){
-            NAME *n;
-            if(call->f && (n = dynamic_cast<NAME*>(call->f))){
-                if(strcmp("printInt", n->n->obterString()) == 0){
-                    ListaExp *aux = call->parametros;
-                    Temp *reg = aux->exp->aceita(this);
-                    fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
-                    fprintf(arqAss, "\tli $v0, 0x01\n");
-                    fprintf(arqAss, "\tsyscall\n");
-                    liberaRetistrador(reg);
-                }
-                else if(strcmp("printReal", n->n->obterString()) == 0){
-                    ListaExp *aux = call->parametros;
-                    Temp *reg =aux->exp->aceita(this);
-                    fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
-                    fprintf(arqAss, "\tli $v0, 0x02\n");
-                    fprintf(arqAss, "\tsyscall\n");
-                    liberaRetistrador(reg);
-                }
-                else if(strcmp("printLiteral", n->n->obterString()) == 0){
-                    ListaExp *aux = call->parametros;
-                    Temp *reg = aux->exp->aceita(this);
-                    fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
-                    fprintf(arqAss, "\tli $v0, 0x04\n");
-                    fprintf(arqAss, "\tsyscall\n");
-                    liberaRetistrador(reg);
-                }
-                else if(strcmp("printCaractere", n->n->obterString()) == 0) {
-                    ListaExp *aux = call->parametros;
-                    Temp *reg = aux->exp->aceita(this);
-                    fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
-                    fprintf(arqAss, "\tli $v0, 0x0B\n");
-                    fprintf(arqAss, "\tsyscall\n");
-                    liberaRetistrador(reg);
-                }
-                else if(strcmp("readlnInt", n->n->obterString()) == 0){
-                    ListaExp *aux = call->parametros;
-                    Temp *reg = aux->exp->aceita(this);
-                    fprintf(arqAss, "\tli $v0,0x05\n");
-                    fprintf(arqAss, "\tsyscall\n");
-                    fprintf(arqAss, "\tsw $v0, 0(%s)\n", reg->obterString());
-                    liberaRetistrador(reg);
-                }
-                else if(strcmp("readlnReal", n->n->obterString()) == 0){
-                    ListaExp *aux = call->parametros;
-                    Temp *reg = aux->exp->aceita(this);
-                    fprintf(arqAss, "\tli $v0,0x06\n");
-                    fprintf(arqAss, "\tsyscall\n");
-                    fprintf(arqAss, "\tsw $f0, 0(%s)\n", reg->obterString());
-                    liberaRetistrador(reg);
-                }else if(e->e)liberaRetistrador(e->e->aceita(this));
-            }
-        } else {
-            if(e->e)liberaRetistrador(e->e->aceita(this));
-        }
+    BINOP *b;
+    if(!(e->e && (m = dynamic_cast<MEM*>(e->e)) && (b = dynamic_cast<BINOP*>(e->e)))) {
+        if(e->e)liberaRetistrador(e->e->aceita(this));
+    } else if(e->e && (t = dynamic_cast<TEMP*>(e->e))){
+        liberaRetistrador(t->t);
     }
 }
 Temp* Gerador::visita(ESEQ *e){ return NULL; }
@@ -372,13 +319,66 @@ Temp* Gerador::visita(CALL* call){
 	NAME *n;
 	Temp *r = pegaRegistradorLivre();
 	if(call->f && (n = dynamic_cast<NAME*>(call->f))){
-        if(strcmp("mfhi", n->n->obterString()) == 0){
-            ListaExp *aux = call->parametros;
-            Temp *reg = aux->exp->aceita(this);
-            fprintf(arqAss, "\tmfhi %s\n",r->obterString());
-            liberaRetistrador(reg);
-			return r;
-		}
+            if(strcmp("printInt", n->n->obterString()) == 0){
+                ListaExp *aux = call->parametros;
+                Temp *reg = aux->exp->aceita(this);
+                fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                fprintf(arqAss, "\tli $v0, 0x01\n");
+                fprintf(arqAss, "\tsyscall\n");
+                liberaRetistrador(reg);
+                return r;
+            }
+            else if(strcmp("printReal", n->n->obterString()) == 0){
+                ListaExp *aux = call->parametros;
+                Temp *reg =aux->exp->aceita(this);
+                fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                fprintf(arqAss, "\tli $v0, 0x02\n");
+                fprintf(arqAss, "\tsyscall\n");
+                liberaRetistrador(reg);
+                return r;
+            }
+            else if(strcmp("printLiteral", n->n->obterString()) == 0){
+                ListaExp *aux = call->parametros;
+                Temp *reg = aux->exp->aceita(this);
+                fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                fprintf(arqAss, "\tli $v0, 0x04\n");
+                fprintf(arqAss, "\tsyscall\n");
+                liberaRetistrador(reg);
+                return r;
+            }
+            else if(strcmp("printCaractere", n->n->obterString()) == 0) {
+                ListaExp *aux = call->parametros;
+                Temp *reg = aux->exp->aceita(this);
+                fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                fprintf(arqAss, "\tli $v0, 0x0B\n");
+                fprintf(arqAss, "\tsyscall\n");
+                liberaRetistrador(reg);
+                return r;
+            }
+            else if(strcmp("readlnInt", n->n->obterString()) == 0){
+                ListaExp *aux = call->parametros;
+                Temp *reg = aux->exp->aceita(this);
+                fprintf(arqAss, "\tli $v0,0x05\n");
+                fprintf(arqAss, "\tsyscall\n");
+                fprintf(arqAss, "\tsw $v0, 0(%s)\n", reg->obterString());
+                liberaRetistrador(reg);
+                return r;
+            }
+            else if(strcmp("readlnReal", n->n->obterString()) == 0){
+                ListaExp *aux = call->parametros;
+                Temp *reg = aux->exp->aceita(this);
+                fprintf(arqAss, "\tli $v0,0x06\n");
+                fprintf(arqAss, "\tsyscall\n");
+                fprintf(arqAss, "\tsw $f0, 0(%s)\n", reg->obterString());
+                liberaRetistrador(reg);
+                return r;
+            }else if(strcmp("mfhi", n->n->obterString()) == 0){
+                ListaExp *aux = call->parametros;
+                Temp *reg = aux->exp->aceita(this);
+                fprintf(arqAss, "\tmfhi %s\n",r->obterString());
+                liberaRetistrador(reg);
+                return r;
+            }
 		else{
 		    ListaExp *l = NULL, *aux = call->parametros;
 		    int i = 0;
@@ -415,6 +415,7 @@ void Gerador::visita(ListaStm* lstm){
 void Gerador::visita(MOVE* mov){
     MEM *m;
     CALL * call;
+    BINOP *b;
 	TEMP *t = dynamic_cast<TEMP*>(mov->e1);
 	if(mov->e1 && (m = dynamic_cast<MEM*>(mov->e1))){
         BINOP *bop;
@@ -450,6 +451,12 @@ void Gerador::visita(MOVE* mov){
             }
             liberaRetistrador(org);
         }
+	}else if(mov->e1 && (b = dynamic_cast<BINOP*>(mov->e1)) && b->op == OP_ADD){
+            Temp *org = mov->e2->aceita(this);
+            Temp *dest= mov->e1->aceita(this);
+            fprintf(arqAss, "\tsw %s, %d(%s)\n", org->obterString(), 0, dest->obterString());
+            liberaRetistrador(org);
+            liberaRetistrador(dest);
 	}else if(t){
         CONST *c;
         NAME *nome;
@@ -460,66 +467,6 @@ void Gerador::visita(MOVE* mov){
         else if(mov->e2 && (nome = dynamic_cast<NAME*>(mov->e2))){
               t->t= mov->e1->aceita(this);
               fprintf(arqAss, "\tla %s,%s\n", t->t->obterString(), nome->n->obterString());
-        }
-        else if(mov->e2 && (call = dynamic_cast<CALL*>(mov->e2))){
-                NAME *n;
-                if(call->f && (n = dynamic_cast<NAME*>(call->f))){
-                    if(strcmp("printInt", n->n->obterString()) == 0){
-                        ListaExp *aux = call->parametros;
-                        Temp *reg = aux->exp->aceita(this);
-                        fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
-                        fprintf(arqAss, "\tli $v0, 0x01\n");
-                        fprintf(arqAss, "\tsyscall\n");
-                        liberaRetistrador(reg);
-                    }
-                    else if(strcmp("printReal", n->n->obterString()) == 0){
-                        ListaExp *aux = call->parametros;
-                        Temp *reg =aux->exp->aceita(this);
-                        fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
-                        fprintf(arqAss, "\tli $v0, 0x02\n");
-                        fprintf(arqAss, "\tsyscall\n");
-                        liberaRetistrador(reg);
-                    }
-                    else if(strcmp("printLiteral", n->n->obterString()) == 0){
-                        ListaExp *aux = call->parametros;
-                        Temp *reg = aux->exp->aceita(this);
-                        fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
-                        fprintf(arqAss, "\tli $v0, 0x04\n");
-                        fprintf(arqAss, "\tsyscall\n");
-                        liberaRetistrador(reg);
-                    }
-                    else if(strcmp("printCaractere", n->n->obterString()) == 0) {
-                        ListaExp *aux = call->parametros;
-                        Temp *reg = aux->exp->aceita(this);
-                        fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
-                        fprintf(arqAss, "\tli $v0, 0x0B\n");
-                        fprintf(arqAss, "\tsyscall\n");
-                        liberaRetistrador(reg);
-                    }
-                    else if(strcmp("readlnInt", n->n->obterString()) == 0){
-                        ListaExp *aux = call->parametros;
-                        Temp *reg = aux->exp->aceita(this);
-                        fprintf(arqAss, "\tli $v0,0x05\n");
-                        fprintf(arqAss, "\tsyscall\n");
-                        fprintf(arqAss, "\tsw $v0, 0(%s)\n", reg->obterString());
-                        liberaRetistrador(reg);
-                    }
-                    else if(strcmp("readlnReal", n->n->obterString()) == 0){
-                        ListaExp *aux = call->parametros;
-                        Temp *reg = aux->exp->aceita(this);
-                        fprintf(arqAss, "\tli $v0,0x06\n");
-                        fprintf(arqAss, "\tsyscall\n");
-                        fprintf(arqAss, "\tsw $f0, 0(%s)\n", reg->obterString());
-                        liberaRetistrador(reg);
-                    }
-                    else{
-                        t->t= mov->e1->aceita(this);
-                        Temp *aux = mov->e2->aceita(this);
-                        fprintf(arqAss, "\tmove %s, %s\n", t->t->obterString(), aux->obterString());
-                        liberaRetistrador(aux);
-                    }
-                }
-
         }else {
             t->t= mov->e1->aceita(this);
             Temp *aux = mov->e2->aceita(this);
@@ -539,50 +486,33 @@ void Gerador::visita(JUMP* j){
     }
 }
 void Gerador::visita(CJUMP* cjp){
-	char parte1[16], parte2[16];
+	char operacao[8];
 	switch (cjp->op) {
 		case OP_EQ:
-			sprintf(parte1, "beq ");
+			sprintf(operacao, "beq ");
 			break;
 		case OP_NEQ:
-			sprintf(parte1, "bne ");
+			sprintf(operacao, "bne ");
 			break;
 		case OP_GT:
-			sprintf(parte1, "bgt ");
+			sprintf(operacao, "bgt ");
 			break;
 		case OP_GE:
-			sprintf(parte1, "bge ");
+			sprintf(operacao, "bge ");
 			break;
 		case OP_LT:
-			sprintf(parte1, "blt ");
+			sprintf(operacao, "blt ");
 			break;
 		case OP_LE:
-			sprintf(parte1, "ble ");
+			sprintf(operacao, "ble ");
 			break;
 	}
-	/*CONST *c1, *c2;
-	CONSTF *cf1, *cf2;
-    if(cjp->e1 && ((c1 = dynamic_cast<CONST*>(cjp->e1)) || (cf1 = dynamic_cast<CONSTF*>(cjp->e1)))){
-        Temp *t = cjp->e2->aceita(this);
-        if(c1) sprintf(parte2, "%s, %d ", t->obterString(), c1->ci);
-        liberaRetistrador(t);
-	}
-	else if(cjp->e2 && ((c2 = dynamic_cast<CONST*>(cjp->e2)) || (cf2 = dynamic_cast<CONSTF*>(cjp->e2)))){
-        Temp *t = cjp->e1->aceita(this);
-        if(c2) sprintf(parte2, "%s, %d ", t->obterString(), c2->ci);
-        liberaRetistrador(t);
-	}*/
-	//else{
-
-        Temp *t = cjp->e1->aceita(this);
-        Temp *t2 = cjp->e2->aceita(this);
-        sprintf(parte2, " %s, %s, ", t->obterString(), t2->obterString());
-        liberaRetistrador(t);
-        liberaRetistrador(t2);
-	//}
-	//fprintf(stdout,"%s\n",parte1);
-    fprintf(arqAss, "\t%s%s%s\n", parte1, parte2, cjp->verdadeiro->obterString());
+    Temp *t = cjp->e1->aceita(this);
+    Temp *t2 = cjp->e2->aceita(this);
+    fprintf(arqAss, "\t%s %s, %s, %s\n", operacao,  t->obterString(), t2->obterString(), cjp->verdadeiro->obterString());
     fprintf(arqAss, "\tj %s\n", cjp->falso->obterString());
+    liberaRetistrador(t);
+    liberaRetistrador(t2);
 }
 void Gerador::visita(SEQ* s){
     if(s->s1) s->s1->aceita(this);

@@ -79,10 +79,8 @@ Temp::Temp(){
     sprintf(temp, "$temp%d", contador++);
 }
 Temp::Temp(char *_temp) : temp(_temp) {
-    this->temp = new char[strlen(_temp)+2];
-    strcpy((this->temp)+1, _temp);
-    this->temp[0] = '$';
-
+    this->temp = new char[strlen(_temp)+1];
+    strcpy((this->temp), _temp);
 }
 Temp::~Temp(){
     delete temp;
@@ -155,7 +153,7 @@ Frame::~Frame(){}
 FrameMIPS::FrameMIPS(Rotulo *rotulo, ListaAcesso *variaveisLocais, int desVarLocais, int desParametros)
                      : rotulo(rotulo), variaveisLocais(variaveisLocais), numeroParametros(0),
                        deslocamentoVariaveisLocais(desVarLocais), deslocamentoParametros(desParametros) {
-    tempRetorno = new Temp((char*)"v0");
+    tempRetorno = new Temp((char*)"$v0");
 }
 FrameMIPS::~FrameMIPS() {
     delete rotulo;
@@ -202,7 +200,7 @@ void FrameMIPS::aceita(VisitanteRI *vri) {
     vri->visita(this);
 }
 NoFrame::NoFrame(int deslocamento) : deslocamento(deslocamento) {
-    exp = new MEM(new BINOP(OP_ADD, new TEMP(new Temp((char*)"fp")), new CONST(deslocamento)));
+    exp = new MEM(new BINOP(OP_ADD, new TEMP(new Temp((char*)"$fp")), new CONST(deslocamento)));
 }
 NoFrame::~NoFrame() {
     delete exp;
