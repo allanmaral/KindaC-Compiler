@@ -32,3 +32,4 @@ int main() {
 	print("F(%d)=%d\n", fat, fatorial(fat));
 }
 */
+

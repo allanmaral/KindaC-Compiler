@@ -32,9 +32,9 @@
     }
     return 0;
 }
+*/
 
-
-int main(){
+/*int main(){
     int i, vet[10], MAX;
 
     // Lê MAX ou 10 valores
@@ -61,7 +61,6 @@ int main(){
 
     return 0;
 }*/
-
 int main(){
    int i, vet[10], MAX;
 

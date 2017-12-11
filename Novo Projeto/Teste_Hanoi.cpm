@@ -1,0 +1,17 @@
+int hanoi(int n, char a, char b, char c){  
+	if (n == 1){
+		print("mova disco %d de %c para %c\n", n, a, b);
+	}
+	else{
+		hanoi(n - 1, a, c, b);                            
+		print("mova disco %d de %c para %c\n", n, a, b);
+		hanoi(n - 1, c, b, a);                            
+	}
+}
+int main(){
+	int numDiscos;
+	print("Digite o numero de discos para resolver a torre de Hanoi:\n");
+	readln(&numDiscos);
+	hanoi(numDiscos, 'A', 'B', 'C');
+	return 0;
+}

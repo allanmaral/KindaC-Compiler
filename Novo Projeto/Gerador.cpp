@@ -233,7 +233,7 @@ void Gerador::visita(EXP* e){
                     fprintf(arqAss, "\tsyscall\n");
                     fprintf(arqAss, "\tsw $f0, 0(%s)\n", reg->obterString());
                     liberaRetistrador(reg);
-                }
+                }else if(e->e)liberaRetistrador(e->e->aceita(this));
             }
         } else {
             if(e->e)liberaRetistrador(e->e->aceita(this));
