@@ -1,6 +1,4 @@
-/*float PI;
-int X;*/
-/*int fatorial(int n){
+int fatorial(int n){
  if(n < 1) {
  	return 1;
  }
@@ -11,18 +9,10 @@ int X;*/
 
 int main() {
 	int a;
+	int *b;
+	b = &a;
 	a=fatorial(6);
-}*/
-/*int teste(int a){return a;}
-int main(){
-	int a;
-	a=3;
-	a=teste(a);
-}
-*/
-int main(){
-	int a,b;
-	a=(5+4)%2-1;
-	a=main();
-
+	*b = 1;
+	readln(&a);
+	print("F(6)=%d\nTeste\n%c", a, 'g');
 }

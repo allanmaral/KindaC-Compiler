@@ -66,7 +66,7 @@ void VisitanteTradutor::visita(NoLiteral           *lit    ) {
     else listaFragmento = l;
 }
 void VisitanteTradutor::visita(NoAscii             *asc    ) {
-    ultimaExp = new CONST((int)asc->entradaTabela->pegarLexema()[0]);
+    ultimaExp = new CONST((int)asc->entradaTabela->pegarLexema()[1]);
 }
 void VisitanteTradutor::visita(NoParenteses        *pa     ) {
     if(pa->expressao) pa->expressao->aceita(this);
@@ -257,41 +257,33 @@ void VisitanteTradutor::visita(NoImprime           *imp    ) {
                         }
                         comeco = -1;
                     }
+
                     if(format[i+1]) {
-                        if(format[i+1] == 'd') { // Inteiro
-                            if(printExp) {
-                                printExp = new SEQ(printExp,
-                                                   new EXP(new CALL(new NAME(new Rotulo((char*)"printInt")),
-                                                                    new ListaExp(listaExp->exp, NULL))));
-                            } else {
-                                  printExp = new EXP(new CALL(new NAME(new Rotulo((char*)"printInt")),
-                                                            new ListaExp(listaExp->exp, NULL)));
-                            }
+                        Stm *printTEMP = NULL;
+                        switch(format[i+1]) {
+                            case 'd': {
+                                printTEMP = new EXP(new CALL(new NAME(new Rotulo((char*)"printInt")),
+                                                             new ListaExp(listaExp->exp, NULL)));
+                            } break;
+                            case 'f': {
+                                printTEMP = new EXP(new CALL(new NAME(new Rotulo((char*)"printReal")),
+                                                             new ListaExp(listaExp->exp, NULL)));
+                            } break;
+                            case 's' : {
+                                printTEMP = new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
+                                                             new ListaExp(listaExp->exp, NULL)));
+                            } break;
+                            case 'c' : {
+                                printTEMP = new EXP(new CALL(new NAME(new Rotulo((char*)"printCaractere")),
+                                                             new ListaExp(listaExp->exp, NULL)));
+                            } break;
+                        }
+                        if(printTEMP) {
+                            if(printExp)  printExp = new SEQ(printExp, printTEMP);
+                            else printExp = printTEMP;
                             listaExp = listaExp->proximoExp;
                             i++;
-                        } else if(format[i+1] == 'f') { // Real
-                                   if(printExp) {
-                                       printExp = new SEQ(printExp,
-                                                          new EXP(new CALL(new NAME(new Rotulo((char*)"printReal")),
-                                                                        new ListaExp(listaExp->exp, NULL))));
-                                   } else {
-                                         printExp = new EXP(new CALL(new NAME(new Rotulo((char*)"printReal")),
-                                                                     new ListaExp(listaExp->exp, NULL)));
-                                   }
-                                   listaExp = listaExp->proximoExp;
-                                   i++;
-                               } else if(format[i+1] == 's') { // Literal
-                                          if(printExp) {
-                                              printExp = new SEQ(printExp,
-                                                                 new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
-                                                                                  new ListaExp(listaExp->exp, NULL))));
-                                          } else {
-                                                printExp = new EXP(new CALL(new NAME(new Rotulo((char*)"printLiteral")),
-                                                                            new ListaExp(listaExp->exp, NULL)));
-                                          }
-                                          listaExp = listaExp->proximoExp;
-                                          i++;
-                                      }
+                        }
                     }
                 } else if( comeco < 0) {
                            comeco = i;

@@ -121,10 +121,9 @@ void Gerador::visita(Procedimento* p){
     FrameMIPS *frame=dynamic_cast<FrameMIPS*>(p->frame);
     if(strcmp(frame->rotulo->rotulo,"main")){
         fprintf(arqAss,"%s_Epilogo:\n",frame->rotulo->obterString());
-        int tamanhoQuadro = frame->deslocamentoVariaveisLocais;
         int tamanhoParametros = frame->deslocamentoParametros;
         recuperarTodosRegistradores(tamanhoParametros);
-        fprintf(arqAss,"\tj $ra \n\n\n",tamanhoQuadro+QUADRO_BASICO);
+        fprintf(arqAss,"\tj $ra \n\n\n");
         //recuperarTodosRegistradores(-tamanhoQuadro-NUM_REGISTRADORES-3*4);
         //fprintf(arqAss,"\taddi $sp, $fp, 0\n");
         //fprintf(arqAss,"\taddu $fp, $fp,%d\n",tamanhoQuadro+QUADRO_BASICO);
@@ -318,18 +317,7 @@ Temp* Gerador::visita(CALL* call){
 	NAME *n;
 	Temp *r = pegaRegistradorLivre();
 	if(call->f && (n = dynamic_cast<NAME*>(call->f))){
-        if(strcmp("readlnInt", n->n->obterString()) == 0){
-            fprintf(arqAss, "\tli $v0,0x05\n");
-            fprintf(arqAss, "\tsyscall\n");
-            fprintf(arqAss, "\tmove %s,$v0\n", r->obterString());
-			return r;
-		}
-		else if(strcmp("readlnReal", n->n->obterString()) == 0){
-            fprintf(arqAss, "\tli $v0,0x06\n");
-            fprintf(arqAss, "\tsyscall\n");
-            fprintf(arqAss, "\tmove %s,$f0\n", r->obterString());
-			return r;
-		}else if(strcmp("mfhi", n->n->obterString()) == 0){
+        if(strcmp("mfhi", n->n->obterString()) == 0){
             ListaExp *aux = call->parametros;
             Temp *reg = aux->exp->aceita(this);
             fprintf(arqAss, "\tmfhi %s\n",r->obterString());
@@ -424,30 +412,55 @@ void Gerador::visita(MOVE* mov){
                     if(strcmp("printInt", n->n->obterString()) == 0){
                         ListaExp *aux = call->parametros;
                         Temp *reg = aux->exp->aceita(this);
-                        fprintf(arqAss, "\tmove $a0,%s\n", reg->obterString());
-                        fprintf(arqAss, "\tli $v0,0x01\n");
+                        fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                        fprintf(arqAss, "\tli $v0, 0x01\n");
                         fprintf(arqAss, "\tsyscall\n");
                         liberaRetistrador(reg);
                     }
                     else if(strcmp("printReal", n->n->obterString()) == 0){
                         ListaExp *aux = call->parametros;
                         Temp *reg =aux->exp->aceita(this);
-                        fprintf(arqAss, "\tmove $a0,%s\n", reg->obterString());
-                        fprintf(arqAss, "\tli $v0,0x02\n");
+                        fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                        fprintf(arqAss, "\tli $v0, 0x02\n");
                         fprintf(arqAss, "\tsyscall\n");
                         liberaRetistrador(reg);
                     }
                     else if(strcmp("printLiteral", n->n->obterString()) == 0){
                         ListaExp *aux = call->parametros;
                         Temp *reg = aux->exp->aceita(this);
-                        fprintf(arqAss, "\tmove $a0,%s\n", reg->obterString());
-                        fprintf(arqAss, "\tli $v0,0x04\n");
+                        fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                        fprintf(arqAss, "\tli $v0, 0x04\n");
                         fprintf(arqAss, "\tsyscall\n");
                         liberaRetistrador(reg);
-                    }else{
+                    }
+                    else if(strcmp("printCaractere", n->n->obterString()) == 0) {
+                        ListaExp *aux = call->parametros;
+                        Temp *reg = aux->exp->aceita(this);
+                        fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                        fprintf(arqAss, "\tli $v0, 0x0B\n");
+                        fprintf(arqAss, "\tsyscall\n");
+                        liberaRetistrador(reg);
+                    }
+                    else if(strcmp("readlnInt", n->n->obterString()) == 0){
+                        ListaExp *aux = call->parametros;
+                        Temp *reg = aux->exp->aceita(this);
+                        fprintf(arqAss, "\tli $v0,0x05\n");
+                        fprintf(arqAss, "\tsyscall\n");
+                        fprintf(arqAss, "\tsw $v0, 0(%s)\n", reg->obterString());
+                        liberaRetistrador(reg);
+                    }
+                    else if(strcmp("readlnReal", n->n->obterString()) == 0){
+                        ListaExp *aux = call->parametros;
+                        Temp *reg = aux->exp->aceita(this);
+                        fprintf(arqAss, "\tli $v0,0x06\n");
+                        fprintf(arqAss, "\tsyscall\n");
+                        fprintf(arqAss, "\tsw $f0, 0(%s)\n", reg->obterString());
+                        liberaRetistrador(reg);
+                    }
+                    else{
                         t->t= mov->e1->aceita(this);
                         Temp *aux = mov->e2->aceita(this);
-                        fprintf(arqAss, "\tmove %s,%s\n", t->t->obterString(), aux->obterString());
+                        fprintf(arqAss, "\tmove %s, %s\n", t->t->obterString(), aux->obterString());
                         liberaRetistrador(aux);
                         liberaRetistrador(t->t);
                     }
