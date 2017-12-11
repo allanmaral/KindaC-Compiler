@@ -16,3 +16,19 @@ int main() {
 	readln(&a);
 	print("F(6)=%d\nTeste\n%c", a, 'g');
 }
+/*
+int fatorial(int n){
+ if(n < 1) {
+ 	return 1;
+ }
+ else{
+	return n*fatorial(n-1);
+  }
+}
+int main() {
+	int fat;
+	print("Digite um numero para calcular o seu fatorial:\n");
+	readln(&fat);
+	print("F(%d)=%d\n", fat, fatorial(fat));
+}
+*/
