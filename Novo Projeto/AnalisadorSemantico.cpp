@@ -222,6 +222,7 @@ void AnalisadorSemantico::visita(NoEnquanto* enq){
             saidaErro(ErroSemanticoExprContr, enq->expressao->linha, enq->expressao->coluna);
         }
     }
+    if(enq->sentenca) enq->sentenca->aceita(this);
 }
 void AnalisadorSemantico::visita(NoBlocoCaso* bc){
     if(bc->listaSentenca) bc->listaSentenca->aceita(this);
@@ -512,8 +513,8 @@ void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
     if(tipo && cF->expressao && valorRetorno){
         if(!obtemTabelaClasses()->busca(valorRetorno->pegarLexema())){
             if(!obtemTabelaTipos()->busca(valorRetorno->pegarLexema())){
-                saidaErro(ErroSemanticoTipoVariavel, cF->expressao->linha,
-                            cF->expressao->coluna, valorRetorno->pegarLexema());
+                //saidaErro(ErroSemanticoTipoVariavel, cF->expressao->linha,
+                //            cF->expressao->coluna, valorRetorno->pegarLexema());
                 erro = true;
             }
         }
