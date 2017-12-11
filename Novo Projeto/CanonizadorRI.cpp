@@ -94,9 +94,15 @@ void CanonizadorRI::visita(MEM* m){
 void CanonizadorRI::visita(CALL* ca){
     MOVE *mo;
     TEMP *tmp;
+    EXP *ep;
     if(!expAnterior){
         if((mo = dynamic_cast<MOVE*>(stmAnterior))){
             if(mo->e1 && (tmp = dynamic_cast<TEMP*>(mo->e1))){
+                expAtual = ca;
+                return;
+            }
+        }else{
+            if(ep = dynamic_cast<EXP*>(stmAnterior)){
                 expAtual = ca;
                 return;
             }
