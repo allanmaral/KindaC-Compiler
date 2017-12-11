@@ -411,7 +411,7 @@ int AtributoVariavel::pegarArranjo(){
 AtributoVariavel::AtributoVariavel():Atributo(){
     tipo = 0;
     ponteiro = false;
-    arranjo = 0;
+    arranjo = 1;
     acesso = NULL;
     variavel = NULL;
     tamBytes = 4;

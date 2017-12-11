@@ -439,9 +439,11 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
                         atr->atribuirEscapa(true);
                     }
                     if(atrT){
-                        atr->atribuiTamanho(((AtributoTipo*)atrT)->pegarTamBytes());
+                        atr->atribuiTamanho(((AtributoTipo*)atrT)->pegarTamBytes()*atr->pegarArranjo());
                     }else if(atrC){
-                        atr->atribuiTamanho(((AtributoClasse*)atrC)->pegarTamBytes());
+                        atr->atribuiTamanho(((AtributoClasse*)atrC)->pegarTamBytes()*atr->pegarArranjo());
+                    }else{
+                        atr->atribuiTamanho(4*atr->pegarArranjo());
                     }
                     if(tamanhoClasse){
                         tamanhoClasse->adicionarTamanho(atr->pegarTamanho());

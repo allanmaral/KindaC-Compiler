@@ -416,6 +416,7 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
         AtributoVariavel *var = static_cast<AtributoVariavel*>(atr);
 
         int tamanho = var->pegarTamanho();
+        fprintf(stdout,"###################  %s : %d \n",var->pegarLexema(),tamanho);
         bool escapa = true;//var->pegarEscapa();
 
         if(frame) {
