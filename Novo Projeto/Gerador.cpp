@@ -181,8 +181,63 @@ Temp* Gerador::visita(ListaExp* lex){ return NULL; }
 void Gerador::visita(EXP* e){
     TEMP *t = NULL;
     MEM *m = NULL;
+    CALL *call = NULL;
     if(!(e->e && ((t = dynamic_cast<TEMP*>(e->e)) || (m = dynamic_cast<MEM*>(e->e))))) {
-        if(e->e)liberaRetistrador(e->e->aceita(this));
+        if(e->e && (call = dynamic_cast<CALL*>(e->e))){
+            NAME *n;
+            if(call->f && (n = dynamic_cast<NAME*>(call->f))){
+                if(strcmp("printInt", n->n->obterString()) == 0){
+                    ListaExp *aux = call->parametros;
+                    Temp *reg = aux->exp->aceita(this);
+                    fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                    fprintf(arqAss, "\tli $v0, 0x01\n");
+                    fprintf(arqAss, "\tsyscall\n");
+                    liberaRetistrador(reg);
+                }
+                else if(strcmp("printReal", n->n->obterString()) == 0){
+                    ListaExp *aux = call->parametros;
+                    Temp *reg =aux->exp->aceita(this);
+                    fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                    fprintf(arqAss, "\tli $v0, 0x02\n");
+                    fprintf(arqAss, "\tsyscall\n");
+                    liberaRetistrador(reg);
+                }
+                else if(strcmp("printLiteral", n->n->obterString()) == 0){
+                    ListaExp *aux = call->parametros;
+                    Temp *reg = aux->exp->aceita(this);
+                    fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                    fprintf(arqAss, "\tli $v0, 0x04\n");
+                    fprintf(arqAss, "\tsyscall\n");
+                    liberaRetistrador(reg);
+                }
+                else if(strcmp("printCaractere", n->n->obterString()) == 0) {
+                    ListaExp *aux = call->parametros;
+                    Temp *reg = aux->exp->aceita(this);
+                    fprintf(arqAss, "\tmove $a0, %s\n", reg->obterString());
+                    fprintf(arqAss, "\tli $v0, 0x0B\n");
+                    fprintf(arqAss, "\tsyscall\n");
+                    liberaRetistrador(reg);
+                }
+                else if(strcmp("readlnInt", n->n->obterString()) == 0){
+                    ListaExp *aux = call->parametros;
+                    Temp *reg = aux->exp->aceita(this);
+                    fprintf(arqAss, "\tli $v0,0x05\n");
+                    fprintf(arqAss, "\tsyscall\n");
+                    fprintf(arqAss, "\tsw $v0, 0(%s)\n", reg->obterString());
+                    liberaRetistrador(reg);
+                }
+                else if(strcmp("readlnReal", n->n->obterString()) == 0){
+                    ListaExp *aux = call->parametros;
+                    Temp *reg = aux->exp->aceita(this);
+                    fprintf(arqAss, "\tli $v0,0x06\n");
+                    fprintf(arqAss, "\tsyscall\n");
+                    fprintf(arqAss, "\tsw $f0, 0(%s)\n", reg->obterString());
+                    liberaRetistrador(reg);
+                }
+            }
+        } else {
+            if(e->e)liberaRetistrador(e->e->aceita(this));
+        }
     }
 }
 Temp* Gerador::visita(ESEQ *e){ return NULL; }
