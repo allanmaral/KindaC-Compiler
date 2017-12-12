@@ -1,31 +1,17 @@
-int a,b,c,vet[5];
-int mod(int a){ return 0;}
-
+typedef struct{
+	int a;
+	int vet[5];
+}VETOR;
+VETOR *v;
+VETOR st;
+int vetor[5];
 int main(){
-	int i;
-	a=b=1;
-	a=vet[0];	
-	vet[0]=7777;
-	vet[1]=44444;
-	i=0;
-	while(i<5){
-		print("digite um valor para pos[%d]: ",i);
-		readln(&vet[i]);
-		i=i+1;
-	}
-	i=0;
-	print("o vetor é:\n");
-	while(i<5){
-		print("pos[%d] valor %d \n",i,vet[i]);
-		i=i+1;
-	}
-	print("Digite o numero de interacoes : ");
-	readln(&b);
-	c=0;
-	while(c<b){
-		print("B: %d",b);
-		print("C: %d\n",c);
-		a=a-1;
-		c = c + 1;
-	}	
+	v=&st;
+	st.vet[0]=0;
+	st.vet[1]=7777;
+	st.a=666;
+	
+	print("v->vet[0]  = %d\n",v->vet[0]);
+	print("v->vet[1]  = %d\n",v->vet[1]);
+	print("v->a  = %d\n",v->a);
 }

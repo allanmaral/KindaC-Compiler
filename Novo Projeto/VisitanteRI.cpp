@@ -575,12 +575,23 @@ void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofss
             }
         }
         expAC->exprEsquerda->aceita(this);
+
         base = ultimaExp;
         if(expAC->terminal == PONTO) {
             if(MEM* m = dynamic_cast<MEM*>(base)) base = m->e;
         }
     }
-    ultimaExp = new MEM(new BINOP(OP_ADD, base, new CONST(deslocamento)));
+    expAC->exprDireita->aceita(this);
+    if(MEM* m = dynamic_cast<MEM*>(ultimaExp)){
+        ultimaExp = new MEM(new BINOP(OP_ADD,new BINOP(OP_ADD, base, new CONST(deslocamento)),m->e));
+    }else{
+        ultimaExp = new MEM(new BINOP(OP_ADD, base, new CONST(deslocamento)));
+    }
+
+
+
+
+
     //ultimaExp = new CONST(0);
 }
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
