@@ -357,7 +357,13 @@ Temp* Gerador::visita(CALL* call){
             }
             else if(strcmp("readlnInt", n->n->obterString()) == 0){
                 ListaExp *aux = call->parametros;
-                Temp *reg = aux->exp->aceita(this);
+                Temp *reg;
+                MEM *m;
+                if(aux->exp && (m = dynamic_cast<MEM*>(aux->exp))){
+                    reg = m->e->aceita(this);
+                }else{
+                    reg = aux->exp->aceita(this);
+                }
                 fprintf(arqAss, "\tli $v0,0x05\n");
                 fprintf(arqAss, "\tsyscall\n");
                 fprintf(arqAss, "\tsw $v0, 0(%s)\n", reg->obterString());
@@ -366,7 +372,13 @@ Temp* Gerador::visita(CALL* call){
             }
             else if(strcmp("readlnReal", n->n->obterString()) == 0){
                 ListaExp *aux = call->parametros;
-                Temp *reg = aux->exp->aceita(this);
+                Temp *reg;
+                MEM *m;
+                if(aux->exp && (m = dynamic_cast<MEM*>(aux->exp))){
+                    reg = m->e->aceita(this);
+                }else{
+                    reg = aux->exp->aceita(this);
+                }
                 fprintf(arqAss, "\tli $v0,0x06\n");
                 fprintf(arqAss, "\tsyscall\n");
                 fprintf(arqAss, "\tsw $f0, 0(%s)\n", reg->obterString());

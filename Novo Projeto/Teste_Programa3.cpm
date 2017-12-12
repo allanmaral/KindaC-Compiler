@@ -2,9 +2,24 @@ int a,b,c,vet[5];
 int mod(int a){ return 0;}
 
 int main(){
-	a=b=1001;
-	vet[0]=&mod(0);
-	print("Digite o numero de interacoes: ");
+	int i;
+	a=b=1;
+	a=vet[0];	
+	vet[0]=7777;
+	vet[1]=44444;
+	i=0;
+	while(i<5){
+		print("digite um valor para pos[%d]: ",i);
+		readln(&vet[i]);
+		i=i+1;
+	}
+	i=0;
+	print("o vetor é:\n");
+	while(i<5){
+		print("pos[%d] valor %d \n",i,vet[i]);
+		i=i+1;
+	}
+	print("Digite o numero de interacoes : ");
 	readln(&b);
 	c=0;
 	while(c<b){

@@ -616,7 +616,7 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
         nc->expressao->aceita(this);
         offset = new BINOP(OP_MUL, new CONST(tamanhoTipo), ultimaExp);
     }
-    ultimaExp = new BINOP(OP_ADD, base, offset);
+    ultimaExp = new MEM(new BINOP(OP_ADD, base, offset));
 }
 
 void VisitanteTradutor::visita(NoArranjo           *arr    ) {}
