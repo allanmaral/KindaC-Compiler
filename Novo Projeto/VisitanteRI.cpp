@@ -36,13 +36,18 @@ void VisitanteTradutor::visita(NoPrograma          *prog   ) {
 }
 void VisitanteTradutor::visita(NoId                *id     ) {
     /// PEGAR DESLOCAMENTO
-    ultimaExp = new MEM(new CONST(0));
     if(frame) {
         Atributo* atr = frame->atr->busca(id->entradaTabela->pegarLexema());
         if(atr)
         {
             AtributoVariavel* var = static_cast<AtributoVariavel*>(atr);
-            ultimaExp = var->pegarAcesso()->codigoAcesso();
+            AcessoLocal *ass = var->pegarAcesso();
+            fprintf(stdout, "%s: ponteiro=%d arranjo=%d\n",var->pegarLexema(), var->pegarPonteiro(), var->pegarArranjo());
+            MEM *m = NULL;
+            NoFrame *nf = NULL;
+            if(var->pegarArranjo() > 1 && (nf = dynamic_cast<NoFrame*>(ass)) && (m = dynamic_cast<MEM*>(ass->codigoAcesso()))) {
+                ultimaExp = m->e;
+            } else ultimaExp = ass->codigoAcesso();
             return;
         }
     }
@@ -50,7 +55,9 @@ void VisitanteTradutor::visita(NoId                *id     ) {
     if(atr) {
         AtributoVariavel* var = static_cast<AtributoVariavel*>(atr);
         ultimaExp = new MEM(new NAME(var->pegarVariavel()->rotulo));
+        return;
     }
+    ultimaExp = new MEM(new CONST(0));
 }
 void VisitanteTradutor::visita(NoLiteral           *lit    ) {
     char* rot = RotuloNome("Literal", contLiteral++);
@@ -620,7 +627,7 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
             }
         }
         /// Só tira o mem se for um vetor
-        if(MEM* temp = dynamic_cast<MEM*>(base)) base = temp->e;
+        //if(MEM* temp = dynamic_cast<MEM*>(base)) base = temp->e;
     }
     if(nc->expressao) {
         nc->expressao->aceita(this);
