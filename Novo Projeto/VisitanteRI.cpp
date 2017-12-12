@@ -231,7 +231,6 @@ void VisitanteTradutor::visita(NoImprime           *imp    ) {
     if(listaExp) {
         NAME *lit = dynamic_cast<NAME*>(listaExp->exp); // Se o primeiro nó for o literal, faz o parsing
         if(lit) {
-            fprintf(stdout, "Entrou IMPRIME\n");
             char* format = lit->l->literal; // A cada leitura do um % separa a impressão
             int comeco = 1, i = 1;
             listaExp = listaExp->proximoExp;
@@ -688,9 +687,10 @@ void VisitanteImpressaoRI::visita(Variavel *var){///Terminar
     fprintf(stdout,"-VARIAVEL: %s\n", var->rotulo->rotulo);
     //AtributoVariavel* atr=static_cast<AtributoVariavel*>(var->tipo);
     //atr->pegarAcesso()->aceita(this);
+    nivel++;
     imprimeNivel();
     if(var->tamanho) fprintf(stdout,"-TAM.%d\n",var->tamanho);
-    nivel-=2;
+    nivel--;
     if(var->proximoFragmento) var->proximoFragmento->aceita(this);
 }
 

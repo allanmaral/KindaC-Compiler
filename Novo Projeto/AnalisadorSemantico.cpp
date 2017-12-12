@@ -244,6 +244,7 @@ void AnalisadorSemantico::visita(NoImprime* imp){
     if(imp->listaExpr) imp->listaExpr->aceita(this);
 }
 void AnalisadorSemantico::visita(NoLeLinha* leL){
+    verificandoCorpo = false;
     if(leL->expressao) leL->expressao->aceita(this);
 }
 void AnalisadorSemantico::visita(NoRetorna* ret){

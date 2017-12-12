@@ -399,7 +399,7 @@ Temp* Gerador::visita(CALL* call){
                 aux = aux->proximoExp;
                 i++;
 		    }
-		    aux = l;
+		    aux = call->parametros;
 		    int deslocamento = i*4;
 		    fprintf(arqAss, "\t#Pre-Chamada\n\tsubu $sp, $sp, %d\n", deslocamento+QUADRO_BASICO);
 		    i = 0;
@@ -408,7 +408,7 @@ Temp* Gerador::visita(CALL* call){
                 if(i<4){
                     fprintf(arqAss,"\tmove $a%d, %s\n", i, param->obterString());
                 }
-                fprintf(arqAss,"\tsw %s, %d($sp)\n", param->obterString(), i*PALAVRA);
+                fprintf(arqAss,"\tsw %s, %d($sp)\n", param->obterString(), i*4);
                 liberaRetistrador(param);
                 aux = aux->proximoExp;
                 i++;

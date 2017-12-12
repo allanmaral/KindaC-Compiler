@@ -20,7 +20,7 @@ void finalizaPrograma();
 int main(int argc, char** args){
     FILE* arquivo = stdin;
     FILE* arqAss  = stdout;
-    if ( argc == 2| argc == 3 ) {
+    if ( argc == 2 || argc == 3 ) {
         char caminhoArquivo[strlen(args[1])+5];
         char *caminhoSaida;
         if(argc==2){
@@ -39,7 +39,7 @@ int main(int argc, char** args){
             strcat(caminhoArquivo, ".cpm");
         }else{
             if(argc==2){
-                for(int i = 0;i<(strlen(args[1])-4);i++){
+                for(unsigned int i = 0;i<(strlen(args[1])-4);i++){
                     caminhoSaida[i]=caminhoArquivo[i];
                 }
                 strcat(caminhoSaida, ".asm");

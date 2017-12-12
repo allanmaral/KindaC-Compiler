@@ -102,7 +102,7 @@ void CanonizadorRI::visita(CALL* ca){
                 return;
             }
         }else{
-            if(ep = dynamic_cast<EXP*>(stmAnterior)){
+            if((ep = dynamic_cast<EXP*>(stmAnterior))){
                 expAtual = ca;
                 return;
             }
