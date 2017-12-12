@@ -3,7 +3,7 @@ int mod(int a){ return 0;}
 
 int main(){
 	a=b=1001;
-	vet[0]=a;
+	vet[0]=&mod(0);
 	print("Digite o numero de interacoes: ");
 	readln(&b);
 	c=0;

@@ -181,7 +181,7 @@ void Gerador::visita(EXP* e){
     MEM *m = NULL;
     CALL *call = NULL;
     BINOP *b;
-    if(!(e->e && (m = dynamic_cast<MEM*>(e->e)) && (b = dynamic_cast<BINOP*>(e->e)))) {
+    if(!(e->e && ((dynamic_cast<MEM*>(e->e)) || (dynamic_cast<BINOP*>(e->e))))) {
         if(e->e)liberaRetistrador(e->e->aceita(this));
     } else if(e->e && (t = dynamic_cast<TEMP*>(e->e))){
         liberaRetistrador(t->t);
