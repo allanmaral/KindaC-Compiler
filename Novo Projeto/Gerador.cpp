@@ -119,6 +119,7 @@ void Gerador::visita(Procedimento* p){
     FrameMIPS *frame=dynamic_cast<FrameMIPS*>(p->frame);
     if(strcmp(frame->rotulo->rotulo,"main")){
         fprintf(arqAss,"%s_Epilogo:\n",frame->rotulo->obterString());
+        fprintf(arqAss,"\tmove $sp, $fp\n");
         int tamanhoParametros = frame->deslocamentoParametros;
         recuperarTodosRegistradores(tamanhoParametros);
         fprintf(arqAss,"\tj $ra \n\n\n");
