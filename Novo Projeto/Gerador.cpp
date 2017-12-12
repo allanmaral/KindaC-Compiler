@@ -138,12 +138,12 @@ void Gerador::visita(Procedimento* p){
 
 }
 void Gerador::visita(Literal* l){
-    fprintf(arqAss, ".rdata\n%s:\n\t.asciiz %s\n", l->rotulo->obterString(), l->literal);
+    fprintf(arqAss, ".rdata\n_%s:\n\t.asciiz %s\n", l->rotulo->obterString(), l->literal);
     if(l->proximoFragmento) l->proximoFragmento->aceita(this);
 }
 void Gerador::visita(Variavel* v){
     fprintf(arqAss, ".data\n");
-    fprintf(arqAss, "var_%s: ", v->rotulo->obterString());
+    fprintf(arqAss, "_%s: ", v->rotulo->obterString());
     fprintf(arqAss, ".space %d\n", v->tamanho);
     if(v->proximoFragmento) v->proximoFragmento->aceita(this);
 }
@@ -201,7 +201,7 @@ Temp* Gerador::visita(CONSTF* c){
 }
 Temp* Gerador::visita(NAME* n){
     Temp *r = pegaRegistradorLivre();
-    fprintf(arqAss, "\tla %s %s\n", r->obterString(), n->n->obterString());
+    fprintf(arqAss, "\tla %s, _%s\n", r->obterString(), n->n->obterString());
     return r;
 }
 Temp* Gerador::visita(TEMP* t){
@@ -306,7 +306,7 @@ Temp* Gerador::visita(MEM* m){
     }else{
         NAME *n;
         if(m->e && (n = dynamic_cast<NAME*>(m->e)))
-            fprintf(arqAss, "\tlw %s, %s(%d)\n", r->obterString(), n->n->obterString(), 0);
+            fprintf(arqAss, "\tlw %s, _%s\n", r->obterString(), n->n->obterString());
         else{
 			Temp* base =m->e->aceita(this);
             fprintf(arqAss, "\tlw %s, 0(%s)\n", r->obterString(), base->obterString());
@@ -443,7 +443,7 @@ void Gerador::visita(MOVE* mov){
             NAME *name;
             Temp *org = mov->e2->aceita(this);
             if(m->e && (name = dynamic_cast<NAME*>(m->e)))
-                fprintf(arqAss, "\tsw %s, %s(%d)\n", org->obterString(), name->n->obterString(), 0);
+                fprintf(arqAss, "\tsw %s, _%s\n", org->obterString(), name->n->obterString());
             else{
                 Temp *r = m->e->aceita(this);
                 fprintf(arqAss, "\tsw %s, %d(%s)\n", org->obterString(), 0, r->obterString());
@@ -466,7 +466,7 @@ void Gerador::visita(MOVE* mov){
         }
         else if(mov->e2 && (nome = dynamic_cast<NAME*>(mov->e2))){
               t->t= mov->e1->aceita(this);
-              fprintf(arqAss, "\tla %s,%s\n", t->t->obterString(), nome->n->obterString());
+              fprintf(arqAss, "\tla %s, _%s\n", t->t->obterString(), nome->n->obterString());
         }else {
             t->t= mov->e1->aceita(this);
             Temp *aux = mov->e2->aceita(this);

@@ -1,7 +1,16 @@
+int a,b,c,vet[5];
+int mod(int a){ return 0;}
+
 int main(){
-	int a,b,c,vet[5];
 	a=b=1001;
-	vet[0]=11111;
-	print("V[0]:%d ",v[0]);
-	
+	vet[0]=a;
+	print("Digite o numero de interacoes: ");
+	readln(&b);
+	c=0;
+	while(c<b){
+		print("B: %d",b);
+		print("C: %d\n",c);
+		a=a-1;
+		c = c + 1;
+	}	
 }
