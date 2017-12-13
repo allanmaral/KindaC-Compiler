@@ -139,7 +139,6 @@ void VisitanteTradutor::visita(NoSe                *se     ) {
     char *rFimSe = RotuloNome("FimSe",     contLaco);
     Rotulo *entao = new Rotulo(rEntao);
     Rotulo *fimSe = new Rotulo(rFimSe);
-    ultimoFim = fimSe;
     delete [] rEntao;
     delete [] rFimSe;
     se->expressao->aceita(this);

@@ -4,31 +4,9 @@ int main(){
 	a=1;
 	b=1;
 	while(true){
-		print("digite A\n");
-		readln(a);
-		print("digite B\n");
-		readln(b);
-		if(a&&!b){
-			print("A&&!B\n");
-		}
-		if(b&&a){
-			print("A&&B\n");
-		}
-		if(!a){
-			print("!a\n");	
-			
-		}
-		if(b||a||1){
-			print("a||b||1\n");	
-			
-		}
-		if(b||a){
-			print("a||b\n");	
-			
-		}
-		if(b||!a){
-			print("!a||b\n");	
-			a=1;
+		if(1==1){
+			break;
 		}
 	}
+	print("Eu breakc[ A\n");
 }
