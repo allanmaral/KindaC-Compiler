@@ -129,7 +129,8 @@ int main(){
 	int numDiscos;
 	int loop;
 	loop = 1;
-	while(1 == 1){
+	op=1;
+	while((op==1)|(op==2)|(op==3)|(op==4)){
 		print("Digite a opcao:\n");
 		print("\t1 - QuickSort:\n");
 		print("\t2 - BubbleSort:\n");

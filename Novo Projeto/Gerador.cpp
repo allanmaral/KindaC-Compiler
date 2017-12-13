@@ -28,14 +28,14 @@ static char registradores [16][4] = {
     "$t8",
     "$t9",
 };
-static bool registradorReservado(Temp *t){
+static bool registradorReservado(Temp *t){///verifica se o temp nao e um registrador reservado
     if(strcmp(t->obterString(),"$fp") && strcmp(t->obterString(),"$v0") &&  strcmp(t->obterString(),"$0") &&
         strcmp(t->obterString(),"$a0") &&  strcmp(t->obterString(),"$a1") &&  strcmp(t->obterString(),"$a2") &&
         strcmp(t->obterString(),"$a3") &&  strcmp(t->obterString(),"$sp")&&  strcmp(t->obterString(),"$r0")){
         return false;
     }else return true;
 }
-static bool registradorValido(Temp *t){
+static bool registradorValido(Temp *t){///verifica se o temp pertence ao vetor de temporarios
     for(int i=0;i<NUM_REGISTRADORES;i++){
         if(strcmp(t->obterString(),registradores[i])==0){
             return true;
@@ -45,7 +45,17 @@ static bool registradorValido(Temp *t){
 }
 void Gerador::liberaRetistrador(Temp* t){
     if(!registradorReservado(t)){
-            //fprintf(stdout, "liberou: %s\n", t->obterString());///tambem tirar isso
+        bool autorizao = true;
+        FilaRegistrador *percorre;
+        percorre=primeiroRegLivre;
+        while(percorre){///Verifica se o registrador ainda nao foi liberado
+            if(strcmp(percorre->reg->obterString(),t->obterString())==0){
+                autorizao=false;
+                break;
+            }
+            percorre=percorre->proximo;
+        }if(autorizao){
+           // fprintf(stdout, "liberou: %s\n", t->obterString());
             if(primeiroRegLivre){
                 FilaRegistrador * liberado = new FilaRegistrador();
                 liberado->reg = t;
@@ -56,13 +66,15 @@ void Gerador::liberaRetistrador(Temp* t){
                 primeiroRegLivre->proximo=NULL;
                 primeiroRegLivre->reg=t;
              }
+        }
+
      }
 
 }
-Temp* Gerador::pegaRegistradorLivre(){
+Temp* Gerador::pegaRegistradorLivre(){///retorna o primeiro registrador da pilha
     if(primeiroRegLivre){
         //fprintf(stdout, "pegou: %s\n", primeiroRegLivre->reg->obterString());///tambem tirar isso
-        Temp* t= primeiroRegLivre->reg;
+        Temp* t = primeiroRegLivre->reg;
         FilaRegistrador *prox = primeiroRegLivre->proximo;
         delete primeiroRegLivre;
         primeiroRegLivre = prox;
@@ -520,12 +532,37 @@ void Gerador::visita(CJUMP* cjp){
 			sprintf(operacao, "ble ");
 			break;
 	}
-    Temp *t = cjp->e1->aceita(this);
-    Temp *t2 = cjp->e2->aceita(this);
-    fprintf(arqAss, "\t%s %s, %s, %s\n", operacao,  t->obterString(), t2->obterString(), cjp->verdadeiro->obterString());
-    fprintf(arqAss, "\tj %s\n", cjp->falso->obterString());
-    liberaRetistrador(t);
-    liberaRetistrador(t2);
+    CONST* c1 = dynamic_cast<CONST*>(cjp->e1);
+	CONST* c2 = dynamic_cast<CONST*>(cjp->e2);
+    if(c1){
+        if(c2){
+            Temp *aux= pegaRegistradorLivre();
+            fprintf(arqAss, "\tli %s, %d\n",aux->obterString(),c1->ci);
+            fprintf(arqAss, "\t%s %s, %d, %s\n", operacao,  aux->obterString(), c2->ci ,cjp->verdadeiro->obterString());
+            if(cjp->falso) fprintf(arqAss, "\tj %s\n", cjp->falso->obterString());
+            liberaRetistrador(aux);
+        }else{
+            Temp *aux= cjp->e2->aceita(this);
+            fprintf(arqAss, "\t%s %d, %s, %s\n", operacao , c1->ci,aux->obterString() ,cjp->verdadeiro->obterString());
+            if(cjp->falso) fprintf(arqAss, "\tj %s\n", cjp->falso->obterString());
+            liberaRetistrador(aux);
+        }
+    }
+    else{
+        if(c2){
+            Temp *aux=cjp->e1->aceita(this);
+            fprintf(arqAss, "\t%s %s, %d, %s\n", operacao,  aux->obterString(), c2->ci ,cjp->verdadeiro->obterString());
+            if(cjp->falso) fprintf(arqAss, "\tj %s\n", cjp->falso->obterString());
+            liberaRetistrador(aux);
+        }else{
+            Temp *t = cjp->e1->aceita(this);
+            Temp *t2 = cjp->e2->aceita(this);
+            fprintf(arqAss, "\t%s %s, %s, %s\n", operacao,  t->obterString(), t2->obterString(), cjp->verdadeiro->obterString());
+            if(cjp->falso) fprintf(arqAss, "\tj %s\n", cjp->falso->obterString());
+            liberaRetistrador(t);
+            liberaRetistrador(t2);
+        }
+    }
 }
 void Gerador::visita(SEQ* s){
     if(s->s1) s->s1->aceita(this);

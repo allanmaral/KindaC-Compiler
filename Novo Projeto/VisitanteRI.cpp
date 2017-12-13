@@ -198,6 +198,7 @@ void VisitanteTradutor::visita(NoBlocoCaso         *bc     ) {
     Exp *e1 = ultimaExp;
     bc->listaSentenca->aceita(this);
     Stm *s1 = ultimaStm;
+
     if(bc->lista){
         char* rSenao = RotuloNome("SeNaoCaso", contCaso);
         Rotulo *senao = new Rotulo(rSenao);
@@ -423,7 +424,7 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
 
         int tamanho = var->pegarTamanho();
         fprintf(stdout,"###################  %s : %d \n",var->pegarLexema(),tamanho);
-        bool escapa = true;//var->pegarEscapa();
+        bool escapa = true;
 
         if(frame) {
             frame->deslocamentoVariaveisLocais += tamanho;
@@ -505,8 +506,7 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
             }break;
         case ATRIBUICAO:
             break;
-        case E_COMERCIAL: /// REVER ISSO AQUI
-        case E:{
+        case E: case E_COMERCIAL:{
 			Rotulo *l1 =  new Rotulo();
 			Rotulo *l2 =  new Rotulo();
 			Rotulo *l3 =  new Rotulo();
@@ -516,7 +516,7 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
 							  new SEQ(new LABEL(l1),new SEQ(new CJUMP(OP_NEQ,e2,new CONST(0),l3,l2),
 								new SEQ(new LABEL(l3),new SEQ(new MOVE(new TEMP(t),new CONST(1)),new LABEL(l2))))))),new TEMP(t));
 			 }break;
-        case OU:{
+        case OU: case OU_CC: {
         	Rotulo *l1 =  new Rotulo();
 			Rotulo *l2 =  new Rotulo();
 			Temp *r = new Temp();
@@ -525,8 +525,6 @@ void VisitanteTradutor::visita(NoExprBinaria       *expB   ) {
 								new SEQ(new LABEL(l1),
 									new SEQ(new MOVE(new TEMP(r),new CONST(1)),new LABEL(l2))))),new TEMP(r));
 			}break;
-        case OU_CC:
-            break;
         case ADICAO:
             ultimaExp = new BINOP(OP_ADD,e1,e2);
             break;
