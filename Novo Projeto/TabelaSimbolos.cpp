@@ -491,6 +491,7 @@ Atributo* AtributoClasse::pegarHeranca(){
 }
 Tipo::Tipo(int tipo){
     this->tipo = tipo;
+    this->ponteiro = false;
 }
 Tipo::~Tipo(){}
 int Tipo::pegaTipo(){
@@ -498,6 +499,12 @@ int Tipo::pegaTipo(){
 }
 void Tipo::atribuirTipo(int tipo){
     this->tipo = tipo;
+}
+bool Tipo::pegarPonteiro(){
+    return this->ponteiro;
+}
+void Tipo::atribuirPonteiro(bool ponteiro){
+    this->ponteiro = ponteiro;
 }
 TipoId::TipoId(char* lexema, int primitivo):Tipo(primitivo){
     this->lexema=(char*)malloc(sizeof(char) * (strlen(lexema) + 1));

@@ -587,7 +587,23 @@ void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofss
             if(MEM* m = dynamic_cast<MEM*>(base)) base = m->e;
         }
     }
-    ultimaExp = new MEM(new BINOP(OP_ADD, base, new CONST(deslocamento)));
+    if(expAC->exprDireita) {
+        NoColchetes* col = NULL;
+        if((col = dynamic_cast<NoColchetes*>(expAC->exprDireita))){
+            col->aceita(this);
+            Exp* exp = ultimaExp;
+            MEM *m;
+            if((m = dynamic_cast<MEM*>(exp))) {
+                exp = m->e;
+                BINOP *b;
+                if((b = dynamic_cast<BINOP*>(exp))) {
+                    exp = b->e2;
+                }
+            }
+            ultimaExp = new MEM(new BINOP(OP_ADD, base, new BINOP(OP_ADD, exp, new CONST(deslocamento))));
+        } else if(expAC->tipo->pegaTipo() == ID) ultimaExp = new BINOP(OP_ADD, base, new CONST(deslocamento));
+               else ultimaExp = new MEM(new BINOP(OP_ADD, base, new CONST(deslocamento)));
+    }
     //ultimaExp = new CONST(0);
 }
 void VisitanteTradutor::visita(NoVerdadeiro        *tr     ) {
@@ -616,6 +632,9 @@ void VisitanteTradutor::visita(NoColchetes         *nc     ) {
             }
         }
         /// Só tira o mem se for um vetor
+        if(nc->expressao->tipo->pegarPonteiro()){
+            if(MEM* temp = dynamic_cast<MEM*>(base)) base = temp->e;
+        }
         //if(MEM* temp = dynamic_cast<MEM*>(base)) base = temp->e;
     }
     if(nc->expressao) {

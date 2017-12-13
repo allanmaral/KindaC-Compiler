@@ -92,12 +92,14 @@ void AnalisadorSemantico::visita(NoConteudo* con){
     if(con->primario) {
         con->primario->aceita(this);
         con->tipo = con->primario->tipo;
+        con->tipo->atribuirPonteiro(false);
     }
 }
 void AnalisadorSemantico::visita(NoEndereco* ende){
     if(ende->primario){
         ende->primario->aceita(this);
         ende->tipo = ende->primario->tipo;
+        ende->tipo->atribuirPonteiro(true);
     }
     if(retorno == ID){
         if(!tipo){
@@ -163,6 +165,8 @@ void AnalisadorSemantico::visita(NoListaFormal* lf){
                 }else{
                     tipo = new Tipo(lf->tipo->primitivo);
                 }
+                tipo->atribuirPonteiro(lf->ponteiro);
+                tipo->atribuirPonteiro(lf->ponteiro);
                 atr->atribuirTipo(tipo);
                 if(lf->arranjo){
                     if(lf->arranjo->num){
@@ -357,6 +361,7 @@ void AnalisadorSemantico::visita(NoListaId* lid){
                 if(!erro){
                     AtributoVariavel *atr = new AtributoVariavel();
                     TipoId *tp = new TipoId(tipo->pegarLexema(), ID);
+                    tp->atribuirPonteiro(lid->ponteiro);
                     atr->atribuirTipo(tp);
                     atr->atribuirLexema(lid->id->entradaTabela->pegarLexema());
                     atr->atribuiArranjo(arranjo);
@@ -454,6 +459,7 @@ void AnalisadorSemantico::visita(NoDeclVariavel* decV){
                         tamanhoTipo->adicionarTamanho(atr->pegarTamanho());
                     }
                     atr->atribuirLexema(aux->id->entradaTabela->pegarLexema());
+                    tp->atribuirPonteiro(aux->ponteiro);
                     ((AtributoVariavel*)atr)->atribuirTipo(tp);
                     tabela->insere(atr->pegarLexema(), atr);
                 }
@@ -538,6 +544,7 @@ void AnalisadorSemantico::visita(NoCorpoFuncao* cF){
                         } else if(AtributoClasse* __atr = (AtributoClasse*)obtemTabelaClasses()->busca(tipo->pegarLexema())) {
                             tamanho = __atr->pegarTamBytes();
                         }
+                        tp->atribuirPonteiro(false);
                         atr->atribuirTipo(tp);
                         atr->atribuiTamanho(tamanho);
                         atr->atribuirLexema(cF->id->entradaTabela->pegarLexema());
@@ -677,6 +684,7 @@ void AnalisadorSemantico::visita(NoExprBinaria* expB){
                                     atr->atribuiArranjo(arranjo);
                                 }
                                 atr->atribuiPonteiro(true);
+                                tp->atribuirPonteiro(true);
                                 atr->atribuiTamanho(4);
                                 atr->atribuirTipo(tp);
                                 atr->atribuirLexema(valorRetorno->pegarLexema());
@@ -864,6 +872,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                             (((AtributoFuncao*)atrFunc)->pegarPonteiro())){
                         retorno = LITERAL;
                         expAC->tipo = new Tipo(LITERAL);
+                        expAC->tipo->atribuirPonteiro(true);
                     } else if(retorno == ID) {
                                if(!(valorRetorno = obtemTabelaClasses()->busca(((TipoId*)expAC->tipo)->pegarLexema()))) {
                                    valorRetorno = obtemTabelaTipos()->busca(((TipoId*)expAC->tipo)->pegarLexema());
@@ -888,6 +897,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                              ((AtributoVariavel*)atrFunc)->pegarArranjo())    ){
                         retorno = LITERAL;
                         expAC->tipo = new Tipo(LITERAL);
+                        expAC->tipo->atribuirPonteiro(true);
                     } else if(retorno == ID) {
                                if(!(valorRetorno = obtemTabelaClasses()->busca(((TipoId*)expAC->tipo)->pegarLexema()))) {
                                    valorRetorno = obtemTabelaTipos()->busca(((TipoId*)expAC->tipo)->pegarLexema());
@@ -908,6 +918,7 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                          ((AtributoVariavel*)atrVar)->pegarArranjo())    )){
                     retorno = LITERAL;
                     expAC->tipo = new Tipo(LITERAL);
+                    expAC->tipo->atribuirPonteiro(true);
                 } else if(retorno == ID) {
                            if(!(valorRetorno = obtemTabelaClasses()->busca(((TipoId*)expAC->tipo)->pegarLexema()))) {
                                valorRetorno = obtemTabelaTipos()->busca(((TipoId*)expAC->tipo)->pegarLexema());
@@ -925,6 +936,17 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                       ((TipoId*)((AtributoVariavel*)idEsq)->pegarTipo())->pegarLexema());
     }
     else saidaErro(ErroSemanticoNaoPossuiAcesso, expAC->linha, expAC->coluna);
+
+    if(expAC->exprDireita) {
+        if(!expAC->exprDireita->tipo){
+            expAC->exprDireita->tipo = expAC->tipo;
+        } else if(expAC->exprDireita->tipo->pegaTipo() == -1) { // Nó colchetes
+            expAC->exprDireita->tipo = expAC->tipo;
+            if(expAC->tipo->pegarPonteiro()) {
+                expAC->tipo->atribuirPonteiro(false);
+            }
+        }
+    }
 }
 void AnalisadorSemantico::visita(NoVerdadeiro* tr){
     retorno = BOLEANO;
@@ -978,4 +1000,9 @@ void AnalisadorSemantico::visita(NoColchetes* nc){
         }
     }
     nc->tipo = nc->primario->tipo;
+    if(nc->tipo){
+        if(nc->tipo->pegarPonteiro()) nc->tipo->atribuirPonteiro(false);
+    } else {
+        nc->tipo = new Tipo(-1);
+    }
 }

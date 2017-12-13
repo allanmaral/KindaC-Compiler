@@ -229,8 +229,11 @@ class Tipo{
         ~Tipo();
         int pegaTipo();
         void atribuirTipo(int tipo);
+        bool pegarPonteiro();
+        void atribuirPonteiro(bool ponteiro);
     private:
         int tipo;
+        bool ponteiro;
 };
 class TipoId:public Tipo{
     public:
