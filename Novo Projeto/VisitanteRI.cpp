@@ -139,7 +139,6 @@ void VisitanteTradutor::visita(NoSe                *se     ) {
     char *rFimSe = RotuloNome("FimSe",     contLaco);
     Rotulo *entao = new Rotulo(rEntao);
     Rotulo *fimSe = new Rotulo(rFimSe);
-    Rotulo *rUltimoFim = ultimoFim; // Empilha ultimo fim
     ultimoFim = fimSe;
     delete [] rEntao;
     delete [] rFimSe;
@@ -165,7 +164,6 @@ void VisitanteTradutor::visita(NoSe                *se     ) {
           ultimaStm = new SEQ(new CJUMP(OP_NEQ,e1,new CONST(0),entao,fimSe),
                               new SEQ(new LABEL(entao),s1));
       }
-    ultimoFim = rUltimoFim; // Desempilha ultimo fim
 }
 void VisitanteTradutor::visita(NoSenao             *sen    ) {
     if(sen->sentenca) sen->sentenca->aceita(this);
