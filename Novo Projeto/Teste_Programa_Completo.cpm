@@ -46,37 +46,6 @@ int bubble_sort(int *vetor, int n) {
 		k = k + 1;
 	}
 }
-int heapsort(int *a, int n) {
-	int i, pai, filho, t;
-	i = n / 2;
-	while(true) {
-		if (i > 0) {
-			i = i - 1;
-			t = a[i];
-		} else {
-			n = n -1;
-			if (n == 0){
-				return 0;
-			}
-			t = a[n];
-			a[n] = a[0];
-		}
-		pai = i;
-		filho = i * 2 + 1;
-		while (filho < n) {
-			if ((filho + 1 < n)  &&  (a[filho + 1] > a[filho]))
-				filho = filho + 1;
-				if (a[filho] > t) {
-				a[pai] = a[filho];
-				pai = filho;
-				filho = pai * 2 + 1;
-			} else {
-				break;
-			}
-		}
-		a[pai] = t;
-	}
-}
 int sort_menu(int op){
 	int i, vet[10], MAX;
 
@@ -98,10 +67,6 @@ int sort_menu(int op){
 		case 2:
 			print("BubbleSort\n");
 			bubble_sort(vet, MAX);
-		break;
-		case 3:
-			print("HeapSort\n");
-			heapsort(vet, MAX);
 		break;
 	}
 	
@@ -127,16 +92,14 @@ int main(){
 	int op;
 	op = 0;
 	int numDiscos;
-	int loop;
-	loop = 1;
-	op=1;
-	while((op==1)|(op==2)|(op==3)|(op==4)){
+	bool loop;
+	loop = true;
+	while(loop){
 		print("Digite a opcao:\n");
 		print("\t1 - QuickSort:\n");
 		print("\t2 - BubbleSort:\n");
-		print("\t3 - HeapSort:\n");
-		print("\t4 - Torre de Hanoi:\n");
-		print("\t5 - Sair:\n");
+		print("\t3 - Torre de Hanoi:\n");
+		print("\t4 - Sair:\n");
 		readln(&op);
 		switch(op){
 			case 1:
@@ -146,18 +109,12 @@ int main(){
 				sort_menu(op);
 			break;
 			case 3:
-				sort_menu(op);
-			break;
-			case 4:
 				print("Digite o numero de discos para resolver a torre de Hanoi:\n");
 				readln(&numDiscos);
 				hanoi(numDiscos, 'A', 'B', 'C');
 			break;
-			case 5:
-				loop = 0;
-			break;
-		}
-		if(loop == 0){
+			case 4:
+				loop = false;
 			break;
 		}
 	}

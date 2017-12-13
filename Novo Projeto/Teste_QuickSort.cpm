@@ -1,6 +1,6 @@
 // Protótipo da função de ordenação
 // Ordination function prototype
-/*int quick_sort(int *vetor, int esq, int dir) {
+int quick_sort(int *vetor, int esq, int dir) {
     int i, j;
     int centro, aux;
      
@@ -32,9 +32,7 @@
     }
     return 0;
 }
-*/
-
-/*int main(){
+int main(){
     int i, vet[10], MAX;
 
     // Lê MAX ou 10 valores
@@ -42,9 +40,9 @@
     i = 0;
 
     while(i < MAX){
-        print("Digite um valor: ");
+        print("Digite um valor(%d de %d): ", i+1, MAX);
         readln(&vet[i]);
-        print("Valor adicionado: %d\n", vet[i]);
+        //print("Valor adicionado: %d\n", vet[i]);
         i = i + 1;
     }
 
@@ -60,19 +58,4 @@
     }
 
     return 0;
-}*/
-int main(){
-   int i, vet[10], MAX;
-
-   // Lê MAX ou 10 valores
-   MAX = 10;
-   i = 0;
-
-   while(i < MAX){
-       print("Digite um valor: ");
-       readln(vet[i]);
-       print("Valor adicionado: %d\n", *vet[i]);
-       i = i + 1;
-   }
-   return 0;
 }
