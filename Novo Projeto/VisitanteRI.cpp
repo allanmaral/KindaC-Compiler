@@ -42,7 +42,6 @@ void VisitanteTradutor::visita(NoId                *id     ) {
         {
             AtributoVariavel* var = static_cast<AtributoVariavel*>(atr);
             AcessoLocal *ass = var->pegarAcesso();
-            fprintf(stdout, "%s: ponteiro=%d arranjo=%d\n",var->pegarLexema(), var->pegarPonteiro(), var->pegarArranjo());
             MEM *m = NULL;
             NoFrame *nf = NULL;
             if(var->pegarArranjo() > 1 && (nf = dynamic_cast<NoFrame*>(ass)) && (m = dynamic_cast<MEM*>(ass->codigoAcesso()))) {
@@ -404,7 +403,6 @@ void VisitanteTradutor::visita(NoListaFormal       *lf     ) {
         if(var){
             //var->atribuiAcesso(frame->insereParametro(var->pegarEscapa(), var->pegarTamanho()));
             var->atribuiAcesso(frame->insereParametro(true, frame->deslocamentoParametros));
-            fprintf(stdout, "#################### %s - Arranjo: %d - ponteiro: %d\n", lf->id->entradaTabela->pegarLexema(), var->pegarArranjo(), var->pegarPonteiro());
             frame->deslocamentoParametros += var->pegarTamanho() * (var->pegarArranjo() > 0 ? var->pegarArranjo() : 1);
         }
         if(lf->lista) lf->lista->aceita(this);
