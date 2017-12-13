@@ -1,0 +1,165 @@
+int quick_sort(int *vetor, int esq, int dir) {
+    int i, j;
+    int centro, aux;
+     
+    i = esq;
+    j = dir;
+    centro = vetor[(esq + dir) / 2];
+     
+    while(i <= j) {
+        while(vetor[i] < centro && i < dir) {
+            i = i + 1;
+        }
+        while(vetor[j] > centro && j > esq) {
+            j = j - 1;
+        }
+        if(i <= j) {
+            aux = vetor[i];
+            vetor[i] = vetor[j];
+            vetor[j] = aux;
+            i = i + 1;
+            j = j - 1;
+        }
+    }
+     
+    if(j > esq) {
+        quick_sort(vetor, esq, j);
+    }
+    if(i < dir) {
+        quick_sort(vetor, i, dir);
+    }
+    return 0;
+}
+int bubble_sort(int *vetor, int n) {
+    int k, j, aux;
+	k = 1;
+	while(k < n){
+		j = 0;
+		while(j < (n - 1)){
+			if (vetor[j] > vetor[j + 1]) {
+                aux          = vetor[j];
+                vetor[j]     = vetor[j + 1];
+                vetor[j + 1] = aux;
+            }
+			j = j + 1;
+		}
+		k = k + 1;
+	}
+}
+int heapsort(int *a, int n) {
+	int i, pai, filho, t;
+	i = n / 2;
+	while(true) {
+		if (i > 0) {
+			i = i - 1;
+			t = a[i];
+		} else {
+			n = n -1;
+			if (n == 0){
+				return 0;
+			}
+			t = a[n];
+			a[n] = a[0];
+		}
+		pai = i;
+		filho = i * 2 + 1;
+		while (filho < n) {
+			if ((filho + 1 < n)  &&  (a[filho + 1] > a[filho]))
+				filho = filho + 1;
+				if (a[filho] > t) {
+				a[pai] = a[filho];
+				pai = filho;
+				filho = pai * 2 + 1;
+			} else {
+				break;
+			}
+		}
+		a[pai] = t;
+	}
+}
+int sort_menu(int op){
+	int i, vet[10], MAX;
+
+    // Lê MAX ou 10 valores
+    MAX = 10;
+    i = 0;
+    while(i < MAX){
+        print("Digite um valor(%d de %d): ", i,MAX);
+        readln(&vet[i]);
+        print("Valor adicionado: %d\n", vet[i]);
+        i = i + 1;
+    }
+    // Ordena os valores
+    switch(op){
+		case 1:
+			print("QuickSort\n");
+			quick_sort(vet, 0, MAX - 1);
+		break;
+		case 2:
+			print("BubbleSort\n");
+			bubble_sort(vet, MAX);
+		break;
+		case 3:
+			print("HeapSort\n");
+			heapsort(vet, MAX);
+		break;
+	}
+	
+    // Imprime os valores ordenados
+    print("\n\nValores ordenados\n");
+    i = 0;
+    while(i < MAX){
+        print("%d\n", vet[i]);
+        i = i + 1;
+    }
+}
+int hanoi(int n, char a, char b, char c){  
+	if (n == 1){
+		print("mova disco %d de %c para %c\n", n, a, b);
+	}
+	else{
+		hanoi(n - 1, a, c, b);                            
+		print("mova disco %d de %c para %c\n", n, a, b);
+		hanoi(n - 1, c, b, a);                            
+	}
+}
+int main(){
+	int op;
+	op = 0;
+	int numDiscos;
+	int loop;
+	loop = 1;
+	while(1 == 1){
+		print("Digite a opcao:\n");
+		print("\t1 - QuickSort:\n");
+		print("\t2 - BubbleSort:\n");
+		print("\t3 - HeapSort:\n");
+		print("\t4 - Torre de Hanoi:\n");
+		print("\t5 - Sair:\n");
+		readln(&op);
+		switch(op){
+			case 1:
+				sort_menu(op);
+			break;
+			case 2:
+				sort_menu(op);
+			break;
+			case 3:
+				sort_menu(op);
+			break;
+			case 4:
+				print("Digite o numero de discos para resolver a torre de Hanoi:\n");
+				readln(&numDiscos);
+				hanoi(numDiscos, 'A', 'B', 'C');
+			break;
+			case 5:
+				loop = 0;
+			break;
+		}
+		if(loop == 0){
+			break;
+		}
+	}
+	print("Programa Encerrado.\n");
+    return 0;
+}

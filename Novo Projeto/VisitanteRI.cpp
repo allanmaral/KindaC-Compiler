@@ -582,6 +582,7 @@ void VisitanteTradutor::visita(NoExprAceCamp       *expAC  ) {///Precisa do ofss
             }
         }
         expAC->exprEsquerda->aceita(this);
+
         base = ultimaExp;
         if(expAC->terminal == PONTO) {
             if(MEM* m = dynamic_cast<MEM*>(base)) base = m->e;
