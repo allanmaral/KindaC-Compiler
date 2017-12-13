@@ -55,7 +55,6 @@ int sort_menu(int op){
     while(i < MAX){
         print("Digite um valor(%d de %d): ", i,MAX);
         readln(&vet[i]);
-        print("Valor adicionado: %d\n", vet[i]);
         i = i + 1;
     }
     // Ordena os valores
