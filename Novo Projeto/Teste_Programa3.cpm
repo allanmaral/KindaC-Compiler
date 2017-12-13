@@ -1,17 +1,34 @@
-typedef struct{
-	int a;
-	int vet[5];
-}VETOR;
-VETOR *v;
-VETOR st;
-int vetor[5];
+int a,b;
 int main(){
-	v=&st;
-	st.vet[0]=0;
-	st.vet[1]=7777;
-	st.a=666;
-	
-	print("v->vet[0]  = %d\n",v->vet[0]);
-	print("v->vet[1]  = %d\n",v->vet[1]);
-	print("v->a  = %d\n",v->a);
+		
+	a=1;
+	b=1;
+	while(true){
+		print("digite A\n");
+		readln(a);
+		print("digite B\n");
+		readln(b);
+		if(a&&!b){
+			print("A&&!B\n");
+		}
+		if(b&&a){
+			print("A&&B\n");
+		}
+		if(!a){
+			print("!a\n");	
+			
+		}
+		if(b||a||1){
+			print("a||b||1\n");	
+			
+		}
+		if(b||a){
+			print("a||b\n");	
+			
+		}
+		if(b||!a){
+			print("!a||b\n");	
+			a=1;
+		}
+	}
 }

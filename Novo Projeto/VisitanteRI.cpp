@@ -423,7 +423,6 @@ void VisitanteTradutor::visita(NoDeclVariavel      *decV   ) {
         AtributoVariavel *var = static_cast<AtributoVariavel*>(atr);
 
         int tamanho = var->pegarTamanho();
-        fprintf(stdout,"###################  %s : %d \n",var->pegarLexema(),tamanho);
         bool escapa = true;
 
         if(frame) {
@@ -455,7 +454,7 @@ void VisitanteTradutor::visita(NoExprUnaria    	   *expU   ) {
             Rotulo *nV = new Rotulo();
             Rotulo *nF = new Rotulo();
             Rotulo *fim = new Rotulo();
-            ultimaExp = new ESEQ(new SEQ(new CJUMP(OP_EQ,e1,new CONST(1),nV,nF),
+            ultimaExp = new ESEQ(new SEQ(new CJUMP(OP_EQ,e1,new CONST(0),nF,nV),
                                          new SEQ(new LABEL(nV),
                                                  new SEQ(new SEQ(new MOVE(new TEMP(r), new CONST(0)),
                                                                  new JUMP(new NAME(fim))),

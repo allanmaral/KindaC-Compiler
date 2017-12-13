@@ -61,34 +61,25 @@ int main(int argc, char** args){
                exit(1);
            }
 
-    // Função chamada na saída do programa, garante que memória será desalocada
-    atexit(finalizaPrograma);
+
+    atexit(finalizaPrograma); /// Função chamada na saída do programa, garante que memória será desalocada
     inicializaGerenciadorErro();
     iniciaAnalisadorLexico(arquivo);
     NoPrograma* programa = Programa();
-    // Imprime a ASA
-    //VisitanteImpressao vp;
-    //vp.visita(programa);
-    // Semantico
+
     AnalisadorSemantico as;
     as.visita(programa);
     VisitanteTradutor vt;
     vt.visita(programa);
-    VisitanteImpressaoRI vtri;
-    vtri.visita(vt.pegarFragmento());
-
-    fprintf(stdout, "#####################Canonizador ###########################\n");
 
     CanonizadorRI canRI;
     canRI.visita(vt.pegarFragmento());
-    vtri.visita(vt.pegarFragmento());
 
-    Gerador *ger = new Gerador(arqAss);
-    ger->visita(vt.pegarFragmento());
-    delete ger;
+    Gerador ger(arqAss);
+    ger.visita(vt.pegarFragmento());
 
     imprimeListaErros();
-    delete programa; // Destroi a ASA
+    delete programa; /// Destroi a ASA
     return 0;
 }
 

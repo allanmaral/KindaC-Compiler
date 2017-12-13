@@ -37,7 +37,6 @@ void AnalisadorSemantico::visita(NoPrograma* prog){
     else if(NoDeclFuncao* decF = dynamic_cast<NoDeclFuncao*>(prog)) { decF->aceita(this); }
 }
 void AnalisadorSemantico::visita(NoId* id){
-    fprintf(stdout, "ID: %s\n", id->entradaTabela->pegarLexema());
     Atributo *atr = NULL;
     if(!(atr = tabelaParametrosAtual->busca(id->entradaTabela->pegarLexema()))){
         if(!(atr = tabelaVariaveisAtual->busca(id->entradaTabela->pegarLexema()))){
@@ -867,7 +866,6 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                     erro = true;
                     retorno = ((AtributoFuncao*)atrFunc)->pegarRetorno()->pegaTipo();
                     expAC->tipo = ((AtributoFuncao*)atrFunc)->pegarRetorno();
-                    fprintf(stdout, "RETORNO: %s", (char*) pegarTokenLiteral(retorno));
                     if(retorno == CARACTERE &&
                             (((AtributoFuncao*)atrFunc)->pegarPonteiro())){
                         retorno = LITERAL;
@@ -891,7 +889,6 @@ void AnalisadorSemantico::visita(NoExprAceCamp* expAC){
                 else{
                     retorno = ((AtributoVariavel*)atrFunc)->pegarTipo()->pegaTipo();
                     expAC->tipo = ((AtributoVariavel*)atrFunc)->pegarTipo();
-                    fprintf(stdout, "RETORNO: %s", (char*) pegarTokenLiteral(retorno));
                     if(retorno == CARACTERE &&
                             (((AtributoVariavel*)atrFunc)->pegarPonteiro() ||
                              ((AtributoVariavel*)atrFunc)->pegarArranjo())    ){

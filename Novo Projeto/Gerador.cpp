@@ -55,7 +55,6 @@ void Gerador::liberaRetistrador(Temp* t){
             }
             percorre=percorre->proximo;
         }if(autorizao){
-           // fprintf(stdout, "liberou: %s\n", t->obterString());
             if(primeiroRegLivre){
                 FilaRegistrador * liberado = new FilaRegistrador();
                 liberado->reg = t;
@@ -73,7 +72,6 @@ void Gerador::liberaRetistrador(Temp* t){
 }
 Temp* Gerador::pegaRegistradorLivre(){///retorna o primeiro registrador da pilha
     if(primeiroRegLivre){
-        //fprintf(stdout, "pegou: %s\n", primeiroRegLivre->reg->obterString());///tambem tirar isso
         Temp* t = primeiroRegLivre->reg;
         FilaRegistrador *prox = primeiroRegLivre->proximo;
         delete primeiroRegLivre;
@@ -223,9 +221,7 @@ Temp* Gerador::visita(TEMP* t){
             return t->t;
         }else{
             Temp *tAux = pegaRegistradorLivre();
-            fprintf(stdout,"Substituiu %s por %s\n",t->t->obterString(),tAux->obterString());///tem que tirar esse print depois
             *t->t=*tAux;
-            free(tAux);
             return t->t;
         }
     }else return t->t;
